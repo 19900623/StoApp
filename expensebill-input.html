@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="css/mui.min.css">
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">新增报销单</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded" style="margin: 5px;">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>报销人</label>
+						<input type="text" id="UserName" class="mui-input-clear mui-input" required="required">
+					</div>
+					<div class="mui-input-row">
+						<label>金额</label>
+						<input type="text" id="Amount" class="mui-input-clear mui-input" required="required">
+					</div>
+					<div class="mui-input-row">
+						<label>报销日期</label>
+						<input type="text" placeholder="选择日期" id="BXDate" class="mui-input" readonly="readonly">
+					</div>
+				</form>
+				<div class="mui-input-row" style="margin: 5px 0px;">
+					<textarea id="Reamrk" rows="5" placeholder="备注" class="mui-input-clear mui-input"></textarea>
+				</div>
+
+				<div class="mui-button-row">
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
+				</div>
+
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/mui.enterfocus.js"></script>
+		<script>
+			mui.init({
+			});
+			mui.plusReady(function() {
+				var bxdate = document.getElementById("BXDate");
+				var d = new Date();
+				bxdate.value = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+				var buttonok = document.getElementById('buttonok');
+				mui.enterfocus('#bill-form input', function() {
+					mui.trigger(buttonok, 'tap');
+				});
+			});
+			//选择报销日期事件			
+			document.getElementById("BXDate").addEventListener('tap', function() {
+				var dDate = new Date();
+				var minDate = new Date();
+				minDate.setFullYear(2015, 0, 1);
+				var maxDate = new Date();
+				maxDate.setFullYear(2030, 12, 31);
+				plus.nativeUI.pickDate(function(e) {
+					var d = e.date;
+					bxdate.value = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+				}, function(e) {
+					bxdate.value = "您没有选择日期";
+				}, {
+					title: "请选择日期",
+					date: dDate,
+					minDate: minDate,
+					maxDate: maxDate
+				});
+			})
+
+			function btn_ok() {
+				var UserName = document.getElementById("UserName");
+				var Amount = document.getElementById("Amount");
+				var BXDate = document.getElementById("BXDate");
+				var Reamrk = document.getElementById("Reamrk");
+				//验证
+				if (UserName.value == "") {
+					plus.nativeUI.toast("报销人不能为空");
+					UserName.focus();
+					return;
+				}
+				if (Amount.value == "") {
+					plus.nativeUI.toast("报销金额不能为空");
+					Amount.focus();
+					return;
+				} else {
+					if (isNaN(Amount.value)) {
+						plus.nativeUI.toast("报销金额必须为数字");
+						Amount.value = "";
+						Amount.focus();
+						return;
+					}
+				}
+				var userid = app.getLoginInfo().userid;
+				var username = JSON.parse(app.getLoginInfo().userinfo).realname;
+				//调用方法
+				var billInfo = {
+					UserName: UserName.value,
+					Amount: Amount.value,
+					BXDate: BXDate.value,
+					Reamrk: Reamrk.value,
+					CreateUserId: userid,
+					CreateUserName: username
+				};
+				var url = app.getUrl() + 'AddExpenseBill';
+				mui.ajax(url, {
+					data: {
+						info: JSON.stringify(billInfo)
+					},
+					type: 'post', //HTTP请求类型
+					success: function(data) {
+						if (data == "") {
+							plus.nativeUI.toast('添加成功');
+							var page = plus.webview.getWebviewById('expensebill-list-sub');
+							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+							mui.fire(page, 'refresh');
+							mui.back();
+						} else {
+							plus.nativeUI.toast(data);
+						}
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

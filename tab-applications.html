@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="css/app.css" />
+	</head>
+
+	<body>
+		<div>
+			<ul class="mui-table-view mui-grid-view mui-grid-9">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a href="#" onclick="toExpense()">
+						<img src="img/account_balances.png">
+						<div class="mui-media-body">报销单</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a href="#" onclick="toLeaveBill()">
+						<img src="img/allow_users_edit_ranges.png">
+						<div class="mui-media-body">请假条</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a href="#" onclick="toAddressList()">
+						<img src="img/blackberry.png">
+						<div class="mui-media-body">通讯录</div>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</body>
+	<script src="js/mui.min.js"></script>
+	<script>
+		mui.init({
+			swipeBack: true //启用右滑关闭功能
+		});
+		var expensePage;
+		var leavebillPage;
+		mui.plusReady(function() {
+			expensePage = mui.preload({
+				"id": 'expensebill-list-main',
+				"url": 'expensebill-list-main.html'
+			});
+			leavebillPage= mui.preload({
+				"id": 'leavebill-list-main',
+				"url": 'leavebill-list-main.html'
+			});
+			addresslistPage=
+			mui.preload({
+				"id": 'addresslist',
+				"url": 'addresslist.html'
+			});
+		});
+		var toExpense = function() {
+			mui.fire(expensePage, 'show', null);
+			setTimeout(function() {
+				mui.openWindow({
+					id: 'expensebill-list-main',
+					show: {
+						aniShow: 'pop-in'
+					},
+					waiting: {
+						autoShow: false
+					}
+				});
+			}, 0);
+		};
+		
+		var toLeaveBill=function(){
+			mui.fire(leavebillPage, 'show', null);
+			setTimeout(function() {
+				mui.openWindow({
+					id: 'leavebill-list-main',
+					show: {
+						aniShow: 'pop-in'
+					},
+					waiting: {
+						autoShow: false
+					}
+				});
+			}, 0);
+		};
+		
+		var toAddressList=function(){
+			mui.fire(addresslistPage, 'show', null);
+			setTimeout(function() {
+				mui.openWindow({
+					id: 'addresslist',
+					show: {
+						aniShow: 'pop-in'
+					},
+					waiting: {
+						autoShow: false
+					}
+				});
+			}, 0);
+		};
+	</script>
+
+</html>
