@@ -258,7 +258,8 @@
 				"refer": [
 					"addresslist.html",
 					"expensebill-list-main.html",
-					"leavebill-list-main.html"
+					"leavebill-list-main.html",
+					"questionbill-input.html"
 				],
 				"priority": 0
 			},
@@ -513,6 +514,27 @@
 					"js/mui.min.js",
 					"fonts/mui.ttf",
 					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"questionbill-input.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/common.js"
+				],
+				"refer": [
+					"barcode_scan.html"
+				],
+				"priority": 0
+			},
+			"barcode_scan.html": {
+				"resources": [
+					"css/common.css",
+					"js/common.js"
 				],
 				"refer": [],
 				"priority": 0

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/mui.picker.min.css" />
+			<link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+		<link href="css/mui.poppicker.css" rel="stylesheet" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			
+			.button {
+				font-size: 18px;
+				font-weight: normal;
+				text-decoration: none;
+				display: block;
+				text-align: center;
+				color: #FFF;
+				background-color: #FFCC33;
+				border: 1px solid #ECB100;
+				padding: .1em 0em;
+				margin: .0em 4.7em;
+				-webkit-border-radius: 0px;
+				border-radius: 0px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">新增大字错写</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded" style="margin: 5px;">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>运单编号</label>
+						<input type="text" id="WayBillNumber" class="mui-input-clear mui-input" required="required">
+							
+					</div>
+				<div class="button" onclick="clicked('barcode_scan.html',true,true);">扫一扫</div>
+					<div class="mui-input-row">
+						<label>类型</label>
+						<input type="text" id="KPI" class="mui-input" required="required">
+					</div>
+					<div class="mui-input-row">
+						<label>类别</label>
+						<input type="text" id="Type" class="mui-input" required="required" readonly="readonly">
+					</div>
+					
+				</form>
+				<div class="mui-input-row" style="margin: 5px 0px 0px;">
+					<textarea id="LeaveReason" rows="3" placeholder="备注" class="mui-input-clear mui-input"></textarea>
+				</div>
+				<ul id="history" class="dlist" style="text-align:left;padding: 0em 0em;margin: 0px 0px 10px 00px;">
+				<li id="empty" class="ditem-empty">照片1</li>
+				<li id="empty" class="ditem-empty">照片2</li>
+				<li id="empty" class="ditem-empty">照片3</li>
+				</ul>
+				  
+				<div class="mui-button-row">
+					<button type="button" class="mui-btn mui-btn-success" onclick="btn_ok()" id="buttonok">拍照</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
+				</div>
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/mui.enterfocus.js"></script>
+		<script src="js/mui.picker.min.js"></script>
+		<script src="js/mui.poppicker.js"></script>
+		<script type="text/javascript" src="js/common.js"></script>
+		<script>
+			mui.init({});
+			var KPIPicker, TypePicker;
+			mui.plusReady(function() {
+				KPIPicker = new mui.PopPicker({
+					layer: 2
+				});
+				KPIPicker.setData([{
+					value: '进港大字错写',
+					text: '进港大字错写',
+					children: [{
+						value: '大字',
+						text: '大字'
+					}, {
+						value: '大包',
+						text: '大包'
+					}]
+				}, {
+					value: '出港大字错写',
+					text: '出港大字错写',
+					children: [{
+						value: '大字',
+						text: '大字'
+					}, {
+						value: '大包',
+						text: '大包'
+					}]
+				}, {
+					value: '出港不规则包装',
+					text: '出港不规则包装',
+					children: [{
+						value: '不规则',
+						text: '不规则'
+					}, {
+						value: '同行',
+						text: '同行'
+					}, {
+						value: '裸包装',
+						text: '裸包装'
+					}]
+				}, {
+					value: '进港不规则包装',
+					text: '进港不规则包装',
+					children: [{
+						value: '不规则',
+						text: '不规则'
+					}, {
+						value: '同行',
+						text: '同行'
+					}, {
+						value: '裸包装',
+						text: '裸包装'
+					}]
+				}]);
+				var buttonok = document.getElementById('buttonok');
+				mui.enterfocus('#bill-form input', function() {
+					mui.trigger(buttonok, 'tap');
+				});
+			});
+			//选择请假类型事件		
+			document.getElementById("KPI").addEventListener('tap', function() {
+				KPIPicker.show(function(items) {
+					document.getElementById("KPI").value = items[0].value;
+					document.getElementById("Type").value = items[1].value;
+				});
+			});
+
+			function btn_ok() {
+			}
+
+			function scaned(r) {
+				var WayBillNumber = document.getElementById("WayBillNumber");
+				WayBillNumber.value = r;
+			}
+		</script>
+	</body>
+
+</html>

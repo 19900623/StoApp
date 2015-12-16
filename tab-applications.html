@@ -65,6 +65,12 @@
 				"id": 'addresslist',
 				"url": 'addresslist.html'
 			});
+			
+			questionbillPage=
+			mui.preload({
+				"id": 'questionbill-input',
+				"url": 'questionbill-input.html'
+			});
 		});
 		var toExpense = function() {
 			mui.fire(expensePage, 'show', null);
@@ -112,10 +118,10 @@
 		};
 		
 		var toQuestionBill=function(){
-			mui.fire(addresslistPage, 'show', null);
+			mui.fire(questionbillPage, 'show', null);
 			setTimeout(function() {
 				mui.openWindow({
-					id: 'addresslist',
+					id: 'questionbill-input',
 					show: {
 						aniShow: 'pop-in'
 					},
