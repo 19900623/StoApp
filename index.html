@@ -86,7 +86,6 @@
 					statusBarBackground: '#f7f7f7'
 				});
 				$.plusReady(function() {
-
 					plus.screen.lockOrientation("portrait-primary");
 					//设置WebService的Url				
 					var settings = app.getSettings();
@@ -229,6 +228,10 @@
 								pageid = 'collectionmoney-workflow'
 								pagehtml = 'collectionmoney-workflow.html'
 								break;
+							case 'Vehicle_Departure':
+								pageid = 'vehicle-workflow'
+								pagehtml = 'vehicle-workflow.html'
+								break;
 							default:
 								return;
 								break;
@@ -240,7 +243,6 @@
 							pagehtml: pagehtml
 						}
 						var id = JSON.stringify(info);
-						
 						var nwaiting = plus.nativeUI.showWaiting();
 						webviewShow = plus.webview.create(
 							info.pagehtml,

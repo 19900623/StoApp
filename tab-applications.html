@@ -35,6 +35,12 @@
 						<div class="mui-media-body">通讯录</div>
 					</a>
 				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a href="#" onclick="toQuestionBill()">
+						<img src="img/cell_delete.png">
+						<div class="mui-media-body">大字错写</div>
+					</a>
+				</li>
 			</ul>
 		</div>
 	</body>
@@ -91,6 +97,21 @@
 		};
 		
 		var toAddressList=function(){
+			mui.fire(addresslistPage, 'show', null);
+			setTimeout(function() {
+				mui.openWindow({
+					id: 'addresslist',
+					show: {
+						aniShow: 'pop-in'
+					},
+					waiting: {
+						autoShow: false
+					}
+				});
+			}, 0);
+		};
+		
+		var toQuestionBill=function(){
 			mui.fire(addresslistPage, 'show', null);
 			setTimeout(function() {
 				mui.openWindow({
