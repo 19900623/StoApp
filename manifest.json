@@ -524,10 +524,19 @@
 					"js/mui.poppicker.js",
 					"css/mui.poppicker.css",
 					"css/mui.picker.min.css",
-					"js/common.js"
+					"js/common.js",
+					"img/shuijiao.jpg",
+					"css/common.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"img/me_logo.png",
+					"css/mui.min.css",
+					"js/mui.enterfocus.js"
 				],
 				"refer": [
-					"barcode_scan.html"
+					"barcode_scan.html",
+					"camera_image.html"
 				],
 				"priority": 0
 			},
@@ -538,11 +547,18 @@
 				],
 				"refer": [],
 				"priority": 0
+			},
+			"camera_image.html": {
+				"resources": [
+					"js/common.js",
+					"css/common.css"
+				],
+				"refer": [],
+				"priority": 0
 			}
 		},
 		"idle": {
 			"resources": [
-				"img/shuijiao.jpg",
 				"expensebill-modify.html",
 				"css/mui.css",
 				"expensebill-workflow.html",

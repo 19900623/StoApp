@@ -10,7 +10,7 @@
 
 		<link rel="stylesheet" href="css/mui.min.css">
 		<link rel="stylesheet" href="css/mui.picker.min.css" />
-			<link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+		<link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
 		<link href="css/mui.poppicker.css" rel="stylesheet" />
 		<style>
 			html,
@@ -46,9 +46,9 @@
 					<div class="mui-input-row">
 						<label>运单编号</label>
 						<input type="text" id="WayBillNumber" class="mui-input-clear mui-input" required="required">
-							
+
 					</div>
-				<div class="button" onclick="clicked('barcode_scan.html',true,true);">扫一扫</div>
+					<div class="button" onclick="clicked('barcode_scan.html',true,true);">扫一扫</div>
 					<div class="mui-input-row">
 						<label>类型</label>
 						<input type="text" id="KPI" class="mui-input" required="required">
@@ -57,19 +57,17 @@
 						<label>类别</label>
 						<input type="text" id="Type" class="mui-input" required="required" readonly="readonly">
 					</div>
-					
+
 				</form>
 				<div class="mui-input-row" style="margin: 5px 0px 0px;">
 					<textarea id="LeaveReason" rows="3" placeholder="备注" class="mui-input-clear mui-input"></textarea>
 				</div>
-				<ul id="history" class="dlist" style="text-align:left;padding: 0em 0em;margin: 0px 0px 10px 00px;">
-				<li id="empty" class="ditem-empty">照片1</li>
-				<li id="empty" class="ditem-empty">照片2</li>
-				<li id="empty" class="ditem-empty">照片3</li>
+				<ul id="images" class="dlist">
+
 				</ul>
-				  
+
 				<div class="mui-button-row">
-					<button type="button" class="mui-btn mui-btn-success" onclick="btn_ok()" id="buttonok">拍照</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-success" onclick="getImage();" id="buttonok">拍照</button>&nbsp;&nbsp;
 					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
 					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
 				</div>
@@ -149,6 +147,67 @@
 			});
 
 			function btn_ok() {
+				//将照片上传
+				var task = plus.uploader.createUpload("http://www.test.com/upload.do", {}, function(t, status) {
+					// 上传完成
+					if (status == 200) {
+						alert("Upload success: " + t.url);
+					} else {
+						alert("Upload failed: " + status);
+					}
+				});
+				task.addFile("_www/a.doc", { 
+					key: "testdoc"
+				});
+
+				//task.addEventListener( "statechanged", onStateChanged, false );
+				task.start();
+			}
+			// 拍照
+			function getImage() {
+				//outSet("开始拍照：");
+				var cmr = plus.camera.getCamera();
+				var imageUrl = '';
+				cmr.captureImage(function(p) {
+					plus.io.resolveLocalFileSystemURL(p, function(entry) {
+						imageUrl = entry.toLocalURL();
+						var img = document.createElement('img');
+						var ul = document.getElementById("images");
+						img.className = "ditem";
+						img.src = imageUrl;
+						img.setAttribute("onclick", "displayFile(this);");
+						ul.appendChild(img);
+					}, function(e) {
+						outLine("读取拍照文件错误：" + e.message);
+					});
+				}, function(e) {
+					outLine("失败：" + e.message);
+				}, {
+					filename: "_doc/camera/",
+					index: 1
+				});
+			}
+			var w = null;
+			// 显示文件
+			function displayFile(img) {
+				if (w) {
+					outLine("重复点击！");
+					return;
+				}
+				var url = "camera_image.html";
+				w = plus.webview.create(url, url, {
+					hardwareAccelerated: true,
+					scrollIndicator: 'none',
+					scalable: true,
+					bounce: "all"
+				});
+				w.addEventListener("loaded", function() {
+					w.evalJS("loadMedia('" + img.src + "')");
+				}, false);
+				w.addEventListener("close", function() {
+					w = null;
+				}, false);
+				w.show("pop-in");
 			}
 
 			function scaned(r) {
