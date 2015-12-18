@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="utf-8">
 		<title>Hello MUI</title>
@@ -8,6 +9,7 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
 		<style>
 			html,
 			body {
@@ -56,25 +58,14 @@
 		<script src="js/app.js"></script>
 		<script src="js/mui.enterfocus.js"></script>
 		<script>
-            
 			var WayBillNumber = document.getElementById("WayBillNumber");
 			var KPI = document.getElementById("KPI");
 			var Type = document.getElementById("Type");
 			var Remark = document.getElementById("Remark");
-
-			mui.init({
-				beforeback: function() {
-					var page = plus.webview.getWebviewById('expensebill-list-sub');
-					//触发列表界面的自定义事件（refresh）,从而进行数据刷新
-					//返回true，继续页面关闭逻辑
-					return true;							
-				}
-			});
-		
+				var id;
 			mui.plusReady(function() {
-				var id=plus.webview.currentWebview().name;					
-				var url = app.getUrl() + 'GetExpenseBillByID';
-
+				id= plus.webview.currentWebview().name;
+				var url = app.getUrl() + 'GetQuestionBillByID';
 				mui.ajax(url, {
 					data: {
 						id: id
@@ -82,28 +73,38 @@
 					type: 'post', //HTTP请求类型
 					dataType: 'json',
 					success: function(data) {
-						if(data)
-						{
-							WayBillNumber.value=data[0].waybillnumber;
-							KPI.value=data[0].kpi;
-							Type.value=data[0].type;
-							Remark.value=data[0].remark;							
+						if (data) {
+							WayBillNumber.value = data[0].waybillnumber;
+							KPI.value = data[0].kpi;
+							Type.value = data[0].type;
+							Remark.value = data[0].remark;
+							var image = data[0].image || '';
+							if (image != '') {
+								var images = image.split(',');
+								for (var i = 1; i < images.length; i++) {
+									var img = document.createElement('img');
+									var ul = document.getElementById("images");
+									img.className = "ditem";
+									img.src = images[i].replace('~', 'http://192.168.6.164:8080');
+									//正式库
+									//									img.src = images[i].replace('~', 'http://192.168.20.20:8022');
+									img.setAttribute("onclick", "displayFile(this);");
+									ul.appendChild(img);
+								}
+							}
 						}
 					}
-					
 				});
-			
 			});
-			       
-            //确定按钮
+			//确定按钮
 			function btn_ok() {
-				aler(123)
+				var wt = plus.nativeUI.showWaiting();
 				//调用方法
-				var billInfo = { 
-					ID:plus.webview.currentWebview().name,
-					Reamrk: Reamrk.value,				
+				var billInfo = {
+					ID: id,
+					Remark: Remark.value,
 				};
-				var url = app.getUrl() + 'ModifyExpenseBill';
+				var url = app.getUrl() + 'ModifyQuestionBill';
 				mui.ajax(url, {
 					data: {
 						info: JSON.stringify(billInfo)
@@ -111,15 +112,96 @@
 					type: 'post', //HTTP请求类型
 					success: function(data) {
 						if (data == "") {
-							plus.nativeUI.toast('修改成功');												
+							var images = document.getElementById("images");
+							//将照片上传
+							if (images.children.length > 0) {
+								//本机
+								var url = 'http://192.168.6.164:8080/QuestionModule/QuestionBill/UpdateImage?id=' + id
+									//正式库
+									//var url = 'http://192.168.20.20:8022/QuestionModule/QuestionBill/UpdateImage?id=' + id
+								var task = plus.uploader.createUpload(url, {
+									method: "POST"
+								}, function(t, status) {
+									// 上传完成
+									if (status == 200) {
+										if (t.responseText == "") {
+											plus.nativeUI.toast('编辑成功');
+											var page = plus.webview.getWebviewById('questionbill-list-sub');
+											//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+											mui.fire(page, 'refresh');
+											mui.back();
+										} else
+											alert(t.responseText);
+										wt.close()
+									} else {
+										plus.nativeUI.toast("Upload failed: " + status);
+										wt.close()
+									}
+								});								
+								for (var i = 0; i < images.children.length; i++) {
+									var url = images.children[i].src
+									if (url.indexOf('http') != 0)
+									{
+										task.addFile(url, {
+											key: images.children[i].fileName
+										});
+									}
+								}
+								task.start();
+							}
 						} else {
 							plus.nativeUI.toast(data);
+							wt.close()
 						}
 					}
 				});
 			}
-			
-			
+			var w = null;
+			// 显示文件
+			function displayFile(img) {
+				if (w) {
+					outLine("重复点击！");
+					return;
+				}
+				var url = "camera_image.html";
+				w = plus.webview.create(url, url, {
+					hardwareAccelerated: true,
+					scrollIndicator: 'none',
+					scalable: true,
+					bounce: "all"
+				});
+				w.addEventListener("loaded", function() {
+					w.evalJS("loadMedia('" + img.src + "')");
+				}, false);
+				w.addEventListener("close", function() {
+					w = null;
+				}, false);
+				w.show("pop-in");
+			}
+			// 拍照
+			function getImage() {
+				//outSet("开始拍照：");
+				var cmr = plus.camera.getCamera();
+				var imageUrl = '';
+				cmr.captureImage(function(p) {
+					plus.io.resolveLocalFileSystemURL(p, function(entry) {
+						imageUrl = entry.toLocalURL();
+						var img = document.createElement('img');
+						var ul = document.getElementById("images");
+						img.className = "ditem";
+						img.src = imageUrl;
+						img.setAttribute("onclick", "displayFile(this);");
+						ul.appendChild(img);
+					}, function(e) {
+						alert("读取拍照文件错误：" + e.message);
+					});
+				}, function(e) {
+					alert("失败：" + e.message);
+				}, {
+					filename: "_doc/camera/",
+					index: 1
+				});
+			}
 		</script>
 	</body>
 

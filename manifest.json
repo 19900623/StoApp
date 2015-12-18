@@ -240,7 +240,8 @@
 					"js/mui.view.js",
 					"css/mui.min.css",
 					"fonts/mui.ttf",
-					"img/me_logo.png"
+					"img/me_logo.png",
+					"js/app.js"
 				],
 				"refer": [],
 				"priority": 0
@@ -576,9 +577,12 @@
 					"js/mui.min.js",
 					"fonts/mui.ttf",
 					"css/mui.min.css",
-					"js/mui.enterfocus.js"
+					"js/mui.enterfocus.js",
+					"css/common.css"
 				],
-				"refer": [],
+				"refer": [
+					"camera_image.html"
+				],
 				"priority": 0
 			},
 			"questionbill-list-sub.html": {
