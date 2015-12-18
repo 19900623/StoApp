@@ -85,9 +85,9 @@
 									var img = document.createElement('img');
 									var ul = document.getElementById("images");
 									img.className = "ditem";
-									img.src = images[i].replace('~', 'http://192.168.6.164:8080');
+//									img.src = images[i].replace('~', 'http://192.168.6.164:8080');
 									//正式库
-									//									img.src = images[i].replace('~', 'http://192.168.20.20:8022');
+									img.src = images[i].replace('~', 'http://192.168.20.20:8022');
 									img.setAttribute("onclick", "displayFile(this);");
 									ul.appendChild(img);
 								}
