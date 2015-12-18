@@ -116,9 +116,9 @@
 							//将照片上传
 							if (images.children.length > 0) {
 								//本机
-								var url = 'http://192.168.6.164:8080/QuestionModule/QuestionBill/UpdateImage?id=' + id
-									//正式库
-									//var url = 'http://192.168.20.20:8022/QuestionModule/QuestionBill/UpdateImage?id=' + id
+//								var url = 'http://192.168.6.164:8080/QuestionModule/QuestionBill/UpdateImage?id=' + id
+								//正式库
+								var url = 'http://192.168.20.20:8022/QuestionModule/QuestionBill/UpdateImage?id=' + id
 								var task = plus.uploader.createUpload(url, {
 									method: "POST"
 								}, function(t, status) {

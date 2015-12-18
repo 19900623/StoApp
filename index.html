@@ -89,8 +89,8 @@
 					plus.screen.lockOrientation("portrait-primary");
 					//设置WebService的Url				
 					var settings = app.getSettings();
-					var httpUrl = 'http://192.168.6.164';
-					var url = httpUrl + '/LeaRun.MobileApp/MobileAppService.asmx/';
+					var httpUrl = 'http://58.57.35.3:8066';
+					var url = httpUrl + '/MobileAppService.asmx/';
 					app.setUrl(url);
 					//检查App升级版本并升级			
 					var url = app.getUrl() + 'GetVersionInfo';
@@ -104,7 +104,7 @@
 								//version属性
 								oldVersion = info.version;
 								if (oldVersion < versionNew) {
-									var DownUrl = httpUrl + '/LeaRun.MobileApp/App/Sto' + versionNew + '.wgt'; // 下载文件地址
+									var DownUrl = httpUrl + '/App/Sto' + versionNew + '.wgt'; // 下载文件地址
 									var dtask = plus.downloader.createDownload(DownUrl, {}, function(d, status) {
 										if (status == 200) { // 下载成功
 											var path = d.filename;
