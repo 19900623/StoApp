@@ -68,8 +68,8 @@
 			
 			questionbillPage=
 			mui.preload({
-				"id": 'questionbill-input',
-				"url": 'questionbill-input.html'
+				"id": 'questionbill-list-main',
+				"url": 'questionbill-list-main.html'
 			});
 		});
 		var toExpense = function() {
@@ -121,7 +121,7 @@
 			mui.fire(questionbillPage, 'show', null);
 			setTimeout(function() {
 				mui.openWindow({
-					id: 'questionbill-input',
+					id: 'questionbill-list-main',
 					show: {
 						aniShow: 'pop-in'
 					},

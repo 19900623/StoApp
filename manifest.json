@@ -259,7 +259,8 @@
 					"addresslist.html",
 					"expensebill-list-main.html",
 					"leavebill-list-main.html",
-					"questionbill-input.html"
+					"questionbill-input.html",
+					"questionbill-list-main.html"
 				],
 				"priority": 0
 			},
@@ -488,7 +489,11 @@
 					"js/mui.poppicker.js",
 					"fonts/mui.ttf",
 					"css/mui.poppicker.css",
-					"css/mui.picker.min.css"
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"js/mui.enterfocus.js"
 				],
 				"refer": [],
 				"priority": 0
@@ -554,6 +559,33 @@
 					"css/common.css"
 				],
 				"refer": [],
+				"priority": 0
+			},
+			"questionbill-list-main.html": {
+				"resources": [
+					"questionbill-list-sub.html"
+				],
+				"refer": [
+					"questionbill-input.html"
+				],
+				"priority": 0
+			},
+			"questionbill-modify.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/mui.enterfocus.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"questionbill-list-sub.html": {
+				"resources": [],
+				"refer": [
+					"questionbill-modify.html"
+				],
 				"priority": 0
 			}
 		},

@@ -60,7 +60,7 @@
 
 				</form>
 				<div class="mui-input-row" style="margin: 5px 0px 0px;">
-					<textarea id="LeaveReason" rows="3" placeholder="备注" class="mui-input-clear mui-input"></textarea>
+					<textarea id="Remark" rows="3" placeholder="备注" class="mui-input-clear mui-input"></textarea>
 				</div>
 				<ul id="images" class="dlist">
 
@@ -147,21 +147,85 @@
 			});
 
 			function btn_ok() {
-				//将照片上传
-				var task = plus.uploader.createUpload("http://www.test.com/upload.do", {}, function(t, status) {
-					// 上传完成
-					if (status == 200) {
-						alert("Upload success: " + t.url);
-					} else {
-						alert("Upload failed: " + status);
+				var guid = app.NewGuid();
+				var wt = plus.nativeUI.showWaiting();
+				//保存数据
+				var WayBillNumber = document.getElementById("WayBillNumber");
+				var KPI = document.getElementById("KPI");
+				var Type = document.getElementById("Type");
+				var Remark = document.getElementById("Remark");
+				//验证
+				if (WayBillNumber.value == "") {
+					plus.nativeUI.toast("运单编号不能为空");
+					WayBillNumber.focus();
+					return;
+				}
+				if (KPI.value == "") {
+					plus.nativeUI.toast("类型不能为空");
+					KPI.focus();
+					return;
+				}
+				var userid = app.getLoginInfo().userid;
+				var username = JSON.parse(app.getLoginInfo().userinfo).realname;
+				var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
+				//调用方法
+				var billInfo = {
+					ID: guid,
+					WayBillNumber: WayBillNumber.value,
+					KPI: KPI.value,
+					Type: Type.value,
+					Remark: Remark.value,
+					CreateUserId: userid,
+					CreateUserName: username,
+					UserCode: usercode
+				};
+				var url = app.getUrl() + 'AddQuestionBill';
+				mui.ajax(url, {
+					data: {
+						info: JSON.stringify(billInfo)
+					},
+					type: 'post', //HTTP请求类型
+					success: function(data) {
+						if (data == "") {
+							var images = document.getElementById("images");
+							//将照片上传
+							if (images.children.length > 0) {
+								//本机
+								var url = 'http://192.168.6.164:8080/QuestionModule/QuestionBill/UpdateImage?id=' + guid
+								//正式库
+//								var url = 'http://192.168.20.20:8022/QuestionModule/QuestionBill/UpdateImage?id=' + guid
+								var task = plus.uploader.createUpload(url, {
+									method: "POST"
+								}, function(t, status) {
+									// 上传完成
+									if (status == 200) {
+										if (t.responseText == "") {
+											plus.nativeUI.toast('添加成功');
+											var page = plus.webview.getWebviewById('questionbill-list-sub');
+											//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+											mui.fire(page, 'refresh');
+											mui.back();
+										} else
+											alert(t.responseText);
+										wt.close()
+									} else {
+										plus.nativeUI.toast("Upload failed: " + status);
+										wt.close()
+									}
+								});
+								for (var i = 0; i < images.children.length; i++) {
+									task.addFile(images.children[i].src, {
+										key: images.children[i].fileName
+									});
+								}
+								task.start();
+							}
+						} else {
+							plus.nativeUI.toast(data);
+							wt.close();
+						}
 					}
 				});
-				task.addFile("_www/a.doc", { 
-					key: "testdoc"
-				});
-
-				//task.addEventListener( "statechanged", onStateChanged, false );
-				task.start();
 			}
 			// 拍照
 			function getImage() {
@@ -178,10 +242,10 @@
 						img.setAttribute("onclick", "displayFile(this);");
 						ul.appendChild(img);
 					}, function(e) {
-						outLine("读取拍照文件错误：" + e.message);
+						alert("读取拍照文件错误：" + e.message);
 					});
 				}, function(e) {
-					outLine("失败：" + e.message);
+					alert("失败：" + e.message);
 				}, {
 					filename: "_doc/camera/",
 					index: 1

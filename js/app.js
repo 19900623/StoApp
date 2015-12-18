@@ -37,7 +37,7 @@
 		var settingsText = localStorage.getItem('$settings') || "{}";
 		return JSON.parse(settingsText);
 	};
-	
+
 	/**
 	 * 设置登录信息
 	 **/
@@ -53,14 +53,22 @@
 		var logininfoText = localStorage.getItem('$logininfo') || "{}";
 		return JSON.parse(logininfoText);
 	};
-	
+
 	/**
 	 * 是否正整数
 	 **/
-	owner.isPositiveNum=function(s)
-	{
-	 var re = /^[0-9]*[1-9][0-9]*$/ ; 
-	 return re.test(s) 
-	} 
-	
+	owner.isPositiveNum = function(s) {
+		var re = /^[0-9]*[1-9][0-9]*$/;
+		return re.test(s)
+	}
+
+	function S4() {
+		return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+	}
+
+	owner.NewGuid = function() {
+		return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+	}
+
+
 }(window.mui, window.app = {}));
