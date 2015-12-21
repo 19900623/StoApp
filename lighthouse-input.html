@@ -38,11 +38,16 @@
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">新增大字错写</h1>
+			<h1 id="title" class="mui-title">新增曝光台</h1>
 		</header>
 		<div class="mui-content">
 			<div class="mui-content-padded" style="margin: 5px;">
 				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>标题</label>
+						<input type="text" id="Title" class="mui-input-clear mui-input" required="required">
+
+					</div>
 					<div class="mui-input-row">
 						<label>运单编号</label>
 						<input type="text" id="WayBillNumber" class="mui-input-clear mui-input" required="required">
@@ -50,12 +55,8 @@
 					</div>
 					<div class="button" onclick="clicked('barcode_scan.html',true,true);">扫一扫</div>
 					<div class="mui-input-row">
-						<label>类型</label>
-						<input type="text" id="KPI" class="mui-input" required="required">
-					</div>
-					<div class="mui-input-row">
-						<label>类别</label>
-						<input type="text" id="Type" class="mui-input" required="required" readonly="readonly">
+						<label>日期</label>
+						<input type="text" placeholder="选择日期" id="Date" class="mui-input" readonly="readonly">
 					</div>
 
 				</form>
@@ -81,90 +82,55 @@
 		<script type="text/javascript" src="js/common.js"></script>
 		<script>
 			mui.init({});
-			var KPIPicker, TypePicker;
 			mui.plusReady(function() {
-				KPIPicker = new mui.PopPicker({
-					layer: 2
-				});
-				KPIPicker.setData([{
-					value: '进港大字错写',
-					text: '进港大字错写',
-					children: [{
-						value: '大字',
-						text: '大字'
-					}, {
-						value: '大包',
-						text: '大包'
-					}]
-				}, {
-					value: '出港大字错写',
-					text: '出港大字错写',
-					children: [{
-						value: '大字',
-						text: '大字'
-					}, {
-						value: '大包',
-						text: '大包'
-					}]
-				}, {
-					value: '出港不规则包装',
-					text: '出港不规则包装',
-					children: [{
-						value: '不规则',
-						text: '不规则'
-					}, {
-						value: '同行',
-						text: '同行'
-					}, {
-						value: '裸包装',
-						text: '裸包装'
-					}]
-				}, {
-					value: '进港不规则包装',
-					text: '进港不规则包装',
-					children: [{
-						value: '不规则',
-						text: '不规则'
-					}, {
-						value: '同行',
-						text: '同行'
-					}, {
-						value: '裸包装',
-						text: '裸包装'
-					}]
-				}]);
+				var bxdate = document.getElementById("Date");
+				var d = new Date();
+				bxdate.value = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
 				var buttonok = document.getElementById('buttonok');
 				mui.enterfocus('#bill-form input', function() {
 					mui.trigger(buttonok, 'tap');
 				});
 			});
-			//选择请假类型事件		
-			document.getElementById("KPI").addEventListener('tap', function() {
-				KPIPicker.show(function(items) {
-					document.getElementById("KPI").value = items[0].value;
-					document.getElementById("Type").value = items[1].value;
+			//选择报销日期事件			
+			document.getElementById("Date").addEventListener('tap', function() {
+				var dDate = new Date();
+				var minDate = new Date();
+				minDate.setFullYear(2015, 0, 1);
+				var maxDate = new Date();
+				maxDate.setFullYear(2030, 12, 31);
+				var bxdate = document.getElementById("Date");
+				plus.nativeUI.pickDate(function(e) {
+					var d = e.date;
+					bxdate.value = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+				}, function(e) {
+					bxdate.value = "您没有选择日期";
+				}, {
+					title: "请选择日期",
+					date: dDate,
+					minDate: minDate,
+					maxDate: maxDate
 				});
-			});
+			})
 
 			function btn_ok() {
-				var guid = app.NewGuid();
-				var wt = plus.nativeUI.showWaiting();
 				//保存数据
+				var guid = app.NewGuid();
 				var WayBillNumber = document.getElementById("WayBillNumber");
-				var KPI = document.getElementById("KPI");
-				var Type = document.getElementById("Type");
+				var Title = document.getElementById("Title");
+				var Date = document.getElementById("Date");
 				var Remark = document.getElementById("Remark");
+				var ul = document.getElementById("images");
+				if (ul.children.length == 0) {
+					plus.nativeUI.toast("请上传照片");
+					return;
+				}
 				//验证
-				if (WayBillNumber.value == "") {
-					plus.nativeUI.toast("运单编号不能为空");
-					WayBillNumber.focus();
+				if (Title.value == "") {
+					plus.nativeUI.toast("标题不能为空");
+					Remark.focus();
 					return;
 				}
-				if (KPI.value == "") {
-					plus.nativeUI.toast("类型不能为空");
-					KPI.focus();
-					return;
-				}
+				var wt = plus.nativeUI.showWaiting();
 				var userid = app.getLoginInfo().userid;
 				var username = JSON.parse(app.getLoginInfo().userinfo).realname;
 				var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
@@ -172,14 +138,14 @@
 				var billInfo = {
 					ID: guid,
 					WayBillNumber: WayBillNumber.value,
-					KPI: KPI.value,
-					Type: Type.value,
+					Date: Date.value,
 					Remark: Remark.value,
 					CreateUserId: userid,
 					CreateUserName: username,
-					UserCode: usercode
+					UserCode: usercode,
+					Title: Title.value
 				};
-				var url = app.getUrl() + 'AddQuestionBill';
+				var url = app.getUrl() + 'AddLightHouse';
 				mui.ajax(url, {
 					data: {
 						info: JSON.stringify(billInfo)
@@ -191,9 +157,9 @@
 							//将照片上传
 							if (images.children.length > 0) {
 								//本机
-//								var url = 'http://192.168.6.164:8080/QuestionModule/QuestionBill/UpdateImage?id=' + guid
-								//正式库
-								var url = 'http://192.168.20.20:8022/QuestionModule/QuestionBill/UpdateImage?id=' + guid
+								var url = 'http://192.168.6.164:8080/PerformanceModule/LightHouse/UpdateImage?id=' + guid
+									//正式库
+									//								var url = 'http://192.168.20.20:8022/PerformanceModule/LightHouse/UpdateImage?id=' + guid
 								var task = plus.uploader.createUpload(url, {
 									method: "POST"
 								}, function(t, status) {
@@ -201,7 +167,7 @@
 									if (status == 200) {
 										if (t.responseText == "") {
 											plus.nativeUI.toast('添加成功');
-											var page = plus.webview.getWebviewById('questionbill-list-sub');
+											var page = plus.webview.getWebviewById('lighthouse-list-sub');
 											//触发列表界面的自定义事件（refresh）,从而进行数据刷新
 											mui.fire(page, 'refresh');
 											mui.back();
@@ -245,7 +211,7 @@
 						alert("读取拍照文件错误：" + e.message);
 					});
 				}, function(e) {
-//					alert("失败：" + e.message);
+					//					alert("失败：" + e.message);
 				}, {
 					filename: "_doc/camera/",
 					index: 1

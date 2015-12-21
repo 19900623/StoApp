@@ -71,6 +71,7 @@
 				minDate.setFullYear(2015, 0, 1);
 				var maxDate = new Date();
 				maxDate.setFullYear(2030, 12, 31);
+				var bxdate = document.getElementById("BXDate");
 				plus.nativeUI.pickDate(function(e) {
 					var d = e.date;
 					bxdate.value = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();

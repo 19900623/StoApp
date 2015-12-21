@@ -254,14 +254,16 @@
 					"img/blackberry.png",
 					"css/mui.min.css",
 					"img/account_balances.png",
-					"img/cell_delete.png"
+					"img/cell_delete.png",
+					"img/film_photo.png"
 				],
 				"refer": [
 					"addresslist.html",
 					"expensebill-list-main.html",
 					"leavebill-list-main.html",
 					"questionbill-input.html",
-					"questionbill-list-main.html"
+					"questionbill-list-main.html",
+					"lighthouse-list-main.html"
 				],
 				"priority": 0
 			},
@@ -354,7 +356,9 @@
 					"css/mui.min.css",
 					"fonts/mui.ttf"
 				],
-				"refer": [],
+				"refer": [
+					"expensebill-input.html"
+				],
 				"priority": 0
 			},
 			"leavebill-list-main.html": {
@@ -591,6 +595,67 @@
 					"questionbill-modify.html"
 				],
 				"priority": 0
+			},
+			"lighthouse-list-main.html": {
+				"resources": [
+					"lighthouse-list-sub.html"
+				],
+				"refer": [
+					"lighthouse-input.html"
+				],
+				"priority": 0
+			},
+			"lighthouse-input.html": {
+				"resources": [
+					"js/common.js",
+					"js/mui.picker.min.js",
+					"css/common.css",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/mui.enterfocus.js"
+				],
+				"refer": [
+					"barcode_scan.html"
+				],
+				"priority": 0
+			},
+			"expensebill-input.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/mui.enterfocus.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"lighthouse-list-sub.html": {
+				"resources": [],
+				"refer": [
+					"questionbill-modify.html",
+					"lighthouse-modify.html"
+				],
+				"priority": 0
+			},
+			"lighthouse-modify.html": {
+				"resources": [
+					"css/common.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/mui.enterfocus.js"
+				],
+				"refer": [
+					"camera_image.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {
@@ -598,7 +663,6 @@
 				"expensebill-modify.html",
 				"css/mui.css",
 				"expensebill-workflow.html",
-				"expensebill-input.html",
 				"leavebill-workflow.html"
 			]
 		}

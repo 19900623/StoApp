@@ -41,6 +41,12 @@
 						<div class="mui-media-body">大字错写</div>
 					</a>
 				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a href="#" onclick="toLightHouse()">
+						<img src="img/film_photo.png">
+						<div class="mui-media-body">曝光台</div>
+					</a>
+				</li>
 			</ul>
 		</div>
 	</body>
@@ -70,6 +76,12 @@
 			mui.preload({
 				"id": 'questionbill-list-main',
 				"url": 'questionbill-list-main.html'
+			});
+			
+			lighthousePage=
+			mui.preload({
+				"id": 'lighthouse-list-main',
+				"url": 'lighthouse-list-main.html'
 			});
 		});
 		var toExpense = function() {
@@ -122,6 +134,21 @@
 			setTimeout(function() {
 				mui.openWindow({
 					id: 'questionbill-list-main',
+					show: {
+						aniShow: 'pop-in'
+					},
+					waiting: {
+						autoShow: false
+					}
+				});
+			}, 0);
+		};
+		
+		var toLightHouse=function(){
+			mui.fire(questionbillPage, 'show', null);
+			setTimeout(function() {
+				mui.openWindow({
+					id: 'lighthouse-list-main',
 					show: {
 						aniShow: 'pop-in'
 					},
