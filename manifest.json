@@ -625,7 +625,8 @@
 					"js/mui.enterfocus.js"
 				],
 				"refer": [
-					"barcode_scan.html"
+					"barcode_scan.html",
+					"camera_image.html"
 				],
 				"priority": 0
 			},

@@ -21,6 +21,25 @@
 		//settings.gestures = '';
 		//owner.setSettings(settings);
 	};
+	
+	/**
+	 * 设置当前状态
+	 **/
+	owner.setHttpUrl = function(url) {
+		url = url || {};
+		localStorage.setItem('$HttpUrl', JSON.stringify(url));
+		//var settings = owner.getSettings();
+		//settings.gestures = '';
+		//owner.setSettings(settings);
+	};
+	/**
+	 * 获取当前状态
+	 **/
+	owner.getHttpUrl = function() {
+		var urlText = localStorage.getItem('$HttpUrl') || "{}";
+		return JSON.parse(urlText);
+	};
+	
 
 	/**
 	 * 获取应用本地配置

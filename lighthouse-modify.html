@@ -88,10 +88,9 @@
 								for (var i = 1; i < images.length; i++) {
 									var img = document.createElement('img');
 									var ul = document.getElementById("images");
+									var httpUrl=app.getHttpUrl()
 									img.className = "ditem";
-//									img.src = images[i].replace('~', 'http://192.168.6.164:8080');
-									//正式库
-									img.src = images[i].replace('~', 'http://192.168.20.20:8022');
+									img.src = images[i].replace('~', httpUrl);
 									img.setAttribute("onclick", "displayFile(this);");
 									ul.appendChild(img);
 								}
@@ -119,10 +118,7 @@
 							var images = document.getElementById("images");
 							//将照片上传
 							if (images.children.length > 0) {
-								//本机
-//								var url = 'http://192.168.6.164:8080/PerformanceModule/LightHouse/UpdateImage?id=' + id
-								//正式库
-								var url = 'http://192.168.20.20:8022/PerformanceModule/LightHouse/UpdateImage?id=' + id
+								var url = app.getUrl() + 'UpdateImage';
 								var task = plus.uploader.createUpload(url, {
 									method: "POST"
 								}, function(t, status) {
@@ -150,6 +146,8 @@
 										});
 									}
 								}
+								task.addData("id", id);
+								task.addData("type", "LightHouse");
 								task.start();
 							}
 						} else {
@@ -188,13 +186,25 @@
 				var imageUrl = '';
 				cmr.captureImage(function(p) {
 					plus.io.resolveLocalFileSystemURL(p, function(entry) {
+						//手机端图片进行压缩
 						imageUrl = entry.toLocalURL();
-						var img = document.createElement('img');
-						var ul = document.getElementById("images");
-						img.className = "ditem";
-						img.src = imageUrl;
-						img.setAttribute("onclick", "displayFile(this);");
-						ul.appendChild(img);
+						var newImage = imageUrl.replace('.jpg', '_c.jpg');
+						plus.zip.compressImage({
+								src: imageUrl,
+								dst: newImage,
+								quality: 20
+							},
+							function() {
+								var img = document.createElement('img');
+								var ul = document.getElementById("images");
+								img.className = "ditem";
+								img.src = newImage;
+								img.setAttribute("onclick", "displayFile(this);");
+								ul.appendChild(img);
+							},
+							function(error) {
+								alert("Compress error!");
+							});
 					}, function(e) {
 						alert("读取拍照文件错误：" + e.message);
 					});

@@ -156,10 +156,7 @@
 							var images = document.getElementById("images");
 							//将照片上传
 							if (images.children.length > 0) {
-								//本机
-//								var url = 'http://192.168.6.164:8080/PerformanceModule/LightHouse/UpdateImage?id=' + guid
-									//正式库
-								var url = 'http://192.168.20.20:8022/PerformanceModule/LightHouse/UpdateImage?id=' + guid
+								var url = app.getUrl() + 'UpdateImage';
 								var task = plus.uploader.createUpload(url, {
 									method: "POST"
 								}, function(t, status) {
@@ -184,6 +181,8 @@
 										key: images.children[i].fileName
 									});
 								}
+								task.addData("id", guid);
+								task.addData("type", "LightHouse");
 								task.start();
 							}
 						} else {
@@ -198,15 +197,28 @@
 				//outSet("开始拍照：");
 				var cmr = plus.camera.getCamera();
 				var imageUrl = '';
+				//将图片进行压缩
 				cmr.captureImage(function(p) {
 					plus.io.resolveLocalFileSystemURL(p, function(entry) {
 						imageUrl = entry.toLocalURL();
-						var img = document.createElement('img');
-						var ul = document.getElementById("images");
-						img.className = "ditem";
-						img.src = imageUrl;
-						img.setAttribute("onclick", "displayFile(this);");
-						ul.appendChild(img);
+						//手机端图片进行压缩
+						var newImage = imageUrl.replace('.jpg', '_c.jpg');
+						plus.zip.compressImage({
+								src: imageUrl,
+								dst: newImage,
+								quality: 20
+							},
+							function() {
+								var img = document.createElement('img');
+								var ul = document.getElementById("images");
+								img.className = "ditem";
+								img.src = newImage;
+								img.setAttribute("onclick", "displayFile(this);");
+								ul.appendChild(img);
+							},
+							function(error) {
+								alert("Compress error!");
+							});
 					}, function(e) {
 						alert("读取拍照文件错误：" + e.message);
 					});
