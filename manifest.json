@@ -6,7 +6,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.2",/*应用版本名称*/
+		"name": "1.0",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -196,12 +196,12 @@
 						"landscape-retina7": ""
 					}
 				},
-				"android": {
-					"mdpi": "", /*普通屏启动图片，分辨率：240x282*/
-					"ldpi": "", /*大屏启动图片，分辨率：320x442*/
-					"hdpi": "", /*高分屏启动图片，分辨率：480x762*/
-					"xhdpi": "", /*720P高分屏启动图片，分辨率：720x1242*/
-					"xxhdpi": ""
+				"android": {"ldpi":"C:/Users/Administrator/Desktop/png/2.png","mdpi":"C:/Users/Administrator/Desktop/png/1.png","hdpi":"C:/Users/Administrator/Desktop/png/480x762.png","xhdpi":"C:/Users/Administrator/Desktop/png/720.png","xxhdpi":"C:/Users/Administrator/Desktop/png/1080.png"
+					 /*普通屏启动图片，分辨率：240x282*/
+					 /*大屏启动图片，分辨率：320x442*/
+					 /*高分屏启动图片，分辨率：480x762*/
+					 /*720P高分屏启动图片，分辨率：720x1242*/
+					
 				}
 			},
 			"debug": false
@@ -229,9 +229,15 @@
 					"libs/echarts-all.js",
 					"js/mui.min.js",
 					"css/app.css",
-					"css/mui.min.css"
+					"css/mui.min.css",
+					"img/combined_chart.png",
+					"img/chart_bar.png",
+					"js/page.js"
 				],
-				"refer": [],
+				"refer": [
+					"report-waybillpickup-day.html",
+					"report-delivery-day.html"
+				],
 				"priority": 0
 			},
 			"tab-setting.html": {
@@ -603,7 +609,9 @@
 			},
 			"lighthouse-list-main.html": {
 				"resources": [
-					"lighthouse-list-sub.html"
+					"lighthouse-list-sub.html",
+					"js/mui.min.js",
+					"css/mui.min.css"
 				],
 				"refer": [
 					"lighthouse-input.html"
@@ -642,7 +650,12 @@
 				"priority": 0
 			},
 			"lighthouse-list-sub.html": {
-				"resources": [],
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"fonts/mui.ttf"
+				],
 				"refer": [
 					"questionbill-modify.html",
 					"lighthouse-modify.html"
@@ -661,6 +674,33 @@
 				"refer": [
 					"camera_image.html"
 				],
+				"priority": 0
+			},
+			"report-waybillpickup-day.html": {
+				"resources": [
+					"js/app.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"fonts/mui.ttf",
+					"js/mui.picker.min.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report-delivery-day.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					null
+				],
+				"refer": [],
 				"priority": 0
 			}
 		},

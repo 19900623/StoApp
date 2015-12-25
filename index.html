@@ -90,13 +90,13 @@
 					//设置WebService的Url				
 					var settings = app.getSettings();
 					//正式库
-//					var httpUrl = 'http://58.57.35.3:8066';
+					var httpUrl = 'http://58.57.35.3:8066';
 					//测试库
-					var httpUrl = 'http://192.168.6.164/LeaRun.MobileApp';
+//					var httpUrl = 'http://192.168.6.164/LeaRun.MobileApp';
 					var url = httpUrl + '/MobileAppService.asmx/';
 					app.setUrl(url);
 					app.setHttpUrl(httpUrl)
-					//检查App升级版本并升级			
+						//检查App升级版本并升级			
 					var url = app.getUrl() + 'GetVersionInfo';
 					mui.ajax(url, {
 						dataType: 'json', //服务器返回json格式数据
@@ -107,26 +107,34 @@
 							plus.runtime.getProperty(plus.runtime.appid, function(info) {
 								//version属性
 								oldVersion = info.version;
+								//								plus.nativeUI.prompt()
 								if (oldVersion < versionNew) {
-									var DownUrl = httpUrl + '/App/Sto' + versionNew + '.wgt'; // 下载文件地址
-									var dtask = plus.downloader.createDownload(DownUrl, {}, function(d, status) {
-										if (status == 200) { // 下载成功
-											var path = d.filename;
-											plus.nativeUI.showWaiting("安装更新文件...");
-											plus.runtime.install(path, {}, function() {
-												plus.nativeUI.closeWaiting();
-												plus.nativeUI.alert("应用资源更新完成！", function() {
-													plus.runtime.restart();
-												});
-											}, function(e) {
-												plus.nativeUI.closeWaiting();
-												plus.nativeUI.alert("安装更新文件失败[" + e.code + "]：" + e.message);
+									var btnArray = ['是', '否'];
+									mui.confirm('检测到当前最新版本' + versionNew + '，是否更新？', '版本更新', btnArray, function(e) {
+										if (e.index == 0) {
+											var DownUrl = httpUrl + '/App/Sto' + versionNew + '.wgt'; // 下载文件地址
+											var dtask = plus.downloader.createDownload(DownUrl, {}, function(d, status) {
+												if (status == 200) { // 下载成功
+													var path = d.filename;
+													plus.nativeUI.showWaiting("安装更新文件...");
+													plus.runtime.install(path, {}, function() {
+														plus.nativeUI.closeWaiting();
+														plus.nativeUI.alert("应用资源更新完成！", function() {
+															plus.runtime.restart();
+														});
+													}, function(e) {
+														plus.nativeUI.closeWaiting();
+														plus.nativeUI.alert("安装更新文件失败[" + e.code + "]：" + e.message);
+													});
+												} else { //下载失败
+													alert("Download failed: " + status);
+												}
 											});
-										} else { //下载失败
-											alert("Download failed: " + status);
+											dtask.start();
+										} else {
+											return;
 										}
-									});
-									dtask.start();
+									})
 								}
 							});
 						}
