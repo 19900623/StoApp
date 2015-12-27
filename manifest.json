@@ -232,7 +232,8 @@
 					"css/mui.min.css",
 					"img/combined_chart.png",
 					"img/chart_bar.png",
-					"js/page.js"
+					"js/page.js",
+					"js/app.js"
 				],
 				"refer": [
 					"report-waybillpickup-day.html",
