@@ -236,10 +236,10 @@
 						imageUrl = entry.toLocalURL();
 						//手机端图片进行压缩
 						var newImage = imageUrl.replace('.jpg', '_c.jpg');
-						plus.zip.compressImage({
+						plus.zip.compressImage({ 
 								src: imageUrl,
 								dst: newImage,
-								quality: 20
+								quality: 30
 							},
 							function() {
 								var img = document.createElement('img');

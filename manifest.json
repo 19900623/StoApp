@@ -612,10 +612,13 @@
 				"resources": [
 					"lighthouse-list-sub.html",
 					"js/mui.min.js",
-					"css/mui.min.css"
+					"css/mui.min.css",
+					"fonts/mui.ttf",
+					null
 				],
 				"refer": [
-					"lighthouse-input.html"
+					"lighthouse-input.html",
+					"upload-image.html"
 				],
 				"priority": 0
 			},
@@ -700,6 +703,20 @@
 					"fonts/mui.ttf",
 					"css/mui.min.css",
 					null
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"upload-image.html": {
+				"resources": [
+					"img/60x60.gif",
+					"js/mui.lazyload.js",
+					"js/mui.lazyload.img.js",
+					"js/mui.min.js",
+					"css/app.css",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/app.js"
 				],
 				"refer": [],
 				"priority": 0

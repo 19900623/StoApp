@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="css/mui.min.css">
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" id="header">
+			<a id="back" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">图片上传</h1>
+		</header>
+		<div style="margin-top: 45px;">
+			<ul id="list" class="mui-table-view mui-table-view-chevron">
+
+			</ul>
+		</div>
+	</body>
+	<script src="js/mui.min.js "></script>
+	<script src="js/app.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.lazyload.js"></script>
+	<script src="js/mui.lazyload.img.js"></script>
+	<script>
+		mui.init();
+		var task;
+		var wt;
+		mui.plusReady(function() {
+			createFragment();
+			var header = document.getElementById("header");
+			var rightbtn = document.createElement('button');
+			rightbtn.className = 'mui-btn mui-btn-blue mui-btn-link mui-pull-right';
+			rightbtn.innerText = '上传';
+			rightbtn.addEventListener('tap', function(event) {
+				var btnArray = ['是', '否'];
+				mui.confirm('是否全部上传图片到服务器？', '申通提醒', btnArray, function(e) {
+					if (e.index == 0) {
+						wt = plus.nativeUI.showWaiting();
+						task.addData("type", "LightHouse");
+						task.addData("username", JSON.parse(app.getLoginInfo().userinfo).realname);
+						task.start();
+					}
+				});
+			});
+			header.appendChild(rightbtn);
+			var url = app.getUrl() + 'UpdateImage';
+			task = plus.uploader.createUpload(url, {
+				method: "POST"
+			}, function(t, status) {
+				// 上传完成
+				if (status == 200) {
+					if (t.responseText == "") {
+						plus.nativeUI.toast('上传成功');
+						mui.back();
+					} else
+						alert(t.responseText);
+					wt.close()
+				} else {
+					plus.nativeUI.toast("Upload failed: " + status);
+					wt.close()
+				}
+			});
+		});
+		var createFragment = function() {
+			var li;
+			var messageInfo = {
+				billname: plus.webview.currentWebview().name,
+				username: JSON.parse(app.getLoginInfo().userinfo).realname
+			};
+			var url = app.getUrl() + 'GetImage';
+			mui.ajax(url, {
+				data: messageInfo,
+				type: 'post',
+				dataType: 'json',
+				success: function(data) {
+					if (data) {
+						var fragment = document.createDocumentFragment();
+						for (var i = 0; i < data.length; i++) {
+							li = document.createElement('li');
+							li.className = 'mui-table-view-cell mui-media';
+							li.innerHTML = '<a class="mui-navigate"><img class="mui-media-object mui-pull-left" data-lazyload=' + data[i].imgpath + '><div class="mui-media-body">未上传<p class="mui-ellipsis">时间：' + data[i].uploaddate + '</p></div></a>';
+							fragment.appendChild(li);
+							task.addFile(data[i].imgpath, {
+								key: data[i].id
+							});
+						}
+						var list = document.getElementById("list");
+						list.appendChild(fragment);
+						mui(document).imageLazyload({
+							placeholder: 'img/60x60.gif'
+						});
+					}
+				}
+			});
+		};
+	</script>
+
+</html>

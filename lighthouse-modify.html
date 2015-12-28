@@ -52,8 +52,8 @@
 
 				<div class="mui-button-row">
 					<button type="button" class="mui-btn mui-btn-success" onclick="getImage();" id="buttonok">拍照</button>&nbsp;&nbsp;
-					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
-					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">保存</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-danger" onclick="btn_delete()">删除</button>
 				</div>
 			</div>
 		</div>
@@ -61,14 +61,13 @@
 		<script src="js/app.js"></script>
 		<script src="js/mui.enterfocus.js"></script>
 		<script>
-		
-		var WayBillNumber = document.getElementById("WayBillNumber");
-				var id;
+			var WayBillNumber = document.getElementById("WayBillNumber");
+			var id;
 			mui.plusReady(function() {
 				var Title = document.getElementById("Title");
 				var Date = document.getElementById("Date");
 				var Remark = document.getElementById("Remark");
-				id=plus.webview.currentWebview().name;
+				id = plus.webview.currentWebview().name;
 				var url = app.getUrl() + 'GetLightHouseByID';
 				mui.ajax(url, {
 					data: {
@@ -88,9 +87,16 @@
 								for (var i = 1; i < images.length; i++) {
 									var img = document.createElement('img');
 									var ul = document.getElementById("images");
-									var httpUrl=app.getHttpUrl()
+									var httpUrl = app.getHttpUrl()
 									img.className = "ditem";
+									if(images[i].indexOf('file')>=0)
+									{
+										img.src=images[i]
+									}
+									else
+									{
 									img.src = images[i].replace('~', httpUrl);
+								    }
 									img.setAttribute("onclick", "displayFile(this);");
 									ul.appendChild(img);
 								}
@@ -157,6 +163,33 @@
 					}
 				});
 			}
+
+			function btn_delete() {
+				var btnArray = ['是', '否'];
+				mui.confirm('是否删除该条数据？', '申通提醒', btnArray, function(e) {
+					if (e.index == 0) {
+						var url = app.getUrl() + 'DeleteLightHouseByID';
+						mui.ajax(url, {
+							data: {
+								id: id
+							},
+							type: 'post', //HTTP请求类型
+							dataType: 'json',
+							success: function(data) {
+								if (data == ""||data == null) {
+									plus.nativeUI.toast('删除成功');
+									var page = plus.webview.getWebviewById('lighthouse-list-sub');
+									mui.fire(page, 'refresh');
+									mui.back();
+								} else {
+									plus.nativeUI.toast(data);
+								}
+							}
+						})
+					}
+				});
+			}
+			
 			var w = null;
 			// 显示文件
 			function displayFile(img) {

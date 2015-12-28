@@ -49,8 +49,8 @@
 
 				<div class="mui-button-row">
 					<button type="button" class="mui-btn mui-btn-success" onclick="getImage();" id="buttonok">拍照</button>&nbsp;&nbsp;
-					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
-					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">保存</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-danger" onclick="btn_delete()">删除</button>
 				</div>
 			</div>
 		</div>
@@ -84,9 +84,8 @@
 								for (var i = 1; i < images.length; i++) {
 									var img = document.createElement('img');
 									var ul = document.getElementById("images");
-									img.className = "ditem";									
-									var httpUrl=app.getHttpUrl()
 									img.className = "ditem";
+									var httpUrl = app.getHttpUrl()
 									img.src = images[i].replace('~', httpUrl);
 									img.setAttribute("onclick", "displayFile(this);");
 									ul.appendChild(img);
@@ -149,6 +148,32 @@
 							plus.nativeUI.toast(data);
 							wt.close()
 						}
+					}
+				});
+			}
+
+			function btn_delete() {
+				var btnArray = ['是', '否'];
+				mui.confirm('是否删除该条数据？', '申通提醒', btnArray, function(e) {
+					if (e.index == 0) {
+						var url = app.getUrl() + 'DeleteQuestionBillByID';
+						mui.ajax(url, {
+							data: {
+								id: id
+							},
+							type: 'post', //HTTP请求类型
+							dataType: 'json',
+							success: function(data) {
+								if (data == "" || data == null) {
+									plus.nativeUI.toast('删除成功');
+									var page = plus.webview.getWebviewById('questionbill-list-sub');
+									mui.fire(page, 'refresh');
+									mui.back();
+								} else {
+									plus.nativeUI.toast(data);
+								}
+							}
+						})
 					}
 				});
 			}

@@ -362,6 +362,11 @@ a:active {
 	float: right
 }
 
+.mui-pull-right-margin {
+	float: right;
+	right: 15px;
+}
+
 .mui-list-unstyled {
 	padding-left: 0;
 	list-style: none

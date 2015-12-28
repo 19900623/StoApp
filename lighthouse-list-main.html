@@ -62,6 +62,29 @@
 					});
 				}, 0);
 			});
+			
+			header.appendChild(rightbtn);
+			
+			var rightbtn = document.createElement('button');
+			rightbtn.className = 'mui-btn mui-btn-blue mui-btn-link mui-pull-right';
+			rightbtn.innerText = '图片上传';
+			rightbtn.addEventListener('tap', function(event) {
+				setTimeout(function() {
+					mui.openWindow({
+						id: 'upload-image',
+						url:'upload-image.html',
+						show: {
+							aniShow: 'pop-in'
+						},
+					   extras:{
+       						name: 'LightHouse'
+    					},
+						waiting: {
+							autoShow: false
+						}	
+					});
+				}, 0);
+			});
 			header.appendChild(rightbtn);
 		});		
 	</script>
