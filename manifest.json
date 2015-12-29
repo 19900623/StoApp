@@ -6,7 +6,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.0",/*应用版本名称*/
+		"name": "1.1",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -196,7 +196,7 @@
 						"landscape-retina7": ""
 					}
 				},
-				"android": {"ldpi":"C:/Users/Administrator/Desktop/png/2.png","mdpi":"C:/Users/Administrator/Desktop/png/1.png","hdpi":"C:/Users/Administrator/Desktop/png/480x762.png","xhdpi":"C:/Users/Administrator/Desktop/png/720.png","xxhdpi":"C:/Users/Administrator/Desktop/png/1080.png"
+				"android": {"ldpi":"G:/手机端更新/png/2.png","mdpi":"G:/手机端更新/png/1.png","hdpi":"G:/手机端更新/png/480x762.png","xhdpi":"G:/手机端更新/png/720.png","xxhdpi":"G:/手机端更新/png/1080.png"
 					 /*普通屏启动图片，分辨率：240x282*/
 					 /*大屏启动图片，分辨率：320x442*/
 					 /*高分屏启动图片，分辨率：480x762*/
@@ -581,7 +581,8 @@
 					"css/mui.min.css"
 				],
 				"refer": [
-					"questionbill-input.html"
+					"questionbill-input.html",
+					"upload-image.html"
 				],
 				"priority": 0
 			},

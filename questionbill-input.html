@@ -168,6 +168,11 @@
 				var userid = app.getLoginInfo().userid;
 				var username = JSON.parse(app.getLoginInfo().userinfo).realname;
 				var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
+				var images = document.getElementById("images");
+				var ImagePaths='';
+				for (var i = 0; i < images.children.length; i++) {
+					ImagePaths += images.children[i].src + ',';
+				}
 				//调用方法
 				var billInfo = {
 					ID: guid,
@@ -177,7 +182,8 @@
 					Remark: Remark.value,
 					CreateUserId: userid,
 					CreateUserName: username,
-					UserCode: usercode
+					UserCode: usercode,
+					Image: ImagePaths
 				};
 				var url = app.getUrl() + 'AddQuestionBill';
 				mui.ajax(url, {
@@ -187,38 +193,12 @@
 					type: 'post', //HTTP请求类型
 					success: function(data) {
 						if (data == "") {
-							var images = document.getElementById("images");
-							//将照片上传
-							if (images.children.length > 0) {
-								var url = app.getUrl() + 'UpdateImage';
-								var task = plus.uploader.createUpload(url, {
-									method: "POST"
-								}, function(t, status) {
-									// 上传完成
-									if (status == 200) {
-										if (t.responseText == "") {
-											plus.nativeUI.toast('添加成功');
-											var page = plus.webview.getWebviewById('questionbill-list-sub');
-											//触发列表界面的自定义事件（refresh）,从而进行数据刷新
-											mui.fire(page, 'refresh');
-											mui.back();
-										} else
-											alert(t.responseText);
-										wt.close()
-									} else {
-										plus.nativeUI.toast("Upload failed: " + status);
-										wt.close()
-									}
-								});
-								for (var i = 0; i < images.children.length; i++) {
-									task.addFile(images.children[i].src, {
-										key: images.children[i].fileName
-									});
-								}
-								task.addData("id", guid);
-								task.addData("type", "QuestionBill");
-								task.start();
-							}
+							plus.nativeUI.toast('添加成功');
+							var page = plus.webview.getWebviewById('questionbill-list-sub');
+							wt.close();
+							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+							mui.fire(page, 'refresh');
+							mui.back();
 						} else {
 							plus.nativeUI.toast(data);
 							wt.close();

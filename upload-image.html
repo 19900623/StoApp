@@ -41,7 +41,7 @@
 				mui.confirm('是否全部上传图片到服务器？', '申通提醒', btnArray, function(e) {
 					if (e.index == 0) {
 						wt = plus.nativeUI.showWaiting();
-						task.addData("type", "LightHouse");
+						task.addData("type", plus.webview.currentWebview().name);
 						task.addData("username", JSON.parse(app.getLoginInfo().userinfo).realname);
 						task.start();
 					}
@@ -72,6 +72,12 @@
 				billname: plus.webview.currentWebview().name,
 				username: JSON.parse(app.getLoginInfo().userinfo).realname
 			};
+			var title;
+			if(messageInfo.billname=='LightHouse')
+				title='曝光台';
+		    if(messageInfo.billname=='QuestionBill')
+				title='大字错写';
+			
 			var url = app.getUrl() + 'GetImage';
 			mui.ajax(url, {
 				data: messageInfo,
@@ -83,7 +89,7 @@
 						for (var i = 0; i < data.length; i++) {
 							li = document.createElement('li');
 							li.className = 'mui-table-view-cell mui-media';
-							li.innerHTML = '<a class="mui-navigate"><img class="mui-media-object mui-pull-left" data-lazyload=' + data[i].imgpath + '><div class="mui-media-body">未上传<p class="mui-ellipsis">时间：' + data[i].uploaddate + '</p></div></a>';
+							li.innerHTML = '<a class="mui-navigate"><img class="mui-media-object mui-pull-left" data-lazyload=' + data[i].imgpath + '><div class="mui-media-body">'+title+'<p class="mui-ellipsis">时间：' + data[i].uploaddate + '</p></div></a>';
 							fragment.appendChild(li);
 							task.addFile(data[i].imgpath, {
 								key: data[i].id
