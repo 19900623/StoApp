@@ -47,23 +47,21 @@
 			var rightbtn = document.createElement('button');
 			rightbtn.className = 'mui-btn mui-btn-blue mui-btn-link mui-pull-right';
 			rightbtn.innerText = '新增';
-			rightbtn.addEventListener('tap', function(event) {
-				setTimeout(function() {
-					mui.openWindow({
-						url: 'questionbill-input.html',
-						id: 'questionbill-input',
-						styles: {},
-						show: {
-							aniShow: 'pop-in'
-						},
-						extras: {
-							name: name
-						},
-						waiting: {
-							autoShow: false
-						}
-					});
-				}, 0);
+			rightbtn.addEventListener('tap', function(event) {				
+				var nwaiting = plus.nativeUI.showWaiting();
+				var addresslistPage = plus.webview.create(
+					'questionbill-input.html',
+					'questionbill-input',
+					{},
+					{name:name}
+				); //后台创建webview并打开show.html
+				addresslistPage.addEventListener("loaded", function() { //注册新webview的载入完成事件
+					setTimeout(function() {
+						nwaiting.close();
+						//新webview的载入完毕后关闭等待框
+						addresslistPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+					}, 300);
+				}, false);						
 			});
 			header.appendChild(rightbtn);
 			var rightbtn = document.createElement('button');
@@ -102,7 +100,6 @@
 									if (image != '') {
 										var images = image.split(',');
 										for (var j = 0; j < images.length - 1; j++) {
-											console.log(images[j]);
 											task.addFile(images[j], {
 												key: app.NewGuid()
 											});
@@ -110,7 +107,7 @@
 									}
 									list.push(QustionBill);
 								}
-								console.log(JSON.stringify(list));
+//								console.log(JSON.stringify(list));
 //								return;
 								task.addData("Info", JSON.stringify(list));
 								task.addData("type", 'QuestionBill');

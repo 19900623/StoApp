@@ -137,39 +137,39 @@
 				for (var i = 0; i < images.children.length; i++) {
 					ImagePaths += images.children[i].src + ',';
 				}
-				var d =new Date().format('yyyy-MM-dd hh:mm');
+				var d = new Date().format('yyyy-MM-dd hh:mm');
 				var wt = plus.nativeUI.showWaiting();
 				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
-//				db.transaction(function(context) {
-//					var sql = 'DELETE FROM QustionBill';
-//					context.executeSql(sql);
-//				});
+				//				db.transaction(function(context) {
+				//					var sql = 'DELETE FROM QustionBill';
+				//					context.executeSql(sql);
+				//				});
 				db.transaction(function(context) {
-					var sql = 'INSERT INTO QustionBill (WayBillNumber, KPI,Type,Remark,Image,State,CreateDate) VALUES ("' + WayBillNumber.value + '","' + name +'","'+Type.value+'","'+Remark .value+'","'+ImagePaths+'","未上传","'+d+'")';
 					context.executeSql('CREATE TABLE IF NOT EXISTS QustionBill (WayBillNumber unique, KPI,Type,Remark,Image,State,CreateDate)');
-					context.executeSql(sql,[], 
-					function(tx,result)
-					{ 
-						plus.nativeUI.toast('添加成功');
-						var page = plus.webview.getWebviewById('questionbill-list-sub');
-						wt.close();
-						//触发列表界面的自定义事件（refresh）,从而进行数据刷新
-						mui.fire(page, 'refresh');
-						mui.back();
-					},
-        			
-        			function(tx, error)
-        			{
-        				wt.close();
-        				if(error.message.indexOf('WayBillNumber')>0)
-        				{
-        					plus.nativeUI.toast('运单编号已经存在');
-        				}
-        				else
-        				{       				
-        				plus.nativeUI.toast(error.message);
-        				}
-        			});
+					context.executeSql("SELECT 1 FROM QustionBill where WayBillNumber=?", [WayBillNumber.value], function(context, results) {
+						if (results.rows.length > 0) {
+							plus.nativeUI.toast('运单编号已经存在');
+							wt.close();
+							return;
+						} else {
+							db.transaction(function(context) {
+								var sql = 'INSERT INTO QustionBill (WayBillNumber, KPI,Type,Remark,Image,State,CreateDate) VALUES ("' + WayBillNumber.value + '","' + name + '","' + Type.value + '","' + Remark.value + '","' + ImagePaths + '","未上传","' + d + '")';								
+								context.executeSql(sql, [],
+									function(tx, result) {
+										plus.nativeUI.toast('添加成功');
+										var page = plus.webview.getWebviewById('questionbill-list-sub');
+										wt.close();
+										//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+										mui.fire(page, 'refresh');
+										mui.back();
+									},
+									function(tx, error) {
+										wt.close();
+										plus.nativeUI.toast(error.message);
+									});
+							});
+						}
+					});
 				});
 			}
 			// 拍照

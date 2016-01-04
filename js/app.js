@@ -21,7 +21,7 @@
 		//settings.gestures = '';
 		//owner.setSettings(settings);
 	};
-	
+
 	/**
 	 * 设置当前状态
 	 **/
@@ -39,7 +39,7 @@
 		var urlText = localStorage.getItem('$HttpUrl') || "{}";
 		return JSON.parse(urlText);
 	};
-	
+
 
 	/**
 	 * 获取应用本地配置
@@ -89,24 +89,23 @@
 		return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 	}
 
-Date.prototype.format =function(format)
-{
-var o = {
-"M+" : this.getMonth()+1, //month
-"d+" : this.getDate(), //day
-"h+" : this.getHours(), //hour
-"m+" : this.getMinutes(), //minute
-"s+" : this.getSeconds(), //second
-"q+" : Math.floor((this.getMonth()+3)/3), //quarter
-"S" : this.getMilliseconds() //millisecond
-}
-if(/(y+)/.test(format)) format=format.replace(RegExp.$1,
-(this.getFullYear()+"").substr(4- RegExp.$1.length));
-for(var k in o)if(new RegExp("("+ k +")").test(format))
-format = format.replace(RegExp.$1,
-RegExp.$1.length==1? o[k] :
-("00"+ o[k]).substr((""+ o[k]).length));
-return format;
-}
+	Date.prototype.format = function(format) {
+		var o = {
+			"M+": this.getMonth() + 1, //month
+			"d+": this.getDate(), //day
+			"h+": this.getHours(), //hour
+			"m+": this.getMinutes(), //minute
+			"s+": this.getSeconds(), //second
+			"q+": Math.floor((this.getMonth() + 3) / 3), //quarter
+			"S": this.getMilliseconds() //millisecond
+		}
+		if (/(y+)/.test(format)) format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+		for (var k in o)
+			if (new RegExp("(" + k + ")").test(format))
+				format = format.replace(RegExp.$1,
+					RegExp.$1.length == 1 ? o[k] :
+					("00" + o[k]).substr(("" + o[k]).length));
+		return format;
+	}
 
 }(window.mui, window.app = {}));

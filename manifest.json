@@ -6,7 +6,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.1",/*应用版本名称*/
+		"name": "1.2",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -624,7 +624,8 @@
 					"js/mui.min.js",
 					"css/mui.min.css",
 					"fonts/mui.ttf",
-					null
+					null,
+					"js/app.js"
 				],
 				"refer": [
 					"lighthouse-input.html",
@@ -683,10 +684,12 @@
 					"js/mui.min.js",
 					"fonts/mui.ttf",
 					"css/mui.min.css",
-					"js/mui.enterfocus.js"
+					"js/mui.enterfocus.js",
+					"js/common.js"
 				],
 				"refer": [
-					"camera_image.html"
+					"camera_image.html",
+					"barcode_scan.html"
 				],
 				"priority": 0
 			},
