@@ -108,7 +108,7 @@
 								ali.onclick = function() {
 									//处理切换时，数据未从数据库更新完毕
 									var nwaiting = plus.nativeUI.showWaiting();
-									webviewShow = plus.webview.create(
+									var webviewShow = plus.webview.create(
 										'addresslist-detail.html',
 										'addresslist-detail',
 										'', {

@@ -136,7 +136,7 @@
 										var info = JSON.parse(this.id)
 											//处理切换时，数据未从数据库更新完毕
 										var nwaiting = plus.nativeUI.showWaiting();
-										webviewShow = plus.webview.create(
+										var webviewShow = plus.webview.create(
 											info.pagehtml,
 											info.pageid,
 											'', {
@@ -245,11 +245,11 @@
 									}
 									li.id = JSON.stringify(info);
 									li.onclick = function() {
-										//根据Type类型判断打开请假条或流程的审批界面
+										//根据Type类型判断打开请假条或流程的审批界面 
 										var info = JSON.parse(this.id)
 											//处理切换时，数据未从数据库更新完毕
 										var nwaiting = plus.nativeUI.showWaiting();
-										webviewShow = plus.webview.create(
+										var webviewShow = plus.webview.create(
 											info.pagehtml,
 											info.pageid,
 											'', {

@@ -9,6 +9,7 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/mui.picker.min.css" />
 		<link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
 		<style>
 			html,
@@ -29,10 +30,6 @@
 					<div class="mui-input-row">
 						<label>运单编号</label>
 						<input type="text" id="WayBillNumber" class="mui-input" required="required" readonly="readonly">
-					</div>
-					<div class="mui-input-row">
-						<label>类型</label>
-						<input type="text" id="KPI" class="mui-input" required="required" readonly="readonly">
 					</div>
 					<div class="mui-input-row">
 						<label>类别</label>
@@ -57,82 +54,90 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/app.js"></script>
 		<script src="js/mui.enterfocus.js"></script>
+		<script src="js/mui.picker.min.js"></script>
+		<script src="js/mui.poppicker.js"></script>
 		<script>
+			mui.init({});
 			var WayBillNumber = document.getElementById("WayBillNumber");
-			var KPI = document.getElementById("KPI");
 			var Type = document.getElementById("Type");
 			var Remark = document.getElementById("Remark");
-			var id;
+			var id, name;
+			var KPIPicker;
 			mui.plusReady(function() {
 				id = plus.webview.currentWebview().name;
-				var url = app.getUrl() + 'GetQuestionBillByID';
-				mui.ajax(url, {
-					data: {
-						id: id
-					},
-					type: 'post', //HTTP请求类型
-					dataType: 'json',
-					success: function(data) {
-						if (data) {
-							WayBillNumber.value = data[0].waybillnumber;
-							KPI.value = data[0].kpi;
-							Type.value = data[0].type;
-							Remark.value = data[0].remark;
-							var image = data[0].image || '';
-							if (image != '') {
-								var images = image.split(',');
-								for (var i = 1; i < images.length; i++) {
-									var img = document.createElement('img');
-									var ul = document.getElementById("images");
-									img.className = "ditem";
-									var httpUrl = app.getHttpUrl()
-									if (images[i].indexOf('file') >= 0) {
-										img.src = images[i]
-									} else {
-										img.src = images[i].replace('~', httpUrl);
-									}
-									img.setAttribute("onclick", "displayFile(this);");
-									ul.appendChild(img);
-								}
+				name = plus.webview.currentWebview().type;
+				document.getElementById("title").innerHTML = '编辑' + name;
+				KPIPicker = new mui.PopPicker({
+					layer: 1
+				});
+				if (name.indexOf('大字') > 0) {
+					KPIPicker.setData([{
+						value: '大字',
+						text: '大字'
+					}, {
+						value: '大包',
+						text: '大包'
+					}]);
+				} else {
+					KPIPicker.setData([{
+						value: '不规则',
+						text: '不规则'
+					}, {
+						value: '同行',
+						text: '同行'
+					}, {
+						value: '裸包装',
+						text: '裸包装'
+					}]);
+				}
+				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+				db.transaction(function(context) {
+					context.executeSql("SELECT * FROM QustionBill where WayBillNumber=?", [id], function(context, results) {
+						WayBillNumber.value = id;
+						Type.value = results.rows.item(0).Type;
+						Remark.value = results.rows.item(0).Remark;
+						var image = results.rows.item(0).Image || '';
+						if (image != '') {
+							var images = image.split(',');
+							for (var i = 0; i < images.length - 1; i++) {
+								var img = document.createElement('img');
+								var ul = document.getElementById("images");
+								img.className = "ditem";
+								img.src = images[i]
+								img.setAttribute("onclick", "displayFile(this);");
+								ul.appendChild(img);
 							}
 						}
-					}
+					});
+				});
+			});
+			//选择请假类型事件		
+			document.getElementById("Type").addEventListener('tap', function() {
+				KPIPicker.show(function(items) {
+					document.getElementById("Type").value = items[0].value;
 				});
 			});
 			//确定按钮
 			function btn_ok() {
-				var wt = plus.nativeUI.showWaiting();
 				var images = document.getElementById("images");
 				var ImagePaths = '';
 				for (var i = 0; i < images.children.length; i++) {
 					if (images.children[i].src.indexOf('file') >= 0)
 						ImagePaths += images.children[i].src + ',';
 				}
-				//调用方法
-				var billInfo = {
-					ID: id,
-					Remark: Remark.value,
-					Image: ImagePaths
-				};
-				var url = app.getUrl() + 'ModifyQuestionBill';
-				mui.ajax(url, {
-					data: {
-						info: JSON.stringify(billInfo)
-					},
-					type: 'post', //HTTP请求类型
-					success: function(data) {
-						if (data == "") {
-							plus.nativeUI.toast('添加成功');
+				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+				db.transaction(function(context) {
+					context.executeSql('update QustionBill set Type=?,Remark=?,Image=? where WayBillNumber=?', [Type.value, Remark.value, ImagePaths, id],
+						function(tx, result) {
+							plus.nativeUI.toast('保存成功');
 							var page = plus.webview.getWebviewById('questionbill-list-sub');
-							wt.close();
 							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
 							mui.fire(page, 'refresh');
 							mui.back();
-						} else {
-							plus.nativeUI.toast(data);
-							wt.close();
-						}
-					}
+						},
+						function(tx, error) {
+							plus.nativeUI.toast(error.message);
+						});
 				});
 			}
 
@@ -140,24 +145,20 @@
 				var btnArray = ['是', '否'];
 				mui.confirm('是否删除该条数据？', '申通提醒', btnArray, function(e) {
 					if (e.index == 0) {
-						var url = app.getUrl() + 'DeleteQuestionBillByID';
-						mui.ajax(url, {
-							data: {
-								id: id
-							},
-							type: 'post', //HTTP请求类型
-							dataType: 'json',
-							success: function(data) {
-								if (data == "" || data == null) {
+						var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+						db.transaction(function(context) {
+							context.executeSql('delete from QustionBill where WayBillNumber=?', [id],
+								function(tx, result) {
 									plus.nativeUI.toast('删除成功');
 									var page = plus.webview.getWebviewById('questionbill-list-sub');
+									//触发列表界面的自定义事件（refresh）,从而进行数据刷新
 									mui.fire(page, 'refresh');
 									mui.back();
-								} else {
-									plus.nativeUI.toast(data);
-								}
-							}
-						})
+								},
+								function(tx, error) {
+									plus.nativeUI.toast(error.message);
+								});
+						});
 					}
 				});
 			}
@@ -196,7 +197,7 @@
 						plus.zip.compressImage({
 								src: imageUrl,
 								dst: newImage,
-								quality: 20
+								quality: 30
 							},
 							function() {
 								var img = document.createElement('img');

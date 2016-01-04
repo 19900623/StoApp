@@ -92,7 +92,7 @@
 									li.onclick = function() {
 										//处理切换时，数据未从数据库更新完毕
 										var nwaiting = plus.nativeUI.showWaiting();
-										webviewShow = plus.webview.create(
+										var webviewShow = plus.webview.create(
 											'leavebill-modify.html',
 											'leavebill-modify',
 											'', {
@@ -164,7 +164,7 @@
 									li.onclick = function() {
 										//处理切换时，数据未从数据库更新完毕
 										var nwaiting = plus.nativeUI.showWaiting();
-										webviewShow = plus.webview.create(
+										var webviewShow = plus.webview.create(
 											'leavebill-modify.html',
 											'leavebill-modify',
 											'', {

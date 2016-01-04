@@ -46,13 +46,8 @@
 					<div class="mui-input-row">
 						<label>运单编号</label>
 						<input type="text" id="WayBillNumber" class="mui-input-clear mui-input" required="required">
-
 					</div>
 					<div class="button" onclick="clicked('barcode_scan.html',true,true);">扫一扫</div>
-					<div class="mui-input-row">
-						<label>类型</label>
-						<input type="text" id="KPI" class="mui-input" required="required">
-					</div>
 					<div class="mui-input-row">
 						<label>类别</label>
 						<input type="text" id="Type" class="mui-input" required="required" readonly="readonly">
@@ -81,35 +76,23 @@
 		<script type="text/javascript" src="js/common.js"></script>
 		<script>
 			mui.init({});
-			var KPIPicker, TypePicker;
+			var KPIPicker, name;
 			mui.plusReady(function() {
 				KPIPicker = new mui.PopPicker({
-					layer: 2
+					layer: 1
 				});
-				KPIPicker.setData([{
-					value: '进港大字错写',
-					text: '进港大字错写',
-					children: [{
+				name = plus.webview.currentWebview().name;
+				document.getElementById("title").innerHTML = '新增' + name;
+				if (name.indexOf('大字') > 0) {
+					KPIPicker.setData([{
 						value: '大字',
 						text: '大字'
 					}, {
 						value: '大包',
 						text: '大包'
-					}]
-				}, {
-					value: '出港大字错写',
-					text: '出港大字错写',
-					children: [{
-						value: '大字',
-						text: '大字'
-					}, {
-						value: '大包',
-						text: '大包'
-					}]
-				}, {
-					value: '出港不规则包装',
-					text: '出港不规则包装',
-					children: [{
+					}]);
+				} else {
+					KPIPicker.setData([{
 						value: '不规则',
 						text: '不规则'
 					}, {
@@ -118,40 +101,24 @@
 					}, {
 						value: '裸包装',
 						text: '裸包装'
-					}]
-				}, {
-					value: '进港不规则包装',
-					text: '进港不规则包装',
-					children: [{
-						value: '不规则',
-						text: '不规则'
-					}, {
-						value: '同行',
-						text: '同行'
-					}, {
-						value: '裸包装',
-						text: '裸包装'
-					}]
-				}]);
+					}]);
+				}
 				var buttonok = document.getElementById('buttonok');
 				mui.enterfocus('#bill-form input', function() {
 					mui.trigger(buttonok, 'tap');
 				});
 			});
 			//选择请假类型事件		
-			document.getElementById("KPI").addEventListener('tap', function() {
+			document.getElementById("Type").addEventListener('tap', function() {
 				KPIPicker.show(function(items) {
-					document.getElementById("KPI").value = items[0].value;
-					document.getElementById("Type").value = items[1].value;
+					document.getElementById("Type").value = items[0].value;
 				});
 			});
 
 			function btn_ok() {
 				var guid = app.NewGuid();
-				var wt = plus.nativeUI.showWaiting();
 				//保存数据
 				var WayBillNumber = document.getElementById("WayBillNumber");
-				var KPI = document.getElementById("KPI");
 				var Type = document.getElementById("Type");
 				var Remark = document.getElementById("Remark");
 				//验证
@@ -160,50 +127,49 @@
 					WayBillNumber.focus();
 					return;
 				}
-				if (KPI.value == "") {
-					plus.nativeUI.toast("类型不能为空");
-					KPI.focus();
+				if (Type.value == "") {
+					plus.nativeUI.toast("类别不能为空");
+					Type.focus();
 					return;
 				}
-				var userid = app.getLoginInfo().userid;
-				var username = JSON.parse(app.getLoginInfo().userinfo).realname;
-				var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
 				var images = document.getElementById("images");
-				var ImagePaths='';
+				var ImagePaths = '';
 				for (var i = 0; i < images.children.length; i++) {
 					ImagePaths += images.children[i].src + ',';
 				}
-				//调用方法
-				var billInfo = {
-					ID: guid,
-					WayBillNumber: WayBillNumber.value,
-					KPI: KPI.value,
-					Type: Type.value,
-					Remark: Remark.value,
-					CreateUserId: userid,
-					CreateUserName: username,
-					UserCode: usercode,
-					Image: ImagePaths
-				};
-				var url = app.getUrl() + 'AddQuestionBill';
-				mui.ajax(url, {
-					data: {
-						info: JSON.stringify(billInfo)
+				var d =new Date().format('yyyy-MM-dd hh:mm');
+				var wt = plus.nativeUI.showWaiting();
+				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+//				db.transaction(function(context) {
+//					var sql = 'DELETE FROM QustionBill';
+//					context.executeSql(sql);
+//				});
+				db.transaction(function(context) {
+					var sql = 'INSERT INTO QustionBill (WayBillNumber, KPI,Type,Remark,Image,State,CreateDate) VALUES ("' + WayBillNumber.value + '","' + name +'","'+Type.value+'","'+Remark .value+'","'+ImagePaths+'","未上传","'+d+'")';
+					context.executeSql('CREATE TABLE IF NOT EXISTS QustionBill (WayBillNumber unique, KPI,Type,Remark,Image,State,CreateDate)');
+					context.executeSql(sql,[], 
+					function(tx,result)
+					{ 
+						plus.nativeUI.toast('添加成功');
+						var page = plus.webview.getWebviewById('questionbill-list-sub');
+						wt.close();
+						//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+						mui.fire(page, 'refresh');
+						mui.back();
 					},
-					type: 'post', //HTTP请求类型
-					success: function(data) {
-						if (data == "") {
-							plus.nativeUI.toast('添加成功');
-							var page = plus.webview.getWebviewById('questionbill-list-sub');
-							wt.close();
-							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
-							mui.fire(page, 'refresh');
-							mui.back();
-						} else {
-							plus.nativeUI.toast(data);
-							wt.close();
-						}
-					}
+        			
+        			function(tx, error)
+        			{
+        				wt.close();
+        				if(error.message.indexOf('WayBillNumber')>0)
+        				{
+        					plus.nativeUI.toast('运单编号已经存在');
+        				}
+        				else
+        				{       				
+        				plus.nativeUI.toast(error.message);
+        				}
+        			});
 				});
 			}
 			// 拍照
@@ -216,7 +182,7 @@
 						imageUrl = entry.toLocalURL();
 						//手机端图片进行压缩
 						var newImage = imageUrl.replace('.jpg', '_c.jpg');
-						plus.zip.compressImage({ 
+						plus.zip.compressImage({
 								src: imageUrl,
 								dst: newImage,
 								quality: 30
@@ -236,7 +202,7 @@
 						alert("读取拍照文件错误：" + e.message);
 					});
 				}, function(e) {
-//					alert("失败：" + e.message);
+					//					alert("失败：" + e.message);
 				}, {
 					filename: "_doc/camera/",
 					index: 1

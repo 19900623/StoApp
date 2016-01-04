@@ -5,7 +5,7 @@
 
 			owner.toPickup = function() {
 				var nwaiting = plus.nativeUI.showWaiting();
-				webviewShow = plus.webview.create(
+				var webviewShow = plus.webview.create(
 					'report-waybillpickup-day.html',
 					'report-waybillpickup-day',
 					'', {
@@ -22,7 +22,7 @@
 			
 			owner.toDelivery = function() {
 				var nwaiting = plus.nativeUI.showWaiting();
-				webviewShow = plus.webview.create(
+				var webviewShow = plus.webview.create(
 					'report-delivery-day.html',
 					'report-delivery-day',
 					'', {
