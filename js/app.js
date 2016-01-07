@@ -85,10 +85,16 @@
 		return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
 	}
 
+    /**
+	 * 获取GUID
+	 **/
 	owner.NewGuid = function() {
 		return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 	}
 
+	/**
+	 * 时间格式化
+	 **/
 	Date.prototype.format = function(format) {
 		var o = {
 			"M+": this.getMonth() + 1, //month
@@ -107,5 +113,21 @@
 					("00" + o[k]).substr(("" + o[k]).length));
 		return format;
 	}
+	
+	/**
+	 * 设置登录信息
+	 **/
+	owner.setLoaction = function(Loaction) {
+		Loaction = Loaction;
+		localStorage.setItem('$Loaction', JSON.stringify(Loaction));
+	};
+
+	/**
+	 * 获取登录信息
+	 **/
+	owner.getLoaction = function() {
+		var Loaction = localStorage.getItem('$Loaction') || "{}";
+		return JSON.parse(Loaction);
+	};
 
 }(window.mui, window.app = {}));

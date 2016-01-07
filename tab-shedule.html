@@ -34,6 +34,11 @@
 					<span style="font-family: '微软雅黑'; font-size:large;display: inline-block; padding: 10px 6px;">流程审批</span>
 					<span class="mui-badge mui-badge-primary" id="WokrFlowCount">0</span>
 				</li>
+				<li class="mui-table-view-cell mui-media" onclick="OpenWorkTask()">
+					<img class="mui-media-object mui-pull-left" src="img/client_account_template.png">
+					<span style="font-family: '微软雅黑'; font-size:large;display: inline-block; padding: 10px 6px;">工作任务</span>
+					<span class="mui-badge mui-badge-primary" id="WokrTaskCount">0</span>
+				</li>
 			</ul>
 		</div>
 
@@ -64,6 +69,7 @@
 				UserID: logininfo.userid,
 			};
 			var WokrFlowCount = document.getElementById("WokrFlowCount")
+			var WokrTaskCount = document.getElementById("WokrTaskCount")
 			var url = app.getUrl() + 'GetWorkFlowCount';
 			mui.ajax(url, {
 				data: info,
@@ -72,16 +78,32 @@
 				success: function(data) {
 					if (data) {
 						WokrFlowCount.innerHTML = data[0].workflownumber;
+						WokrTaskCount.innerHTML = data[0].worktasknumber;
 					}
 				}
 			});
 		}
-
+        //打开流程画面
 		function OpenWorkFlow() {
 			var nwaiting = plus.nativeUI.showWaiting();
 			var workflowPage = plus.webview.create(
 				'workflow-main.html',
 				'workflow-main'
+			); //后台创建webview并打开show.html
+			workflowPage.addEventListener("loaded", function() { //注册新webview的载入完成事件
+				setTimeout(function() {
+					nwaiting.close();
+					//新webview的载入完毕后关闭等待框
+					workflowPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+				}, 300);
+			}, false);
+		}
+		//打开工作任务画面
+		function OpenWorkTask() {
+			var nwaiting = plus.nativeUI.showWaiting();
+			var workflowPage = plus.webview.create(
+				'worktask-main.html',
+				'worktask-main'
 			); //后台创建webview并打开show.html
 			workflowPage.addEventListener("loaded", function() { //注册新webview的载入完成事件
 				setTimeout(function() {

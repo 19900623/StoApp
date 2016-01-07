@@ -44,7 +44,16 @@
 					</ul>
 					<ul class="mui-table-view mui-table-view-chevron">
 						<li class="mui-table-view-cell">
-							<a  href="#account" class="mui-navigate-right" id="Version">当前版本：</a>
+							<a href="#account" class="mui-navigate-right" id="Version">当前版本：</a>
+						</li>
+					</ul>
+
+					<ul class="mui-table-view mui-table-view-chevron">
+						<li class="mui-table-view-cell">
+							启用定位
+							<div id="location" class="mui-switch">
+								<div class="mui-switch-handle"></div>
+							</div>
 						</li>
 					</ul>
 
@@ -65,12 +74,22 @@
 		//mui初始化
 		mui.init();
 		mui.plusReady(function() {
-			var Name = document.getElementById("Name");		
+			var Name = document.getElementById("Name");
+			var location = document.getElementById("location");
 			Name.innerHTML = '姓名：' + JSON.parse(app.getLoginInfo().userinfo).realname + '&nbsp;&nbsp;工号：' + JSON.parse(app.getLoginInfo().userinfo).code;
 			plus.runtime.getProperty(plus.runtime.appid, function(info) {
-				var Version = document.getElementById("Version");		
-				Version.innerHTML="当前版本："+info.version;
+				var Version = document.getElementById("Version");
+				Version.innerHTML = "当前版本：" + info.version;
 			});
+			var locationString = app.getLoaction();
+			if (JSON.stringify(locationString) != 'true')
+				locationString = false;
+			location.classList[locationString ? 'add' : 'remove']('mui-active')
+			location.addEventListener('toggle', function(event) {
+				var isActive = event.detail.isActive;
+				locationString = isActive;
+				app.setLoaction(locationString);
+			}, false);
 		})
 	</script>
 
