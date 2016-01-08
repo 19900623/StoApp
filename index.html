@@ -90,9 +90,9 @@
 					//设置WebService的Url				
 					var settings = app.getSettings();
 					//正式库
-//					var httpUrl = 'http://58.57.35.3:8066';
+					var httpUrl = 'http://58.57.35.3:8066';
 					//测试库
-					var httpUrl = 'http://192.168.6.164/LeaRun.MobileApp';
+//					var httpUrl = 'http://192.168.6.164/LeaRun.MobileApp';
 					var url = httpUrl + '/MobileAppService.asmx/';
 					app.setUrl(url);
 					app.setHttpUrl(httpUrl)
@@ -226,10 +226,8 @@
 					plus.push.addEventListener("receive", function(msg) {
 						try {
 							//根据消息类型
-							alert(JSON.parse(msg));
-							var messageState = JSON.parse(msg.payload);
+							var messageState = JSON.parse(msg.content);
 							var type = messageState.Type;
-						
 							var pageid = '';
 							var pagehtml;
 							switch (type) {
@@ -254,6 +252,7 @@
 									pagehtml = 'vehicle-workflow.html'
 									break;
 								case 'WorkTask':
+									var nwaiting = plus.nativeUI.showWaiting();
 									var webviewShow = plus.webview.create(
 										'worktask-modify.html',
 										'worktask-modify',
