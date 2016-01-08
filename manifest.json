@@ -224,7 +224,13 @@
 					"js/mui.enterfocus.js"
 				],
 				"refer": [
-					"main.html"
+					"main.html",
+					"paymentbill-workflow.html",
+					"worktask-modify.html",
+					"vehicle-workflow.html",
+					"leavebill-workflow.html",
+					"expensebill-workflow.html",
+					"collectionmoney-workflow.html"
 				],
 				"priority": 0
 			},
@@ -268,7 +274,8 @@
 					"img/account_balances.png",
 					"img/cell_delete.png",
 					"img/film_photo.png",
-					"img/color_wheel.png"
+					"img/color_wheel.png",
+					"fonts/mui.ttf"
 				],
 				"refer": [
 					"addresslist.html",
@@ -350,7 +357,9 @@
 					"css/mui.min.css",
 					"fonts/mui.ttf"
 				],
-				"refer": [],
+				"refer": [
+					"expensebill-modify.html"
+				],
 				"priority": 0
 			},
 			"workflow-sub.html": {
@@ -363,7 +372,9 @@
 				"refer": [
 					"collectionmoney-workflow.html",
 					"paymentbill-workflow.html",
-					"vehicle-workflow.html"
+					"vehicle-workflow.html",
+					"leavebill-workflow.html",
+					"expensebill-workflow.html"
 				],
 				"priority": 0
 			},
@@ -375,7 +386,8 @@
 					"fonts/mui.ttf"
 				],
 				"refer": [
-					"expensebill-input.html"
+					"expensebill-input.html",
+					"expensebill-modify.html"
 				],
 				"priority": 0
 			},
@@ -805,14 +817,38 @@
 				],
 				"refer": [],
 				"priority": 0
+			},
+			"leavebill-workflow.html": {
+				"href": "leavebill-workflow.html",
+				"priority": 11,
+				"resources": [],
+				"refer": []
+			},
+			"expensebill-workflow.html": {
+				"href": "expensebill-workflow.html",
+				"priority": 12,
+				"resources": [],
+				"refer": []
+			},
+			"expensebill-modify.html": {
+				"href": "expensebill-modify.html",
+				"resources": [
+					"js/app.js",
+					"js/mui.enterfocus.js",
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"fonts/mui.ttf"
+				],
+				"priority": 7,
+				"refer": []
 			}
 		},
 		"idle": {
 			"resources": [
-				"expensebill-modify.html",
+				"img/chart_pie(2).png",
 				"css/mui.css",
-				"expensebill-workflow.html",
-				"leavebill-workflow.html"
+				"img/columnchart.png",
+				"img/chart_column.png"
 			]
 		}
 	},
