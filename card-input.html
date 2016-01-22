@@ -38,35 +38,29 @@
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">新增曝光台</h1>
+			<h1 id="title" class="mui-title">实名制</h1>
 		</header>
 		<div class="mui-content">
 			<div class="mui-content-padded" style="margin: 5px;">
 				<form class="mui-input-group" id="bill-form">
 					<div class="mui-input-row">
-						<label>标题</label>
-						<input type="text" id="Title" class="mui-input-clear mui-input" required="required">
-
-					</div>
-					<div class="mui-input-row">
 						<label>运单编号</label>
 						<input type="text" id="WayBillNumber" class="mui-input-clear mui-input" required="required">
 						<img src="img/scan.png" style="position: absolute; right: 0px;top: 1.5px ;width: 2em; height: 2em;" onclick="clicked('barcode_scan.html',true,true)" />
 					</div>
+					<!--<div class="mui-input-row">
+						<label>姓名</label>
+						<input type="text" id="UserName" class="mui-input-clear mui-input" required="required">
+					</div>-->
 
 					<div class="mui-input-row">
-						<label>日期</label>
-						<input type="text" placeholder="选择日期" id="Date" class="mui-input" readonly="readonly">
+						<label>身份证号</label>
+						<input type="text" id="Card" class="mui-input-clear mui-input" required="required">
 					</div>
-
 				</form>
-				<div class="mui-input-row" style="margin: 5px 0px 0px;">
-					<textarea id="Remark" rows="3" placeholder="备注" class="mui-input-clear mui-input"></textarea>
-				</div>
 				<ul id="images" class="dlist">
 
 				</ul>
-
 				<div class="mui-button-row">
 					<button type="button" class="mui-btn mui-btn-success" onclick="getImage();" id="buttonok">拍照</button>&nbsp;&nbsp;
 					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确定</button>&nbsp;&nbsp;
@@ -74,7 +68,7 @@
 				</div>
 			</div>
 		</div>
-			<script src="js/mui.min.js"></script>
+		<script src="js/mui.min.js"></script>
 		<script src="js/app.js"></script>
 		<script src="js/mui.enterfocus.js"></script>
 		<script src="js/mui.picker.min.js"></script>
@@ -82,84 +76,72 @@
 		<script type="text/javascript" src="js/common.js"></script>
 		<script>
 			mui.init({});
-			mui.plusReady(function() {
-				var bxdate = document.getElementById("Date");
-				var d = new Date();
-				bxdate.value = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
-				var buttonok = document.getElementById('buttonok');
-				mui.enterfocus('#bill-form input', function() {
-					mui.trigger(buttonok, 'tap');
-				});
-			});
-			//选择报销日期事件			
-			document.getElementById("Date").addEventListener('tap', function() {
-				var dDate = new Date();
-				var minDate = new Date();
-				minDate.setFullYear(2015, 0, 1);
-				var maxDate = new Date();
-				maxDate.setFullYear(2030, 12, 31);
-				var bxdate = document.getElementById("Date");
-				plus.nativeUI.pickDate(function(e) {
-					var d = e.date;
-					bxdate.value = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
-				}, function(e) {
-					bxdate.value = "您没有选择日期";
-				}, {
-					title: "请选择日期",
-					date: dDate,
-					minDate: minDate,
-					maxDate: maxDate
-				});
-			})
-
+			mui.plusReady(function() {});
+            var newImage="";
 			function btn_ok() {
-				//保存数据
-				var id=app.NewGuid()
-				var WayBillNumber = document.getElementById("WayBillNumber");
-				var Title = document.getElementById("Title");
-				var CDate = document.getElementById("Date");
-				var Remark = document.getElementById("Remark");
-				var ul = document.getElementById("images");
-				if (ul.children.length == 0) {
-					plus.nativeUI.toast("请上传照片");
-					return;
-				}
+				var CreateUserName = JSON.parse(app.getLoginInfo().userinfo).realname;
+				var WaybillNumber = document.getElementById("WayBillNumber").value;
+				var CardID = document.getElementById("Card").value;
 				//验证
-				if (Title.value == "") {
-					plus.nativeUI.toast("标题不能为空");
-					Remark.focus();
+				if (WaybillNumber == "") {
+					plus.nativeUI.toast("运单编号不能为空");
 					return;
 				}
-				var wt = plus.nativeUI.showWaiting();
-				var images = document.getElementById("images");
-				var ImagePaths = '';
-				for (var i = 0; i < images.children.length; i++) {
-					ImagePaths += images.children[i].src + ',';
+				if (CardID == "") {
+					plus.nativeUI.toast("身份证号不能为空");
+					return;
 				}
-			var d = new Date().format('yyyy-MM-dd hh:mm');
-				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
-				db.transaction(function(context) {
-					context.executeSql('CREATE TABLE IF NOT EXISTS LightHouse (id,WayBillNumber, Title,Date,Remark,Image,State,CreateDate)');
-					db.transaction(function(context) {
-						var sql = "INSERT INTO LightHouse (id,WayBillNumber, Title,Date,Remark,Image,State,CreateDate) VALUES (?,?,?,?,?,?,'未上传',?)";
-						context.executeSql(sql, [id,WayBillNumber.value,Title.value,CDate.value,Remark.value,ImagePaths,d],
-							function(tx, result) {
-								plus.nativeUI.toast('添加成功');
-								var page = plus.webview.getWebviewById('lighthouse-list-sub');
-								wt.close();
-								//触发列表界面的自定义事件（refresh）,从而进行数据刷新
-								mui.fire(page, 'refresh');
-								mui.back();
-							},
-							function(tx, error) {
-								wt.close();
-								plus.nativeUI.toast(error.message);
-							});
-					});
+				
+				if(newImage=="")
+				{
+					plus.nativeUI.toast("请拍摄身份证照片");
+					return;
+				}
+				
+				//检查网路设置
+				if (plus.networkinfo.getCurrentType() == 1) {
+					plus.nativeUI.toast('请检查网路连接!');
+					return;
+				}
+				var nwaiting = plus.nativeUI.showWaiting();
+				//插入数据库
+				var url = app.getUrl() + 'UploadRealName';
+
+				var task = plus.uploader.createUpload(url, {
+					method: "POST"
+				}, function(t, status) {
+					// 上传完成
+					if (status == 200) {
+						if (t.responseText == "") {
+							plus.nativeUI.toast('添加成功');
+							mui.back();
+						} else {
+							alert(t.responseText);
+						}
+					} else {
+						plus.nativeUI.toast("上传失败: " + status);
+					}
+					nwaiting.close();
 				});
+
+				task.addFile(newImage, {
+					key: app.NewGuid()
+				});
+				var info = {
+					CreateUserName: CreateUserName,
+					WaybillNumber: WaybillNumber,
+					CardID: CardID
+				}
+				task.addData("Info", JSON.stringify(info));
+				task.start();
 			}
 			// 拍照
 			function getImage() {
+				//检查网路设置
+				if (plus.networkinfo.getCurrentType() == 1) {
+					plus.nativeUI.toast('请检查网路连接!');
+					return;
+				}
 				//outSet("开始拍照：");
 				var cmr = plus.camera.getCamera();
 				var imageUrl = '';
@@ -167,33 +149,60 @@
 				cmr.captureImage(function(p) {
 					plus.io.resolveLocalFileSystemURL(p, function(entry) {
 						imageUrl = entry.toLocalURL();
+						console.log(entry.name);
 						//手机端图片进行压缩
-						var newImage = imageUrl.replace('.jpg', '_c.jpg');
+						newImage = imageUrl.replace('.jpg', '_c.jpg');
 						plus.zip.compressImage({
 								src: imageUrl,
 								dst: newImage,
 								quality: 30
 							},
 							function() {
+								var nwaiting = plus.nativeUI.showWaiting();
 								var img = document.createElement('img');
 								var ul = document.getElementById("images");
+								console.log(ul.children.length)
+								while (ul.firstChild)
+									ul.removeChild(ul.firstChild);
 								img.className = "ditem";
 								img.src = newImage;
 								img.setAttribute("onclick", "displayFile(this);");
 								ul.appendChild(img);
+								//身份证识别
+								var url = app.getUrl() + 'CardUpload';
+								var task = plus.uploader.createUpload(url, {
+									method: "POST"
+								}, function(t, status) {
+									// 上传完成
+									if (status == 200) {
+										console.log(t.responseText);
+										return;
+										var result = JSON.parse(t.responseText)
+										if (result.state == "0") {
+											//document.getElementById("UserName").value=result.name;
+											document.getElementById("Card").value = result.cardid;
+											console.log(result.textInfo);
+										} else {
+											plus.nativeUI.toast("身份证识别失败: " + result.erro);
+										}
+									} else {
+										plus.nativeUI.toast("身份证识别失败: " + status);
+									}
+									nwaiting.close();
+								});
+								task.addFile(img.src, {
+									key: app.NewGuid()
+								});
+								//检查网路设置
+								if (plus.networkinfo.getCurrentType() != 1) {
+									task.start();
+								}
 							},
 							function(error) {
 								alert("Compress error!");
 							});
-					}, function(e) {
-						alert("读取拍照文件错误：" + e.message);
-					});
-				}, function(e) {
-					//					alert("失败：" + e.message);
-				}, {
-					filename: "_doc/camera/",
-					index: 1
-				});
+					})
+				}, function(e) {});
 			}
 			var w = null;
 			// 显示文件
@@ -220,7 +229,13 @@
 
 			function scaned(r) {
 				var WayBillNumber = document.getElementById("WayBillNumber");
-				WayBillNumber.value = r;
+				if (WayBillNumber.value != "") {
+					if (WayBillNumber.value.indexOf(r) >= 0)
+						plus.nativeUI.toast("该运单编号已存在");
+					else
+						WayBillNumber.value = WayBillNumber.value + "," + r;
+				} else
+					WayBillNumber.value = r;
 			}
 		</script>
 	</body>

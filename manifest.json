@@ -5,9 +5,9 @@
 		"iPad"
 	],
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
-	"name": "申通定位",/*应用名称，程序桌面图标名称*/
+	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.0",/*应用版本名称*/
+		"name": "1.4",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -285,7 +285,8 @@
 					"questionbill-list-main.html",
 					"lighthouse-list-main.html",
 					"questionbill-grid.html",
-					"map.html"
+					"map.html",
+					"card-input.html"
 				],
 				"priority": 0
 			},
@@ -840,6 +841,27 @@
 				],
 				"priority": 7,
 				"refer": []
+			},
+			"card-input.html": {
+				"resources": [
+					"js/common.js",
+					"js/mui.picker.min.js",
+					"css/common.css",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"img/scan.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/mui.enterfocus.js"
+				],
+				"refer": [
+					"camera_image.html",
+					"barcode_scan.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {

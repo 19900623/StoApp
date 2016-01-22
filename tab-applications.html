@@ -47,12 +47,12 @@
 						<div class="mui-media-body">曝光台</div>
 					</a>
 				</li>
-				<!--<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
 					<a href="#" onclick="toMap()">
 						<img src="img/color_wheel.png">
-						<div class="mui-media-body">百度地图</div>
+						<div class="mui-media-body">实名制</div>
 					</a>
-				</li>-->
+				</li>
 			</ul>
 		</div>
 	</body>
@@ -141,8 +141,8 @@
 		var toMap = function() {
 			var nwaiting = plus.nativeUI.showWaiting();
 			var expensePage = plus.webview.create(
-				'map.html',
-				'map'
+				'card-input.html',
+				'card-input'
 			); //后台创建webview并打开show.html
 			expensePage.addEventListener("loaded", function() { //注册新webview的载入完成事件
 				setTimeout(function() {
