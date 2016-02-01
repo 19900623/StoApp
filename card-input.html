@@ -45,7 +45,7 @@
 				<form class="mui-input-group" id="bill-form">
 					<div class="mui-input-row">
 						<label>运单编号</label>
-						<input type="text" id="WayBillNumber" class="mui-input-clear mui-input" required="required">
+						<input type="text" id="WayBillNumber" class="mui-input-clear mui-input" style="padding-right: 2em" required="required">
 						<img src="img/scan.png" style="position: absolute; right: 0px;top: 1.5px ;width: 2em; height: 2em;" onclick="clicked('barcode_scan.html',true,true)" />
 					</div>
 					<!--<div class="mui-input-row">
@@ -77,71 +77,46 @@
 		<script>
 			mui.init({});
 			mui.plusReady(function() {});
-            var newImage="";
+			var newImage = "";
+
 			function btn_ok() {
-				var CreateUserName = JSON.parse(app.getLoginInfo().userinfo).realname;
-				var WaybillNumber = document.getElementById("WayBillNumber").value;
+				var WayBillNumber = document.getElementById("WayBillNumber").value;
 				var CardID = document.getElementById("Card").value;
+				var id = app.NewGuid();
 				//验证
-				if (WaybillNumber == "") {
+				if (WayBillNumber == "") {
 					plus.nativeUI.toast("运单编号不能为空");
 					return;
 				}
-				if (CardID == "") {
-					plus.nativeUI.toast("身份证号不能为空");
-					return;
-				}
-				
-				if(newImage=="")
-				{
+				if (newImage == "") {
 					plus.nativeUI.toast("请拍摄身份证照片");
 					return;
 				}
-				
-				//检查网路设置
-				if (plus.networkinfo.getCurrentType() == 1) {
-					plus.nativeUI.toast('请检查网路连接!');
-					return;
-				}
-				var nwaiting = plus.nativeUI.showWaiting();
-				//插入数据库
-				var url = app.getUrl() + 'UploadRealName';
-
-				var task = plus.uploader.createUpload(url, {
-					method: "POST"
-				}, function(t, status) {
-					// 上传完成
-					if (status == 200) {
-						if (t.responseText == "") {
-							plus.nativeUI.toast('添加成功');
-							mui.back();
-						} else {
-							alert(t.responseText);
-						}
-					} else {
-						plus.nativeUI.toast("上传失败: " + status);
-					}
-					nwaiting.close();
+				var d = new Date().format('yyyy-MM-dd hh:mm');
+				var wt = plus.nativeUI.showWaiting();
+				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+				db.transaction(function(context) {
+					context.executeSql('CREATE TABLE IF NOT EXISTS CardUser (id,CardID,WayBillNumber,Image,State,CreateDate)');
+					db.transaction(function(context) {
+						var sql = "INSERT INTO CardUser (id,CardID,WayBillNumber,Image,State,CreateDate) VALUES (?,?,?,?,'未上传',?)";
+						context.executeSql(sql, [id, CardID, WayBillNumber, newImage, d],
+							function(tx, result) {
+								plus.nativeUI.toast('添加成功');
+								var page = plus.webview.getWebviewById('card-list-sub');
+								wt.close();
+								//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+								mui.fire(page, 'refresh');
+								mui.back();
+							},
+							function(tx, error) {
+								wt.close();
+								plus.nativeUI.toast(error.message);
+							});
+					});
 				});
-
-				task.addFile(newImage, {
-					key: app.NewGuid()
-				});
-				var info = {
-					CreateUserName: CreateUserName,
-					WaybillNumber: WaybillNumber,
-					CardID: CardID
-				}
-				task.addData("Info", JSON.stringify(info));
-				task.start();
 			}
 			// 拍照
 			function getImage() {
-				//检查网路设置
-				if (plus.networkinfo.getCurrentType() == 1) {
-					plus.nativeUI.toast('请检查网路连接!');
-					return;
-				}
 				//outSet("开始拍照：");
 				var cmr = plus.camera.getCamera();
 				var imageUrl = '';
@@ -149,54 +124,22 @@
 				cmr.captureImage(function(p) {
 					plus.io.resolveLocalFileSystemURL(p, function(entry) {
 						imageUrl = entry.toLocalURL();
-						console.log(entry.name);
 						//手机端图片进行压缩
 						newImage = imageUrl.replace('.jpg', '_c.jpg');
 						plus.zip.compressImage({
 								src: imageUrl,
 								dst: newImage,
-								quality: 30
+								quality: 50
 							},
 							function() {
-								var nwaiting = plus.nativeUI.showWaiting();
 								var img = document.createElement('img');
 								var ul = document.getElementById("images");
-								console.log(ul.children.length)
 								while (ul.firstChild)
 									ul.removeChild(ul.firstChild);
 								img.className = "ditem";
 								img.src = newImage;
 								img.setAttribute("onclick", "displayFile(this);");
 								ul.appendChild(img);
-								//身份证识别
-								var url = app.getUrl() + 'CardUpload';
-								var task = plus.uploader.createUpload(url, {
-									method: "POST"
-								}, function(t, status) {
-									// 上传完成
-									if (status == 200) {
-										console.log(t.responseText);
-										return;
-										var result = JSON.parse(t.responseText)
-										if (result.state == "0") {
-											//document.getElementById("UserName").value=result.name;
-											document.getElementById("Card").value = result.cardid;
-											console.log(result.textInfo);
-										} else {
-											plus.nativeUI.toast("身份证识别失败: " + result.erro);
-										}
-									} else {
-										plus.nativeUI.toast("身份证识别失败: " + status);
-									}
-									nwaiting.close();
-								});
-								task.addFile(img.src, {
-									key: app.NewGuid()
-								});
-								//检查网路设置
-								if (plus.networkinfo.getCurrentType() != 1) {
-									task.start();
-								}
 							},
 							function(error) {
 								alert("Compress error!");
@@ -229,13 +172,25 @@
 
 			function scaned(r) {
 				var WayBillNumber = document.getElementById("WayBillNumber");
-				if (WayBillNumber.value != "") {
-					if (WayBillNumber.value.indexOf(r) >= 0)
-						plus.nativeUI.toast("该运单编号已存在");
-					else
-						WayBillNumber.value = WayBillNumber.value + "," + r;
-				} else
-					WayBillNumber.value = r;
+				//在数据库中判断是否已存在
+				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+				db.transaction(function(context) {
+					context.executeSql('CREATE TABLE IF NOT EXISTS CardUser (id,CardID,WayBillNumber,Image,State,CreateDate)');
+					context.executeSql("SELECT 1 FROM CardUser where WayBillNumber like ?", ['%' + r + '%'], function(context, results) {
+						console.log(r);
+						console.log(results.rows.length)
+						if (results.rows.length > 0) {
+							plus.nativeUI.toast('运单编号已经存在');
+							return;
+						} else {
+							if (WayBillNumber.value != "") {
+								if (WayBillNumber.value.indexOf(r) >= 0)
+									plus.nativeUI.toast("该运单编号已存在");
+							} else
+								WayBillNumber.value = r;
+						}
+					});
+				});
 			}
 		</script>
 	</body>

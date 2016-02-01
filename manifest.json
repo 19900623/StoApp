@@ -275,7 +275,8 @@
 					"img/cell_delete.png",
 					"img/film_photo.png",
 					"img/color_wheel.png",
-					"fonts/mui.ttf"
+					"fonts/mui.ttf",
+					"img/vcard.png"
 				],
 				"refer": [
 					"addresslist.html",
@@ -286,7 +287,8 @@
 					"lighthouse-list-main.html",
 					"questionbill-grid.html",
 					"map.html",
-					"card-input.html"
+					"card-input.html",
+					"card-list-main.html"
 				],
 				"priority": 0
 			},
@@ -856,6 +858,47 @@
 					"fonts/mui.ttf",
 					"css/mui.min.css",
 					"js/mui.enterfocus.js"
+				],
+				"refer": [
+					"camera_image.html",
+					"barcode_scan.html"
+				],
+				"priority": 0
+			},
+			"card-list-main.html": {
+				"resources": [
+					"js/app.js",
+					"card-list-sub.html",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"card-input.html"
+				],
+				"priority": 0
+			},
+			"card-list-sub.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"card-modify.html"
+				],
+				"priority": 0
+			},
+			"card-modify.html": {
+				"resources": [
+					"js/common.js",
+					"css/common.css",
+					"js/mui.enterfocus.js",
+					"img/scan.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
 				],
 				"refer": [
 					"camera_image.html",
