@@ -1,0 +1,150 @@
+{
+	"index.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"css/style.css",
+			"js/mui.enterfocus.js"
+		],
+		"refer": [
+			"main.html"
+		]
+	},
+	"tab-echarts.html": {
+		"resources": [
+			"img/combined_chart.png",
+			"css/app.css",
+			"js/page.js",
+			"img/chart_bar.png"
+		]
+	},
+	"tab-applications.html": {
+		"resources": [
+			"img/allow_users_edit_ranges.png",
+			"img/film_photo.png",
+			"img/blackberry.png",
+			"img/vcard.png",
+			"img/cell_delete.png",
+			"img/account_balances.png"
+		],
+		"refer": [
+			"questionbill-grid.html",
+			"addresslist.html",
+			"lighthouse-list-main.html"
+		]
+	},
+	"tab-setting.html": {
+		"resources": [
+			"img/erweima.png",
+			"img/me_logo.png",
+			"js/mui.view.js",
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
+		]
+	},
+	"main.html": {
+		"resources": [
+			"tab-shedule-main.html"
+		],
+		"refer": [
+			"tab-echarts.html",
+			"tab-setting.html",
+			"tab-applications.html",
+			"tab-shedule-main.html"
+		]
+	},
+	"tab-shedule-main.html": {
+		"resources": [
+			"tab-shedule.html"
+		],
+		"refer": [
+			"tab-shedule.html"
+		]
+	},
+	"tab-shedule.html": {
+		"resources": [
+			"img/client_account_template.png",
+			"img/desktop_network.png"
+		],
+		"refer": [
+			"worktask-main.html",
+			"workflow-main.html"
+		]
+	},
+	"questionbill-grid.html": {
+		"resources": [
+			"img/script_edit.png",
+			"img/script_lightning.png",
+			"img/script_go.png",
+			"img/script_error.png"
+		]
+	},
+	"addresslist-indexed.html": {
+		"resources": [
+			"js/pinyin.js",
+			"css/mui.indexedlist.css",
+			"js/mui.indexedlist.js"
+		]
+	},
+	"addresslist.html": {
+		"refer": [
+			"addresslist-indexed.html"
+		]
+	},
+	"worktask-main.html": {
+		"resources": [
+			"worktask-sub.html"
+		],
+		"refer": [
+			"worktask-sub.html"
+		]
+	},
+	"collectionmoney-workflow-detail.html": {
+		"resources": [
+			"css/app.css"
+		]
+	},
+	"collectionmoney-workflow.html": {
+		"resources": [
+			"js/mui.picker.min.js",
+			"js/mui.poppicker.js",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css",
+			"js/mui.enterfocus.js"
+		],
+		"refer": [
+			"collectionmoney-workflow-detail.html"
+		]
+	},
+	"workflow-sub.html": {
+		"resources": [
+			"js/app.js"
+		],
+		"refer": [
+			"collectionmoney-workflow.html"
+		]
+	},
+	"workflow-main.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"workflow-sub.html",
+			"css/mui.min.css"
+		],
+		"refer": [
+			"workflow-sub.html"
+		]
+	},
+	"lighthouse-list-main.html": {
+		"resources": [
+			"lighthouse-list-sub.html"
+		],
+		"refer": [
+			"lighthouse-list-sub.html"
+		]
+	}
+}
