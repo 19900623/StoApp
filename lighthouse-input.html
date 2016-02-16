@@ -180,6 +180,9 @@
 								img.className = "ditem";
 								img.src = newImage;
 								img.setAttribute("onclick", "displayFile(this);");
+								plus.io.resolveLocalFileSystemURL(imageUrl, function(entry) {
+									entry.remove();
+								});
 								ul.appendChild(img);
 							},
 							function(error) {

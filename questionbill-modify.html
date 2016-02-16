@@ -61,8 +61,7 @@
 			var WayBillNumber = document.getElementById("WayBillNumber");
 			var Type = document.getElementById("Type");
 			var Remark = document.getElementById("Remark");
-			var id, name;
-			var KPIPicker;
+			var id, name,KPIPicker;
 			mui.plusReady(function() {
 				id = plus.webview.currentWebview().name;
 				name = plus.webview.currentWebview().type;
@@ -149,6 +148,12 @@
 						db.transaction(function(context) {
 							context.executeSql('delete from QustionBill where WayBillNumber=?', [id],
 								function(tx, result) {
+									var images = document.getElementById("images");
+									for (var i = 0; i < images.children.length; i++) {
+										plus.io.resolveLocalFileSystemURL(images.children[i].src, function(entry) {
+											entry.remove();
+										});
+									}
 									plus.nativeUI.toast('删除成功');
 									var page = plus.webview.getWebviewById('questionbill-list-sub');
 									//触发列表界面的自定义事件（refresh）,从而进行数据刷新

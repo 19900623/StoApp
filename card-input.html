@@ -140,12 +140,15 @@
 								img.src = newImage;
 								img.setAttribute("onclick", "displayFile(this);");
 								ul.appendChild(img);
+								plus.io.resolveLocalFileSystemURL(imageUrl, function(entry) {
+									entry.remove();
+								});
 							},
 							function(error) {
-								alert("Compress error!");
+								plus.nativeUI.toast(error.message);
 							});
 					})
-				}, function(e) {});
+				}, function(e) {plus.nativeUI.toast(e.message)});
 			}
 			var w = null;
 			// 显示文件

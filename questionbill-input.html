@@ -196,6 +196,9 @@
 								img.src = newImage;
 								img.setAttribute("onclick", "displayFile(this);");
 								ul.appendChild(img);
+								plus.io.resolveLocalFileSystemURL(imageUrl, function(entry) {
+									entry.remove();
+								});
 							},
 							function(error) {
 								alert("Compress error!");

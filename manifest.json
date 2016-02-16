@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.5",/*应用版本名称*/
+		"name": "1.6",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -575,7 +575,8 @@
 					"fonts/mui.ttf",
 					"img/me_logo.png",
 					"css/mui.min.css",
-					"js/mui.enterfocus.js"
+					"js/mui.enterfocus.js",
+					"img/scan.png"
 				],
 				"refer": [
 					"barcode_scan.html",

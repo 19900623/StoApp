@@ -18,7 +18,8 @@
 			"css/app.css",
 			"js/page.js",
 			"img/chart_bar.png"
-		]
+		],
+		"refer": []
 	},
 	"tab-applications.html": {
 		"resources": [
@@ -27,12 +28,14 @@
 			"img/blackberry.png",
 			"img/vcard.png",
 			"img/cell_delete.png",
-			"img/account_balances.png"
+			"img/account_balances.png",
+			"css/app.css"
 		],
 		"refer": [
 			"questionbill-grid.html",
 			"addresslist.html",
-			"lighthouse-list-main.html"
+			"lighthouse-list-main.html",
+			"card-list-main.html"
 		]
 	},
 	"tab-setting.html": {
@@ -44,7 +47,8 @@
 			"js/mui.min.js",
 			"fonts/mui.ttf",
 			"css/mui.min.css"
-		]
+		],
+		"refer": []
 	},
 	"main.html": {
 		"resources": [
@@ -81,6 +85,9 @@
 			"img/script_lightning.png",
 			"img/script_go.png",
 			"img/script_error.png"
+		],
+		"refer": [
+			"questionbill-list-main.html"
 		]
 	},
 	"addresslist-indexed.html": {
@@ -88,12 +95,14 @@
 			"js/pinyin.js",
 			"css/mui.indexedlist.css",
 			"js/mui.indexedlist.js"
-		]
+		],
+		"refer": []
 	},
 	"addresslist.html": {
 		"refer": [
 			"addresslist-indexed.html"
-		]
+		],
+		"resources": []
 	},
 	"worktask-main.html": {
 		"resources": [
@@ -106,7 +115,8 @@
 	"collectionmoney-workflow-detail.html": {
 		"resources": [
 			"css/app.css"
-		]
+		],
+		"refer": []
 	},
 	"collectionmoney-workflow.html": {
 		"resources": [
@@ -145,6 +155,75 @@
 		],
 		"refer": [
 			"lighthouse-list-sub.html"
+		]
+	},
+	"card-input.html": {
+		"resources": [
+			"js/common.js",
+			"js/mui.picker.min.js",
+			"css/common.css",
+			"js/mui.poppicker.js",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css",
+			"img/scan.png"
+		]
+	},
+	"card-list-main.html": {
+		"resources": [
+			"card-list-sub.html"
+		],
+		"refer": [
+			"card-list-sub.html",
+			"card-input.html"
+		]
+	},
+	"card-modify.html": {
+		"resources": [
+			"js/app.js",
+			"js/common.js",
+			"js/mui.min.js",
+			"css/common.css",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/mui.enterfocus.js",
+			"img/scan.png"
+		]
+	},
+	"card-list-sub.html": {
+		"refer": [
+			"card-modify.html"
+		]
+	},
+	"questionbill-list-main.html": {
+		"resources": [
+			"questionbill-list-sub.html",
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
+		],
+		"refer": [
+			"questionbill-list-sub.html",
+			"questionbill-input.html"
+		]
+	},
+	"questionbill-input.html": {
+		"resources": [
+			"js/common.js",
+			"js/mui.picker.min.js",
+			"css/common.css",
+			"js/mui.poppicker.js",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css",
+			"img/scan.png",
+			"js/mui.enterfocus.js",
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
+		],
+		"refer": [
+			"camera_image.html"
 		]
 	}
 }
