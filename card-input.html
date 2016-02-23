@@ -180,17 +180,20 @@
 				db.transaction(function(context) {
 					context.executeSql('CREATE TABLE IF NOT EXISTS CardUser (id,CardID,WayBillNumber,Image,State,CreateDate)');
 					context.executeSql("SELECT 1 FROM CardUser where WayBillNumber like ?", ['%' + r + '%'], function(context, results) {
-						console.log(r);
-						console.log(results.rows.length)
 						if (results.rows.length > 0) {
 							plus.nativeUI.toast('运单编号已经存在');
 							return;
 						} else {
 							if (WayBillNumber.value != "") {
+								console.log(WayBillNumber.value.indexOf(r))
 								if (WayBillNumber.value.indexOf(r) >= 0)
 									plus.nativeUI.toast("该运单编号已存在");
+							    else
+							    	WayBillNumber.value = WayBillNumber.value + "," + r;
 							} else
-								WayBillNumber.value = r;
+							{
+								WayBillNumber.value =r;
+							}
 						}
 					});
 				});

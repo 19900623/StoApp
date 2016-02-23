@@ -1,229 +1,265 @@
 {
-	"index.html": {
-		"resources": [
-			"js/app.js",
-			"js/mui.min.js",
-			"fonts/mui.ttf",
-			"css/mui.min.css",
-			"css/style.css",
-			"js/mui.enterfocus.js"
-		],
-		"refer": [
-			"main.html"
-		]
-	},
-	"tab-echarts.html": {
-		"resources": [
-			"img/combined_chart.png",
-			"css/app.css",
-			"js/page.js",
-			"img/chart_bar.png"
-		],
-		"refer": []
-	},
-	"tab-applications.html": {
-		"resources": [
-			"img/allow_users_edit_ranges.png",
-			"img/film_photo.png",
-			"img/blackberry.png",
-			"img/vcard.png",
-			"img/cell_delete.png",
-			"img/account_balances.png",
-			"css/app.css"
-		],
-		"refer": [
-			"questionbill-grid.html",
-			"addresslist.html",
-			"lighthouse-list-main.html",
-			"card-list-main.html"
-		]
-	},
-	"tab-setting.html": {
-		"resources": [
-			"img/erweima.png",
-			"img/me_logo.png",
-			"js/mui.view.js",
-			"js/app.js",
-			"js/mui.min.js",
-			"fonts/mui.ttf",
-			"css/mui.min.css"
-		],
-		"refer": []
-	},
-	"main.html": {
-		"resources": [
-			"tab-shedule-main.html"
-		],
-		"refer": [
-			"tab-echarts.html",
-			"tab-setting.html",
-			"tab-applications.html",
-			"tab-shedule-main.html"
-		]
-	},
-	"tab-shedule-main.html": {
-		"resources": [
-			"tab-shedule.html"
-		],
-		"refer": [
-			"tab-shedule.html"
-		]
-	},
-	"tab-shedule.html": {
-		"resources": [
-			"img/client_account_template.png",
-			"img/desktop_network.png"
-		],
-		"refer": [
-			"worktask-main.html",
-			"workflow-main.html"
-		]
-	},
-	"questionbill-grid.html": {
-		"resources": [
-			"img/script_edit.png",
-			"img/script_lightning.png",
-			"img/script_go.png",
-			"img/script_error.png"
-		],
-		"refer": [
-			"questionbill-list-main.html"
-		]
-	},
-	"addresslist-indexed.html": {
-		"resources": [
-			"js/pinyin.js",
-			"css/mui.indexedlist.css",
-			"js/mui.indexedlist.js"
-		],
-		"refer": []
-	},
-	"addresslist.html": {
-		"refer": [
-			"addresslist-indexed.html"
-		],
-		"resources": []
-	},
-	"worktask-main.html": {
-		"resources": [
-			"worktask-sub.html"
-		],
-		"refer": [
-			"worktask-sub.html"
-		]
-	},
-	"collectionmoney-workflow-detail.html": {
-		"resources": [
-			"css/app.css"
-		],
-		"refer": []
-	},
-	"collectionmoney-workflow.html": {
-		"resources": [
-			"js/mui.picker.min.js",
-			"js/mui.poppicker.js",
-			"css/mui.poppicker.css",
-			"css/mui.picker.min.css",
-			"js/mui.enterfocus.js"
-		],
-		"refer": [
-			"collectionmoney-workflow-detail.html"
-		]
-	},
-	"workflow-sub.html": {
-		"resources": [
-			"js/app.js"
-		],
-		"refer": [
-			"collectionmoney-workflow.html"
-		]
-	},
-	"workflow-main.html": {
-		"resources": [
-			"js/mui.min.js",
-			"fonts/mui.ttf",
-			"workflow-sub.html",
-			"css/mui.min.css"
-		],
-		"refer": [
-			"workflow-sub.html"
-		]
-	},
-	"lighthouse-list-main.html": {
-		"resources": [
-			"lighthouse-list-sub.html"
-		],
-		"refer": [
-			"lighthouse-list-sub.html"
-		]
-	},
-	"card-input.html": {
-		"resources": [
-			"js/common.js",
-			"js/mui.picker.min.js",
-			"css/common.css",
-			"js/mui.poppicker.js",
-			"css/mui.poppicker.css",
-			"css/mui.picker.min.css",
-			"img/scan.png"
-		]
-	},
-	"card-list-main.html": {
-		"resources": [
-			"card-list-sub.html"
-		],
-		"refer": [
-			"card-list-sub.html",
-			"card-input.html"
-		]
-	},
-	"card-modify.html": {
-		"resources": [
-			"js/app.js",
-			"js/common.js",
-			"js/mui.min.js",
-			"css/common.css",
-			"fonts/mui.ttf",
-			"css/mui.min.css",
-			"js/mui.enterfocus.js",
-			"img/scan.png"
-		]
-	},
-	"card-list-sub.html": {
-		"refer": [
-			"card-modify.html"
-		]
-	},
-	"questionbill-list-main.html": {
-		"resources": [
-			"questionbill-list-sub.html",
-			"js/app.js",
-			"js/mui.min.js",
-			"fonts/mui.ttf",
-			"css/mui.min.css"
-		],
-		"refer": [
-			"questionbill-list-sub.html",
-			"questionbill-input.html"
-		]
-	},
-	"questionbill-input.html": {
-		"resources": [
-			"js/common.js",
-			"js/mui.picker.min.js",
-			"css/common.css",
-			"js/mui.poppicker.js",
-			"css/mui.poppicker.css",
-			"css/mui.picker.min.css",
-			"img/scan.png",
-			"js/mui.enterfocus.js",
-			"js/app.js",
-			"js/mui.min.js",
-			"fonts/mui.ttf",
-			"css/mui.min.css"
-		],
-		"refer": [
-			"camera_image.html"
-		]
-	}
+  "index.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "css/style.css",
+      "js/mui.enterfocus.js"
+    ],
+    "refer": [
+      "main.html"
+    ]
+  },
+  "tab-echarts.html": {
+    "resources": [
+      "img/combined_chart.png",
+      "css/app.css",
+      "js/page.js",
+      "img/chart_bar.png"
+    ],
+    "refer": []
+  },
+  "tab-applications.html": {
+    "resources": [
+      "img/allow_users_edit_ranges.png",
+      "img/film_photo.png",
+      "img/blackberry.png",
+      "img/vcard.png",
+      "img/cell_delete.png",
+      "img/account_balances.png",
+      "css/app.css"
+    ],
+    "refer": [
+      "questionbill-grid.html",
+      "addresslist.html",
+      "lighthouse-list-main.html",
+      "card-list-main.html"
+    ]
+  },
+  "tab-setting.html": {
+    "resources": [
+      "img/erweima.png",
+      "img/me_logo.png",
+      "js/mui.view.js",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "main.html": {
+    "resources": [
+      "tab-shedule-main.html",
+      "fonts/mui.ttf"
+    ],
+    "refer": [
+      "tab-echarts.html",
+      "tab-setting.html",
+      "tab-applications.html",
+      "tab-shedule-main.html"
+    ]
+  },
+  "tab-shedule-main.html": {
+    "resources": [
+      "tab-shedule.html"
+    ],
+    "refer": [
+      "tab-shedule.html"
+    ]
+  },
+  "tab-shedule.html": {
+    "resources": [
+      "img/client_account_template.png",
+      "img/desktop_network.png"
+    ],
+    "refer": [
+      "worktask-main.html",
+      "workflow-main.html"
+    ]
+  },
+  "questionbill-grid.html": {
+    "resources": [
+      "img/script_edit.png",
+      "img/script_lightning.png",
+      "img/script_go.png",
+      "img/script_error.png"
+    ],
+    "refer": [
+      "questionbill-list-main.html"
+    ]
+  },
+  "addresslist-indexed.html": {
+    "resources": [
+      "js/pinyin.js",
+      "css/mui.indexedlist.css",
+      "js/mui.indexedlist.js"
+    ],
+    "refer": []
+  },
+  "addresslist.html": {
+    "refer": [
+      "addresslist-indexed.html"
+    ],
+    "resources": []
+  },
+  "worktask-main.html": {
+    "resources": [
+      "worktask-sub.html"
+    ],
+    "refer": [
+      "worktask-sub.html"
+    ]
+  },
+  "collectionmoney-workflow-detail.html": {
+    "resources": [
+      "css/app.css"
+    ],
+    "refer": []
+  },
+  "collectionmoney-workflow.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "js/mui.poppicker.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/mui.enterfocus.js"
+    ],
+    "refer": [
+      "collectionmoney-workflow-detail.html"
+    ]
+  },
+  "workflow-sub.html": {
+    "resources": [
+      "js/app.js"
+    ],
+    "refer": [
+      "collectionmoney-workflow.html"
+    ]
+  },
+  "workflow-main.html": {
+    "resources": [
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "workflow-sub.html",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "workflow-sub.html"
+    ]
+  },
+  "lighthouse-list-main.html": {
+    "resources": [
+      "lighthouse-list-sub.html"
+    ],
+    "refer": [
+      "lighthouse-list-sub.html"
+    ]
+  },
+  "card-input.html": {
+    "resources": [
+      "js/common.js",
+      "js/mui.picker.min.js",
+      "css/common.css",
+      "js/mui.poppicker.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "img/scan.png",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/mui.enterfocus.js"
+    ],
+    "refer": [
+      "barcode_scan.html"
+    ]
+  },
+  "card-list-main.html": {
+    "resources": [
+      "card-list-sub.html"
+    ],
+    "refer": [
+      "card-list-sub.html",
+      "card-input.html"
+    ]
+  },
+  "card-modify.html": {
+    "resources": [
+      "js/app.js",
+      "js/common.js",
+      "js/mui.min.js",
+      "css/common.css",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/mui.enterfocus.js",
+      "img/scan.png"
+    ],
+    "refer": []
+  },
+  "card-list-sub.html": {
+    "refer": [
+      "card-modify.html"
+    ],
+    "resources": []
+  },
+  "questionbill-list-main.html": {
+    "resources": [
+      "questionbill-list-sub.html",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "questionbill-list-sub.html",
+      "questionbill-input.html"
+    ]
+  },
+  "questionbill-input.html": {
+    "resources": [
+      "js/common.js",
+      "js/mui.picker.min.js",
+      "css/common.css",
+      "js/mui.poppicker.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "img/scan.png",
+      "js/mui.enterfocus.js",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "camera_image.html"
+    ]
+  },
+  "barcode_scan.html": {
+    "resources": [
+      "js/common.js",
+      "css/common.css"
+    ],
+    "refer": []
+  },
+  "questionbill-modify.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.picker.min.js",
+      "js/mui.min.js",
+      "css/common.css",
+      "js/mui.poppicker.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "css/mui.picker.min.css",
+      "js/mui.enterfocus.js"
+    ]
+  },
+  "questionbill-list-sub.html": {
+    "refer": [
+      "questionbill-modify.html"
+    ]
+  }
 }

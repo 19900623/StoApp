@@ -173,7 +173,6 @@
 				cmr.captureImage(function(p) {
 					plus.io.resolveLocalFileSystemURL(p, function(entry) {
 						imageUrl = entry.toLocalURL();
-						console.log(entry.name);
 						//手机端图片进行压缩
 						newImage = imageUrl.replace('.jpg', '_c.jpg');
 						plus.zip.compressImage({
@@ -191,6 +190,9 @@
 								img.src = newImage;
 								img.setAttribute("onclick", "displayFile(this);");
 								ul.appendChild(img);
+								plus.io.resolveLocalFileSystemURL(imageUrl, function(entry) {
+									entry.remove();
+								});
 							},
 							function(error) {
 								alert("Compress error!");
@@ -201,13 +203,28 @@
 
 			function scaned(r) {
 				var WayBillNumber = document.getElementById("WayBillNumber");
-				if (WayBillNumber.value != "") {
-					if (WayBillNumber.value.indexOf(r) >= 0)
-						plus.nativeUI.toast("该运单编号已存在");
-					else
-						WayBillNumber.value = WayBillNumber.value + "," + r;
-				} else
-					WayBillNumber.value = r;
+				//在数据库中判断是否已存在
+				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+				db.transaction(function(context) {
+					context.executeSql('CREATE TABLE IF NOT EXISTS CardUser (id,CardID,WayBillNumber,Image,State,CreateDate)');
+					context.executeSql("SELECT 1 FROM CardUser where WayBillNumber like ?", ['%' + r + '%'], function(context, results) {
+						if (results.rows.length > 0) {
+							plus.nativeUI.toast('运单编号已经存在');
+							return;
+						} else {
+							if (WayBillNumber.value != "") {
+								console.log(WayBillNumber.value.indexOf(r))
+								if (WayBillNumber.value.indexOf(r) >= 0)
+									plus.nativeUI.toast("该运单编号已存在");
+							    else
+							    	WayBillNumber.value = WayBillNumber.value + "," + r;
+							} else
+							{
+								WayBillNumber.value =r;
+							}
+						}
+					});
+				});
 			}
 		</script>
 	</body>

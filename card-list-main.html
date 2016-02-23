@@ -77,6 +77,7 @@
 							plus.nativeUI.toast('请检查网路连接!');
 							return;
 						}
+						plus.nativeUI.showWaiting("正在上传文件...");
 						var userid = app.getLoginInfo().userid;
 						var username = JSON.parse(app.getLoginInfo().userinfo).realname;
 						var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
@@ -134,6 +135,7 @@
 						mui.back();
 					} else
 						alert(t.responseText);
+					plus.nativeUI.closeWaiting();
 				} else {
 					plus.nativeUI.toast("Upload failed: " + status);
 				}

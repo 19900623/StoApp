@@ -77,6 +77,7 @@
 							plus.nativeUI.toast('请检查网路连接!');
 							return;
 						}
+						plus.nativeUI.showWaiting("正在上传文件...");
 						var userid = app.getLoginInfo().userid;
 						var username = JSON.parse(app.getLoginInfo().userinfo).realname;
 						var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
@@ -127,21 +128,6 @@
 					if (t.responseText == "") {
 						var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 						db.transaction(function(context) {
-							context.executeSql("SELECT * FROM QustionBill where State='未上传' and KPI=?  order by CreateDate desc", [name], function(context, results) {
-								var len = results.rows.length;
-								for (var i = 0; i < len; i++) {
-									var image = results.rows.item(0).Image || '';
-									if (image != '') {
-										var images = image.split(',');
-										for (var i = 0; i < images.length - 1; i++) {
-											var newImage = images[i]
-											plus.io.resolveLocalFileSystemURL(newImage, function(entry) {
-												entry.remove();
-											});
-										}
-									}
-								}
-							});
 							var sql = "Update QustionBill set State='已上传' where State='未上传'";
 							context.executeSql(sql);
 						});
@@ -152,6 +138,7 @@
 				} else {
 					plus.nativeUI.toast("Upload failed: " + status);
 				}
+				plus.nativeUI.closeWaiting();
 			});
 		});
 	</script>

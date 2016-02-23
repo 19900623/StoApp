@@ -82,6 +82,7 @@
 						var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
 						var list = new Array();
 						var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+						plus.nativeUI.showWaiting("正在上传文件...");
 						db.transaction(function(context) {
 							context.executeSql("SELECT * FROM LightHouse where State='未上传' order by CreateDate desc", [], function(context, results) {
 								var len = results.rows.length;
@@ -141,6 +142,7 @@
 				} else {
 					plus.nativeUI.toast("Upload failed: " + status);
 				}
+				plus.nativeUI.closeWaiting();
 			});
 		});
 	</script>

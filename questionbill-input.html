@@ -135,6 +135,11 @@
 					return;
 				}
 				var images = document.getElementById("images");
+				
+				if (images.children.length == 0) {
+					plus.nativeUI.toast("请上传照片");
+					return;
+				}
 				var ImagePaths = '';
 				for (var i = 0; i < images.children.length; i++) {
 					ImagePaths += images.children[i].src + ',';
