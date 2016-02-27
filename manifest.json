@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "2.0",/*应用版本名称*/
+		"name": "2.4",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -262,7 +262,9 @@
 					"js/app.js",
 					"img/erweima.png"
 				],
-				"refer": [],
+				"refer": [
+					"password.html"
+				],
 				"priority": 0
 			},
 			"tab-applications.html": {
@@ -277,7 +279,8 @@
 					"img/film_photo.png",
 					"img/color_wheel.png",
 					"fonts/mui.ttf",
-					"img/vcard.png"
+					"img/vcard.png",
+					"img/coins.png"
 				],
 				"refer": [
 					"addresslist.html",
@@ -289,7 +292,8 @@
 					"questionbill-grid.html",
 					"map.html",
 					"card-input.html",
-					"card-list-main.html"
+					"card-list-main.html",
+					"salary.html"
 				],
 				"priority": 0
 			},
@@ -906,6 +910,30 @@
 					"camera_image.html",
 					"barcode_scan.html"
 				],
+				"priority": 0
+			},
+			"salary.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"fonts/mui.ttf",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/mui.min.js",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"password.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/mui.enterfocus.js"
+				],
+				"refer": [],
 				"priority": 0
 			}
 		},

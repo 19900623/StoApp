@@ -47,6 +47,7 @@
 				<div class="mui-button-row">
 					<button type="button" class="mui-btn mui-btn-success" onclick="getImage();" id="buttonok">拍照</button>&nbsp;&nbsp;
 					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">保存</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-success" onclick="btn_update()">上传</button>
 					<button type="button" class="mui-btn mui-btn-danger" onclick="btn_delete()">删除</button>
 				</div>
 			</div>
@@ -61,7 +62,7 @@
 			var WayBillNumber = document.getElementById("WayBillNumber");
 			var Type = document.getElementById("Type");
 			var Remark = document.getElementById("Remark");
-			var id, name,KPIPicker;
+			var id, name, KPIPicker, task, image;
 			mui.plusReady(function() {
 				id = plus.webview.currentWebview().name;
 				name = plus.webview.currentWebview().type;
@@ -94,8 +95,8 @@
 					context.executeSql("SELECT * FROM QustionBill where WayBillNumber=?", [id], function(context, results) {
 						WayBillNumber.value = id;
 						Type.value = results.rows.item(0).Type;
-						Remark.value = results.rows.item(0).Remark;
-						var image = results.rows.item(0).Image || '';
+						Remark.value = Remark.value;
+						image = results.rows.item(0).Image || '';
 						if (image != '') {
 							var images = image.split(',');
 							for (var i = 0; i < images.length - 1; i++) {
@@ -108,6 +109,31 @@
 							}
 						}
 					});
+				});
+				var url = app.getUrl() + 'UpdateImage';
+				task = plus.uploader.createUpload(url, {
+					method: "POST"
+				}, function(t, status) {
+					// 上传完成
+					if (status == 200) {
+						if (t.responseText == "") {
+							var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+							db.transaction(function(context) {
+								var sql = "Update QustionBill set State='已上传' where WayBillNumber=?";
+								context.executeSql(sql, [id],
+									function(context, results) {
+										plus.nativeUI.toast('上传成功');
+										var page = plus.webview.getWebviewById('questionbill-list-sub');
+										mui.fire(page, 'refresh');
+										mui.back();
+									});
+							});
+						} else
+							alert(t.responseText);
+					} else {
+						plus.nativeUI.toast("Upload failed: " + status);
+					}
+					plus.nativeUI.closeWaiting();
 				});
 			});
 			//选择请假类型事件		
@@ -164,6 +190,48 @@
 									plus.nativeUI.toast(error.message);
 								});
 						});
+					}
+				});
+			}
+
+			function btn_update() {
+				var btnArray = ['是', '否'];
+				mui.confirm('是否上传图片到服务器？', '申通提醒', btnArray, function(e) {
+					if (e.index == 0) {
+						//检查网路设置
+						if (plus.networkinfo.getCurrentType() == 1) {
+							plus.nativeUI.toast('请检查网路连接!');
+							return;
+						}
+						plus.nativeUI.showWaiting("正在上传文件...");
+						var userid = app.getLoginInfo().userid;
+						var username = JSON.parse(app.getLoginInfo().userinfo).realname;
+						var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
+						var QustionBill = {
+							WayBillNumber: WayBillNumber.value,
+							KPI: name,
+							Type: Type.value,
+							Remark: Remark.value,
+							CreateUserId: userid,
+							CreateUserName: username,
+							UserCode: usercode,
+							Image: image
+						}
+						if (image != '') {
+							var images = image.split(',');
+							for (var j = 0; j < images.length - 1; j++) {
+								task.addFile(images[j], {
+									key: app.NewGuid()
+								});
+							}
+						}
+						var list = new Array();
+						list.push(QustionBill);
+						//								console.log(JSON.stringify(list));
+						//								return;
+						task.addData("Info", JSON.stringify(list));
+						task.addData("type", 'QuestionBill');
+						task.start();
 					}
 				});
 			}

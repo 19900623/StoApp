@@ -29,13 +29,15 @@
       "img/vcard.png",
       "img/cell_delete.png",
       "img/account_balances.png",
-      "css/app.css"
+      "css/app.css",
+      "img/coins.png"
     ],
     "refer": [
       "questionbill-grid.html",
       "addresslist.html",
       "lighthouse-list-main.html",
-      "card-list-main.html"
+      "card-list-main.html",
+      "salary.html"
     ]
   },
   "tab-setting.html": {
@@ -48,7 +50,9 @@
       "fonts/mui.ttf",
       "css/mui.min.css"
     ],
-    "refer": []
+    "refer": [
+      "password.html"
+    ]
   },
   "main.html": {
     "resources": [
@@ -234,7 +238,8 @@
       "css/mui.min.css"
     ],
     "refer": [
-      "camera_image.html"
+      "camera_image.html",
+      "barcode_scan.html"
     ]
   },
   "barcode_scan.html": {
@@ -255,11 +260,33 @@
       "css/mui.min.css",
       "css/mui.picker.min.css",
       "js/mui.enterfocus.js"
-    ]
+    ],
+    "refer": []
   },
   "questionbill-list-sub.html": {
     "refer": [
       "questionbill-modify.html"
+    ],
+    "resources": []
+  },
+  "salary.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.picker.min.js",
+      "fonts/mui.ttf",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ]
+  },
+  "password.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/mui.enterfocus.js"
     ]
   }
 }
