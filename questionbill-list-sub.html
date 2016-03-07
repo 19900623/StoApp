@@ -73,15 +73,14 @@
 									results.rows.item(i).WayBillNumber + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '类别:' + results.rows.item(i).Type + '&nbsp;&nbsp;状态：' + results.rows.item(i).State + '<br/>日期：' + results.rows.item(i).CreateDate + '</p>' + '</div>' + '</div>';
 								li.id = results.rows.item(i).WayBillNumber;;
 								li.innerHTML = htmlText;
-								li.onclick = function() {
-									//处理切换时，数据未从数据库更新完毕
+								li.addEventListener('tap', function(event) {
 									var nwaiting = plus.nativeUI.showWaiting();
 									var webviewShow = plus.webview.create(
 										'questionbill-modify.html',
 										'questionbill-modify',
 										'', {
 											name: this.id,
-											type:name,
+											type: name,
 										}
 									); //后台创建webview并打开show.html
 									webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
@@ -91,8 +90,8 @@
 											webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
 										}, 300);
 									}, false);
-								}
-								fragment.appendChild(li);								
+								});
+								fragment.appendChild(li);
 							}
 							table.appendChild(fragment);
 						});

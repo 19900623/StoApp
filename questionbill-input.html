@@ -188,7 +188,10 @@
 					plus.io.resolveLocalFileSystemURL(p, function(entry) {
 						imageUrl = entry.toLocalURL();
 						//手机端图片进行压缩
-						var newImage = imageUrl.replace('.jpg', '_c.jpg');
+						var newImage = imageUrl.replace('.jpg', '_c.jpg');					
+//						plus.io.resolveLocalFileSystemURL(newImage, function(entry) {
+//							entry.remove();
+//						});					
 						plus.zip.compressImage({
 								src: imageUrl,
 								dst: newImage,
@@ -206,7 +209,7 @@
 								});
 							},
 							function(error) {
-								alert("Compress error!");
+								alert("Compress error!"+error.message);
 							});
 					}, function(e) {
 						alert("读取拍照文件错误：" + e.message);

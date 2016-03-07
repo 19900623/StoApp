@@ -106,7 +106,7 @@
 					return;
 				}
 				
-				mui.back();
+			
 				var name = JSON.parse(app.getLoginInfo().userinfo).realname;
 				var start = document.getElementById("StartTime").value;
 				var end = document.getElementById("EndTime").value;
@@ -149,6 +149,7 @@
 						}
 					},
 				});
+					mui('#topPopover').popover('toggle');
 			}
 		</script>
 	</body>

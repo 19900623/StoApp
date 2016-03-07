@@ -63,6 +63,7 @@
 				<div class="mui-button-row">
 					<button type="button" class="mui-btn mui-btn-success" onclick="getImage();" id="buttonok">拍照</button>&nbsp;&nbsp;
 					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">保存</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-success" onclick="btn_update()">上传</button>
 					<button type="button" class="mui-btn mui-btn-danger" onclick="btn_delete()">删除</button>
 				</div>
 			</div>
@@ -72,7 +73,7 @@
 		<script src="js/mui.enterfocus.js"></script>
 		<script type="text/javascript" src="js/common.js"></script>
 		<script>
-			var id, newImage;
+			var id, newImage, task;
 			mui.plusReady(function() {
 				var WayBillNumber = document.getElementById("WayBillNumber");
 				var Card = document.getElementById("Card");
@@ -91,6 +92,35 @@
 						ul.appendChild(img);
 					});
 				});
+				var url = app.getUrl() + 'UploadRealName';
+				task = plus.uploader.createUpload(url, {
+					method: "POST"
+				}, function(t, status) {
+					// 上传完成
+					if (status == 200) {
+						if (t.responseText == "") {
+							var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+							db.transaction(function(context) {
+								plus.io.resolveLocalFileSystemURL(newImage, function(entry) {
+									 entry.remove();
+								});
+								var sql = "Update CardUser set State='已上传' where State='未上传' and WayBillNumber=?";
+								context.executeSql(sql, [WayBillNumber.value],
+								function(context, results) {
+										plus.nativeUI.toast('上传成功');
+										var page = plus.webview.getWebviewById('card-list-sub');
+										mui.fire(page, 'refresh');
+										mui.back();
+									});
+
+							});							
+						} else
+							alert(t.responseText);
+						plus.nativeUI.closeWaiting();
+					} else {
+						plus.nativeUI.toast("Upload failed: " + status);
+					}
+				});
 			});
 			//确定按钮
 			function btn_ok() {
@@ -98,7 +128,7 @@
 				var CardID = document.getElementById("Card").value;
 				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 				db.transaction(function(context) {
-					context.executeSql('update CardUser set CardID=?,WayBillNumber=?,Image=? where id=?', [CardID, WayBillNumber, newImage,id],
+					context.executeSql('update CardUser set CardID=?,WayBillNumber=?,Image=? where id=?', [CardID, WayBillNumber, newImage, id],
 						function(tx, result) {
 							plus.nativeUI.toast('保存成功');
 							var page = plus.webview.getWebviewById('card-list-sub');
@@ -122,7 +152,7 @@
 								function(tx, result) {
 									plus.nativeUI.toast('删除成功');
 									//删除照片
-									plus.io.resolveLocalFileSystemURL( newImage, function ( entry ) {
+									plus.io.resolveLocalFileSystemURL(newImage, function(entry) {
 										entry.remove();
 									});
 									var page = plus.webview.getWebviewById('card-list-sub');
@@ -135,7 +165,7 @@
 								});
 						});
 					}
-				});                       
+				});
 			}
 			var w = null;
 			// 显示文件
@@ -201,6 +231,40 @@
 				}, function(e) {});
 			}
 
+			function btn_update() {
+				var btnArray = ['是', '否'];
+				mui.confirm('是否上传图片到服务器？', '申通提醒', btnArray, function(e) {
+					if (e.index == 0) {
+						//检查网路设置
+						if (plus.networkinfo.getCurrentType() == 1) {
+							plus.nativeUI.toast('请检查网路连接!');
+							return;
+						}
+						plus.nativeUI.showWaiting("正在上传文件...");
+						var WayBillNumber = document.getElementById("WayBillNumber");
+						var Card = document.getElementById("Card");
+						var userid = app.getLoginInfo().userid;
+						var username = JSON.parse(app.getLoginInfo().userinfo).realname;
+						var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
+						var Card = {
+							WayBillNumber: WayBillNumber.value,
+							CardID: Card.value,
+							CreateUserName: username,
+							CardImage: newImage
+						};
+						task.addFile(newImage, {
+							key: app.NewGuid()
+						});
+						var list = new Array();
+						list.push(Card);
+						//								console.log(JSON.stringify(list));
+						//								return;
+						task.addData("Info", JSON.stringify(list));
+						task.start();
+					}
+				});
+			}
+
 			function scaned(r) {
 				var WayBillNumber = document.getElementById("WayBillNumber");
 				//在数据库中判断是否已存在
@@ -216,11 +280,10 @@
 								console.log(WayBillNumber.value.indexOf(r))
 								if (WayBillNumber.value.indexOf(r) >= 0)
 									plus.nativeUI.toast("该运单编号已存在");
-							    else
-							    	WayBillNumber.value = WayBillNumber.value + "," + r;
-							} else
-							{
-								WayBillNumber.value =r;
+								else
+									WayBillNumber.value = WayBillNumber.value + "," + r;
+							} else {
+								WayBillNumber.value = r;
 							}
 						}
 					});

@@ -90,7 +90,7 @@
 									+'&nbsp;&nbsp;指派人：' + data[i].leadername+ '<br/>执行日期：' + data[i].begindate + '&nbsp;&nbsp;至&nbsp;&nbsp;'+ data[i].enddate +'</p>' + '</div>' + '</div>';
 									li.innerHTML = htmlText;
 									li.id = data[i].id;
-									li.onclick = function() {
+									li.addEventListener('tap', function(event) {
 										//处理切换时，数据未从数据库更新完毕
 										var nwaiting = plus.nativeUI.showWaiting();
 										var webviewShow = plus.webview.create(
@@ -107,7 +107,7 @@
 												webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
 											}, 300);
 										}, false);
-									}
+									});
 									fragment.appendChild(li);
 								}
 								var list = document.getElementById("list");
@@ -160,7 +160,7 @@
 									+'&nbsp;&nbsp;指派人：' + data[i].leadername+ '<br/>执行日期：' + data[i].begindate + '&nbsp;&nbsp;至&nbsp;&nbsp;'+ data[i].enddate +'</p>' + '</div>' + '</div>';
 									li.innerHTML = htmlText;
 									li.id = data[i].id;
-									li.onclick = function() {
+									li.addEventListener('tap', function(event) {
 										//处理切换时，数据未从数据库更新完毕
 										var nwaiting = plus.nativeUI.showWaiting();
 										var webviewShow = plus.webview.create(
@@ -177,7 +177,7 @@
 												webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
 											}, 300);
 										}, false);
-									}
+									});
 									fragment.appendChild(li);
 								}
 								var list = document.getElementById("list");

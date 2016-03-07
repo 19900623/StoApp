@@ -45,7 +45,7 @@
 			<div class="mui-popover-arrow"></div>
 			<div class="mui-scroll-wrapper">
 				<form class="mui-input-group" id="bill-form">
-					<div class="mui-input-row">
+					<div class="mui-input-row" >
 						<label>月份</label>
 						<input type="text" id="StartTime" class="mui-input" required="required" readonly="readonly">
 					</div>
@@ -83,7 +83,7 @@
 					plus.nativeUI.toast("请选择月份");
 					return;
 				}
-				mui.back();
+		
 				var name = JSON.parse(app.getLoginInfo().userinfo).realname;
 				var start = document.getElementById("StartTime").value;
 				//加载数据
@@ -127,6 +127,8 @@
 						}
 					},
 				});
+                //关闭弹出框
+				mui('#topPopover').popover('toggle');				  
 			}
 		</script>
 	</body>

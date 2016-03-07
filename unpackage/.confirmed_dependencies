@@ -68,7 +68,10 @@
   },
   "tab-shedule-main.html": {
     "resources": [
-      "tab-shedule.html"
+      "tab-shedule.html",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
     ],
     "refer": [
       "tab-shedule.html"
@@ -77,7 +80,8 @@
   "tab-shedule.html": {
     "resources": [
       "img/client_account_template.png",
-      "img/desktop_network.png"
+      "img/desktop_network.png",
+      "js/app.js"
     ],
     "refer": [
       "worktask-main.html",
@@ -111,7 +115,10 @@
   },
   "worktask-main.html": {
     "resources": [
-      "worktask-sub.html"
+      "worktask-sub.html",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
     ],
     "refer": [
       "worktask-sub.html"
@@ -140,7 +147,8 @@
       "js/app.js"
     ],
     "refer": [
-      "collectionmoney-workflow.html"
+      "collectionmoney-workflow.html",
+      "paymentbill-workflow.html"
     ]
   },
   "workflow-main.html": {
@@ -183,7 +191,11 @@
   },
   "card-list-main.html": {
     "resources": [
-      "card-list-sub.html"
+      "card-list-sub.html",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
     ],
     "refer": [
       "card-list-sub.html",
@@ -286,6 +298,20 @@
       "js/mui.min.js",
       "fonts/mui.ttf",
       "css/mui.min.css",
+      "js/mui.enterfocus.js"
+    ]
+  },
+  "worktask-sub.html": {
+    "resources": [
+      "js/app.js"
+    ]
+  },
+  "paymentbill-workflow.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "js/mui.poppicker.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
       "js/mui.enterfocus.js"
     ]
   }
