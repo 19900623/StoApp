@@ -14,7 +14,7 @@
 	<body>
 		<header class="mui-bar mui-bar-nav" id="header">
 			<a id="back" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">大字错写</h1>
+			<h1 id="title" class="mui-title">热敏面单</h1>
 		</header>
 		<div class="mui-content"></div>
 	</body>
@@ -27,8 +27,8 @@
 				doubletap: true
 			},
 			subpages: [{
-				url: 'questionbill-list-sub.html',
-				id: 'questionbill-list-sub',
+				url: 'waybill-list-sub.html',
+				id: 'waybill-list-sub',
 				styles: {
 					top: '45px',
 					bottom: '0px',
@@ -43,7 +43,7 @@
 		mui.plusReady(function() {
 			//			var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 			//			db.transaction(function(context) {
-			//				var sql = "Update QustionBill set State='未上传' where State='已上传'";
+			//				var sql = "Update WayBill set State='未上传' where State='已上传'";
 			//				context.executeSql(sql);
 			//			});
 			name = plus.webview.currentWebview().name;
@@ -55,8 +55,8 @@
 			rightbtn.addEventListener('tap', function(event) {
 				var nwaiting = plus.nativeUI.showWaiting();
 				var addresslistPage = plus.webview.create(
-					'questionbill-input.html',
-					'questionbill-input', {}, {
+					'waybill-input.html',
+					'waybill-input', {}, {
 						name: name
 					}
 				); //后台创建webview并打开show.html
@@ -82,20 +82,19 @@
 							plus.nativeUI.toast('请检查网路连接!');
 							return;
 						}
-						plus.nativeUI.showWaiting("正在上传文件...");
 						var userid = app.getLoginInfo().userid;
 						var username = JSON.parse(app.getLoginInfo().userinfo).realname;
 						var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
 						var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 						db.transaction(function(context) {
-							context.executeSql("SELECT * FROM QustionBill where State='未上传' and KPI=?  order by CreateDate desc", [name], function(context, results) {
+							context.executeSql("SELECT * FROM WayBill where State='未上传' and KPI=?  order by CreateDate desc", [name], function(context, results) {
 								var len = results.rows.length;
 								var k = 0;
 								for (var i = 0; i < len; i++) {
-									var QustionBill = {
+									plus.nativeUI.showWaiting("正在上传文件...");
+									var WayBill = {
 										WayBillNumber: results.rows.item(i).WayBillNumber,
 										KPI: name,
-										Type: results.rows.item(i).Type,
 										Remark: results.rows.item(i).Remark,
 										CreateUserId: userid,
 										CreateUserName: username,
@@ -106,13 +105,14 @@
 									task = plus.uploader.createUpload(url, {
 										method: "POST"
 									}, function(t, status) {
-										k++
+										k++;
 										// 上传完成
 										if (status == 200) {
+											//console.log(JSON.parse(t.responseText).type);
 											if (JSON.parse(t.responseText).type == 0) {
 												var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 												db.transaction(function(context) {
-													var sql = "Update QustionBill set State='已上传' where  WayBillNumber=?";
+													var sql = "Update WayBill set State='已上传' where  WayBillNumber=?";
 													context.executeSql(sql, [JSON.parse(t.responseText).Message]);
 												});
 											} else
@@ -135,9 +135,10 @@
 											});
 										}
 									}
-									task.addData("Info", JSON.stringify(QustionBill));
-									task.addData("type", 'QuestionBill');
+									task.addData("Info", JSON.stringify(WayBill));
+									task.addData("type", 'WayBill');
 									task.start();
+									//task = null;
 								}
 								//								return;
 							});

@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "2.5",/*应用版本名称*/
+		"name": "2.7",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -280,7 +280,8 @@
 					"img/color_wheel.png",
 					"fonts/mui.ttf",
 					"img/vcard.png",
-					"img/coins.png"
+					"img/coins.png",
+					"img/client_account_template.png"
 				],
 				"refer": [
 					"addresslist.html",
@@ -293,7 +294,8 @@
 					"map.html",
 					"card-input.html",
 					"card-list-main.html",
-					"salary.html"
+					"salary.html",
+					"waybill-grid.html"
 				],
 				"priority": 0
 			},
@@ -927,6 +929,70 @@
 			},
 			"password.html": {
 				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/mui.enterfocus.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"waybill-grid.html": {
+				"resources": [
+					"img/script_edit.png",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"waybill-list-main.html"
+				],
+				"priority": 0
+			},
+			"waybill-input.html": {
+				"resources": [
+					"js/common.js",
+					"js/mui.picker.min.js",
+					"css/common.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"img/scan.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/mui.enterfocus.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"waybill-list-main.html": {
+				"resources": [
+					"waybill-list-sub.html",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"waybill-input.html"
+				],
+				"priority": 0
+			},
+			"waybill-list-sub.html": {
+				"resources": [],
+				"refer": [
+					"waybill-modify.html"
+				],
+				"priority": 0
+			},
+			"waybill-modify.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"css/common.css",
+					"js/mui.poppicker.js",
+					"css/mui.picker.min.css",
 					"js/app.js",
 					"js/mui.min.js",
 					"fonts/mui.ttf",

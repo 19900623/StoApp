@@ -190,6 +190,7 @@
 							plus.nativeUI.toast('请检查网路连接!');
 							return;
 						}
+		
 						var url = app.getUrl() + 'CheckLogin';
 						mui.ajax(url, {
 							data: loginInfo,
@@ -204,11 +205,16 @@
 										userinfo: data.UserInfo,
 										userreport: data.UserReport
 									};
+								
 									app.setSettings(settings);
 									app.setLoginInfo(loginInfo);
 									toMain();
 								}
 								return;
+							},
+							error:function(xhr,type,errorThrown){
+								//异常处理；
+								console.log(type+errorThrown);
 							}
 						});
 					});

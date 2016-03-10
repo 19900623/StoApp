@@ -98,7 +98,7 @@
 				}, function(t, status) {
 					// 上传完成
 					if (status == 200) {
-						if (t.responseText == "") {
+							if (JSON.parse(t.responseText).type == 0) {
 							var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 							db.transaction(function(context) {
 								plus.io.resolveLocalFileSystemURL(newImage, function(entry) {
@@ -115,7 +115,7 @@
 
 							});							
 						} else
-							alert(t.responseText);
+								alert(JSON.parse(t.responseText).Message);
 						plus.nativeUI.closeWaiting();
 					} else {
 						plus.nativeUI.toast("Upload failed: " + status);
@@ -255,11 +255,7 @@
 						task.addFile(newImage, {
 							key: app.NewGuid()
 						});
-						var list = new Array();
-						list.push(Card);
-						//								console.log(JSON.stringify(list));
-						//								return;
-						task.addData("Info", JSON.stringify(list));
+						task.addData("Info", JSON.stringify(Card));
 						task.start();
 					}
 				});

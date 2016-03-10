@@ -30,14 +30,16 @@
       "img/cell_delete.png",
       "img/account_balances.png",
       "css/app.css",
-      "img/coins.png"
+      "img/coins.png",
+      "img/client_account_template.png"
     ],
     "refer": [
       "questionbill-grid.html",
       "addresslist.html",
       "lighthouse-list-main.html",
       "card-list-main.html",
-      "salary.html"
+      "salary.html",
+      "waybill-grid.html"
     ]
   },
   "tab-setting.html": {
@@ -312,6 +314,67 @@
       "js/mui.poppicker.js",
       "css/mui.poppicker.css",
       "css/mui.picker.min.css",
+      "js/mui.enterfocus.js",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ]
+  },
+  "waybill-grid.html": {
+    "refer": [
+      "waybill-list-main.html"
+    ],
+    "resources": [
+      "img/script_edit.png",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ]
+  },
+  "waybill-input.html": {
+    "resources": [
+      "js/common.js",
+      "js/mui.picker.min.js",
+      "css/common.css",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "img/scan.png",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/mui.enterfocus.js"
+    ]
+  },
+  "waybill-list-main.html": {
+    "resources": [
+      "waybill-list-sub.html",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "waybill-input.html",
+      "waybill-list-sub.html"
+    ]
+  },
+  "waybill-list-sub.html": {
+    "refer": [
+      "waybill-modify.html"
+    ]
+  },
+  "waybill-modify.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "css/common.css",
+      "js/mui.poppicker.js",
+      "css/mui.picker.min.css",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
       "js/mui.enterfocus.js"
     ]
   }

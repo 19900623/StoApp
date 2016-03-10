@@ -22,7 +22,7 @@
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">编辑大字错写</h1>
+			<h1 id="title" class="mui-title">编辑热敏面单</h1>
 		</header>
 		<div class="mui-content">
 			<div class="mui-content-padded" style="margin: 5px;">
@@ -31,11 +31,6 @@
 						<label>运单编号</label>
 						<input type="text" id="WayBillNumber" class="mui-input" required="required" readonly="readonly">
 					</div>
-					<div class="mui-input-row">
-						<label>类别</label>
-						<input type="text" id="Type" class="mui-input" required="required" readonly="readonly">
-					</div>
-
 				</form>
 				<div class="mui-input-row" style="margin: 5px 0px 0px;">
 					<textarea id="Remark" rows="3" placeholder="备注" class="mui-input-clear mui-input"></textarea>
@@ -60,42 +55,17 @@
 		<script>
 			mui.init({});
 			var WayBillNumber = document.getElementById("WayBillNumber");
-			var Type = document.getElementById("Type");
 			var Remark = document.getElementById("Remark");
-			var id, name, KPIPicker, task, image;
+			var id, name, task, image;
 			mui.plusReady(function() {
 				id = plus.webview.currentWebview().name;
 				name = plus.webview.currentWebview().type;
 				document.getElementById("title").innerHTML = '编辑' + name;
-				KPIPicker = new mui.PopPicker({
-					layer: 1
-				});
-				if (name.indexOf('大字') > 0) {
-					KPIPicker.setData([{
-						value: '大字',
-						text: '大字'
-					}, {
-						value: '大包',
-						text: '大包'
-					}]);
-				} else {
-					KPIPicker.setData([{
-						value: '不规则',
-						text: '不规则'
-					}, {
-						value: '同行',
-						text: '同行'
-					}, {
-						value: '裸包装',
-						text: '裸包装'
-					}]);
-				}
 				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 				db.transaction(function(context) {
-					context.executeSql("SELECT * FROM QustionBill where WayBillNumber=?", [id], function(context, results) {
+					context.executeSql("SELECT * FROM WayBill where WayBillNumber=?", [id], function(context, results) {
 						WayBillNumber.value = id;
-						Type.value = results.rows.item(0).Type;
-						Remark.value = Remark.value;
+						Remark.value = results.rows.item(0).Remark;
 						image = results.rows.item(0).Image || '';
 						if (image != '') {
 							var images = image.split(',');
@@ -110,37 +80,6 @@
 						}
 					});
 				});
-				var url = app.getUrl() + 'UpdateImage';
-				task = plus.uploader.createUpload(url, {
-					method: "POST"
-				}, function(t, status) {
-					// 上传完成
-					if (status == 200) {
-						if (JSON.parse(t.responseText).type == 0) {
-							var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
-							db.transaction(function(context) {
-								var sql = "Update QustionBill set State='已上传' where WayBillNumber=?";
-								context.executeSql(sql, [id],
-									function(context, results) {
-										plus.nativeUI.toast('上传成功');
-										var page = plus.webview.getWebviewById('questionbill-list-sub');
-										mui.fire(page, 'refresh');
-										mui.back();
-									});
-							});
-						} else
-							alert(JSON.parse(t.responseText).Message);
-					} else {
-						plus.nativeUI.toast("Upload failed: " + status);
-					}
-					plus.nativeUI.closeWaiting();
-				});
-			});
-			//选择请假类型事件		
-			document.getElementById("Type").addEventListener('tap', function() {
-				KPIPicker.show(function(items) {
-					document.getElementById("Type").value = items[0].value;
-				});
 			});
 			//确定按钮
 			function btn_ok() {
@@ -152,10 +91,10 @@
 				}
 				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 				db.transaction(function(context) {
-					context.executeSql('update QustionBill set Type=?,Remark=?,Image=? where WayBillNumber=?', [Type.value, Remark.value, ImagePaths, id],
+					context.executeSql('update WayBill set Remark=?,Image=? where WayBillNumber=?', [Remark.value, ImagePaths, id],
 						function(tx, result) {
 							plus.nativeUI.toast('保存成功');
-							var page = plus.webview.getWebviewById('questionbill-list-sub');
+							var page = plus.webview.getWebviewById('waybill-list-sub');
 							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
 							mui.fire(page, 'refresh');
 							mui.back();
@@ -172,7 +111,7 @@
 					if (e.index == 0) {
 						var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 						db.transaction(function(context) {
-							context.executeSql('delete from QustionBill where WayBillNumber=?', [id],
+							context.executeSql('delete from WayBill where WayBillNumber=?', [id],
 								function(tx, result) {
 									var images = document.getElementById("images");
 									for (var i = 0; i < images.children.length; i++) {
@@ -181,7 +120,7 @@
 										});
 									}
 									plus.nativeUI.toast('删除成功');
-									var page = plus.webview.getWebviewById('questionbill-list-sub');
+									var page = plus.webview.getWebviewById('waybill-list-sub');
 									//触发列表界面的自定义事件（refresh）,从而进行数据刷新
 									mui.fire(page, 'refresh');
 									mui.back();
@@ -204,29 +143,59 @@
 							return;
 						}
 						plus.nativeUI.showWaiting("正在上传文件...");
+						var images = document.getElementById("images");
+						var ImagePaths = '';
+						for (var i = 0; i < images.children.length; i++) {
+							if (images.children[i].src.indexOf('file') >= 0)
+								ImagePaths += images.children[i].src + ',';
+						}
 						var userid = app.getLoginInfo().userid;
 						var username = JSON.parse(app.getLoginInfo().userinfo).realname;
 						var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
-						var QustionBill = {
-							WayBillNumber: WayBillNumber.value,
+						var WayBill = {
+							WayBillNumber: id,
 							KPI: name,
-							Type: Type.value,
 							Remark: Remark.value,
 							CreateUserId: userid,
 							CreateUserName: username,
 							UserCode: usercode,
-							Image: image
+							Image: ImagePaths
 						}
-						if (image != '') {
-							var images = image.split(',');
-							for (var j = 0; j < images.length - 1; j++) {
-								task.addFile(images[j], {
-									key: app.NewGuid()
-								});
+						var url = app.getUrl() + 'UpdateImage';
+						task = plus.uploader.createUpload(url, {
+							method: "POST"
+						}, function(t, status) {
+							// 上传完成
+							if (status == 200) {
+								//console.log(JSON.parse(t.responseText).type);
+								if (JSON.parse(t.responseText).type == 0) {
+									var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+									db.transaction(function(context) {
+										var sql = "Update WayBill set State='已上传' where WayBillNumber=?";
+										context.executeSql(sql, [id],
+											function(context, results) {
+												plus.nativeUI.toast('上传成功');
+												var page = plus.webview.getWebviewById('waybill-list-sub');
+												mui.fire(page, 'refresh');
+												mui.back();
+											});
+									});
+								} else
+									alert(JSON.parse(t.responseText).Message);
+							} else {
+								plus.nativeUI.toast("Upload failed: " + status);
 							}
+							plus.nativeUI.closeWaiting();
+						});
+						var images = document.getElementById("images");
+						var ImagePaths = '';
+						for (var i = 0; i < images.children.length; i++) {
+							task.addFile(images.children[i].src, {
+								key: app.NewGuid()
+							});
 						}
-						task.addData("Info", JSON.stringify(QustionBill));
-						task.addData("type", 'QuestionBill');
+						task.addData("Info", JSON.stringify(WayBill));
+						task.addData("type", 'WayBill');
 						task.start();
 					}
 				});
