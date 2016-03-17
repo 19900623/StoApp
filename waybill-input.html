@@ -122,10 +122,11 @@
 									function(tx, result) {
 										plus.nativeUI.toast('添加成功');
 										var page = plus.webview.getWebviewById('waybill-list-sub');
-										wt.close();
 										//触发列表界面的自定义事件（refresh）,从而进行数据刷新
 										mui.fire(page, 'refresh');
 										mui.back();
+										wt.close();
+			
 									},
 									function(tx, error) {
 										wt.close();

@@ -41,11 +41,11 @@
 			contentWebview.evalJS("mui('#pullrefresh').pullRefresh().scrollTo(0,0,100)");
 		});
 		mui.plusReady(function() {
-			//			var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
-			//			db.transaction(function(context) {
-			//				var sql = "Update WayBill set State='未上传' where State='已上传'";
-			//				context.executeSql(sql);
-			//			});
+//						var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+//						db.transaction(function(context) {
+//							var sql = "Update WayBill set State='未上传' where State='已上传'";
+//							context.executeSql(sql);
+//						});
 			name = plus.webview.currentWebview().name;
 			document.getElementById("title").innerHTML = name;
 			var header = document.getElementById("header");

@@ -39,7 +39,9 @@
       "lighthouse-list-main.html",
       "card-list-main.html",
       "salary.html",
-      "waybill-grid.html"
+      "waybill-grid.html",
+      "expensebill-list-main.html",
+      "leavebill-list-main.html"
     ]
   },
   "tab-setting.html": {
@@ -95,7 +97,10 @@
       "img/script_edit.png",
       "img/script_lightning.png",
       "img/script_go.png",
-      "img/script_error.png"
+      "img/script_error.png",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
     ],
     "refer": [
       "questionbill-list-main.html"
@@ -113,7 +118,12 @@
     "refer": [
       "addresslist-indexed.html"
     ],
-    "resources": []
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ]
   },
   "worktask-main.html": {
     "resources": [
@@ -166,7 +176,11 @@
   },
   "lighthouse-list-main.html": {
     "resources": [
-      "lighthouse-list-sub.html"
+      "lighthouse-list-sub.html",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
     ],
     "refer": [
       "lighthouse-list-sub.html"
@@ -292,7 +306,8 @@
       "css/mui.picker.min.css",
       "js/mui.min.js",
       "css/mui.min.css"
-    ]
+    ],
+    "refer": []
   },
   "password.html": {
     "resources": [
@@ -301,12 +316,14 @@
       "fonts/mui.ttf",
       "css/mui.min.css",
       "js/mui.enterfocus.js"
-    ]
+    ],
+    "refer": []
   },
   "worktask-sub.html": {
     "resources": [
       "js/app.js"
-    ]
+    ],
+    "refer": []
   },
   "paymentbill-workflow.html": {
     "resources": [
@@ -319,17 +336,20 @@
       "js/mui.min.js",
       "fonts/mui.ttf",
       "css/mui.min.css"
-    ]
+    ],
+    "refer": []
   },
   "waybill-grid.html": {
     "refer": [
-      "waybill-list-main.html"
+      "waybill-list-main.html",
+      "waybill-standard.html"
     ],
     "resources": [
       "img/script_edit.png",
       "js/mui.min.js",
       "fonts/mui.ttf",
-      "css/mui.min.css"
+      "css/mui.min.css",
+      "img/advanced_data_grid.png"
     ]
   },
   "waybill-input.html": {
@@ -345,7 +365,8 @@
       "fonts/mui.ttf",
       "css/mui.min.css",
       "js/mui.enterfocus.js"
-    ]
+    ],
+    "refer": []
   },
   "waybill-list-main.html": {
     "resources": [
@@ -363,7 +384,8 @@
   "waybill-list-sub.html": {
     "refer": [
       "waybill-modify.html"
-    ]
+    ],
+    "resources": []
   },
   "waybill-modify.html": {
     "resources": [
@@ -376,6 +398,77 @@
       "fonts/mui.ttf",
       "css/mui.min.css",
       "js/mui.enterfocus.js"
+    ],
+    "refer": []
+  },
+  "expensebill-list-sub.html": {
+    "resources": [
+      "js/app.js"
+    ],
+    "refer": []
+  },
+  "expensebill-list-main.html": {
+    "resources": [
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "expensebill-list-sub.html",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "expensebill-list-sub.html",
+      "expensebill-input.html"
     ]
+  },
+  "leavebill-list-main.html": {
+    "resources": [
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "leavebill-list-sub.html"
+    ],
+    "refer": [
+      "leavebill-list-sub.html",
+      "leavebill-input.html"
+    ]
+  },
+  "leavebill-list-sub.html": {
+    "resources": [
+      "js/app.js"
+    ],
+    "refer": []
+  },
+  "waybill-standard.html": {
+    "resources": [
+      "img/K:Lb2.jpg",
+      "img/K:Lb1.jpg",
+      "img/erweima.png",
+      "img/waybill1.jpg",
+      "img/waybill2.jpg",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "css/common.css",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/mui.min.js",
+      "img/K:Lb2.jpg",
+      "img/K:Lb1.jpg"
+    ],
+    "refer": []
+  },
+  "leavebill-input.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "js/mui.poppicker.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/mui.enterfocus.js"
+    ],
+    "refer": []
+  },
+  "expensebill-input.html": {
+    "resources": [
+      "js/mui.enterfocus.js"
+    ],
+    "refer": []
   }
 }
