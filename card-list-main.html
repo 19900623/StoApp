@@ -97,7 +97,7 @@
 									task = plus.uploader.createUpload(url, {
 										method: "POST"
 									}, function(t, status) {
-										k++
+										k++;
 										// 上传完成
 										if (status == 200) {
 											if (JSON.parse(t.responseText).type == 0) {
@@ -118,7 +118,7 @@
 										} else {
 											plus.nativeUI.toast("Upload failed: " + status);
 										}
-										if (k == len - 1) {
+										if (k == len) {
 											plus.nativeUI.closeWaiting();
 											plus.nativeUI.toast('上传成功');
 											mui.back();
