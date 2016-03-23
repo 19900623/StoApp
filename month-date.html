@@ -16,14 +16,13 @@
 			body {
 				background-color: #efeff4;
 			}
-			/*跨webview需要手动指定位置*/
-			
+			/*跨webview需要手动指定位置*/		
 			.mui-popover {
 				height: 150px;
 			}
 			
 			.amount{
-				position:absolute ;right: 0px;width: 6em;top: 10px;
+				position:absolute ;right: 10px;width: 6em;top: 10px;
 			}
 			
 		</style>
@@ -33,11 +32,11 @@
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" href="#topPopover">查询</a>
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">工资单</h1>
+			<h1 id="title" class="mui-title">考勤月账</h1>
 		</header>
 		<div style="margin-top: 45px;">
-			<ul class="mui-table-view" id="list">
-
+			<ul class="mui-table-view" id="list">              
+ 
 			</ul>
 		</div>
 		<!--右上角弹出菜单-->
@@ -91,7 +90,7 @@
 				while (table.firstChild)
 					table.removeChild(table.firstChild);
 				var fragment = document.createDocumentFragment();
-				var url = app.getUrl() + 'GetSalary';
+				var url = app.getUrl() + 'GetMonthDate';
 				mui.ajax(url, {
 					data: {
 						UserName: name,
@@ -100,30 +99,56 @@
 					type: 'post',
 					dataType: 'json',
 					success: function(data) {
-						if (data) {
-							alert(1);
-							li = document.createElement('li');
-							li.className = 'mui-table-view-cell ';
-							var htmlText = '月份：<div class="amount" >'+start+'<div>';							
-							li.innerHTML = htmlText;
-							fragment.appendChild(li);
-							
-							for (var i = 0; i < data.length; i++) {
-								li = document.createElement('li');
-								li.className = 'mui-table-view-cell ';
-								var htmlText = data[i].kpi+'：<div class="amount" >'+data[i].realamount+'<div>';							
-								li.innerHTML = htmlText;
-								total+=data[i].realamount;
-								fragment.appendChild(li);
-							}		
-							
-							li = document.createElement('li');
-							li.className = 'mui-table-view-cell ';
-							var htmlText = '合计：<div class="amount" >'+total+'<div>';							
-							li.innerHTML = htmlText;
-							fragment.appendChild(li);
-							
-							table.appendChild(fragment);
+						if (data) {			
+						    var htmlText=' <li class="mui-table-view-cell">月份：<div class="amount" >'+start+'<div></li>'
+						    htmlText+= '<li class="mui-table-view-cell">当月天数：<div class="amount" >'+data[0].monthday+'<div></li>'
+						    htmlText+= '<li class="mui-table-view-cell">出勤天数：<div class="amount" >'+data[0].workday+'<div></li>'
+						    htmlText+= '<li class="mui-table-view-cell mui-collapse">'
+						    htmlText+= '<a class="mui-navigate-right" href="#">旷工天数： <div class="amount">'+data[0].absentday+'</div> </a>'
+						    if(data[0].absentday>0)
+						    {
+						       var kgRemark=data[0].kuangremark
+						       var kgArray=kgRemark.split(' ')
+						       var len=kgArray.length;
+						       if (len>0)
+						       {
+						       	   htmlText+='<ul class="mui-table-view mui-table-view-chevron">';
+						       for(var i=0;i<len;i++)
+						       {
+						       	   htmlText+='<li class="mui-table-view-cell">'+kgArray[i]+'</li>';
+						       }
+						       htmlText+='</ul>'
+						       }						       
+						    }
+						    htmlText+= '</li>'
+						    htmlText+= '<li class="mui-table-view-cell">请假天数：<div class="amount" >'+data[0].leaveday+'<div></li>';	
+						    htmlText+= '<li class="mui-table-view-cell">晚间迟到：<div class="amount" >'+data[0].nightlateday+'<div></li>';	
+						    htmlText+= '<li class="mui-table-view-cell mui-collapse">'
+						    htmlText+= '<a class="mui-navigate-right" href="#">考勤异常： <div class="amount">'+data[0].unusual+'</div> </a>'
+						    if(data[0].unusual>0)
+						    {
+						       var wRemark=data[0].wrongremark;
+						       var wArray=wRemark.split(' ');
+						       var len=wArray.length;
+						       if (len>0)
+						       {
+						       	  htmlText+='<ul class="mui-table-view mui-table-view-chevron">';
+						          for(var i=0;i<len;i++)
+						          {
+						          	 var n,h;
+						          	 if(i%2==0)
+						          	    n=wArray[i];
+						          	 else
+						          	 {
+						          	 	h=wArray[i]
+						       	        htmlText+='<li class="mui-table-view-cell">'+n+' '+h+'</li>';
+						       	    }
+						          }
+						          htmlText+='</ul>'
+						       }						       
+						    }
+						    htmlText+= '</li>'
+							table.innerHTML=htmlText;
 						}
 					},
 				});

@@ -31,7 +31,8 @@
       "img/account_balances.png",
       "css/app.css",
       "img/coins.png",
-      "img/client_account_template.png"
+      "img/client_account_template.png",
+      "img/visa_2.png"
     ],
     "refer": [
       "questionbill-grid.html",
@@ -41,7 +42,9 @@
       "salary.html",
       "waybill-grid.html",
       "expensebill-list-main.html",
-      "leavebill-list-main.html"
+      "leavebill-list-main.html",
+      "printer.html",
+      "salary-grid.html"
     ]
   },
   "tab-setting.html": {
@@ -470,5 +473,39 @@
       "js/mui.enterfocus.js"
     ],
     "refer": []
+  },
+  "printer.html": {
+    "resources": [
+      "css/common.css",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "salary-grid.html": {
+    "resources": [
+      "img/date.png",
+      "js/mui.min.js",
+      "img/coins.png",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "salary.html",
+      "month-date.html"
+    ]
+  },
+  "month-date.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ]
   }
 }

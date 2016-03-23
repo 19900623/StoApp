@@ -54,9 +54,9 @@
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a  onclick="toSalary()">
-						<img src="img/coins.png">
-						<div class="mui-media-body">工资单</div>
+					<a  onclick="toSalaryGrid()">
+						<img src="img/visa_2.png">
+						<div class="mui-media-body">员工工资</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
@@ -65,6 +65,13 @@
 						<div class="mui-media-body">热敏面单</div>
 					</a>
 				</li>
+				
+				<!--<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a  onclick="toPrinter()">
+						<img src="img/client_account_template.png">
+						<div class="mui-media-body">打印机</div>
+					</a>
+				</li>-->
 				
 			</ul>
 		</div>
@@ -166,11 +173,11 @@
 			}, false);
 		};		
 		
-		var toSalary = function() {
+		var toSalaryGrid = function() {
 			var nwaiting = plus.nativeUI.showWaiting();
 			var cardPage = plus.webview.create(
-				'salary.html',
-				'salary'
+				'salary-grid.html',
+				'salary-grid'
 			); //后台创建webview并打开show.html
 			cardPage.addEventListener("loaded", function() { //注册新webview的载入完成事件
 				setTimeout(function() {
@@ -195,7 +202,23 @@
 					cardPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
 				}, 300);
 			}, false);
+		};	
+		
+		var toPrinter = function() {
+			var nwaiting = plus.nativeUI.showWaiting();
+			var printerPage = plus.webview.create(
+				'printer.html',
+				'printer'
+			); //后台创建webview并打开show.html
+			printerPage.addEventListener("loaded", function() { //注册新webview的载入完成事件
+				setTimeout(function() {
+					nwaiting.close();
+					//新webview的载入完毕后关闭等待框
+					printerPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+				}, 300);
+			}, false);
 		};		
+		
 		
 	</script>
 </html>

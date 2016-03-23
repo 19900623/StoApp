@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "2.73",/*应用版本名称*/
+		"name": "2.74",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -281,7 +281,8 @@
 					"fonts/mui.ttf",
 					"img/vcard.png",
 					"img/coins.png",
-					"img/client_account_template.png"
+					"img/client_account_template.png",
+					"img/visa_2.png"
 				],
 				"refer": [
 					"addresslist.html",
@@ -295,7 +296,9 @@
 					"card-input.html",
 					"card-list-main.html",
 					"salary.html",
-					"waybill-grid.html"
+					"waybill-grid.html",
+					"printer.html",
+					"salary-grid.html"
 				],
 				"priority": 0
 			},
@@ -1017,6 +1020,44 @@
 					"css/mui.poppicker.css",
 					"css/mui.picker.min.css",
 					"js/mui.min.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"printer.html": {
+				"resources": [
+					"css/common.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/mui.min.js",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"salary-grid.html": {
+				"resources": [
+					"img/date.png",
+					"js/mui.min.js",
+					"img/coins.png",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"salary.html",
+					"month-date.html"
+				],
+				"priority": 0
+			},
+			"month-date.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
 				],
 				"refer": [],
 				"priority": 0
