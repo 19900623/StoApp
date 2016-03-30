@@ -31,6 +31,12 @@
 						<label>运单编号</label>
 						<input type="text" id="WayBillNumber" class="mui-input" required="required" readonly="readonly">
 					</div>
+					
+					<div class="mui-input-row">
+						<label>类别</label>
+						<input type="text" id="Type" class="mui-input" required="required" readonly="readonly">
+					</div>
+					
 				</form>
 				<div class="mui-input-row" style="margin: 5px 0px 0px;">
 					<textarea id="Remark" rows="3" placeholder="备注" class="mui-input-clear mui-input"></textarea>
@@ -53,6 +59,7 @@
 		<script src="js/mui.picker.min.js"></script>
 		<script src="js/mui.poppicker.js"></script>
 		<script>
+		    var KPIPicker;
 			mui.init({});
 			var WayBillNumber = document.getElementById("WayBillNumber");
 			var Remark = document.getElementById("Remark");
@@ -63,9 +70,10 @@
 				document.getElementById("title").innerHTML = '编辑' + name;
 				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 				db.transaction(function(context) {
-					context.executeSql("SELECT * FROM WayBill where WayBillNumber=?", [id], function(context, results) {
+					context.executeSql("SELECT * FROM SensWayBill where WayBillNumber=?", [id], function(context, results) {
 						WayBillNumber.value = id;
 						Remark.value = results.rows.item(0).Remark;
+						Type.value = results.rows.item(0).Type;
 						image = results.rows.item(0).Image || '';
 						if (image != '') {
 							var images = image.split(',');
@@ -80,7 +88,35 @@
 						}
 					});
 				});
+				
+				KPIPicker = new mui.PopPicker({
+					layer: 1
+				});
+				KPIPicker.setData([{
+					value: '客户寄件信息未规范打印',
+					text: '客户寄件信息未规范打印'
+				}, {
+					value: '客户收件信息未规范打印',
+					text: '客户收件信息未规范打印'
+				}, {
+					value: '条形码信息未规范打印',
+					text: '条形码信息未规范打印'
+				}, {
+					value: '客户信息和条形码未规范打印',
+					text: '客户信息和条形码未规范打印'
+				}, {
+					value: '到件同一网点单号重复使用',
+					text: '到件同一网点单号重复使用'
+				}]);
 			});
+			
+			//类别	
+			document.getElementById("Type").addEventListener('tap', function() {
+				KPIPicker.show(function(items) {
+					document.getElementById("Type").value = items[0].value;
+				});
+			});
+			
 			//确定按钮
 			function btn_ok() {
 				var images = document.getElementById("images");
@@ -91,7 +127,7 @@
 				}
 				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 				db.transaction(function(context) {
-					context.executeSql('update WayBill set Remark=?,Image=? where WayBillNumber=?', [Remark.value, ImagePaths, id],
+					context.executeSql('update SensWayBill set Remark=?,Image=?,Type=? where WayBillNumber=?', [Remark.value, ImagePaths,Type.value, id],
 						function(tx, result) {
 							plus.nativeUI.toast('保存成功');
 							var page = plus.webview.getWebviewById('waybill-list-sub');
@@ -111,7 +147,7 @@
 					if (e.index == 0) {
 						var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 						db.transaction(function(context) {
-							context.executeSql('delete from WayBill where WayBillNumber=?', [id],
+							context.executeSql('delete from SensWayBill where WayBillNumber=?', [id],
 								function(tx, result) {
 									var images = document.getElementById("images");
 									for (var i = 0; i < images.children.length; i++) {
@@ -156,6 +192,7 @@
 							WayBillNumber: id,
 							KPI: name,
 							Remark: Remark.value,
+							Type: Type.value,
 							CreateUserId: userid,
 							CreateUserName: username,
 							UserCode: usercode,
@@ -171,7 +208,7 @@
 								if (JSON.parse(t.responseText).type == 0) {
 									var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 									db.transaction(function(context) {
-										var sql = "Update WayBill set State='已上传' where WayBillNumber=?";
+										var sql = "Update SensWayBill set State='已上传' where WayBillNumber=?";
 										context.executeSql(sql, [id],
 											function(context, results) {
 												plus.nativeUI.toast('上传成功');

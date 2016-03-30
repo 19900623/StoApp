@@ -64,13 +64,13 @@
 					var li;
 					var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 					db.transaction(function(context) {
-						context.executeSql("SELECT * FROM WayBill where State='未上传' and KPI=?  order by CreateDate desc", [name], function(context, results) {
+						context.executeSql("SELECT * FROM SensWayBill where State='未上传' and KPI=?  order by CreateDate desc", [name], function(context, results) {
 							var len = results.rows.length;
 							for (var i = 0; i < len; i++) {
 								li = document.createElement('li');
 								li.className = 'mui-table-view-cell';
 								var htmlText = '<div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '运单编号：' +
-									results.rows.item(i).WayBillNumber + '</h4>' + '<p class="mui-h6 mui-ellipsis">' +'状态：' + results.rows.item(i).State + '<br/>日期：' + results.rows.item(i).CreateDate + '</p>' + '</div>' + '</div>';
+									results.rows.item(i).WayBillNumber + '</h4>' + '<p class="mui-h6 mui-ellipsis">' +'类别：'+results.rows.item(i).Type+ '<br/>日期：' + results.rows.item(i).CreateDate + '</p>' + '</div>' + '</div>';
 								li.id = results.rows.item(i).WayBillNumber;;
 								li.innerHTML = htmlText;
 								li.addEventListener('tap', function(event) {

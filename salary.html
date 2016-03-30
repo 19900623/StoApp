@@ -101,8 +101,8 @@
 					dataType: 'json',
 					success: function(data) {
 						if (data) {
-							alert(1);
-							li = document.createElement('li');
+							var total=0;
+							li = document.createElement('li'); 
 							li.className = 'mui-table-view-cell ';
 							var htmlText = '月份：<div class="amount" >'+start+'<div>';							
 							li.innerHTML = htmlText;
@@ -121,8 +121,7 @@
 							li.className = 'mui-table-view-cell ';
 							var htmlText = '合计：<div class="amount" >'+total+'<div>';							
 							li.innerHTML = htmlText;
-							fragment.appendChild(li);
-							
+							fragment.appendChild(li);							
 							table.appendChild(fragment);
 						}
 					},

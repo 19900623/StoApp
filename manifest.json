@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "2.74",/*应用版本名称*/
+		"name": "2.77",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -986,7 +986,11 @@
 				"priority": 0
 			},
 			"waybill-list-sub.html": {
-				"resources": [],
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css"
+				],
 				"refer": [
 					"waybill-modify.html"
 				],

@@ -87,7 +87,7 @@
 						var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
 						var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 						db.transaction(function(context) {
-							context.executeSql("SELECT * FROM WayBill where State='未上传' and KPI=?  order by CreateDate desc", [name], function(context, results) {
+							context.executeSql("SELECT * FROM SensWayBill where State='未上传' and KPI=?  order by CreateDate desc", [name], function(context, results) {
 								var len = results.rows.length;
 								var k = 0;
 								for (var i = 0; i < len; i++) {
@@ -96,6 +96,7 @@
 										WayBillNumber: results.rows.item(i).WayBillNumber,
 										KPI: name,
 										Remark: results.rows.item(i).Remark,
+										Type: results.rows.item(i).Type,
 										CreateUserId: userid,
 										CreateUserName: username,
 										UserCode: usercode,
@@ -112,7 +113,7 @@
 											if (JSON.parse(t.responseText).type == 0) {
 												var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 												db.transaction(function(context) {
-													var sql = "Update WayBill set State='已上传' where  WayBillNumber=?";
+													var sql = "Update SensWayBill set State='已上传' where  WayBillNumber=?";
 													context.executeSql(sql, [JSON.parse(t.responseText).Message]);
 												});
 											} else
