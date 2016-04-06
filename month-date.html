@@ -103,6 +103,8 @@
 						    var htmlText=' <li class="mui-table-view-cell">月份：<div class="amount" >'+start+'<div></li>'
 						    htmlText+= '<li class="mui-table-view-cell">当月天数：<div class="amount" >'+data[0].monthday+'<div></li>'
 						    htmlText+= '<li class="mui-table-view-cell">出勤天数：<div class="amount" >'+data[0].workday+'<div></li>'
+						    htmlText+= '<li class="mui-table-view-cell">休班天数：<div class="amount" >'+data[0].xiuday+'<div></li>'
+						    htmlText+= '<li class="mui-table-view-cell">打卡天数：<div class="amount" >'+data[0].chuday+'<div></li>'
 						    htmlText+= '<li class="mui-table-view-cell mui-collapse">'
 						    htmlText+= '<a class="mui-navigate-right" href="#">旷工天数： <div class="amount">'+data[0].absentday+'</div> </a>'
 						    if(data[0].absentday>0)

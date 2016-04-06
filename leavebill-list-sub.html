@@ -87,7 +87,7 @@
 									li = document.createElement('li');
 									li.className = 'mui-table-view-cell';
 									li.id = data[i].leaveid;
-									var htmlText = '<div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '标题：' + data[i].leavetitle + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '请假类型:' + data[i].leavetype + '&nbsp;&nbsp;请假日期:' + data[i].leavestarttime.substr(0,10) + '<br/>审批状态:' + data[i].flowstate + '</p>' + '</div>' + '</div>';
+										var htmlText = '<div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '标题：' + data[i].leavetitle + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '请假类型:' + data[i].leavetype + '&nbsp;&nbsp;审批状态:' + data[i].flowstate  + '<br/>' + data[i].leavestarttime+'至'+data[i].leaveendtime+ '</p>' + '</div>' + '</div>';
 									li.innerHTML = htmlText;
 									li.addEventListener('tap', function(event) {
 									
@@ -161,7 +161,7 @@
 									li = document.createElement('li');
 									li.className = 'mui-table-view-cell';
 									li.id = data[i].leaveid;
-									var htmlText = '<div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '标题：' + data[i].leavetitle + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '请假类型:' + data[i].leavetype + '&nbsp;&nbsp;请假日期:' + data[i].leavestarttime.substr(0,10) + '<br/>审批状态:' + data[i].flowstate + '</p>' + '</div>' + '</div>';
+									var htmlText = '<div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '标题：' + data[i].leavetitle + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '请假类型:' + data[i].leavetype + '&nbsp;&nbsp;审批状态:' + data[i].flowstate  + '<br/>' + data[i].leavestarttime+'至'+data[i].leaveendtime+ '</p>' + '</div>' + '</div>';
 									li.innerHTML = htmlText;
 									li.addEventListener('tap', function(event) {
 										//处理切换时，数据未从数据库更新完毕

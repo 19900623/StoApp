@@ -441,9 +441,14 @@
   },
   "leavebill-list-sub.html": {
     "resources": [
-      "js/app.js"
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
     ],
-    "refer": []
+    "refer": [
+      "leavebill-modify.html"
+    ]
   },
   "waybill-standard.html": {
     "resources": [
@@ -469,7 +474,11 @@
       "js/mui.poppicker.js",
       "css/mui.poppicker.css",
       "css/mui.picker.min.css",
-      "js/mui.enterfocus.js"
+      "js/mui.enterfocus.js",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
     ],
     "refer": []
   },
@@ -518,6 +527,19 @@
     "resources": [
       "css/mui.poppicker.css",
       "css/mui.picker.min.css"
+    ]
+  },
+  "leavebill-modify.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.picker.min.js",
+      "js/mui.min.js",
+      "js/mui.poppicker.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/mui.enterfocus.js"
     ]
   }
 }
