@@ -55,7 +55,8 @@
 				<div class="mui-button-row">
 					<button type="button" class="mui-btn mui-btn-success" onclick="btn_commit()" id="buttoncommit">提交</button>&nbsp;&nbsp;
 					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
-					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
+					<button type="button" class="mui-btn mui-btn-danger" onclick="btn_delete()" id="buttondel">删除</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-primary" onclick="mui.back()">取消</button>
 				</div>
 			</div>
 		</div>
@@ -66,16 +67,16 @@
 		<script src="js/mui.poppicker.js"></script>
 		<script>
 			var leaveDays, leaveHour, startTime, endTime;
-				var LeaveMold = document.getElementById("LeaveMold");
-				var LeaveType = document.getElementById("LeaveType");
-				var LeaveStartTime = document.getElementById("LeaveStartTime");
-				var LeaveEndTime = document.getElementById("LeaveEndTime");
-				var LeaveReason = document.getElementById("LeaveReason");
+			var LeaveMold = document.getElementById("LeaveMold");
+			var LeaveType = document.getElementById("LeaveType");
+			var LeaveStartTime = document.getElementById("LeaveStartTime");
+			var LeaveEndTime = document.getElementById("LeaveEndTime");
+			var LeaveReason = document.getElementById("LeaveReason");
 			var FlowState = document.getElementById("FlowState");
 			mui.init({});
-			var userPicker,leavePicker;
+			var userPicker, leavePicker;
 			mui.plusReady(function() {
-				var id=plus.webview.currentWebview().name;		
+				var id = plus.webview.currentWebview().name;
 				userPicker = new mui.PopPicker();
 				userPicker.setData([{
 					value: '事假',
@@ -101,7 +102,6 @@
 					mui.trigger(buttonok, 'tap');
 				});
 				var url = app.getUrl() + 'GetLeaveBillByID';
-				
 				leavePicker = new mui.PopPicker();
 				leavePicker.setData([{
 					value: '全天',
@@ -119,7 +119,6 @@
 					value: '晚间操作',
 					text: '晚间操作'
 				}]);
-				
 				mui.ajax(url, {
 					data: {
 						id: id
@@ -130,13 +129,14 @@
 						if (data) {
 							LeaveMold.value = data[0].leavetitle;
 							LeaveType.value = data[0].leavetype;
-							LeaveStartTime.value = data[0].leavestarttime.substr(0,10);
-							LeaveEndTime.value = data[0].leaveendtime.substr(0,10);
+							LeaveStartTime.value = data[0].leavestarttime.substr(0, 10);
+							LeaveEndTime.value = data[0].leaveendtime.substr(0, 10);
 							LeaveReason.value = data[0].leavereason;
-							FlowState.value=data[0].flowstate;
-							if (FlowState.value != '未提交'&&FlowState.value != '驳回') {
+							FlowState.value = data[0].flowstate;
+							if (FlowState.value != '未提交' && FlowState.value != '驳回') {
 								document.getElementById("buttoncommit").style.display = "none";
 								document.getElementById("buttonok").style.display = "none";
+								document.getElementById("buttondel").style.display = "none";
 							}
 						}
 					}
@@ -144,7 +144,7 @@
 			});
 			//选择请假类型事件		
 			document.getElementById("LeaveType").addEventListener('tap', function() {
-				userPicker.show(function(items) {					
+				userPicker.show(function(items) {
 					document.getElementById("LeaveType").value = items[0].value;
 					if (items[0].value == '早间操作' || items[0].value == '晚间操作') {
 						document.getElementById("LeaveType").value = '小时假';
@@ -191,7 +191,7 @@
 			});
 
 			function btn_ok() {
-								//验证
+				//验证
 				if (LeaveMold.value == "") {
 					plus.nativeUI.toast("时间段不能为空");
 					LeaveMold.focus();
@@ -217,17 +217,13 @@
 					LeaveEndTime.focus();
 					return;
 				}
-				
-				if(LeaveType.value=='小时假')
-				{
-					if (LeaveMold.value != '早间操作' && LeaveMold.value != '晚间操作')
-					{
+				if (LeaveType.value == '小时假') {
+					if (LeaveMold.value != '早间操作' && LeaveMold.value != '晚间操作') {
 						plus.nativeUI.toast("该时间段不能为小时假");
 						LeaveMold.focus();
 						return;
 					}
 				}
-				
 				//请假原因
 				if (LeaveReason.value == "") {
 					plus.nativeUI.toast("请假原因不能为空");
@@ -241,12 +237,12 @@
 						endTime = LeaveEndTime.value + ' 23:59:59';
 						var dateBegin = new Date(LeaveStartTime.value);
 						var dateEnd = new Date(LeaveEndTime.value);
-						var dateDif =dateEnd.getTime()- dateBegin.getTime() ;
+						var dateDif = dateEnd.getTime() - dateBegin.getTime();
 						leaveDays = Math.floor(dateDif / (1000 * 60 * 60 * 24));
-						if(leaveDays>0)
-						   leaveDays = leaveDays+1
+						if (leaveDays > 0)
+							leaveDays = leaveDays + 1
 						else
-						   leaveDays=1
+							leaveDays = 1
 						leaveHour = 0;
 						break;
 					case '上午':
@@ -274,11 +270,10 @@
 						leaveHour = 5;
 						break;
 				}
-				
 				var userid = app.getLoginInfo().userid;
 				//调用方法
 				var billInfo = {
-					LeaveID:plus.webview.currentWebview().name,
+					LeaveID: plus.webview.currentWebview().name,
 					LeaveTitle: LeaveMold.value,
 					LeaveType: LeaveType.value,
 					LeaveStartTime: startTime,
@@ -306,31 +301,55 @@
 					}
 				});
 			}
-			
 			//提交按钮
-			function btn_commit()
-			{
+			function btn_commit() {
 				var url = app.getUrl() + 'StartFlow';
-					var userid = app.getLoginInfo().userid;
-					mui.ajax(url, {
-						data: {
-							taskid: plus.webview.currentWebview().name,
-							nodeid:'87ca8039-62de-4159-b6e5-ea6236f23be3',
-							userid:userid
-						},
-						type: 'post', //HTTP请求类型
-						success: function(data) {
-							if (data == "") {
-								plus.nativeUI.toast('提交成功');
-								var page = plus.webview.getWebviewById('leavebill-list-sub');
-								//触发列表界面的自定义事件（refresh）,从而进行数据刷新
-								mui.fire(page, 'refresh');
-								mui.back();
-							} else {
-								plus.nativeUI.toast(data);
-							}
+				var userid = app.getLoginInfo().userid;
+				mui.ajax(url, {
+					data: {
+						taskid: plus.webview.currentWebview().name,
+						nodeid: '87ca8039-62de-4159-b6e5-ea6236f23be3',
+						userid: userid
+					},
+					type: 'post', //HTTP请求类型
+					success: function(data) {
+						if (data == "") {
+							plus.nativeUI.toast('提交成功');
+							var page = plus.webview.getWebviewById('leavebill-list-sub');
+							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+							mui.fire(page, 'refresh');
+							mui.back();
+						} else {
+							plus.nativeUI.toast(data);
 						}
-					});	
+					}
+				});
+			}
+			//提交按钮
+			function btn_delete() {
+				var btnArray = ['是', '否'];
+				mui.confirm('是否删除该条数据？', '申通提醒', btnArray, function(e) {
+					if (e.index == 0) {
+						var url = app.getUrl() + 'DeleteLeaveBill';
+						mui.ajax(url, {
+							data: {
+								id: plus.webview.currentWebview().name,
+							},
+							type: 'post', //HTTP请求类型
+							success: function(data) {
+								if (data == "") {
+									plus.nativeUI.toast('删除成功');
+									var page = plus.webview.getWebviewById('leavebill-list-sub');
+									//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+									mui.fire(page, 'refresh');
+									mui.back();
+								} else {
+									plus.nativeUI.toast(data);
+								}
+							}
+						});
+					}
+				});
 			}
 		</script>
 	</body>
