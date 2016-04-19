@@ -32,7 +32,8 @@
       "css/app.css",
       "img/coins.png",
       "img/client_account_template.png",
-      "img/visa_2.png"
+      "img/visa_2.png",
+      "img/subdomains.png"
     ],
     "refer": [
       "questionbill-grid.html",
@@ -187,7 +188,8 @@
       "css/mui.min.css"
     ],
     "refer": [
-      "lighthouse-list-sub.html"
+      "lighthouse-list-sub.html",
+      "lighthouse-input.html"
     ]
   },
   "card-input.html": {
@@ -327,7 +329,9 @@
     "resources": [
       "js/app.js"
     ],
-    "refer": []
+    "refer": [
+      "worktask-modify.html"
+    ]
   },
   "paymentbill-workflow.html": {
     "resources": [
@@ -527,7 +531,8 @@
     "resources": [
       "css/mui.poppicker.css",
       "css/mui.picker.min.css"
-    ]
+    ],
+    "refer": []
   },
   "leavebill-modify.html": {
     "resources": [
@@ -539,6 +544,54 @@
       "css/mui.min.css",
       "css/mui.poppicker.css",
       "css/mui.picker.min.css",
+      "js/mui.enterfocus.js"
+    ],
+    "refer": []
+  },
+  "lighthouse-input.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.picker.min.js",
+      "js/mui.min.js",
+      "js/mui.poppicker.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/mui.enterfocus.js",
+      "css/common.css"
+    ],
+    "refer": []
+  },
+  "lighthouse-list-sub.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "lighthouse-modify.html"
+    ]
+  },
+  "lighthouse-modify.html": {
+    "resources": [
+      "js/app.js",
+      "js/common.js",
+      "js/mui.min.js",
+      "css/common.css",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/mui.enterfocus.js",
+      "js/mui.picker.min.js",
+      "js/mui.poppicker.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css"
+    ],
+    "refer": []
+  },
+  "worktask-modify.html": {
+    "resources": [
       "js/mui.enterfocus.js"
     ]
   }

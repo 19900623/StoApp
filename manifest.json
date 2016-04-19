@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "2.81",/*应用版本名称*/
+		"name": "2.82",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -282,7 +282,8 @@
 					"img/vcard.png",
 					"img/coins.png",
 					"img/client_account_template.png",
-					"img/visa_2.png"
+					"img/visa_2.png",
+					"img/subdomains.png"
 				],
 				"refer": [
 					"addresslist.html",
@@ -720,7 +721,11 @@
 					"fonts/mui.ttf",
 					"css/mui.min.css",
 					"js/mui.enterfocus.js",
-					"js/common.js"
+					"js/common.js",
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
 				],
 				"refer": [
 					"camera_image.html",

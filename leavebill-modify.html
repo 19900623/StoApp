@@ -101,7 +101,7 @@
 				mui.enterfocus('#bill-form input', function() {
 					mui.trigger(buttonok, 'tap');
 				});
-				var url = app.getUrl() + 'GetLeaveBillByID';
+
 				leavePicker = new mui.PopPicker();
 				leavePicker.setData([{
 					value: '全天',
@@ -119,6 +119,7 @@
 					value: '晚间操作',
 					text: '晚间操作'
 				}]);
+				var url = app.getUrl() + 'GetLeaveBillByID';
 				mui.ajax(url, {
 					data: {
 						id: id

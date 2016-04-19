@@ -17,154 +17,201 @@
 			body {
 				background-color: #efeff4;
 			}
-			
-			.button {
-				font-size: 18px;
-				font-weight: normal;
-				text-decoration: none;
-				display: block;
-				text-align: center;
-				color: #FFF;
-				background-color: #FFCC33;
-				border: 1px solid #ECB100;
-				padding: .1em 0em;
-				margin: .0em 4.7em;
-				-webkit-border-radius: 0px;
-				border-radius: 0px;
-			}
 		</style>
 	</head>
 
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">新增曝光台</h1>
+			<h1 id="title" class="mui-title">新增请求</h1>
 		</header>
 		<div class="mui-content">
 			<div class="mui-content-padded" style="margin: 5px;">
 				<form class="mui-input-group" id="bill-form">
-					<div class="mui-input-row">
+					<!--<div class="mui-input-row">
 						<label>标题</label>
-						<input type="text" id="Title" class="mui-input-clear mui-input" required="required">
+						<input type="text" id="LeaveTitle" class="mui-input-clear mui-input" required="required">
+					</div>-->
 
-					</div>
 					<div class="mui-input-row">
-						<label>运单编号</label>
-						<input type="text" id="WayBillNumber" class="mui-input-clear mui-input" required="required">
-						<img src="img/scan.png" style="position: absolute; right: 0px;top: 1.5px ;width: 2em; height: 2em;" onclick="clicked('barcode_scan.html',true,true)" />
+						<label>类型</label>
+						<input type="text" id="Type" class="mui-input-clear mui-input" required="required">
 					</div>
-
 					<div class="mui-input-row">
 						<label>日期</label>
-						<input type="text" placeholder="选择日期" id="Date" class="mui-input" readonly="readonly">
+						<input type="text" id="RequestDate" class="mui-input" required="required" readonly="readonly">
 					</div>
-
 				</form>
-				<div class="mui-input-row" style="margin: 5px 0px 0px;">
-					<textarea id="Remark" rows="3" placeholder="备注" class="mui-input-clear mui-input"></textarea>
+				<div class="mui-input-row" style="margin: 5px 0px;">
+					<textarea id="Request" rows="8" placeholder="问题描述" class="mui-input-clear mui-input"></textarea>
 				</div>
+
 				<ul id="images" class="dlist">
 
 				</ul>
 
 				<div class="mui-button-row">
 					<button type="button" class="mui-btn mui-btn-success" onclick="getImage();" id="buttonok">拍照</button>&nbsp;&nbsp;
-					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确定</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
 					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
 				</div>
 			</div>
 		</div>
-			<script src="js/mui.min.js"></script>
+		<script src="js/mui.min.js"></script>
 		<script src="js/app.js"></script>
 		<script src="js/mui.enterfocus.js"></script>
 		<script src="js/mui.picker.min.js"></script>
 		<script src="js/mui.poppicker.js"></script>
-		<script type="text/javascript" src="js/common.js"></script>
 		<script>
 			mui.init({});
+			var typePicker;
 			mui.plusReady(function() {
-				var bxdate = document.getElementById("Date");
-				var d = new Date();
-				bxdate.value = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
 				var buttonok = document.getElementById('buttonok');
 				mui.enterfocus('#bill-form input', function() {
 					mui.trigger(buttonok, 'tap');
 				});
-			});
-			//选择报销日期事件			
-			document.getElementById("Date").addEventListener('tap', function() {
-				var dDate = new Date();
-				var minDate = new Date();
-				minDate.setFullYear(2015, 0, 1);
-				var maxDate = new Date();
-				maxDate.setFullYear(2030, 12, 31);
-				var bxdate = document.getElementById("Date");
-				plus.nativeUI.pickDate(function(e) {
-					var d = e.date;
-					bxdate.value = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
-				}, function(e) {
-					bxdate.value = "您没有选择日期";
-				}, {
-					title: "请选择日期",
-					date: dDate,
-					minDate: minDate,
-					maxDate: maxDate
+				if (plus.networkinfo.getCurrentType() == 1) {
+					plus.nativeUI.toast('请检查网路连接!');
+					return;
+				}
+				var url = app.getUrl() + 'GetPersonRequestType';
+				mui.ajax(url, {
+					type: 'post', //HTTP请求类型
+					dataType: 'json',
+					success: function(data) {
+						if (data) {
+							typePicker = new mui.PopPicker();
+							var itemList = new Array();
+							for (var i = 0; i < data.length; i++) {
+								var Item = {
+									value: data[i].fullname,
+									text: data[i].fullname
+								};
+								itemList.push(Item);
+							}
+							typePicker.setData(itemList);
+						}
+					}
 				});
-			})
+			});
+			//选择请假类型事件		
+			document.getElementById("Type").addEventListener('tap', function() {
+				typePicker.show(function(items) {
+					document.getElementById("Type").value = items[0].value;
+				});
+			});
+			//选择开始时间事件			
+			document.getElementById("RequestDate").addEventListener('tap', function() {
+				var options = JSON.parse('{"type":"date"}');
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+					document.getElementById("RequestDate").value = rs.text;
+					picker.dispose();
+				});
+			});
 
 			function btn_ok() {
-				//保存数据
-				var id=app.NewGuid()
-				var WayBillNumber = document.getElementById("WayBillNumber");
-				var Title = document.getElementById("Title");
-				var CDate = document.getElementById("Date");
-				var Remark = document.getElementById("Remark");
-				var ul = document.getElementById("images");
-				console.log(ul.children.length)
-				if (ul.children.length == 0) {
-					plus.nativeUI.toast("请上传照片");
-					return;
-				}
+				var Type = document.getElementById("Type");
+				var RequestDate = document.getElementById("RequestDate");
+				var Request = document.getElementById("Request");
 				//验证
-				if (Title.value == "") {
-					plus.nativeUI.toast("标题不能为空");
-					Remark.focus();
+				if (Type.value == "") {
+					plus.nativeUI.toast("类型不能为空");
+					LeaveMold.focus();
 					return;
 				}
-				var wt = plus.nativeUI.showWaiting();
-				var images = document.getElementById("images");
-				var ImagePaths = '';
-				for (var i = 0; i < images.children.length; i++) {
-					ImagePaths += images.children[i].src + ',';
+				if (RequestDate.value == "") {
+					plus.nativeUI.toast("日期不能为空");
+					LeaveReason.focus();
+					return;
 				}
-			var d = new Date().format('yyyy-MM-dd hh:mm');
-				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
-				db.transaction(function(context) {
-					context.executeSql('CREATE TABLE IF NOT EXISTS LightHouse (id,WayBillNumber, Title,Date,Remark,Image,State,CreateDate)');
-					db.transaction(function(context) {
-						var sql = "INSERT INTO LightHouse (id,WayBillNumber, Title,Date,Remark,Image,State,CreateDate) VALUES (?,?,?,?,?,?,'未上传',?)";
-						context.executeSql(sql, [id,WayBillNumber.value,Title.value,CDate.value,Remark.value,ImagePaths,d],
-							function(tx, result) {
+				if (Request.value == "") {
+					plus.nativeUI.toast("问题描述不能为空");
+					LeaveReason.focus();
+					return;
+				}
+				var images = document.getElementById("images");
+				//没有图片直接上传，有图片则改为图片上传功能
+				if (images.children.length == 0) {
+					var userid = app.getLoginInfo().userid;
+					//调用方法
+					var billInfo = {
+						CreateUserID: userid,
+						Type: Type.value,
+						RequestDate: RequestDate.value,
+						Request: Request.value
+					};
+					var url = app.getUrl() + 'AddPersonRequest';
+					mui.ajax(url, {
+						data: {
+							Data: JSON.stringify(billInfo)
+						},
+						type: 'post', //HTTP请求类型
+						success: function(data) {
+							if (data == "") {
 								plus.nativeUI.toast('添加成功');
 								var page = plus.webview.getWebviewById('lighthouse-list-sub');
-								wt.close();
 								//触发列表界面的自定义事件（refresh）,从而进行数据刷新
 								mui.fire(page, 'refresh');
 								mui.back();
-							},
-							function(tx, error) {
-								wt.close();
-								plus.nativeUI.toast(error.message);
-							});
+							} else {
+								plus.nativeUI.toast(data);
+							}
+						}
 					});
-				});
+				} else {
+					var ImagePaths = '';
+					for (var i = 0; i < images.children.length; i++) {
+						ImagePaths += images.children[i].src + ',';
+					}
+					var url = app.getUrl() + 'UpdateImage';
+					var task = plus.uploader.createUpload(url, {
+						method: "POST"
+					}, function(t, status) {
+						// 上传完成
+						if (status == 200) {
+							if (JSON.parse(t.responseText).type == 0) {
+								plus.nativeUI.toast('添加成功');
+								var page = plus.webview.getWebviewById('lighthouse-list-sub');
+								//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+								mui.fire(page, 'refresh');
+								mui.back();
+							} else
+								alert(JSON.parse(t.responseText).Message);
+						} else {
+							plus.nativeUI.toast("Upload failed: " + status);
+						}
+						plus.nativeUI.closeWaiting();
+					});
+					var userid = app.getLoginInfo().userid;
+					var username = JSON.parse(app.getLoginInfo().userinfo).realname;
+					var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
+					var billInfo = {
+						CreateUserID: userid,
+						Type: Type.value,
+						RequestDate: RequestDate.value, 
+						Request: Request.value,
+						CreateUserName: username,
+						Image: ImagePaths
+					}
+					if (ImagePaths != '') {
+						var images = ImagePaths.split(',');
+						for (var j = 0; j < images.length - 1; j++) {
+							task.addFile(images[j], {
+								key: app.NewGuid()
+							});
+						}
+					}
+					task.addData("Info", JSON.stringify(billInfo));
+					task.addData("type", 'PersonRequest');
+					task.start();
+				}
 			}
 			// 拍照
 			function getImage() {
 				//outSet("开始拍照：");
 				var cmr = plus.camera.getCamera();
 				var imageUrl = '';
-				//将图片进行压缩
 				cmr.captureImage(function(p) {
 					plus.io.resolveLocalFileSystemURL(p, function(entry) {
 						imageUrl = entry.toLocalURL();
@@ -181,13 +228,13 @@
 								img.className = "ditem";
 								img.src = newImage;
 								img.setAttribute("onclick", "displayFile(this);");
+								ul.appendChild(img);
 								plus.io.resolveLocalFileSystemURL(imageUrl, function(entry) {
 									entry.remove();
 								});
-								ul.appendChild(img);
 							},
 							function(error) {
-								alert("Compress error!");
+								alert("Compress error!" + error.message);
 							});
 					}, function(e) {
 						alert("读取拍照文件错误：" + e.message);
@@ -220,11 +267,6 @@
 					w = null;
 				}, false);
 				w.show("pop-in");
-			}
-
-			function scaned(r) {
-				var WayBillNumber = document.getElementById("WayBillNumber");
-				WayBillNumber.value = r;
 			}
 		</script>
 	</body>

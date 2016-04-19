@@ -9,26 +9,13 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/mui.picker.min.css" />
+		<link href="css/mui.poppicker.css" rel="stylesheet" />
 		<link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
 		<style>
 			html,
 			body {
 				background-color: #efeff4;
-			}
-			
-			.button {
-				font-size: 18px;
-				font-weight: normal;
-				text-decoration: none;
-				display: block;
-				text-align: center;
-				color: #FFF;
-				background-color: #FFCC33;
-				border: 1px solid #ECB100;
-				padding: .1em 0em;
-				margin: .0em 4.7em;
-				-webkit-border-radius: 0px;
-				border-radius: 0px;
 			}
 		</style>
 	</head>
@@ -36,142 +23,115 @@
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">编辑曝光台</h1>
+			<h1 id="title" class="mui-title">百事通详情</h1>
 		</header>
 		<div class="mui-content">
 			<div class="mui-content-padded" style="margin: 5px;">
 				<form class="mui-input-group" id="bill-form">
 					<div class="mui-input-row">
-						<label>标题</label>
-						<input type="text" id="Title" class=" mui-input" required="required" readonly="readonly">
-
+						<label>类型</label>
+						<input type="text" id="Type" class="mui-input-clear mui-input" required="required" readonly="readonly">
 					</div>
-					<div class="mui-input-row">
-						<label>运单编号</label>
-						<input type="text" id="WayBillNumber" class="mui-input-clear mui-input" required="required">
-
-					</div>
-					<div class="button" onclick="clicked('barcode_scan.html',true,true);">扫一扫</div>
-
 					<div class="mui-input-row">
 						<label>日期</label>
-						<input type="text" placeholder="选择日期" id="Date" class="mui-input" readonly="readonly">
+						<input type="text" id="RequestDate" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>指派人</label>
+						<input type="text" id="AssignUserName" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>状态</label>
+						<input type="text" id="State" class="mui-input" required="required" readonly="readonly">
 					</div>
 
 				</form>
-				<div class="mui-input-row" style="margin: 5px 0px 0px;">
-					<textarea id="Remark" rows="3" placeholder="备注" class="mui-input-clear mui-input"></textarea>
+				<div class="mui-input-row" style="margin: 5px 0px;">
+					<textarea id="Request" rows="5" placeholder="问题描述" class="mui-input-clear mui-input"></textarea>
 				</div>
+
 				<ul id="images" class="dlist">
 
 				</ul>
 
 				<div class="mui-button-row">
-					<button type="button" class="mui-btn mui-btn-success" onclick="getImage();" id="buttonok">拍照</button>&nbsp;&nbsp;
-					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">保存</button>&nbsp;&nbsp;
-					<button type="button" class="mui-btn mui-btn-danger" onclick="btn_delete()">删除</button>
+					<button type="button" class="mui-btn mui-btn-danger" onclick="btn_delete()" id="buttondel">删除</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-primary" onclick="mui.back()">取消</button>
 				</div>
 			</div>
 		</div>
 		<script src="js/mui.min.js"></script>
 		<script src="js/app.js"></script>
 		<script src="js/mui.enterfocus.js"></script>
-		<script type="text/javascript" src="js/common.js"></script>
+		<script src="js/mui.picker.min.js"></script>
+		<script src="js/mui.poppicker.js"></script>
 		<script>
-			var id;
-			//选择报销日期事件			
-			document.getElementById("Date").addEventListener('tap', function() {
-				var dDate = new Date();
-				var minDate = new Date();
-				minDate.setFullYear(2015, 0, 1);
-				var maxDate = new Date();
-				maxDate.setFullYear(2030, 12, 31);
-				var bxdate = document.getElementById("Date");
-				plus.nativeUI.pickDate(function(e) {
-					var d = e.date;
-					bxdate.value = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
-				}, function(e) {
-					bxdate.value = "您没有选择日期";
-				}, {
-					title: "请选择日期",
-					date: dDate,
-					minDate: minDate,
-					maxDate: maxDate
-				});
-			})
+			mui.init({});
 			mui.plusReady(function() {
-				var WayBillNumber = document.getElementById("WayBillNumber");
-				var Title = document.getElementById("Title");
-				var Date = document.getElementById("Date");
-				var Remark = document.getElementById("Remark");
-				id = plus.webview.currentWebview().name;
-				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
-				db.transaction(function(context) {
-					context.executeSql("SELECT * FROM LightHouse where id=?", [id], function(context, results) {
-						Title.value = results.rows.item(0).Title;
-						WayBillNumber.value = results.rows.item(0).WayBillNumber;
-						Date.value = results.rows.item(0).Date;
-						Remark.value = results.rows.item(0).Remark;
-						var image = results.rows.item(0).Image || '';
-						if (image != '') {
-							var images = image.split(',');
-							for (var i = 0; i < images.length - 1; i++) {
-								var img = document.createElement('img');
-								var ul = document.getElementById("images");
-								img.className = "ditem";
-								img.src = images[i]
-								img.setAttribute("onclick", "displayFile(this);");
-								ul.appendChild(img);
+				var Type = document.getElementById("Type");
+				var RequestDate = document.getElementById("RequestDate");
+				var Request = document.getElementById("Request");
+				var State = document.getElementById("State");
+				var AssignUserName = document.getElementById("AssignUserName");
+				var url = app.getUrl() + 'GetPersonRequestByID';
+				mui.ajax(url, {
+					data: {
+						id: plus.webview.currentWebview().name
+					},
+					type: 'post', //HTTP请求类型
+					dataType: 'json',
+					success: function(data) {
+						if (data) {						
+							Type.value = data[0].type;
+							RequestDate.value = data[0].requestdate;
+							Request.value = data[0].request;
+							State.value = data[0].state;
+							AssignUserName.value = data[0].modifyusername;
+							if (State.value != '未分配') {
+								document.getElementById("buttondel").style.display = "none";
+							}
+							var image = data[0].image;	
+
+							if (image != '') {
+								var imgs = image.split(',');
+								for (var i = 0; i < imgs.length; i++) {
+									if(imgs[i]!='')
+									{										
+									var img = document.createElement('img');
+									var ul = document.getElementById("images");
+									img.className = "ditem";									
+									img.src =  imgs[i].replace('~',app.getHttpUrl());
+									img.setAttribute("onclick", "displayFile(this);");
+									ul.appendChild(img);
+									}
+								}
 							}
 						}
-					});
+					}
 				});
 			});
-			//确定按钮
-			function btn_ok() {
-				var WayBillNumber = document.getElementById("WayBillNumber");
-				var Title = document.getElementById("Title");
-				var Date = document.getElementById("Date");
-				var Remark = document.getElementById("Remark");
-				var images = document.getElementById("images");
-				var ImagePaths = '';
-				for (var i = 0; i < images.children.length; i++) {
-					if (images.children[i].src.indexOf('file') >= 0)
-						ImagePaths += images.children[i].src + ',';
-				}
-				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
-				db.transaction(function(context) {
-					context.executeSql('update LightHouse set Title=?,WayBillNumber=?,Date=?,Remark=?,Image=? where id=?', [Title.value, WayBillNumber.value, Date.value, Remark.value, ImagePaths, id],
-						function(tx, result) {
-							plus.nativeUI.toast('保存成功');
-							var page = plus.webview.getWebviewById('lighthouse-list-sub');
-							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
-							mui.fire(page, 'refresh');
-							mui.back();
-						},
-						function(tx, error) {
-							plus.nativeUI.toast(error.message);
-						});
-				});
-			}
-
+			//删除按钮
 			function btn_delete() {
 				var btnArray = ['是', '否'];
 				mui.confirm('是否删除该条数据？', '申通提醒', btnArray, function(e) {
 					if (e.index == 0) {
-						var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
-						db.transaction(function(context) {
-							context.executeSql('delete from LightHouse where id=?', [id],
-								function(tx, result) {
+						var url = app.getUrl() + 'DeletePersonRequestByID';
+						mui.ajax(url, {
+							data: {
+								id: plus.webview.currentWebview().name,
+							},
+							type: 'post', //HTTP请求类型
+							success: function(data) {
+								if (data == "") {
 									plus.nativeUI.toast('删除成功');
 									var page = plus.webview.getWebviewById('lighthouse-list-sub');
 									//触发列表界面的自定义事件（refresh）,从而进行数据刷新
 									mui.fire(page, 'refresh');
 									mui.back();
-								},
-								function(tx, error) {
-									plus.nativeUI.toast(error.message);
-								});
+								} else {
+									plus.nativeUI.toast(data);
+								}
+							}
 						});
 					}
 				});
@@ -197,50 +157,6 @@
 					w = null;
 				}, false);
 				w.show("pop-in");
-			}
-			// 拍照
-			function getImage() {
-				//outSet("开始拍照：");
-				var cmr = plus.camera.getCamera();
-				var imageUrl = '';
-				cmr.captureImage(function(p) {
-					plus.io.resolveLocalFileSystemURL(p, function(entry) {
-						//手机端图片进行压缩
-						imageUrl = entry.toLocalURL();
-						var newImage = imageUrl.replace('.jpg', '_c.jpg');
-						plus.zip.compressImage({
-								src: imageUrl,
-								dst: newImage,
-								quality: 30
-							},
-							function() {
-								var img = document.createElement('img');
-								var ul = document.getElementById("images");
-								img.className = "ditem";
-								img.src = newImage;
-								img.setAttribute("onclick", "displayFile(this);");
-								ul.appendChild(img);
-								plus.io.resolveLocalFileSystemURL(imageUrl, function(entry) {
-									entry.remove();
-								});
-							},
-							function(error) {
-								alert("Compress error!");
-							});
-					}, function(e) {
-						alert("读取拍照文件错误：" + e.message);
-					});
-				}, function(e) {
-					alert("失败：" + e.message);
-				}, {
-					filename: "_doc/camera/",
-					index: 1
-				});
-			}
-
-			function scaned(r) {
-				var WayBillNumber = document.getElementById("WayBillNumber");
-				WayBillNumber.value = r;
 			}
 		</script>
 	</body>
