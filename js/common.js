@@ -162,6 +162,10 @@ w.timeToStr=function(ts){
 w.dateToStr=function(d){
 	return (d.getFullYear()+"-"+ultZeroize(d.getMonth()+1)+"-"+ultZeroize(d.getDate())+" "+ultZeroize(d.getHours())+":"+ultZeroize(d.getMinutes())+":"+ultZeroize(d.getSeconds()));
 };
+
+w.dateToStrN=function(d){
+	return (d.getFullYear()+"-"+ultZeroize(d.getMonth()+1)+"-"+ultZeroize(d.getDate()));
+};
 /**
  * zeroize value with length(default is 2).
  * @param {Object} v
