@@ -65,31 +65,31 @@
 					<button type="button" class="mui-btn mui-btn-success" onclick="getImage();" id="buttonok">拍照</button>&nbsp;&nbsp;
 					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确定</button>&nbsp;&nbsp;
 					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
-				</div>			
+				</div>
 			</div>
 		</div>
-		<script src="js/mui.min.js "></script>
-		<script src="js/app.js "></script>
-		<script src="js/mui.enterfocus.js "></script>
-		<script src="js/mui.picker.min.js "></script>
-		<script src="js/mui.poppicker.js "></script>
-		<script type="text/javascript " src="js/common.js "></script>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/mui.enterfocus.js"></script>
+		<script src="js/mui.picker.min.js"></script>
+		<script src="js/mui.poppicker.js"></script>
+		<script type="text/javascript " src="js/common.js"></script>
 		<script>
 			mui.init({});
 			mui.plusReady(function() {});
-			var newImage = " ";
-			
+			var newImage = "";
+
 			function btn_ok() {
-				var WayBillNumber = document.getElementById("WayBillNumber ").value;
-				var CardID = document.getElementById("Card ").value;
+				var WayBillNumber = document.getElementById("WayBillNumber").value;
+				var CardID = document.getElementById("Card").value;
 				var id = app.NewGuid();
 				//验证
-				if (WayBillNumber == " ") {
-					plus.nativeUI.toast("运单编号不能为空 ");
+				if (WayBillNumber == "") {
+					plus.nativeUI.toast("运单编号不能为空");
 					return;
 				}
-				if (newImage == " ") {
-					plus.nativeUI.toast("请拍摄身份证照片 ");
+				if (newImage == "") {
+					plus.nativeUI.toast("请拍摄身份证照片");
 					return;
 				}
 				var d = new Date().format('yyyy-MM-dd hh:mm');
@@ -98,7 +98,7 @@
 				db.transaction(function(context) {
 					context.executeSql('CREATE TABLE IF NOT EXISTS CardUser (id,CardID,WayBillNumber,Image,State,CreateDate)');
 					db.transaction(function(context) {
-						var sql = "INSERT INTO CardUser (id,CardID,WayBillNumber,Image,State,CreateDate) VALUES (?,?,?,?, '未上传',?) ";
+						var sql = "INSERT INTO CardUser (id,CardID,WayBillNumber,Image,State,CreateDate) VALUES (?,?,?,?, '未上传',?)";
 						context.executeSql(sql, [id, CardID, WayBillNumber, newImage, d],
 							function(tx, result) {
 								plus.nativeUI.toast('添加成功');
@@ -133,12 +133,12 @@
 							},
 							function() {
 								var img = document.createElement('img');
-								var ul = document.getElementById("images ");
+								var ul = document.getElementById("images");
 								while (ul.firstChild)
 									ul.removeChild(ul.firstChild);
-								img.className = "ditem ";
+								img.className ="ditem";
 								img.src = newImage;
-								img.setAttribute("onclick ", "displayFile(this); ");
+								img.setAttribute("onclick","displayFile(this);");
 								ul.appendChild(img);
 								plus.io.resolveLocalFileSystemURL(imageUrl, function(entry) {
 									entry.remove();
@@ -148,33 +148,35 @@
 								plus.nativeUI.toast(error.message);
 							});
 					})
-				}, function(e) {plus.nativeUI.toast(e.message)});
+				}, function(e) {
+					plus.nativeUI.toast(e.message)
+				});
 			}
 			var w = null;
 			// 显示文件
 			function displayFile(img) {
 				if (w) {
-					outLine("重复点击！ ");
+					outLine("重复点击！");
 					return;
 				}
-				var url = "camera_image.html ";
+				var url ="camera_image.html";
 				w = plus.webview.create(url, url, {
 					hardwareAccelerated: true,
 					scrollIndicator: 'none',
 					scalable: true,
-					bounce: "all "
+					bounce: "all"
 				});
-				w.addEventListener("loaded ", function() {
-					w.evalJS("loadMedia( '" + img.src + "') ");
+				w.addEventListener("loaded", function() {
+					w.evalJS("loadMedia( '" + img.src + "')");
 				}, false);
-				w.addEventListener("close ", function() {
+				w.addEventListener("close", function() {
 					w = null;
 				}, false);
-				w.show("pop-in ");
+				w.show("pop-in");
 			}
 
 			function scaned(r) {
-				var WayBillNumber = document.getElementById("WayBillNumber ");
+				var WayBillNumber = document.getElementById("WayBillNumber");
 				//在数据库中判断是否已存在
 				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 				db.transaction(function(context) {
@@ -184,15 +186,14 @@
 							plus.nativeUI.toast('运单编号已经存在');
 							return;
 						} else {
-							if (WayBillNumber.value != " ") {
+							if (WayBillNumber.value != "") {
 								console.log(WayBillNumber.value.indexOf(r))
 								if (WayBillNumber.value.indexOf(r) >= 0)
-									plus.nativeUI.toast("该运单编号已存在 ");
-							    else
-							    	WayBillNumber.value = WayBillNumber.value + ", " + r;
-							} else
-							{
-								WayBillNumber.value =r;
+									plus.nativeUI.toast("该运单编号已存在");
+								else
+									WayBillNumber.value = WayBillNumber.value + "," + r;
+							} else {
+								WayBillNumber.value = r;
 							}
 						}
 					});

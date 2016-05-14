@@ -24,7 +24,7 @@
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a  onclick="toLeaveBill()">
+					<a onclick="toLeaveBill()">
 						<img src="img/allow_users_edit_ranges.png">
 						<div class="mui-media-body">请假条</div>
 					</a>
@@ -36,49 +36,55 @@
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a  onclick="toQuestionGrid()">
+					<a onclick="toQuestionGrid()">
 						<img src="img/cell_delete.png">
 						<div class="mui-media-body">大字错写</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a  onclick="toLightHouse()">
+					<a onclick="toLightHouse()">
 						<img src="img/subdomains.png">
 						<div class="mui-media-body">百事通</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a  onclick="toCard()">
+					<a onclick="toCard()">
 						<img src="img/vcard.png">
 						<div class="mui-media-body">实名制</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a  onclick="toSalaryGrid()">
+					<a onclick="toSalaryGrid()">
 						<img src="img/visa_2.png">
 						<div class="mui-media-body">员工工资</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a  onclick="toWaybill()">
+					<a onclick="toWaybill()">
 						<img src="img/client_account_template.png">
 						<div class="mui-media-body">热敏面单</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a  onclick="toBomuse()">
+					<a onclick="toBomuse()">
 						<img src="img/basket_full.png">
 						<div class="mui-media-body">物料申请</div>
 					</a>
 				</li>
-				
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a onclick="toBoxCheck()">
+						<img src="img/name_manager.png">
+						<div class="mui-media-body">开箱验视</div>
+					</a>
+				</li>
+
 				<!--<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
 					<a  onclick="toPrinter()">
 						<img src="img/client_account_template.png">
 						<div class="mui-media-body">打印机</div>
 					</a>
 				</li>-->
-				
+
 			</ul>
 		</div>
 	</body>
@@ -90,11 +96,10 @@
 		var questiongridPage
 		mui.plusReady(function() {
 			questiongridPage = mui.preload({
-			url: 'questionbill-grid.html',
-			id: 'questionbill-grid'
+				url: 'questionbill-grid.html',
+				id: 'questionbill-grid'
+			});
 		});
-		});
-	
 		var toExpense = function() {
 			var nwaiting = plus.nativeUI.showWaiting();
 			var expensePage = plus.webview.create(
@@ -163,7 +168,7 @@
 					lighthousePage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
 				}, 300);
 			}, false);
-		};		
+		};
 		var toCard = function() {
 			var nwaiting = plus.nativeUI.showWaiting();
 			var cardPage = plus.webview.create(
@@ -177,8 +182,7 @@
 					cardPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
 				}, 300);
 			}, false);
-		};		
-		
+		};
 		var toSalaryGrid = function() {
 			var nwaiting = plus.nativeUI.showWaiting();
 			var cardPage = plus.webview.create(
@@ -192,9 +196,7 @@
 					cardPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
 				}, 300);
 			}, false);
-		};			
-		
-		
+		};
 		var toWaybill = function() {
 			var nwaiting = plus.nativeUI.showWaiting();
 			var cardPage = plus.webview.create(
@@ -208,8 +210,7 @@
 					cardPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
 				}, 300);
 			}, false);
-		};	
-		
+		};
 		var toPrinter = function() {
 			var nwaiting = plus.nativeUI.showWaiting();
 			var printerPage = plus.webview.create(
@@ -223,8 +224,7 @@
 					printerPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
 				}, 300);
 			}, false);
-		};		
-		
+		};
 		var toBomuse = function() {
 			var nwaiting = plus.nativeUI.showWaiting();
 			var printerPage = plus.webview.create(
@@ -238,7 +238,21 @@
 					printerPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
 				}, 300);
 			}, false);
-		};		
-		
+		};
+		var toBoxCheck = function() {
+			var nwaiting = plus.nativeUI.showWaiting();
+			var boxcheckPage = plus.webview.create(
+				'boxcheck-grid.html',
+				'boxcheck-grid'
+			); //后台创建webview并打开show.html
+			boxcheckPage.addEventListener("loaded", function() { //注册新webview的载入完成事件
+				setTimeout(function() {
+					nwaiting.close();
+					//新webview的载入完毕后关闭等待框
+					boxcheckPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+				}, 300);
+			}, false);
+		};
 	</script>
+
 </html>

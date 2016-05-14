@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "2.83",/*应用版本名称*/
+		"name": "2.92",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -284,7 +284,9 @@
 					"img/client_account_template.png",
 					"img/visa_2.png",
 					"img/subdomains.png",
-					"img/basket_full.png"
+					"img/basket_full.png",
+					"img/name_manager.png",
+					null
 				],
 				"refer": [
 					"addresslist.html",
@@ -301,7 +303,8 @@
 					"waybill-grid.html",
 					"printer.html",
 					"salary-grid.html",
-					"bomuse-list-main.html"
+					"bomuse-list-main.html",
+					"boxcheck-grid.html"
 				],
 				"priority": 0
 			},
@@ -317,7 +320,9 @@
 					"tab-shedule.html",
 					"tab-shedule-main.html"
 				],
-				"refer": [],
+				"refer": [
+					"report/tab-echarts.html"
+				],
 				"priority": 0
 			},
 			"tab-shedule.html": {
@@ -1124,6 +1129,194 @@
 					"fonts/mui.ttf",
 					"css/mui.min.css",
 					"js/mui.enterfocus.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"boxcheck-grid.html": {
+				"resources": [
+					"img/script_edit.png",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"boxcheck-list-main.html"
+				],
+				"priority": 0
+			},
+			"boxcheck-list-main.html": {
+				"resources": [
+					"js/app.js",
+					"boxcheck-list-sub.html",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"boxcheck-input.html"
+				],
+				"priority": 0
+			},
+			"boxcheck-input.html": {
+				"resources": [
+					"js/common.js",
+					"js/mui.picker.min.js",
+					"css/common.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/mui.enterfocus.js",
+					"img/scan.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"boxcheck-list-sub.html": {
+				"resources": [],
+				"refer": [
+					"boxcheck-modify.html"
+				],
+				"priority": 0
+			},
+			"boxcheck-modify.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"css/common.css",
+					"js/mui.poppicker.js",
+					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/tab-echarts.html": {
+				"resources": [
+					"img/card_money.png",
+					"img/calendar_link.png",
+					"img/combined_chart.png",
+					"js/page.js",
+					"img/coins_delete.png",
+					"img/coins_add.png",
+					"img/company_generosity.png",
+					"img/save_money.png",
+					"img/chart_bar.png",
+					"css/app.css"
+				],
+				"refer": [
+					"report/report-paymore.html",
+					"report/report-payless.html",
+					"report/report-priceless.html",
+					"report/report-waybillless.html",
+					"report/report-delivery-day.html",
+					"report/report-waybillpickup-day.html",
+					"report/report-arrivalpay.html",
+					"report/report-cashdelivery.html"
+				],
+				"priority": 0
+			},
+			"report/report-paymore.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"fonts/mui.ttf",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/report-waybillpickup-day.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/report-payless.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/report-priceless.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/report-waybillless.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/report-delivery-day.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/report-arrivalpay.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/report-cashdelivery.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
 				],
 				"refer": [],
 				"priority": 0

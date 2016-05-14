@@ -8,9 +8,9 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-		<link rel="stylesheet" href="css/mui.min.css">
-		<link rel="stylesheet" href="css/mui.picker.min.css" />
-		<link href="css/mui.poppicker.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../css/mui.picker.min.css" />
+		<link href="../css/mui.poppicker.css" rel="stylesheet" />
 		<style>
 			html,
 			body {
@@ -28,13 +28,13 @@
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" href="#topPopover">查询</a>
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">取件报表</h1>
+			<h1 id="title" class="mui-title">少单</h1>
 		</header>
-        <div style="margin-top: 45px;">
+		<div style="margin-top: 45px;">
 
-		<ul class="mui-table-view mui-table-view-chevron" id="list">
+			<ul class="mui-table-view mui-table-view-chevron" id="list">
 
-		</ul>
+			</ul>
 		</div>
 		<!--右上角弹出菜单-->
 		<div id="topPopover" class="mui-popover">
@@ -58,54 +58,49 @@
 
 		</div>
 
-		<script src="js/mui.min.js"></script>
-		<script src="js/app.js"></script>
-		<script src="js/mui.picker.min.js"></script>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/mui.picker.min.js"></script>
+
 		<script type="text/javascript" charset="utf-8">
 			mui.init({});
 			mui.plusReady(function() {})
-			//选择开始时间事件			
+				//选择开始时间事件			
 			document.getElementById("StartTime").addEventListener('tap', function() {
-				  var options = 
-						{
-							type:"date",
-							beginYear:"2015",
-							endYear:"2030"
-						}
-						var picker = new mui.DtPicker(options);
-						picker.show(function(rs) {
-							document.getElementById("StartTime").value = rs.text.replace(new RegExp('-',"gm"),'/');
-							picker.dispose();
-						});
+				var options = {
+					type: "date",
+					beginYear: "2015",
+					endYear: "2030"
+				}
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+					document.getElementById("StartTime").value = rs.text.replace(new RegExp('-', "gm"), '/');
+					picker.dispose();
+				});
 			});
 			//选择开始时间事件			
 			document.getElementById("EndTime").addEventListener('tap', function() {
-						var options = 
-						{
-							type:"date",
-							beginYear:"2015",
-							endYear:"2030"
-						}
-						var picker = new mui.DtPicker(options);
-						picker.show(function(rs) {
-							document.getElementById("EndTime").value = rs.text.replace(new RegExp('-',"gm"),'/');
-							picker.dispose();
-						});
+				var options = {
+					type: "date",
+					beginYear: "2015",
+					endYear: "2030"
+				}
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+					document.getElementById("EndTime").value = rs.text.replace(new RegExp('-', "gm"), '/');
+					picker.dispose();
+				});
 			});
 
 			function btn_search() {
-				if(document.getElementById("StartTime").value=='')
-				{
+				if (document.getElementById("StartTime").value == '') {
 					plus.nativeUI.toast("请选择开始时间");
 					return;
 				}
-				if(document.getElementById("EndTime").value=='')
-				{
+				if (document.getElementById("EndTime").value == '') {
 					plus.nativeUI.toast("请选择结束时间");
 					return;
 				}
-				
-
 				var name = JSON.parse(app.getLoginInfo().userinfo).realname;
 				var start = document.getElementById("StartTime").value;
 				var end = document.getElementById("EndTime").value;
@@ -114,7 +109,7 @@
 				while (table.firstChild)
 					table.removeChild(table.firstChild);
 				var fragment = document.createDocumentFragment();
-				var url = app.getUrl() + 'GetPickUpBillReport';
+				var url = app.getUrl() + 'GetWaybillLessReport';
 				mui.ajax(url, {
 					data: {
 						UserName: name,
@@ -125,24 +120,16 @@
 					dataType: 'json',
 					success: function(data) {
 						if (data) {
-							for (var i = 0; i < data.length; i++) {								
+							for (var i = 0; i < data.length; i++) {
 								li = document.createElement('li');
 								li.className = 'mui-table-view-cell mui-collapse';
-								var htmlText = '<a class="mui-navigate-right" href="#">' + data[i].senddate + '&nbsp;&nbsp;取件提成：' + data[i].qjtc + '</a>';
+								var htmlText = '<a class="mui-navigate-right" href="#">' + data[i].date + '&nbsp;&nbsp;金额：' + data[i].amount + '</a>';
 								htmlText += '<ul class="mui-table-view mui-table-view-chevron"><form class="mui-input-group" id="bill-form">';
-								htmlText += '<div class="mui-input-row"><label>时效件</label>';
-								htmlText += '<input type="text" id="GoodsMoney" class="mui-input" required="required" readonly="readonly" value="' + data[i].sxnumber + '">';
-								htmlText += '</div><div class="mui-input-row"><label>传统件</label>';
-								htmlText += '<input type="text" id="BackMoney" class="mui-input" required="required" readonly="readonly" value="' + data[i].ctnumber + '">';
-								htmlText += '</div><div class="mui-input-row"><label>传淘之间</label>';
-								htmlText += '<input type="text" id="BackCycle" class="mui-input" required="required" width=60px readonly="readonly" value="' + data[i].qjnumber + '">';
-								htmlText += '</div><div class="mui-input-row"><label>淘宝</label>';
-								htmlText += '<input type="text" id="MoneyState" class="mui-input" required="required" readonly="readonly" value="' + data[i].tbnumber + '">';
-								htmlText += '</div><div class="mui-input-row"><label>总票数</label>';
-								htmlText += '<input type="text" id="ReceiveAddr" class="mui-input" required="required" readonly="readonly" value="' + data[i].pickupnumber + '">';
+								htmlText += '<div class="mui-input-row"><label>运单编号</label>';
+								htmlText += '<input type="text" class="mui-input" required="required" readonly="readonly" value="' + data[i].waybillnumber + '">';
 								htmlText += '</div></form></ul>'
 								li.innerHTML = htmlText;
-								fragment.appendChild(li);								
+								fragment.appendChild(li);
 							}
 							table.appendChild(fragment);
 						}

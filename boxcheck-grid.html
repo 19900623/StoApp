@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="css/mui.min.css">
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" id="header">
+			<a id="back" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">开箱验视及品名投诉</h1>
+		</header>
+		<div style="margin-top: 45px;">
+			<ul class="mui-table-view mui-grid-view mui-grid-9">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a  onclick="toBoxCheck('进港投诉')">
+						<img src="img/script_edit.png">
+						<div class="mui-media-body">进港投诉</div>
+					</a>
+				</li>
+				
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a  onclick="toBoxCheck('出港投诉')">
+						<img src="img/script_edit.png">
+						<div class="mui-media-body">出港投诉</div>
+					</a>
+				</li>
+								
+			</ul>
+		</div>
+	</body>
+
+	<script src="js/mui.min.js"></script>
+	<script>
+		mui.init({
+			
+		});
+		mui.plusReady(function() {
+		});
+		
+		var toBoxCheck = function(name) {
+			var nwaiting = plus.nativeUI.showWaiting();
+			var boxcheckPage = plus.webview.create(
+				'boxcheck-list-main.html',
+				'boxcheck-list-main',
+				{},
+				{name:name}
+			); //后台创建webview并打开show.html
+			boxcheckPage.addEventListener("loaded", function() { //注册新webview的载入完成事件
+				setTimeout(function() {
+					nwaiting.close();				
+					//新webview的载入完毕后关闭等待框
+					boxcheckPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+				}, 300);
+			}, false);		
+		};
+	</script>
+
+</html>

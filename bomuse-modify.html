@@ -11,10 +11,12 @@
 		<link rel="stylesheet" href="css/mui.min.css">
 		<link rel="stylesheet" href="css/mui.picker.min.css" />
 		<link href="css/mui.poppicker.css" rel="stylesheet" />
-		<style>html,
-body {
-	background-color: #efeff4;
-}</style>
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
 	</head>
 
 	<body>
@@ -24,11 +26,20 @@ body {
 		</header>
 		<div class="mui-content">
 			<div class="mui-content-padded" style="margin: 5px;">
-	<form class="mui-input-group" id="bill-form">
-					<input type="text" id="State" class="mui-input" required="required" readonly="readonly" style="display: none;" >
+				<form class="mui-input-group" id="bill-form">
+					<input type="text" id="State" class="mui-input" required="required" readonly="readonly" style="display: none;">
+					<div class="mui-input-row">
+						<label>五联面单</label>
+						<div class="mui-numbox" data-numbox-min='0' data-numbox-max='300' style="width:50%;">
+							<button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
+							<input id='wlmd' class="mui-numbox-input" type="number" value="0" />
+							<button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
+						</div>
+					</div>
+
 					<div class="mui-input-row">
 						<label>大袋</label>
-						<div class="mui-numbox" data-numbox-min='0' style="width:50%;">
+						<div class="mui-numbox" data-numbox-min='0' data-numbox-max='350' style="width:50%;">
 							<button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
 							<input id='dd' class="mui-numbox-input" type="number" value="0" />
 							<button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
@@ -36,7 +47,7 @@ body {
 					</div>
 					<div class="mui-input-row">
 						<label>小袋</label>
-						<div class="mui-numbox" data-numbox-min='0' style="width:50%;">
+						<div class="mui-numbox" data-numbox-min='0' data-numbox-max='350' style="width:50%;">
 							<button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
 							<input id='xd' class="mui-numbox-input" type="number" value="0" />
 							<button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
@@ -44,15 +55,16 @@ body {
 					</div>
 					<div class="mui-input-row">
 						<label>信封</label>
-						<div class="mui-numbox" data-numbox-min='0' style="width:50%;">
+						<div class="mui-numbox" data-numbox-min='0' data-numbox-max='350' style="width:50%;">
 							<button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
 							<input id='xf' class="mui-numbox-input" type="number" value="0" />
 							<button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
 						</div>
 					</div>
+
 					<div class="mui-input-row">
 						<label>水笔</label>
-						<div class="mui-numbox" data-numbox-min='0' style="width:50%;">
+						<div class="mui-numbox" data-numbox-min='0'  style="width:50%;">
 							<button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
 							<input id='sb' class="mui-numbox-input" type="number" value="0" />
 							<button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
@@ -67,24 +79,7 @@ body {
 							<button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
 						</div>
 					</div>
-
-					<div class="mui-input-row">
-						<label>五联面单</label>
-						<div class="mui-numbox" data-numbox-min='0' style="width:50%;">
-							<button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
-							<input id='wlmd' class="mui-numbox-input" type="number" value="0" />
-							<button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
-						</div>
-					</div>
-					<div class="mui-input-row">
-						<label>到付面单</label>
-						<div class="mui-numbox" data-numbox-min='0' style="width:50%;">
-							<button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
-							<input id='dfmd' class="mui-numbox-input" type="number" value="0" />
-							<button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
-						</div>
-					</div>
-					<div class="mui-input-row">
+					<div class="mui-input-row" style="display: none;">
 						<label style="width: 135px;">代收货款面单</label>
 						<div class="mui-numbox" data-numbox-min='0' style="width:50%;">
 							<button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
@@ -92,15 +87,24 @@ body {
 							<button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
 						</div>
 					</div>
-					
+
+					<div class="mui-input-row">
+						<label>到付面单</label>
+						<div class="mui-numbox" data-numbox-min='0' data-numbox-max='50' style="width:50%;">
+							<button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
+							<input id='dfmd' class="mui-numbox-input" type="number" value="0" />
+							<button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
+						</div>
+					</div>
+
 				</form>
-				
+
 				<div class="mui-button-row" style="margin-top: 10px;">
 					<button type="button" class="mui-btn mui-btn-success" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
 					<button type="button" class="mui-btn mui-btn-danger" onclick="btn_delete()" id="buttondel">删除</button>&nbsp;&nbsp;
 					<button type="button" class="mui-btn mui-btn-primary" onclick="mui.back()">取消</button>
 				</div>
-				
+
 			</div>
 		</div>
 		<script src="js/mui.min.js"></script>
@@ -132,34 +136,57 @@ body {
 							document.getElementById('State').value = data.UserID;
 							if (document.getElementById('State').value != '未审核') {
 								document.getElementById("buttonok").style.display = "none";
-								document.getElementById("buttondel").style.display = "none"; 
+								document.getElementById("buttondel").style.display = "none";
 							}
 						}
 					}
 				});
 			});
 
-
 			function btn_ok() {
-				var userid = app.getLoginInfo().userid;				
+				var userid = app.getLoginInfo().userid;
+				var dd = document.getElementById('dd').value;
+				var xd = document.getElementById('xd').value;
+				var xf = document.getElementById('xf').value;
+				var sb = document.getElementById('sb').value;
+				var jd = document.getElementById('jd').value;
+				var wlmd = document.getElementById('wlmd').value;
+				var dfmd = document.getElementById('dfmd').value;
+				//验证数量
+				//大袋+小带+信封不得大于 五联面单+到付面单
+				//五联面单+到付面单不足50 没有胶带
+				if (Number(dd) + Number(xd) + Number(xf) > Number(wlmd) + Number(dfmd)) {
+					plus.nativeUI.toast("大袋小袋信封的数量不能大于面单数量");
+					return;
+				}
+				if(Number(sb)>Math.floor((Number(wlmd)+Number(dfmd))/50))
+				{
+					plus.nativeUI.toast("每50个面单可领用一只水笔");
+					return;
+				}
+				
+					if(Number(jd)>Math.floor((Number(wlmd)+Number(dfmd))/100))
+				{
+					plus.nativeUI.toast("每100个面单可领用一卷胶带");
+					return;
+				}
 				//调用方法
 				var billInfo = {
 					UserID: userid,
-					dd:document.getElementById('dd').value,
-					xd:document.getElementById('xd').value,
-					xf:document.getElementById('xf').value,
-					sb:document.getElementById('sb').value,
-					jd:document.getElementById('jd').value,
-					wlmd:document.getElementById('wlmd').value,
-					dfmd:document.getElementById('dfmd').value,
-					dshkmd:document.getElementById('dshkmd').value					
+					dd: document.getElementById('dd').value,
+					xd: document.getElementById('xd').value,
+					xf: document.getElementById('xf').value,
+					sb: document.getElementById('sb').value,
+					jd: document.getElementById('jd').value,
+					wlmd: document.getElementById('wlmd').value,
+					dfmd: document.getElementById('dfmd').value,
+					dshkmd: document.getElementById('dshkmd').value
 				};
-				
 				var url = app.getUrl() + 'ModifyBomUse';
 				mui.ajax(url, {
 					data: {
 						Data: JSON.stringify(billInfo),
-						Code:plus.webview.currentWebview().name
+						Code: plus.webview.currentWebview().name
 					},
 					type: 'post', //HTTP请求类型
 					success: function(data) {
@@ -175,7 +202,6 @@ body {
 					}
 				});
 			}
-
 			//删除按钮
 			function btn_delete() {
 				var btnArray = ['是', '否'];

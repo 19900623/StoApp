@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>ECahrt 示例</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css" />
+		<style>
+			.chart {
+				height: 200px;
+				margin: 0px;
+				padding: 0px;
+			}
+			
+			h5 {
+				margin-top: 30px;
+				font-weight: bold;
+			}
+			
+			h5:first-child {
+				margin-top: 15px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div>
+			<ul class="mui-table-view mui-grid-view mui-grid-9">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="Pickup">
+					<a href="#" onclick="page.toPickup()">
+						<img src="../img/chart_bar.png">
+						<div class="mui-media-body">取件报表</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="Delivery">
+					<a href="#" onclick="page.toDelivery()">
+						<img src="../img/combined_chart.png">
+						<div class="mui-media-body">派件报表</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="PayMore">
+					<a href="#" onclick="page.toPayMore()">
+						<img src="../img/coins_add.png">
+						<div class="mui-media-body">多交</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="PayLess">
+					<a href="#" onclick="page.toPayLess()">
+						<img src="../img/coins_delete.png">
+						<div class="mui-media-body">少交</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="Pickup">
+					<a href="#" onclick="page.toPriceLess()">
+						<img src="../img/card_money.png">
+						<div class="mui-media-body">价格收低</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="Delivery">
+					<a href="#" onclick="page.toWaybillLess()">
+						<img src="../img/calendar_link.png">
+						<div class="mui-media-body">少单</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="Pickup">
+					<a href="#" onclick="page.toArrivalPay()">
+						<img src="../img/save_money.png">
+						<div class="mui-media-body">到付</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" id="Delivery">
+					<a href="#" onclick="page.toCashDelivery()">
+						<img src="../img/company_generosity.png">
+						<div class="mui-media-body">代收货款</div>
+					</a>
+				</li>
+
+			</ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/page.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/app.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			mui.init({
+			});
+			mui.plusReady(function() {
+				var reports = app.getLoginInfo().userreport.split(',');
+				for (var i = 0; i < reports.length - 1; i++) {
+					var Pickup = document.getElementById(reports[i]);
+					Pickup.style.display = 'inline-block';
+				}
+			});
+		</script>
+	</body>
+
+</html>

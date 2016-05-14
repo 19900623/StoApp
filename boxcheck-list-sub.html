@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="css/mui.min.css">
+		<style>
+			.mui-table h4,
+			.mui-table h5,
+			.mui-table .mui-h5,
+			.mui-table .mui-h6,
+			.mui-table p {
+				margin-top: 0;
+			}
+			
+			.mui-table h4 {
+				line-height: 21px;
+				font-weight: 500;
+			}
+			
+			.mui-table .oa-icon {
+				position: absolute;
+				right: 0;
+				bottom: 0;
+			}
+			
+			.mui-table .oa-icon-star-filled {
+				color: #f14e41;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--下拉刷新容器-->
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<!--数据列表-->
+				<ul class="mui-table-view mui-table-view-chevron">
+
+				</ul>
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script>
+			var name;
+			mui.init({});
+			mui.plusReady(function() {
+				name = plus.webview.currentWebview().parent().name;
+				pulldownRefresh();
+			});
+
+			function pulldownRefresh() {
+				setTimeout(function() {
+					var table = document.body.querySelector('.mui-table-view');
+					while (table.firstChild)
+						table.removeChild(table.firstChild);
+					var fragment = document.createDocumentFragment();
+					var li;
+					var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+					db.transaction(function(context) {
+						context.executeSql("SELECT * FROM BoxCheck where State='未上传' and KPI=?  order by CreateDate desc", [name], function(context, results) {
+							var len = results.rows.length;
+							for (var i = 0; i < len; i++) {
+								li = document.createElement('li');
+								li.className = 'mui-table-view-cell';
+								var htmlText = '<div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '运单编号：' +
+									results.rows.item(i).WayBillNumber + '</h4>' + '<p class="mui-h6 mui-ellipsis">' +'类别：'+results.rows.item(i).Type+ '<br/>日期：' + results.rows.item(i).CreateDate + '</p>' + '</div>' + '</div>';
+								li.id = results.rows.item(i).WayBillNumber;;
+								li.innerHTML = htmlText;
+								li.addEventListener('tap', function(event) {
+									var nwaiting = plus.nativeUI.showWaiting();
+									var webviewShow = plus.webview.create(
+										'boxcheck-modify.html',
+										'boxcheck-modify',
+										'', {
+											name: this.id,
+											type: name,
+										}
+									); //后台创建webview并打开show.html
+									webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
+										setTimeout(function() {
+											nwaiting.close();
+											//新webview的载入完毕后关闭等待框
+											webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+										}, 300);
+									}, false);
+								});
+								fragment.appendChild(li);
+							}
+							table.appendChild(fragment);
+						});
+					});
+					mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+				}, 150);
+			}
+			window.addEventListener('refresh', function(event) {
+				pulldownRefresh();
+			});
+		</script>
+	</body>
+
+</html>
