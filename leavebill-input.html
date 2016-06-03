@@ -197,7 +197,7 @@
 				});
 			});
 
-			function btn_ok() {
+			function btn_ok() {			
 				var leaveDays, leaveHour, startTime, endTime;
 				var LeaveMold = document.getElementById("LeaveMold");
 				var LeaveType = document.getElementById("LeaveType");
@@ -290,12 +290,14 @@
 					LeaveReason: LeaveReason.value
 				};
 				var url = app.getUrl() + 'AddLeaveBill';
+				var nwaiting = plus.nativeUI.showWaiting();
 				mui.ajax(url, {
 					data: {
 						Data: JSON.stringify(billInfo)
 					},
 					type: 'post', //HTTP请求类型
 					success: function(data) {
+						nwaiting.close();
 						if (data == "") {
 							plus.nativeUI.toast('添加成功');
 							var page = plus.webview.getWebviewById('leavebill-list-sub');

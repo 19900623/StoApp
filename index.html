@@ -127,6 +127,7 @@
 															plus.nativeUI.alert("应用资源更新完成！", function() {
 																plus.runtime.restart();
 															});
+															
 														}, function(e) {
 															plus.nativeUI.closeWaiting();
 															plus.nativeUI.alert("安装更新文件失败[" + e.code + "]：" + e.message);
