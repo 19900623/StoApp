@@ -1,4 +1,4 @@
-# 申通快递手机OA
+# 手机办公OA
 
 HBuilder构建的HTML5+JS手机App。
 功能包括：
