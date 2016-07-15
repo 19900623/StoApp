@@ -86,21 +86,19 @@
 					statusBarBackground: '#f7f7f7'
 				});
 				$.plusReady(function() {
-    
-									
+
 					plus.screen.lockOrientation("portrait-primary");
 					//设置WebService的Url				
 					var settings = app.getSettings();
 					//正式库
-//					var httpUrl = 'http://58.57.35.3:8066';
-					var httpUrl ='http://oaapp.lyzysoft.com:8066'
-					//测试库
-//					var httpUrl = 'http://192.168.6.164:8080/LeaRun.MobileApp';
-
+					//var httpUrl = 'http://58.57.35.3:8066';
+					var httpUrl = 'http://oaapp.lyzysoft.com:8066'
+						//测试库
+						//var httpUrl = 'http://192.168.6.164:8080/LeaRun.MobileApp';
 					var url = httpUrl + '/MobileAppService.asmx/';
 					app.setUrl(url);
 					app.setHttpUrl(httpUrl);
-						//检查App升级版本并升级			
+					//检查App升级版本并升级			
 					var url = app.getUrl() + 'GetVersionInfo';
 					if (plus.networkinfo.getCurrentType() != 1)
 						mui.ajax(url, {
@@ -127,7 +125,6 @@
 															plus.nativeUI.alert("应用资源更新完成！", function() {
 																plus.runtime.restart();
 															});
-															
 														}, function(e) {
 															plus.nativeUI.closeWaiting();
 															plus.nativeUI.alert("安装更新文件失败[" + e.code + "]：" + e.message);
@@ -184,7 +181,6 @@
 							plus.nativeUI.toast('请检查网路连接!');
 							return;
 						}
-		
 						var url = app.getUrl() + 'CheckLogin';
 						mui.ajax(url, {
 							data: loginInfo,
@@ -199,16 +195,15 @@
 										userinfo: data.UserInfo,
 										userreport: data.UserReport
 									};
-								
 									app.setSettings(settings);
 									app.setLoginInfo(loginInfo);
 									toMain();
 								}
 								return;
 							},
-							error:function(xhr,type,errorThrown){
+							error: function(xhr, type, errorThrown) {
 								//异常处理；
-								console.log(type+errorThrown);
+								console.log(type + errorThrown);
 							}
 						});
 					});
@@ -280,8 +275,8 @@
 									}, false);
 									break;
 								case 'Alert':
-								    alert(messageState.MessageID);
-								    break;
+									alert(messageState.MessageID);
+									break;
 								default:
 									break;
 							}

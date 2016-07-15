@@ -227,15 +227,15 @@
 		};
 		var toBomuse = function() {
 			var nwaiting = plus.nativeUI.showWaiting();
-			var printerPage = plus.webview.create(
-				'bomuse-list-main.html',
-				'bomuse-list-main'
+			var page = plus.webview.create(
+				'business/bomuse/bomuse-grid.html',
+				'bomuse-grid'
 			); //后台创建webview并打开show.html
-			printerPage.addEventListener("loaded", function() { //注册新webview的载入完成事件
+			page.addEventListener("loaded", function() { //注册新webview的载入完成事件
 				setTimeout(function() {
 					nwaiting.close();
 					//新webview的载入完毕后关闭等待框
-					printerPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+					page.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
 				}, 300);
 			}, false);
 		};

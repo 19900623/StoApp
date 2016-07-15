@@ -35,7 +35,9 @@
       "img/visa_2.png",
       "img/subdomains.png",
       "img/basket_full.png",
-      "img/name_manager.png"
+      "img/name_manager.png",
+      "js/mui.min.js",
+      "css/mui.min.css"
     ],
     "refer": [
       "questionbill-grid.html",
@@ -49,7 +51,8 @@
       "printer.html",
       "salary-grid.html",
       "bomuse-list-main.html",
-      "boxcheck-grid.html"
+      "boxcheck-grid.html",
+      "business/bomuse/bomuse-grid.html"
     ]
   },
   "tab-setting.html": {
@@ -841,5 +844,68 @@
       "css/mui.min.css"
     ],
     "refer": []
+  },
+  "business/bomuse/bomuse-list-sub.html": {
+    "resources": [
+      "js/app.js"
+    ]
+  },
+  "business/bomuse/bomuse-input.html": {
+    "resources": [
+      "js/common.js",
+      "js/mui.picker.min.js",
+      "js/mui.poppicker.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/mui.enterfocus.js"
+    ]
+  },
+  "business/bomuse/bomuse-grid.html": {
+    "resources": [
+      "img/borders_accent.png",
+      "fonts/mui.ttf",
+      "img/shopping_cart_reset.png",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "js/app.js"
+    ],
+    "refer": [
+      "business/bomuse/bomuse-list-main.html",
+      "business/bomuse/bomuse-tc-list-main.html"
+    ]
+  },
+  "business/bomuse/bomuse-list-main.html": {
+    "resources": [
+      "business/bomuse/bomuse-list-sub.html"
+    ],
+    "refer": [
+      "business/bomuse/bomuse-list-sub.html",
+      "business/bomuse/bomuse-input.html"
+    ]
+  },
+  "business/bomuse/bomuse-tc-list-main.html": {
+    "resources": [
+      "business/bomuse/bomuse-tc-list-sub.html"
+    ],
+    "refer": [
+      "business/bomuse/bomuse-tc-list-sub.html"
+    ]
+  },
+  "business/bomuse/bomuse-tc-list-sub.html": {
+    "refer": [
+      "business/bomuse/bomuse-tc-modify.html"
+    ]
+  },
+  "business/bomuse/bomuse-tc-modify.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "js/mui.poppicker.js",
+      "css/mui.picker.min.css",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/mui.enterfocus.js"
+    ]
   }
 }

@@ -7,7 +7,7 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="../../css/mui.min.css">
 	</head>
 
 	<body>
@@ -17,7 +17,7 @@
 		</header>
 		<div class="mui-content"></div>
 	</body>
-	<script src="js/mui.min.js"></script>
+	<script src="../../js/mui.min.js"></script>
 	<script type="text/javascript">
 		//启用双击监听
 		mui.init({
@@ -25,8 +25,8 @@
 				doubletap:true
 			},
 			subpages:[{
-				url:'bomuse-list-sub.html',
-				id:'bomuse-list-sub',
+				url:'bomuse-tc-list-sub.html',
+				id:'bomuse-tc-list-sub',
 				styles:{
 					top: '45px',
 					bottom: '0px',
@@ -51,8 +51,8 @@
 			rightbtn.addEventListener('tap', function(event) {
 				setTimeout(function() {
 					mui.openWindow({
-						id: 'bomuse-input',
-						url:'bomuse-input.html',
+						id: 'bomuse-tc-input',
+						url:'bomuse-tc-input.html',
 						show: {
 							aniShow: 'pop-in'
 						},

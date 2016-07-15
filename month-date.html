@@ -130,22 +130,15 @@
 						    if(data[0].unusual>0)
 						    {
 						       var wRemark=data[0].wrongremark;
-						       var wArray=wRemark.split(' ');
+						       var wArray=wRemark.split(';');
 						       var len=wArray.length;
 						       if (len>0)
 						       {
-						       	  htmlText+='<ul class="mui-table-view mui-table-view-chevron">';
-						          for(var i=0;i<len;i++)
-						          {
-						          	 var n,h;
-						          	 if(i%2==0)
-						          	    n=wArray[i];
-						          	 else
-						          	 {
-						          	 	h=wArray[i]
-						       	        htmlText+='<li class="mui-table-view-cell">'+n+' '+h+'</li>';
-						       	    }
-						          }
+						         htmlText+='<ul class="mui-table-view mui-table-view-chevron">';
+						         for(var i=0;i<len;i++)
+						         {
+				     				htmlText+='<li class="mui-table-view-cell">'+wArray[i]+'</li>';
+				     			 }						  		       
 						          htmlText+='</ul>'
 						       }						       
 						    }

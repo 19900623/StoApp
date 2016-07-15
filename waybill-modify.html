@@ -31,12 +31,12 @@
 						<label>运单编号</label>
 						<input type="text" id="WayBillNumber" class="mui-input" required="required" readonly="readonly">
 					</div>
-					
+
 					<div class="mui-input-row">
 						<label>类别</label>
 						<input type="text" id="Type" class="mui-input" required="required" readonly="readonly">
 					</div>
-					
+
 				</form>
 				<div class="mui-input-row" style="margin: 5px 0px 0px;">
 					<textarea id="Remark" rows="3" placeholder="备注" class="mui-input-clear mui-input"></textarea>
@@ -59,7 +59,7 @@
 		<script src="js/mui.picker.min.js"></script>
 		<script src="js/mui.poppicker.js"></script>
 		<script>
-		    var KPIPicker;
+			var KPIPicker;
 			mui.init({});
 			var WayBillNumber = document.getElementById("WayBillNumber");
 			var Remark = document.getElementById("Remark");
@@ -88,7 +88,7 @@
 						}
 					});
 				});
-				
+
 				KPIPicker = new mui.PopPicker({
 					layer: 1
 				});
@@ -107,16 +107,22 @@
 				}, {
 					value: '到件同一网点单号重复使用',
 					text: '到件同一网点单号重复使用'
+				}, {
+					value: '未规范打印申通标识',
+					text: '未规范打印申通标识'
+				}, {
+					value: '未规范打印申通单号',
+					text: '未规范打印申通单号'
 				}]);
 			});
-			
+
 			//类别	
 			document.getElementById("Type").addEventListener('tap', function() {
 				KPIPicker.show(function(items) {
 					document.getElementById("Type").value = items[0].value;
 				});
 			});
-			
+
 			//确定按钮
 			function btn_ok() {
 				var images = document.getElementById("images");
@@ -127,7 +133,7 @@
 				}
 				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 				db.transaction(function(context) {
-					context.executeSql('update SensWayBill set Remark=?,Image=?,Type=? where WayBillNumber=?', [Remark.value, ImagePaths,Type.value, id],
+					context.executeSql('update SensWayBill set Remark=?,Image=?,Type=? where WayBillNumber=?', [Remark.value, ImagePaths, Type.value, id],
 						function(tx, result) {
 							plus.nativeUI.toast('保存成功');
 							var page = plus.webview.getWebviewById('waybill-list-sub');

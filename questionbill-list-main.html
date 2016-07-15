@@ -121,7 +121,6 @@
 											plus.nativeUI.toast("Upload failed: " + status);
 										}
 											if (k == len) {
-											plus.nativeUI.closeWaiting();
 											plus.nativeUI.toast('上传成功');
 											mui.back();
 										}
@@ -139,6 +138,7 @@
 									task.addData("type", 'QuestionBill');
 									task.start();
 								}
+								plus.nativeUI.closeWaiting();
 								//								return;
 							});
 						});

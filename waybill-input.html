@@ -101,6 +101,12 @@
 				}, {
 					value: '到件同一网点单号重复使用',
 					text: '到件同一网点单号重复使用'
+				}, {
+					value: '未规范打印申通标识',
+					text: '未规范打印申通标识'
+				}, {
+					value: '未规范打印申通单号',
+					text: '未规范打印申通单号'
 				}]);
 			});
 			//类别	
@@ -149,7 +155,7 @@
 						} else {
 							db.transaction(function(context) {
 								var sql = "INSERT INTO SensWayBill (WayBillNumber, Remark,Image,State,CreateDate,KPI,Type) VALUES (?,?,?,'未上传',?,?,?)";
-								context.executeSql(sql, [WayBillNumber.value, Remark.value, ImagePaths, d, name,Type.value],
+								context.executeSql(sql, [WayBillNumber.value, Remark.value, ImagePaths, d, name, Type.value],
 									function(tx, result) {
 										plus.nativeUI.toast('添加成功');
 										var page = plus.webview.getWebviewById('waybill-list-sub');

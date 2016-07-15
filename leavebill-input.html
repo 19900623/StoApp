@@ -75,7 +75,11 @@
 				userPicker.setData([{
 					value: '事假',
 					text: '事假'
-				}, {
+				},{
+					value: '休班',
+					text: '休班'
+				}, 
+				{
 					value: '病假',
 					text: '病假'
 				}, {
@@ -291,6 +295,7 @@
 				};
 				var url = app.getUrl() + 'AddLeaveBill';
 				var nwaiting = plus.nativeUI.showWaiting();
+				console.log(JSON.stringify(billInfo));
 				mui.ajax(url, {
 					data: {
 						Data: JSON.stringify(billInfo)

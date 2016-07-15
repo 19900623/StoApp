@@ -123,17 +123,23 @@
 								context.executeSql(sql, [id],
 									function(context, results) {
 										plus.nativeUI.toast('上传成功');
+										plus.nativeUI.closeWaiting();
 										var page = plus.webview.getWebviewById('questionbill-list-sub');
 										mui.fire(page, 'refresh');
 										mui.back();
 									});
 							});
 						} else
+						{
+							plus.nativeUI.closeWaiting();
 							alert(JSON.parse(t.responseText).Message);
+						}
+						
 					} else {
+						plus.nativeUI.closeWaiting();
 						plus.nativeUI.toast("Upload failed: " + status);
 					}
-					plus.nativeUI.closeWaiting();
+					
 				});
 			});
 			//选择请假类型事件		
@@ -203,6 +209,7 @@
 							plus.nativeUI.toast('请检查网路连接!');
 							return;
 						}
+	
 						plus.nativeUI.showWaiting("正在上传文件...");
 						var userid = app.getLoginInfo().userid;
 						var username = JSON.parse(app.getLoginInfo().userinfo).realname;
