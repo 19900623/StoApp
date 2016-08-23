@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">新增请假条</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded" style="margin: 5px;">
+				<form class="mui-input-group" id="bill-form">
+					<!--<div class="mui-input-row">
+						<label>标题</label>
+						<input type="text" id="LeaveTitle" class="mui-input-clear mui-input" required="required">
+					</div>-->
+					<div class="mui-input-row">
+						<label>时间段</label>
+						<input type="text" id="LeaveMold" class="mui-input-clear mui-input" required="required">
+					</div>
+					<div class="mui-input-row">
+						<label>请假类型</label>
+						<input type="text" id="LeaveType" class="mui-input-clear mui-input" required="required">
+					</div>
+					<div class="mui-input-row">
+						<label>开始日期</label>
+						<input type="text" id="LeaveStartTime" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>结束日期</label>
+						<input type="text" id="LeaveEndTime" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>请假天数</label>
+						<input type="text" id="Days" class="mui-input" required="required" readonly="readonly">
+					</div>
+				</form>
+				<div class="mui-input-row" style="margin: 5px 0px;">
+					<textarea id="LeaveReason" rows="5" placeholder="请假原因" class="mui-input-clear mui-input"></textarea>
+				</div>
+
+				<div class="mui-button-row">
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.enterfocus.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script>
+			mui.init({});
+			var userPicker, leavePicker;
+			mui.plusReady(function() {
+				userPicker = new mui.PopPicker();
+				userPicker.setData([{
+					value: '事假',
+					text: '事假'
+				},{
+					value: '休班',
+					text: '休班'
+				}, 
+				{
+					value: '病假',
+					text: '病假'
+				}, {
+					value: '婚假',
+					text: '婚假'
+				}, {
+					value: '丧假',
+					text: '丧假'
+				}, {
+					value: '产假',
+					text: '产假'
+				}, {
+					value: '小时假',
+					text: '小时假'
+				}]);
+				leavePicker = new mui.PopPicker();
+				leavePicker.setData([{
+					value: '全天',
+					text: '全天'
+				}, {
+					value: '上午',
+					text: '上午'
+				}, {
+					value: '下午',
+					text: '下午'
+				}, {
+					value: '早间操作',
+					text: '早间操作'
+				}, {
+					value: '晚间操作',
+					text: '晚间操作'
+				}]);
+				var buttonok = document.getElementById('buttonok');
+				mui.enterfocus('#bill-form input', function() {
+					mui.trigger(buttonok, 'tap');
+				});
+			});
+			//选择请假类型事件		
+			document.getElementById("LeaveType").addEventListener('tap', function() {
+				userPicker.show(function(items) {
+					document.getElementById("LeaveType").value = items[0].value;
+					if (items[0].value == '早间操作' || items[0].value == '晚间操作') {
+						document.getElementById("LeaveType").value = '小时假';
+					}
+				});
+			});
+			//选择请假类型事件		
+			document.getElementById("LeaveMold").addEventListener('tap', function() {
+				leavePicker.show(function(items) {
+					document.getElementById("LeaveMold").value = items[0].value;
+					if (items[0].value == '早间操作' || items[0].value == '晚间操作') {
+						document.getElementById("LeaveMold").value = items[0].value;
+						document.getElementById("LeaveType").value = '小时假';
+						document.getElementById("Days").value = 0;
+					} else {
+						if (items[0].value != '全天')
+							document.getElementById("Days").value = 0.5;
+						else {
+							var leaveDays;
+							var dateBegin = new Date(document.getElementById("LeaveStartTime").value);
+							var dateEnd = new Date(document.getElementById("LeaveEndTime").value);
+							var dateDif = dateEnd.getTime() - dateBegin.getTime();
+							leaveDays = Math.floor(dateDif / (1000 * 60 * 60 * 24));
+							if(leaveDays>0)
+						   document.getElementById("Days").value = leaveDays+1
+						else
+						   document.getElementById("Days").value =1
+						}
+						document.getElementById("LeaveType").value = '';
+					}
+					if (items[0].value != '全天')
+						document.getElementById("LeaveEndTime").value = document.getElementById("LeaveStartTime").value;
+				});
+			});
+			//选择开始时间事件			
+			document.getElementById("LeaveStartTime").addEventListener('tap', function() {
+				var options = JSON.parse('{"type":"date"}');
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+					if (document.getElementById("LeaveMold").value != '全天') {
+						document.getElementById("LeaveEndTime").value = rs.text;
+					}
+					else
+					{
+						var leaveDays;
+						var dateBegin = new Date(rs.text);
+						var dateEnd = new Date(document.getElementById("LeaveEndTime").value);						
+						var dateDif = dateEnd.getTime() - dateBegin.getTime();
+						leaveDays = Math.floor(dateDif / (1000 * 60 * 60 * 24));
+						if(leaveDays>0)
+						   document.getElementById("Days").value = leaveDays+1
+						else
+						   document.getElementById("Days").value =1
+					}
+					document.getElementById("LeaveStartTime").value = rs.text;
+					picker.dispose();
+				});
+			});
+			//选择开始时间事件			
+			document.getElementById("LeaveEndTime").addEventListener('tap', function() {
+				var options = JSON.parse('{"type":"date"}');
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+					if (document.getElementById("LeaveMold").value != '全天') {
+						document.getElementById("LeaveStartTime").value = rs.text;
+					} else {
+						var leaveDays;
+						var dateBegin = new Date(document.getElementById("LeaveStartTime").value);
+						var dateEnd = new Date(rs.text);						
+						var dateDif = dateEnd.getTime() - dateBegin.getTime();
+						leaveDays = Math.floor(dateDif / (1000 * 60 * 60 * 24));
+						if(leaveDays>0)
+						   document.getElementById("Days").value = leaveDays+1
+						else
+						   document.getElementById("Days").value =1
+					}
+					document.getElementById("LeaveEndTime").value = rs.text;
+					picker.dispose();
+				});
+			});
+
+			function btn_ok() {			
+				var leaveDays, leaveHour, startTime, endTime;
+				var LeaveMold = document.getElementById("LeaveMold");
+				var LeaveType = document.getElementById("LeaveType");
+				var LeaveStartTime = document.getElementById("LeaveStartTime");
+				var LeaveEndTime = document.getElementById("LeaveEndTime");
+				var LeaveReason = document.getElementById("LeaveReason");
+				var Days = document.getElementById("Days");
+				//验证
+				if (LeaveMold.value == "") {
+					plus.nativeUI.toast("时间段不能为空");
+					LeaveMold.focus();
+					return;
+				}
+				if (LeaveType.value == "") {
+					plus.nativeUI.toast("请假类型不能为空");
+					LeaveType.focus();
+					return;
+				}
+				if (LeaveStartTime.value == "") {
+					plus.nativeUI.toast("开始时间不能为空");
+					LeaveStartTime.focus();
+					return;
+				}
+				if (LeaveEndTime.value == "") {
+					plus.nativeUI.toast("结束时间不能为空");
+					LeaveEndTime.focus();
+					return;
+				}
+				if (LeaveStartTime.value > LeaveEndTime.value) {
+					plus.nativeUI.toast("开始时间不能大于结束时间");
+					LeaveEndTime.focus();
+					return;
+				}
+				if (LeaveType.value == '小时假') {
+					if (LeaveMold.value != '早间操作' && LeaveMold.value != '晚间操作') {
+						plus.nativeUI.toast("该时间段不能为小时假");
+						LeaveMold.focus();
+						return;
+					}
+				}
+				//请假原因
+				if (LeaveReason.value == "") {
+					plus.nativeUI.toast("请假原因不能为空");
+					LeaveReason.focus();
+					return;
+				}
+				//根据时间段更改日期
+				switch (LeaveMold.value) {
+					case '全天':
+						startTime = LeaveStartTime.value + ' 00:00:00';
+						endTime = LeaveEndTime.value + ' 23:59:59';
+						leaveDays = document.getElementById("Days").value;
+						leaveHour = 0;
+						break;
+					case '上午':
+						startTime = LeaveStartTime.value + ' 00:00:00';
+						endTime = LeaveEndTime.value + ' 13:00:00';
+						leaveDays = 0.5;
+						leaveHour = 0;
+						break;
+					case '下午':
+						startTime = LeaveStartTime.value + ' 13:00:00';
+						endTime = LeaveEndTime.value + ' 23:59:59';
+						leaveDays = 0.5;
+						leaveHour = 0;
+						break;
+					case '早间操作':
+						startTime = LeaveStartTime.value + ' 4:00:00';
+						endTime = LeaveEndTime.value + ' 8:00:00';
+						leaveDays = 0;
+						leaveHour = 4;
+						break;
+					case '晚间操作':
+						startTime = LeaveStartTime.value + ' 17:00:00';
+						endTime = LeaveEndTime.value + ' 23:59:59';
+						leaveDays = 0;
+						leaveHour = 0;
+						break;
+				}
+				var userid = app.getLoginInfo().userid;
+				//调用方法
+				var billInfo = {
+					UserID: userid,
+					LeaveTitle: LeaveMold.value,
+					LeaveType: LeaveType.value,
+					LeaveStartTime: startTime,
+					LeaveEndTime: endTime,
+					LeaveDays: leaveDays,
+					LeaveHour: leaveHour,
+					LeaveReason: LeaveReason.value
+				};
+				var url = app.getUrl() + 'AddLeaveBill';
+				var nwaiting = plus.nativeUI.showWaiting();
+				console.log(JSON.stringify(billInfo));
+				mui.ajax(url, {
+					data: {
+						Data: JSON.stringify(billInfo)
+					},
+					type: 'post', //HTTP请求类型
+					success: function(data) {
+						nwaiting.close();
+						if (data == "") {
+							plus.nativeUI.toast('添加成功');
+							var page = plus.webview.getWebviewById('leavebill-list-sub');
+							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+							mui.fire(page, 'refresh');
+							mui.back();
+						} else {
+							plus.nativeUI.toast(data);
+						}
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

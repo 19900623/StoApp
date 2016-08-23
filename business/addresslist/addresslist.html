@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../../css/mui.min.css">
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" id="header">
+			<a id="back" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">通讯录</h1>
+		</header>
+		<div>
+			<ul class="mui-table-view mui-table-view-chevron" id="list">
+
+			</ul>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script> 
+		<script>
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+			mui.plusReady(function() {
+				var header = document.getElementById("header");
+				var rightbtn = document.createElement('button');
+				var page =
+					mui.preload({
+						"id": 'addresslist-indexed',
+						"url": 'addresslist-indexed.html'
+					});
+				rightbtn.className = 'mui-btn mui-btn-blue mui-btn-link mui-pull-right';
+				rightbtn.innerText = '搜索';
+				rightbtn.addEventListener('tap', function(event) {
+					setTimeout(function() {
+						mui.openWindow({
+							id: 'addresslist-indexed',
+							show: {
+								aniShow: 'pop-in'
+							},
+							waiting: {
+								autoShow: false
+							}
+						});
+					}, 20);
+				});
+				header.appendChild(rightbtn);
+				var fragment = document.createDocumentFragment();
+				var li = document.createElement('li');
+				var url = app.getUrl() + 'GetAddressList';
+				var dept = '';
+				mui.ajax(url, {
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+						if (data) {
+							for (var i = 0; i < data.length; i++) {
+								if (dept != data[i].dept) {
+									li = document.createElement('li');
+									ul = document.createElement('ul');
+									li.className = 'mui-table-view-cell mui-collapse';
+									li.innerHTML = '<a class="mui-navigate-right" href="#">' + data[i].dept + '</a>';
+									ul.className = 'mui-table-view mui-table-view-chevron'
+									li.appendChild(ul);
+									dept = data[i].dept;
+									fragment.appendChild(li);
+								}
+								var ali = document.createElement('li');
+								ali.className = 'mui-table-view-cell'
+								ali.id = data[i].username;
+								ali.innerHTML = '<a class="mui-navigate-right">' + data[i].username + '</a>';
+								ali.addEventListener('tap', function(event) {
+									//处理切换时，数据未从数据库更新完毕
+									var nwaiting = plus.nativeUI.showWaiting();
+									var webviewShow = plus.webview.create(
+										'addresslist-detail.html',
+										'addresslist-detail',
+										'', {
+											name: this.id
+										}
+									); //后台创建webview并打开show.html
+									webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
+										setTimeout(function() {
+											nwaiting.close();
+											//新webview的载入完毕后关闭等待框
+											webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+										}, 300);
+									}, false);
+								});
+								ul.appendChild(ali);
+							}
+							var table = document.getElementById("list")
+							table.appendChild(fragment);
+						}
+					},
+				});
+			});
+		</script>
+	</body>
+
+</html>

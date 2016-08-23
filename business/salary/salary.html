@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			/*跨webview需要手动指定位置*/
+			
+			.mui-popover {
+				height: 150px;
+			}
+			
+			.amount{
+				position:absolute ;right: 0px;width: 6em;top: 10px;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" href="#topPopover">查询</a>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">工资单</h1>
+		</header>
+		<div style="margin-top: 45px;">
+			<ul class="mui-table-view" id="list">
+
+			</ul>
+		</div>
+		<!--右上角弹出菜单-->
+		<div id="topPopover" class="mui-popover">
+			<div class="mui-popover-arrow"></div>
+			<div class="mui-scroll-wrapper">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row" >
+						<label>月份</label>
+						<input type="text" id="StartTime" class="mui-input" required="required" readonly="readonly">
+					</div>
+				</form>
+				<div class="mui-button-row" style="margin-top:10px;">
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_search()" id="buttonok">搜索</button>&nbsp;&nbsp;
+				</div>
+			</div>
+
+		</div>
+
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+
+		<script type="text/javascript" charset="utf-8">
+			mui.init({});
+			mui.plusReady(function() {})
+				//选择开始时间事件			
+			document.getElementById("StartTime").addEventListener('tap', function() {
+				var options = {
+					type: "month",
+					beginYear: "2015",
+					endYear: "2030"
+				}
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+					document.getElementById("StartTime").value = rs.text.replace(new RegExp('-', "gm"), '/');
+					picker.dispose();
+				});
+			});
+
+			function btn_search() {
+				if (document.getElementById("StartTime").value == '') {
+					plus.nativeUI.toast("请选择月份");
+					return;
+				}
+		
+				var name = JSON.parse(app.getLoginInfo().userinfo).realname;
+				var start = document.getElementById("StartTime").value;
+				//加载数据
+				var table = document.getElementById("list");
+				while (table.firstChild)
+					table.removeChild(table.firstChild);
+				var fragment = document.createDocumentFragment();
+				var url = app.getUrl() + 'GetSalary';
+				mui.ajax(url, {
+					data: {
+						UserName: name,
+						Date: start,
+					},
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+						if (data) {
+							var total=0;
+							li = document.createElement('li'); 
+							li.className = 'mui-table-view-cell ';
+							var htmlText = '月份：<div class="amount" >'+start+'<div>';							
+							li.innerHTML = htmlText;
+							fragment.appendChild(li);
+							
+							for (var i = 0; i < data.length; i++) {
+								li = document.createElement('li');
+								li.className = 'mui-table-view-cell ';
+								var htmlText = data[i].kpi+'：<div class="amount" >'+data[i].realamount+'<div>';							
+								li.innerHTML = htmlText;
+								total+=data[i].realamount;
+								fragment.appendChild(li);
+							}		
+							
+							li = document.createElement('li');
+							li.className = 'mui-table-view-cell ';
+							var htmlText = '合计：<div class="amount" >'+total+'<div>';							
+							li.innerHTML = htmlText;
+							fragment.appendChild(li);							
+							table.appendChild(fragment);
+						}
+					},
+				});
+                //关闭弹出框
+				mui('#topPopover').popover('toggle');				  
+			}
+		</script>
+	</body>
+</html>

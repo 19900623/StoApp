@@ -18,77 +18,77 @@
 		<div>
 			<ul class="mui-table-view mui-grid-view mui-grid-9">
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a onclick="toExpense()">
+						<a onclick="app.openPage('business/expensebill/expensebill-list-main.html','expensebill-list-main')">
 						<img src="img/account_balances.png">
 						<div class="mui-media-body">报销单</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a onclick="toLeaveBill()">
+					<a onclick="app.openPage('business/leavebill/leavebill-list-main.html','leavebill-list-main')">
 						<img src="img/allow_users_edit_ranges.png">
 						<div class="mui-media-body">请假条</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a onclick="toAddressList()">
+					<a onclick="app.openPage('business/addresslist/addresslist.html','addresslist')">
 						<img src="img/blackberry.png">
 						<div class="mui-media-body">通讯录</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a onclick="toQuestionGrid()">
+					<a onclick="app.openPage('business/questionbll/questionbill-grid.html','questionbill-grid')">
 						<img src="img/cell_delete.png">
 						<div class="mui-media-body">大字错写</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a onclick="toLightHouse()">
+					<a onclick="app.openPage('business/lighthouse/lighthouse-list-main.html','lighthouse-list-main')">
 						<img src="img/subdomains.png">
 						<div class="mui-media-body">百事通</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a onclick="toCard()">
+					<a onclick="app.openPage('business/card/card-list-main.html','card-list-main')">
 						<img src="img/vcard.png">
 						<div class="mui-media-body">实名制</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a onclick="toSalaryGrid()">
+					<a onclick="app.openPage('business/salary/salary-grid.html','salary-grid')">
 						<img src="img/visa_2.png">
 						<div class="mui-media-body">员工工资</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a onclick="toWaybill()">
+					<a onclick="app.openPage('business/waybill/waybill-grid.html','waybill-grid')">
 						<img src="img/client_account_template.png">
 						<div class="mui-media-body">热敏面单</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a onclick="toBomuse()">
+					<a onclick="app.openPage('business/bomuse/bomuse-grid.html','bomuse-grid')">
 						<img src="img/basket_full.png">
 						<div class="mui-media-body">物料申请</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a onclick="toBoxCheck()">
+					<a onclick="app.openPage('business/boxcheck/boxcheck-grid.html','boxcheck-grid')">
 						<img src="img/name_manager.png">
 						<div class="mui-media-body">开箱验视</div>
 					</a>
 				</li>
-
-				<!--<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a  onclick="toPrinter()">
-						<img src="img/client_account_template.png">
-						<div class="mui-media-body">打印机</div>
+				
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a onclick="app.openPage('business/errosend/errosend-grid.html','errosend-grid')">
+						<img src="img/brick_error.png">
+						<div class="mui-media-body">错发件</div>
 					</a>
-				</li>-->
-
+				</li>			
 			</ul>
 		</div>
 	</body>
 	<script src="js/mui.min.js"></script>
+	<script src="js/app.js"></script>
 	<script>
 		mui.init({
 			swipeBack: true //启用右滑关闭功能
@@ -100,20 +100,7 @@
 				id: 'questionbill-grid'
 			});
 		});
-		var toExpense = function() {
-			var nwaiting = plus.nativeUI.showWaiting();
-			var expensePage = plus.webview.create(
-				'expensebill-list-main.html',
-				'expensebill-list-main'
-			); //后台创建webview并打开show.html
-			expensePage.addEventListener("loaded", function() { //注册新webview的载入完成事件
-				setTimeout(function() {
-					nwaiting.close();
-					//新webview的载入完毕后关闭等待框
-					expensePage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
-				}, 300);
-			}, false);
-		};
+		
 		var toLeaveBill = function() {
 			var nwaiting = plus.nativeUI.showWaiting();
 			var leavebillPage = plus.webview.create(
@@ -128,6 +115,7 @@
 				}, 300);
 			}, false);
 		};
+		
 		var toAddressList = function() {
 			var nwaiting = plus.nativeUI.showWaiting();
 			var addresslistPage = plus.webview.create(
@@ -142,47 +130,8 @@
 				}, 300);
 			}, false);
 		};
-		var toQuestionGrid = function() {
-			setTimeout(function() {
-				mui.openWindow({
-					id: 'questionbill-grid',
-					show: {
-						aniShow: 'pop-in'
-					},
-					waiting: {
-						autoShow: false
-					}
-				});
-			}, 0);
-		};
-		var toLightHouse = function() {
-			var nwaiting = plus.nativeUI.showWaiting();
-			var lighthousePage = plus.webview.create(
-				'lighthouse-list-main.html',
-				'lighthouse-list-main'
-			); //后台创建webview并打开show.html
-			lighthousePage.addEventListener("loaded", function() { //注册新webview的载入完成事件
-				setTimeout(function() {
-					nwaiting.close();
-					//新webview的载入完毕后关闭等待框
-					lighthousePage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
-				}, 300);
-			}, false);
-		};
-		var toCard = function() {
-			var nwaiting = plus.nativeUI.showWaiting();
-			var cardPage = plus.webview.create(
-				'card-list-main.html',
-				'card-list-main'
-			); //后台创建webview并打开show.html
-			cardPage.addEventListener("loaded", function() { //注册新webview的载入完成事件
-				setTimeout(function() {
-					nwaiting.close();
-					//新webview的载入完毕后关闭等待框
-					cardPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
-				}, 300);
-			}, false);
-		};
+		
+
 		var toSalaryGrid = function() {
 			var nwaiting = plus.nativeUI.showWaiting();
 			var cardPage = plus.webview.create(
@@ -197,62 +146,7 @@
 				}, 300);
 			}, false);
 		};
-		var toWaybill = function() {
-			var nwaiting = plus.nativeUI.showWaiting();
-			var cardPage = plus.webview.create(
-				'waybill-grid.html',
-				'waybill-grid'
-			); //后台创建webview并打开show.html
-			cardPage.addEventListener("loaded", function() { //注册新webview的载入完成事件
-				setTimeout(function() {
-					nwaiting.close();
-					//新webview的载入完毕后关闭等待框
-					cardPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
-				}, 300);
-			}, false);
-		};
-		var toPrinter = function() {
-			var nwaiting = plus.nativeUI.showWaiting();
-			var printerPage = plus.webview.create(
-				'printer.html',
-				'printer'
-			); //后台创建webview并打开show.html
-			printerPage.addEventListener("loaded", function() { //注册新webview的载入完成事件
-				setTimeout(function() {
-					nwaiting.close();
-					//新webview的载入完毕后关闭等待框
-					printerPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
-				}, 300);
-			}, false);
-		};
-		var toBomuse = function() {
-			var nwaiting = plus.nativeUI.showWaiting();
-			var page = plus.webview.create(
-				'business/bomuse/bomuse-grid.html',
-				'bomuse-grid'
-			); //后台创建webview并打开show.html
-			page.addEventListener("loaded", function() { //注册新webview的载入完成事件
-				setTimeout(function() {
-					nwaiting.close();
-					//新webview的载入完毕后关闭等待框
-					page.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
-				}, 300);
-			}, false);
-		};
-		var toBoxCheck = function() {
-			var nwaiting = plus.nativeUI.showWaiting();
-			var boxcheckPage = plus.webview.create(
-				'boxcheck-grid.html',
-				'boxcheck-grid'
-			); //后台创建webview并打开show.html
-			boxcheckPage.addEventListener("loaded", function() { //注册新webview的载入完成事件
-				setTimeout(function() {
-					nwaiting.close();
-					//新webview的载入完毕后关闭等待框
-					boxcheckPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
-				}, 300);
-			}, false);
-		};
+
 	</script>
 
 </html>

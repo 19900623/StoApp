@@ -37,7 +37,8 @@
       "img/basket_full.png",
       "img/name_manager.png",
       "js/mui.min.js",
-      "css/mui.min.css"
+      "css/mui.min.css",
+      "img/brick_error.png"
     ],
     "refer": [
       "questionbill-grid.html",
@@ -52,7 +53,8 @@
       "salary-grid.html",
       "bomuse-list-main.html",
       "boxcheck-grid.html",
-      "business/bomuse/bomuse-grid.html"
+      "business/bomuse/bomuse-grid.html",
+      "business/errosend/errosend-grid.html"
     ]
   },
   "tab-setting.html": {
@@ -173,7 +175,8 @@
     ],
     "refer": [
       "collectionmoney-workflow.html",
-      "paymentbill-workflow.html"
+      "paymentbill-workflow.html",
+      "leavebill-workflow.html"
     ]
   },
   "workflow-main.html": {
@@ -906,6 +909,53 @@
       "fonts/mui.ttf",
       "css/mui.min.css",
       "js/mui.enterfocus.js"
+    ]
+  },
+  "leavebill-workflow.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "js/mui.poppicker.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/mui.enterfocus.js"
+    ]
+  },
+  "business/errosend/errosend-grid.html": {
+    "resources": [
+      "img/script_edit.png",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/mui.min.js"
+    ],
+    "refer": [
+      "business/errosend/errosend-list-main.html"
+    ]
+  },
+  "business/errosend/errosend-list-main.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "business/errosend/errosend-list-sub.html"
+    ],
+    "refer": [
+      "business/errosend/errosend-input.html",
+      "business/errosend/errosend-list-sub.html"
+    ]
+  },
+  "business/errosend/errosend-input.html": {
+    "resources": [
+      "js/common.js",
+      "js/mui.picker.min.js",
+      "css/common.css",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "img/scan.png"
     ]
   }
 }

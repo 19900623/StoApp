@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">付款单审批</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded" style="margin: 5px;">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>申请单号</label>
+						<input type="text" id="ApplyBill_Code" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>申请人</label>
+						<input type="text" id="Apply_UserName" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>申请日期</label>
+						<input type="text" id="Apply_Date" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>款项用途</label>
+						<input type="text" id="Money_Purpose" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>款项金额</label>
+						<input type="text" id="Amount" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>收款方式</label>
+						<input type="text" id="Debit_RType" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>收款银行</label>
+						<input type="text" id="Debit_RBank" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>收款账号</label>
+						<input type="text" id="Debit_RAccount" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>收款人</label>
+						<input type="text" id="Debit_Payee" class="mui-input" required="required" readonly="readonly">
+					</div>
+				</form>
+				<div class="mui-input-row" style="margin: 5px 0px;">
+					<textarea id="Remark" rows="2" placeholder="备注" class="mui-input-clear mui-input"></textarea>
+				</div>
+
+				<div class="mui-card">
+					<form class="mui-input-group">
+						<div class="mui-input-row mui-radio">
+							<label>同意</label>
+							<input name="radio1" type="radio" value="1" checked>							
+						</div>
+						<div class="mui-input-row mui-radio" >
+							<label>拒绝</label>
+							<input name="radio1" type="radio" value="3">
+						</div>
+
+					</form>
+					<div class="mui-input-row" style="margin: 5px 5px;">
+						<textarea id="Opnion" rows="2" placeholder="审批意见" class="mui-input-clear mui-input"></textarea>
+					</div>
+				</div>
+
+				<div class="mui-button-row">
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.enterfocus.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script>
+			var ApplyBill_Code = document.getElementById("ApplyBill_Code");
+			var Apply_UserName = document.getElementById("Apply_UserName");
+			var Apply_Date = document.getElementById("Apply_Date");
+			var Money_Purpose = document.getElementById("Money_Purpose");
+			var Amount = document.getElementById("Amount");
+			var Debit_RType = document.getElementById("Debit_RType");
+			var Debit_RBank = document.getElementById("Debit_RBank");
+			var Debit_RAccount = document.getElementById("Debit_RAccount");
+			var Debit_Payee = document.getElementById("Debit_Payee");
+			mui.init({});
+			var userPicker;
+			mui.plusReady(function() {
+				var id = JSON.parse(plus.webview.currentWebview().name).taskid;					
+				var url = app.getUrl() + 'GetPaymentBillByID';
+				
+				mui.ajax(url, {
+					data: {
+						id: id
+					},
+					type: 'post', //HTTP请求类型
+					dataType: 'json',
+					success: function(data) {
+						if (data) {
+							ApplyBill_Code.value = data[0].applybill_code;
+							Apply_UserName.value = data[0].apply_username;
+							Apply_Date.value = data[0].apply_date;
+							Money_Purpose.value = data[0].money_purpose;
+							Amount.value = data[0].amount;
+							Debit_RType.value = data[0].debit_rtype||'';
+							Debit_RBank.value = data[0].debit_rbank||'';
+							Debit_RAccount.value = data[0].debit_raccount||'';
+							Debit_Payee.value = data[0].debit_payee||'';
+						}
+					}
+				});
+			});
+			
+
+			function btn_ok() {
+				var ExcuteType;
+				var obj = document.getElementsByName("radio1");
+				for (var i = 0; i < obj.length; i++) {
+					if (obj[i].checked) {
+						ExcuteType=obj[i].value;
+					}
+				}
+				var MessageID = JSON.parse(plus.webview.currentWebview().name).taskid;
+				var Opinion=document.getElementById("Opnion").value;
+				var url = app.getUrl() + 'ExcuteFlow';
+				var UserID = app.getLoginInfo().userid;
+				mui.ajax(url, {
+					data: {
+						UserID: UserID,
+						MessageID: MessageID,
+						Opinion: Opinion,
+						ExcuteType:ExcuteType
+					},
+					type: 'post', //HTTP请求类型
+					success: function(data) {
+						if (data == "") {
+							plus.nativeUI.toast('流程执行成功');
+							var page = plus.webview.getWebviewById('workflow-sub');
+							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+							mui.fire(page, 'refresh');
+							mui.back();
+						} else {
+							plus.nativeUI.toast(data);
+						}
+					}
+
+				});
+			}
+			
+
+		</script>
+	</body>
+
+</html>

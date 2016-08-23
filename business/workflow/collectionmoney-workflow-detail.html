@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="css/app.css" />
+
+		<style>
+			header.mui-bar {
+				display: none;
+			}
+			
+			.mui-bar-nav~.mui-content {
+				padding: 0;
+			}
+			
+			.title {
+				margin: 15px 10px 10px;
+			}
+			
+			.title+.content {
+				margin: 10px 15px 15px;
+				text-indent: 1em;
+				font-size: 14px;
+				line-height: 24px;
+			}
+			
+			.mui-table-view {
+				margin-bottom: 35px;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div class="mui-content">
+			<div class="title">出港代收货款明细</div>
+			<ul class="mui-table-view mui-table-view-chevron" id="list">
+
+			</ul>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			mui.init({
+				keyEventBind: {
+					backbutton: false,
+					menubutton: false
+				}
+			});
+			var main = null;
+			mui.plusReady(function() {
+				main = plus.webview.currentWebview().opener();
+				var id=plus.webview.currentWebview().name;		
+				//加载数据
+				var fragment = document.createDocumentFragment();
+				var url = app.getUrl() + 'GetCollectionDetailByID';
+				mui.ajax(url, {
+					data: {
+						id: id
+					},
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+						if (data) {
+							for (var i = 0; i < data.length; i++) {
+									li = document.createElement('li');
+									li.className = 'mui-table-view-cell mui-collapse';								
+									var htmlText = '<a class="mui-navigate-right" href="#">运单编号:'+data[i].waybill_code+'</a>';
+									htmlText+='<ul class="mui-table-view mui-table-view-chevron"><form class="mui-input-group" id="bill-form">';
+									htmlText+='<div class="mui-input-row"><label>货款</label>';
+									htmlText+='<input type="text" id="GoodsMoney" class="mui-input" required="required" readonly="readonly" value="'+data[i].goodsmoney+'">';
+									htmlText+='</div><div class="mui-input-row"><label>返款</label>';
+									htmlText+='<input type="text" id="BackMoney" class="mui-input" required="required" readonly="readonly" value="'+data[i].backmoney+'">';
+									htmlText+='</div><div class="mui-input-row"><label>周期</label>';
+									htmlText+='<input type="text" id="BackCycle" class="mui-input" required="required" readonly="readonly" value="'+data[i].backcycle+'">';
+									htmlText+='</div><div class="mui-input-row"><label>状态</label>';
+									htmlText+='<input type="text" id="MoneyState" class="mui-input" required="required" readonly="readonly" value="'+data[i].moneystate+'">';
+									htmlText+='</div><div class="mui-input-row"><label>地址</label>';
+									htmlText+='<input type="text" id="ReceiveAddr" class="mui-input" required="required" readonly="readonly" value="'+data[i].receiveaddr+'">';
+									htmlText+='</div></form></ul>'
+									li.innerHTML=htmlText;
+									fragment.appendChild(li);
+							}
+							var table = document.getElementById("list")
+							table.appendChild(fragment);
+						}
+					},
+				});
+			})
+
+			function closeMenu() {
+				mui.fire(main, "menu:swiperight");
+			}
+			//左滑显示出来的菜单，只需监听右滑，然后将菜单关闭即可；在该菜单上左滑，不做任何操作；
+			window.addEventListener("swiperight", closeMenu);
+		</script>
+	</body>
+
+</html>

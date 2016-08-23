@@ -51,8 +51,8 @@
 		}
 		mui.plusReady(function() {
 			Init();			
-			document.getElementById("WorkFlow").addEventListener('tap', function(event) {OpenWorkFlow();});
-			document.getElementById("WorkTask").addEventListener('tap', function(event) {OpenWorkTask();});
+			document.getElementById("WorkFlow").addEventListener('tap', function(event) {app.openPage('business/workflow/workflow-main.html','workflow-main');});
+			document.getElementById("WorkTask").addEventListener('tap', function(event) {app.openPage('business/worktask/worktask-main.html','worktask-main');});
 		});
 
 		function Init() {
@@ -75,36 +75,7 @@
 				}
 			});
 		}
-        //打开流程画面
-		function OpenWorkFlow() {
-			var nwaiting = plus.nativeUI.showWaiting();
-			var workflowPage = plus.webview.create(
-				'workflow-main.html',
-				'workflow-main'
-			); //后台创建webview并打开show.html
-			workflowPage.addEventListener("loaded", function() { //注册新webview的载入完成事件
-				setTimeout(function() {
-					nwaiting.close();
-					//新webview的载入完毕后关闭等待框
-					workflowPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
-				}, 300);
-			}, false);
-		}
-		//打开工作任务画面
-		function OpenWorkTask() {
-			var nwaiting = plus.nativeUI.showWaiting();
-			var workflowPage = plus.webview.create(
-				'worktask-main.html',
-				'worktask-main'
-			); //后台创建webview并打开show.html
-			workflowPage.addEventListener("loaded", function() { //注册新webview的载入完成事件
-				setTimeout(function() {
-					nwaiting.close();
-					//新webview的载入完毕后关闭等待框
-					workflowPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
-				}, 300);
-			}, false);
-		}
+
 	</script>
 
 </html>

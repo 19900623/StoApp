@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../../css/mui.min.css">
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" id="header">
+			<a id="back" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">百事通</h1>
+		</header>
+		<div class="mui-content"></div>
+	</body>
+	
+	<script src="../../js/mui.min.js"></script>
+	<script src="../../js/app.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		//启用双击监听
+		mui.init({
+			gestureConfig: {
+				doubletap: true
+			},
+			subpages: [{
+				url: 'lighthouse-list-sub.html',
+				id: 'lighthouse-list-sub',
+				styles: {
+					top: '45px',
+					bottom: '0px',
+				}
+			}]
+		});
+		var contentWebview = null;
+		var task;
+		document.querySelector('header').addEventListener('doubletap', function() {
+			if (contentWebview == null) {
+				contentWebview = plus.webview.currentWebview().children()[0];
+			}
+			contentWebview.evalJS("mui('#pullrefresh').pullRefresh().scrollTo(0,0,100)");
+		});
+		mui.plusReady(function() {
+			var header = document.getElementById("header");
+			var rightbtn = document.createElement('button');
+			rightbtn.className = 'mui-btn mui-btn-blue mui-btn-link mui-pull-right';
+			rightbtn.innerText = '新增';
+			rightbtn.addEventListener('tap', function(event) {
+				var nwaiting = plus.nativeUI.showWaiting();
+				var addresslistPage = plus.webview.create(
+					'lighthouse-input.html',
+					'lighthouse-input'
+				); //后台创建webview并打开show.html
+				addresslistPage.addEventListener("loaded", function() { //注册新webview的载入完成事件
+					setTimeout(function() {
+						nwaiting.close();
+						//新webview的载入完毕后关闭等待框
+						addresslistPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+					}, 300);
+				}, false);
+			});
+			header.appendChild(rightbtn);			
+		});
+	</script>
+
+</html>

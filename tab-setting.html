@@ -48,14 +48,14 @@
 						</li>
 					</ul>
 
-					<ul class="mui-table-view mui-table-view-chevron">
+					<!--<ul class="mui-table-view mui-table-view-chevron">
 						<li class="mui-table-view-cell">
 							启用定位
 							<div id="location" class="mui-switch">
 								<div class="mui-switch-handle"></div> 
 							</div>
 						</li>
-					</ul> 
+					</ul> -->
                     
                     <ul class="mui-table-view" >
                     	<div align="center">
@@ -72,7 +72,7 @@
                     
 					<ul class="mui-table-view">
 						<li class="mui-table-view-cell" style="text-align: center;">
-							<a onclick="plus.runtime.quit()">退出登录</a>
+							<a onclick="closeApp()">退出登录</a>
 						</li>
 					</ul>
 					
@@ -105,6 +105,11 @@
 				app.setLoaction(locationString);
 			}, false);
 		})
+		
+		var closeApp=function()
+		{
+             plus.runtime.quit();
+		}
 		
 		var toPassword = function() {
 			var nwaiting = plus.nativeUI.showWaiting();

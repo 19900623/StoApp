@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../../css/mui.min.css">
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" id="header">
+			<a id="back" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">热敏面单</h1>
+		</header>
+		<div class="mui-content"></div>
+	</body>
+	<script src="../../js/mui.min.js"></script>
+	<script src="../../js/app.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		//启用双击监听
+		mui.init({
+			gestureConfig: {
+				doubletap: true
+			},
+			subpages: [{
+				url: 'waybill-list-sub.html',
+				id: 'waybill-list-sub',
+				styles: {
+					top: '45px',
+					bottom: '0px',
+				}
+			}]
+		});
+		var contentWebview = null;
+		var name, task;
+		document.querySelector('header').addEventListener('doubletap', function() {
+			contentWebview.evalJS("mui('#pullrefresh').pullRefresh().scrollTo(0,0,100)");
+		});
+		mui.plusReady(function() {
+			name = plus.webview.currentWebview().name;
+			document.getElementById("title").innerHTML = name;
+			var header = document.getElementById("header");
+			var rightbtn = document.createElement('button');
+			rightbtn.className = 'mui-btn mui-btn-blue mui-btn-link mui-pull-right';
+			rightbtn.innerText = '新增';
+			rightbtn.addEventListener('tap', function(event) {
+				var nwaiting = plus.nativeUI.showWaiting();
+				var addresslistPage = plus.webview.create(
+					'waybill-input.html',
+					'waybill-input', {}, {
+						name: name
+					}
+				); //后台创建webview并打开show.html
+				addresslistPage.addEventListener("loaded", function() { //注册新webview的载入完成事件
+					setTimeout(function() {
+						nwaiting.close();
+						//新webview的载入完毕后关闭等待框
+						addresslistPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+					}, 300);
+				}, false);
+			});
+			header.appendChild(rightbtn);
+			var rightbtn = document.createElement('button');
+			rightbtn.className = 'mui-btn mui-btn-blue mui-btn-link mui-pull-right';
+			rightbtn.innerText = '上传';
+			rightbtn.addEventListener('tap', function(event) {
+				//上传功能代码
+				var btnArray = ['是', '否'];
+				mui.confirm('是否全部上传图片到服务器？', '申通提醒', btnArray, function(e) {
+					if (e.index == 0) {
+						//检查网路设置
+						if (plus.networkinfo.getCurrentType() == 1) {
+							plus.nativeUI.toast('请检查网路连接!');
+							return;
+						}
+						var userid = app.getLoginInfo().userid;
+						var username = JSON.parse(app.getLoginInfo().userinfo).realname;
+						var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
+						var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+						db.transaction(function(context) {
+							context.executeSql("SELECT * FROM SensWayBill where State='未上传' and KPI=?  order by CreateDate desc", [name], function(context, results) {
+								var len = results.rows.length;
+								var k = 0;
+								for (var i = 0; i < len; i++) {
+									plus.nativeUI.showWaiting("正在上传文件...");
+									var WayBill = {
+										WayBillNumber: results.rows.item(i).WayBillNumber,
+										KPI: name,
+										Remark: results.rows.item(i).Remark,
+										Type: results.rows.item(i).Type,
+										CreateUserId: userid,
+										CreateUserName: username,
+										UserCode: usercode,
+										Image: results.rows.item(i).Image
+									}
+									var url = app.getUrl() + 'UpdateImage';
+									task = plus.uploader.createUpload(url, {
+										method: "POST"
+									}, function(t, status) {
+										k++;
+										// 上传完成
+										if (status == 200) {
+											//console.log(JSON.parse(t.responseText).type);
+											if (JSON.parse(t.responseText).type == 0) {
+												var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+												db.transaction(function(context) {
+													var sql = "Update SensWayBill set State='已上传' where  WayBillNumber=?";
+													context.executeSql(sql, [JSON.parse(t.responseText).Message]);
+												});
+											} else
+												alert(JSON.parse(t.responseText).Message);
+										} else {
+											plus.nativeUI.toast("Upload failed: " + status);
+										}
+											if (k == len) {
+											plus.nativeUI.closeWaiting();
+											plus.nativeUI.toast('上传成功');
+											mui.back();
+										}
+									});
+									var image = results.rows.item(i).Image || '';
+									if (image != '') {
+										var images = image.split(',');
+										for (var j = 0; j < images.length - 1; j++) {
+											task.addFile(images[j], {
+												key: app.NewGuid()
+											});
+										}
+									}
+									task.addData("Info", JSON.stringify(WayBill));
+									task.addData("type", 'WayBill');
+									task.start();
+									//task = null;
+								}
+								//								return;
+							});
+						});
+					}
+				});
+			});
+			header.appendChild(rightbtn);
+		});
+	</script>
+
+</html>

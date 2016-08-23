@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "3.00",/*应用版本名称*/
+		"name": "3.03",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -286,7 +286,8 @@
 					"img/subdomains.png",
 					"img/basket_full.png",
 					"img/name_manager.png",
-					null
+					null,
+					"img/brick_error.png"
 				],
 				"refer": [
 					"addresslist.html",
@@ -305,7 +306,8 @@
 					"salary-grid.html",
 					"bomuse-list-main.html",
 					"boxcheck-grid.html",
-					"business/bomuse/bomuse-grid.html"
+					"business/bomuse/bomuse-grid.html",
+					"business/errosend/errosend-grid.html"
 				],
 				"priority": 0
 			},
@@ -847,7 +849,17 @@
 			"leavebill-workflow.html": {
 				"href": "leavebill-workflow.html",
 				"priority": 11,
-				"resources": [],
+				"resources": [
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/mui.enterfocus.js"
+				],
 				"refer": []
 			},
 			"expensebill-workflow.html": {
@@ -1404,6 +1416,43 @@
 					"fonts/mui.ttf",
 					"css/mui.min.css",
 					"js/mui.enterfocus.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/errosend/errosend-grid.html": {
+				"resources": [
+					"img/script_edit.png",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/mui.min.js"
+				],
+				"refer": [
+					"business/errosend/errosend-list-main.html"
+				],
+				"priority": 0
+			},
+			"business/errosend/errosend-list-main.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"business/errosend/errosend-list-sub.html"
+				],
+				"refer": [
+					"business/errosend/errosend-input.html"
+				],
+				"priority": 0
+			},
+			"business/errosend/errosend-input.html": {
+				"resources": [
+					"js/common.js",
+					"js/mui.picker.min.js",
+					"css/common.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"img/scan.png"
 				],
 				"refer": [],
 				"priority": 0

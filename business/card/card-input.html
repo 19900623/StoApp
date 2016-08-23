@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
+		<link rel="stylesheet" href="../../css/common.css" type="text/css" charset="utf-8" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			
+			.button {
+				font-size: 18px;
+				font-weight: normal;
+				text-decoration: none;
+				display: block;
+				text-align: center;
+				color: #FFF;
+				background-color: #FFCC33;
+				border: 1px solid #ECB100;
+				padding: .1em 0em;
+				margin: .0em 4.7em;
+				-webkit-border-radius: 0px;
+				border-radius: 0px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">实名制</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded" style="margin: 5px;">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>运单编号</label>
+						<input type="text" id="WayBillNumber" class="mui-input-clear mui-input" style="padding-right: 2em" required="required">
+						<img src="../../img/scan.png" style="position: absolute; right: 0px;top: 1.5px ;width: 2em; height: 2em;" onclick="clicked('../../barcode_scan.html',true,true)" />
+					</div>
+					<!--<div class="mui-input-row">
+						<label>姓名</label>
+						<input type="text" id="UserName" class="mui-input-clear mui-input" required="required">
+					</div>-->
+
+					<div class="mui-input-row">
+						<label>身份证号</label>
+						<input type="text" id="Card" class="mui-input-clear mui-input" required="required">
+					</div>
+				</form>
+				<ul id="images" class="dlist">
+
+				</ul>
+				<div class="mui-button-row">
+					<button type="button" class="mui-btn mui-btn-success" onclick="app.getOneImage(document.getElementById('images'));" id="buttonok">拍照</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确定</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.enterfocus.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script type="text/javascript " src="../../js/common.js"></script>
+		<script>
+			mui.init({});
+			mui.plusReady(function() {});
+			var newImage = "";
+
+			function btn_ok() {
+				var WayBillNumber = document.getElementById("WayBillNumber").value;
+				var CardID = document.getElementById("Card").value;
+				var id = app.NewGuid();
+				//验证
+				if (WayBillNumber == "") {
+					plus.nativeUI.toast("运单编号不能为空");
+					return;
+				}
+				var images = document.getElementById("images");
+				if (images.children.length == 0) {
+					plus.nativeUI.toast("请上传照片");
+					return;
+				}
+				newImage=images.children[0].src
+
+				var d = new Date().format('yyyy-MM-dd hh:mm');
+				var wt = plus.nativeUI.showWaiting();
+				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+				db.transaction(function(context) {
+					context.executeSql('CREATE TABLE IF NOT EXISTS CardUser (id,CardID,WayBillNumber,Image,State,CreateDate)');
+					db.transaction(function(context) {
+						var sql = "INSERT INTO CardUser (id,CardID,WayBillNumber,Image,State,CreateDate) VALUES (?,?,?,?, '未上传',?)";
+						context.executeSql(sql, [id, CardID, WayBillNumber, newImage, d],
+							function(tx, result) {
+								plus.nativeUI.toast('添加成功');
+								var page = plus.webview.getWebviewById('card-list-sub');
+								wt.close();
+								//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+								mui.fire(page, 'refresh');
+								mui.back();
+							},
+							function(tx, error) {
+								wt.close();
+								plus.nativeUI.toast(error.message);
+							});
+					});
+				});
+			}
+			
+			function scaned(r) {
+				var WayBillNumber = document.getElementById("WayBillNumber");
+				//在数据库中判断是否已存在
+				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+				db.transaction(function(context) {
+					context.executeSql('CREATE TABLE IF NOT EXISTS CardUser (id,CardID,WayBillNumber,Image,State,CreateDate)');
+					context.executeSql("SELECT 1 FROM CardUser where WayBillNumber like ? ", ['%' + r + '%'], function(context, results) {
+						if (results.rows.length > 0) {
+							plus.nativeUI.toast('运单编号已经存在');
+							return;
+						} else {
+							if (WayBillNumber.value != "") {
+								console.log(WayBillNumber.value.indexOf(r))
+								if (WayBillNumber.value.indexOf(r) >= 0)
+									plus.nativeUI.toast("该运单编号已存在");
+								else
+									WayBillNumber.value = WayBillNumber.value + "," + r;
+							} else {
+								WayBillNumber.value = r;
+							}
+						}
+					});
+				});
+			}
+		</script>
+	</body>
+
+</html>

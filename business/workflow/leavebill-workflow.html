@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">请假条审批</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded" style="margin: 5px;">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>标题</label>
+						<input type="text" id="LeaveTitle" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>请假类型</label>
+						<input type="text" id="LeaveType" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>开始时间</label>
+						<input type="text" id="LeaveStartTime" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>结束时间</label>
+						<input type="text" id="LeaveEndTime" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>请假天数</label>
+						<input type="text" id="LeaveDays" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>请假时间</label>
+						<input type="text" id="LeaveHour" placeholder="小时" class="mui-input" readonly="readonly">
+					</div>
+				</form>
+				<div class="mui-input-row" style="margin: 5px 0px;">
+					<textarea id="LeaveReason" rows="2" placeholder="请假原因" class="mui-input" readonly="readonly"></textarea>
+				</div>
+
+				<div class="mui-card">
+					<form class="mui-input-group">
+						<div class="mui-input-row mui-radio">
+							<label>同意</label>
+							<input name="radio1" type="radio" value="1" checked>
+						</div>
+						<div class="mui-input-row mui-radio">
+							<label>拒绝</label>
+							<input name="radio1" type="radio" value="3">
+						</div>
+
+					</form>
+					<div class="mui-input-row" style="margin: 5px 5px;">
+						<textarea id="Opnion" rows="2" placeholder="审批意见" class="mui-input-clear mui-input"></textarea>
+					</div>
+				</div>
+
+				<div class="mui-button-row">
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.enterfocus.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script>
+			var LeaveTitle = document.getElementById("LeaveTitle");
+			var LeaveType = document.getElementById("LeaveType");
+			var LeaveStartTime = document.getElementById("LeaveStartTime");
+			var LeaveEndTime = document.getElementById("LeaveEndTime");
+			var LeaveDays = document.getElementById("LeaveDays");
+			var LeaveHour = document.getElementById("LeaveHour");
+			var LeaveReason = document.getElementById("LeaveReason");
+			mui.init({});
+			var userPicker;
+			mui.plusReady(function() {
+				var id = JSON.parse(plus.webview.currentWebview().name).taskid;
+				var url = app.getUrl() + 'GetLeaveBillByID';
+
+				mui.ajax(url, {
+					data: {
+						id: id
+					},
+					type: 'post', //HTTP请求类型
+					dataType: 'json',
+					success: function(data) {
+						if(data) {
+							LeaveTitle.value = data[0].leavetitle;
+							LeaveType.value = data[0].leavetype;
+							LeaveStartTime.value = data[0].leavestarttime;
+							LeaveEndTime.value = data[0].leaveendtime;
+							LeaveDays.value = data[0].leavedays;
+							LeaveHour.value = data[0].leavehour;
+							LeaveReason.value = data[0].leavereason;
+						}
+					}
+				});
+			});
+
+			function btn_ok() {
+				var ExcuteType;
+				var obj = document.getElementsByName("radio1");
+				for(var i = 0; i < obj.length; i++) {
+					if(obj[i].checked) {
+						ExcuteType = obj[i].value;
+					}
+				}
+				var MessageID = JSON.parse(plus.webview.currentWebview().name).taskid;
+				var Opinion = document.getElementById("Opnion").value;
+				var url = app.getUrl() + 'ExcuteFlow';
+				var UserID = app.getLoginInfo().userid;
+				var nwaiting = plus.nativeUI.showWaiting();
+				mui.ajax(url, {
+					data: {
+						UserID: UserID,
+						MessageID: MessageID,
+						Opinion: Opinion,
+						ExcuteType: ExcuteType
+					},
+					type: 'post', //HTTP请求类型
+					success: function(data) {
+						if(data == "") {
+							nwaiting.close();
+							plus.nativeUI.toast('流程执行成功');
+							var page = plus.webview.getWebviewById('workflow-sub');
+							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+							mui.fire(page, 'refresh');
+							mui.back();
+						} else {
+							plus.nativeUI.toast(data);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+					}
+
+				});
+			}
+		</script>
+	</body>
+
+</html>

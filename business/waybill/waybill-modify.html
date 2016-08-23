@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
+		<link rel="stylesheet" href="../../css/common.css" type="text/css" charset="utf-8" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">编辑热敏面单</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded" style="margin: 5px;">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>运单编号</label>
+						<input type="text" id="WayBillNumber" class="mui-input" required="required" readonly="readonly">
+					</div>
+
+					<div class="mui-input-row">
+						<label>类别</label>
+						<input type="text" id="Type" class="mui-input" required="required" readonly="readonly">
+					</div>
+
+				</form>
+				<div class="mui-input-row" style="margin: 5px 0px 0px;">
+					<textarea id="Remark" rows="3" placeholder="备注" class="mui-input-clear mui-input"></textarea>
+				</div>
+				<ul id="images" class="dlist">
+
+				</ul>
+
+				<div class="mui-button-row">
+					<button type="button" class="mui-btn mui-btn-success" onclick="app.getImage(document.getElementById('images'));" id="buttonok">拍照</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">保存</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-success" onclick="btn_update()">上传</button>
+					<button type="button" class="mui-btn mui-btn-danger" onclick="btn_delete()">删除</button>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.enterfocus.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script>
+			var KPIPicker;
+			mui.init({});
+			var WayBillNumber = document.getElementById("WayBillNumber");
+			var Remark = document.getElementById("Remark");
+			var id, name, task, image;
+			mui.plusReady(function() {
+				id = plus.webview.currentWebview().name;
+				name = plus.webview.currentWebview().type;
+				document.getElementById("title").innerHTML = '编辑' + name;
+				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+				db.transaction(function(context) {
+					context.executeSql("SELECT * FROM SensWayBill where WayBillNumber=?", [id], function(context, results) {
+						WayBillNumber.value = id;
+						Remark.value = results.rows.item(0).Remark;
+						Type.value = results.rows.item(0).Type;
+						image = results.rows.item(0).Image || '';
+						if (image != '') {
+							var images = image.split(',');
+							for (var i = 0; i < images.length - 1; i++) {
+								var img = document.createElement('img');
+								var ul = document.getElementById("images");
+								img.className = "ditem";
+								img.src = images[i]
+								img.setAttribute("onclick", "app.displayFile(this,'../../');");
+								ul.appendChild(img);
+							}
+						}
+					});
+				});
+
+				KPIPicker = new mui.PopPicker({
+					layer: 1
+				});
+				KPIPicker.setData([{
+					value: '客户寄件信息未规范打印',
+					text: '客户寄件信息未规范打印'
+				}, {
+					value: '客户收件信息未规范打印',
+					text: '客户收件信息未规范打印'
+				}, {
+					value: '条形码信息未规范打印',
+					text: '条形码信息未规范打印'
+				}, {
+					value: '客户信息和条形码未规范打印',
+					text: '客户信息和条形码未规范打印'
+				}, {
+					value: '到件同一网点单号重复使用',
+					text: '到件同一网点单号重复使用'
+				}, {
+					value: '未规范打印申通标识',
+					text: '未规范打印申通标识'
+				}, {
+					value: '未规范打印申通单号',
+					text: '未规范打印申通单号'
+				}]);
+			});
+
+			//类别	
+			document.getElementById("Type").addEventListener('tap', function() {
+				KPIPicker.show(function(items) {
+					document.getElementById("Type").value = items[0].value;
+				});
+			});
+
+			//确定按钮
+			function btn_ok() {
+				var images = document.getElementById("images");
+				var ImagePaths = '';
+				for (var i = 0; i < images.children.length; i++) {
+					if (images.children[i].src.indexOf('file') >= 0)
+						ImagePaths += images.children[i].src + ',';
+				}
+				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+				db.transaction(function(context) {
+					context.executeSql('update SensWayBill set Remark=?,Image=?,Type=? where WayBillNumber=?', [Remark.value, ImagePaths, Type.value, id],
+						function(tx, result) {
+							plus.nativeUI.toast('保存成功');
+							var page = plus.webview.getWebviewById('waybill-list-sub');
+							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+							mui.fire(page, 'refresh');
+							mui.back();
+						},
+						function(tx, error) {
+							plus.nativeUI.toast(error.message);
+						});
+				});
+			}
+
+			function btn_delete() {
+				var btnArray = ['是', '否'];
+				mui.confirm('是否删除该条数据？', '申通提醒', btnArray, function(e) {
+					if (e.index == 0) {
+						var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+						db.transaction(function(context) {
+							context.executeSql('delete from SensWayBill where WayBillNumber=?', [id],
+								function(tx, result) {
+									var images = document.getElementById("images");
+									for (var i = 0; i < images.children.length; i++) {
+										plus.io.resolveLocalFileSystemURL(images.children[i].src, function(entry) {
+											entry.remove();
+										});
+									}
+									plus.nativeUI.toast('删除成功');
+									var page = plus.webview.getWebviewById('waybill-list-sub');
+									//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+									mui.fire(page, 'refresh');
+									mui.back();
+								},
+								function(tx, error) {
+									plus.nativeUI.toast(error.message);
+								});
+						});
+					}
+				});
+			}
+
+			function btn_update() {
+				var btnArray = ['是', '否'];
+				mui.confirm('是否上传图片到服务器？', '申通提醒', btnArray, function(e) {
+					if (e.index == 0) {
+						//检查网路设置
+						if (plus.networkinfo.getCurrentType() == 1) {
+							plus.nativeUI.toast('请检查网路连接!');
+							return;
+						}
+						plus.nativeUI.showWaiting("正在上传文件...");
+						var images = document.getElementById("images");
+						var ImagePaths = '';
+						for (var i = 0; i < images.children.length; i++) {
+							if (images.children[i].src.indexOf('file') >= 0)
+								ImagePaths += images.children[i].src + ',';
+						}
+						var userid = app.getLoginInfo().userid;
+						var username = JSON.parse(app.getLoginInfo().userinfo).realname;
+						var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
+						var WayBill = {
+							WayBillNumber: id,
+							KPI: name,
+							Remark: Remark.value,
+							Type: Type.value,
+							CreateUserId: userid,
+							CreateUserName: username,
+							UserCode: usercode,
+							Image: ImagePaths
+						}
+						var url = app.getUrl() + 'UpdateImage';
+						task = plus.uploader.createUpload(url, {
+							method: "POST"
+						}, function(t, status) {
+							// 上传完成
+							if (status == 200) {
+								//console.log(JSON.parse(t.responseText).type);
+								if (JSON.parse(t.responseText).type == 0) {
+									var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+									db.transaction(function(context) {
+										var sql = "Update SensWayBill set State='已上传' where WayBillNumber=?";
+										context.executeSql(sql, [id],
+											function(context, results) {
+												plus.nativeUI.toast('上传成功');
+												var page = plus.webview.getWebviewById('waybill-list-sub');
+												mui.fire(page, 'refresh');
+												mui.back();
+											});
+									});
+								} else
+									alert(JSON.parse(t.responseText).Message);
+							} else {
+								plus.nativeUI.toast("Upload failed: " + status);
+							}
+							plus.nativeUI.closeWaiting();
+						});
+						var images = document.getElementById("images");
+						var ImagePaths = '';
+						for (var i = 0; i < images.children.length; i++) {
+							task.addFile(images.children[i].src, {
+								key: app.NewGuid()
+							});
+						}
+						task.addData("Info", JSON.stringify(WayBill));
+						task.addData("type", 'WayBill');
+						task.start();
+					}
+				});
+			}
+		
+		</script>
+	</body>
+
+</html>

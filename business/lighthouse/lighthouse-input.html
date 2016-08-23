@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
+		<link rel="stylesheet" href="../../css/common.css" type="text/css" charset="utf-8" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">新增请求</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded" style="margin: 5px;">
+				<form class="mui-input-group" id="bill-form">
+					<!--<div class="mui-input-row">
+						<label>标题</label>
+						<input type="text" id="LeaveTitle" class="mui-input-clear mui-input" required="required">
+					</div>-->
+
+					<div class="mui-input-row">
+						<label>类型</label>
+						<input type="text" id="Type" class="mui-input-clear mui-input" required="required">
+					</div>
+					<div class="mui-input-row">
+						<label>日期</label>
+						<input type="text" id="RequestDate" class="mui-input" required="required" readonly="readonly">
+					</div>
+				</form>
+				<div class="mui-input-row" style="margin: 5px 0px;">
+					<textarea id="Request" rows="3" placeholder="问题描述" class="mui-input-clear mui-input"></textarea>
+				</div>
+
+				<ul id="images" class="dlist">
+
+				</ul>
+
+				<div class="mui-button-row">
+					<button type="button" class="mui-btn mui-btn-success" onclick="app.getImage(document.getElementById('images'));" id="buttonok">拍照</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.enterfocus.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script>
+			mui.init({});
+			var typePicker;
+			mui.plusReady(function() {
+				var buttonok = document.getElementById('buttonok');
+				mui.enterfocus('#bill-form input', function() {
+					mui.trigger(buttonok, 'tap');
+				});
+				if (plus.networkinfo.getCurrentType() == 1) {
+					plus.nativeUI.toast('请检查网路连接!');
+					return;
+				}
+				var url = app.getUrl() + 'GetPersonRequestType';
+				mui.ajax(url, {
+					type: 'post', //HTTP请求类型
+					dataType: 'json',
+					success: function(data) {
+						if (data) {
+							typePicker = new mui.PopPicker();
+							var itemList = new Array();
+							for (var i = 0; i < data.length; i++) {
+								var Item = {
+									value: data[i].fullname,
+									text: data[i].fullname
+								};
+								itemList.push(Item);
+							}
+							typePicker.setData(itemList);
+						}
+					}
+				});
+			});
+			//选择请假类型事件		
+			document.getElementById("Type").addEventListener('tap', function() {
+				typePicker.show(function(items) {
+					document.getElementById("Type").value = items[0].value;
+				});
+			});
+			//选择开始时间事件			
+			document.getElementById("RequestDate").addEventListener('tap', function() {
+				var options = JSON.parse('{"type":"date"}');
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+					document.getElementById("RequestDate").value = rs.text;
+					picker.dispose();
+				});
+			});
+
+			function btn_ok() {
+				var Type = document.getElementById("Type");
+				var RequestDate = document.getElementById("RequestDate");
+				var Request = document.getElementById("Request");
+				//验证
+				if (Type.value == "") {
+					plus.nativeUI.toast("类型不能为空");
+					LeaveMold.focus();
+					return;
+				}
+				if (RequestDate.value == "") {
+					plus.nativeUI.toast("日期不能为空");
+					LeaveReason.focus();
+					return;
+				}
+				if (Request.value == "") {
+					plus.nativeUI.toast("问题描述不能为空");
+					LeaveReason.focus();
+					return;
+				}
+				var images = document.getElementById("images");
+				//没有图片直接上传，有图片则改为图片上传功能
+				if (images.children.length == 0) {
+					var userid = app.getLoginInfo().userid;
+					//调用方法
+					var billInfo = {
+						CreateUserID: userid,
+						Type: Type.value,
+						RequestDate: RequestDate.value,
+						Request: Request.value
+					};
+					var url = app.getUrl() + 'AddPersonRequest';
+					mui.ajax(url, {
+						data: {
+							Data: JSON.stringify(billInfo)
+						},
+						type: 'post', //HTTP请求类型
+						success: function(data) {
+							if (data == "") {
+								plus.nativeUI.toast('添加成功');
+								var page = plus.webview.getWebviewById('lighthouse-list-sub');
+								//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+								mui.fire(page, 'refresh');
+								mui.back();
+							} else {
+								plus.nativeUI.toast(data);
+							}
+						}
+					});
+				} else {
+					var ImagePaths = '';
+					for (var i = 0; i < images.children.length; i++) {
+						ImagePaths += images.children[i].src + ',';
+					}
+					var url = app.getUrl() + 'UpdateImage';
+					var task = plus.uploader.createUpload(url, {
+						method: "POST"
+					}, function(t, status) {
+						// 上传完成
+						if (status == 200) {
+							if (JSON.parse(t.responseText).type == 0) {
+								plus.nativeUI.toast('添加成功');
+								var page = plus.webview.getWebviewById('lighthouse-list-sub');
+								//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+								mui.fire(page, 'refresh');
+								mui.back();
+							} else
+								alert(JSON.parse(t.responseText).Message);
+						} else {
+							plus.nativeUI.toast("Upload failed: " + status);
+						}
+						plus.nativeUI.closeWaiting();
+					});
+					var userid = app.getLoginInfo().userid;
+					var username = JSON.parse(app.getLoginInfo().userinfo).realname;
+					var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
+					var billInfo = {
+						CreateUserID: userid,
+						Type: Type.value,
+						RequestDate: RequestDate.value, 
+						Request: Request.value,
+						CreateUserName: username,
+						Image: ImagePaths
+					}
+					if (ImagePaths != '') {
+						var images = ImagePaths.split(',');
+						for (var j = 0; j < images.length - 1; j++) {
+							task.addFile(images[j], {
+								key: app.NewGuid()
+							});
+						}
+					}
+					task.addData("Info", JSON.stringify(billInfo));
+					task.addData("type", 'PersonRequest');
+					task.start();
+				}
+			}
+
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/common.css" type="text/css" charset="utf-8" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			
+			.button {
+				font-size: 18px;
+				font-weight: normal;
+				text-decoration: none;
+				display: block;
+				text-align: center;
+				color: #FFF;
+				background-color: #FFCC33;
+				border: 1px solid #ECB100;
+				padding: .1em 0em;
+				margin: .0em 4.7em;
+				-webkit-border-radius: 0px;
+				border-radius: 0px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">编辑实名制</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded" style="margin: 5px;">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>运单编号</label>
+						<input type="text" id="WayBillNumber" class="mui-input-clear mui-input" style="padding-right: 2em " required="required">
+						<img src="../../img/scan.png" style="position: absolute; right: 0px;top: 1.5px ;width: 2em; height: 2em;" onclick="clicked('../../barcode_scan.html',true,true)" />
+					</div>
+					<!--<div class="mui-input-row">
+						<label>姓名</label>
+						<input type="text" id="UserName" class="mui-input-clear mui-input" required="required">
+					</div>-->
+
+					<div class="mui-input-row">
+						<label>身份证号</label>
+						<input type="text" id="Card" class="mui-input-clear mui-input" required="required">
+					</div>
+				</form>
+				<ul id="images" class="dlist">
+
+				</ul>
+
+				<div class="mui-button-row">
+					<button type="button" class="mui-btn mui-btn-success" onclick="app.getOneImage(document.getElementById('images'));" id="buttonok">拍照</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">保存</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-success" onclick="btn_update()">上传</button>
+					<button type="button" class="mui-btn mui-btn-danger" onclick="btn_delete()">删除</button>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.enterfocus.js"></script>
+		<script type="text/javascript" src="../../js/common.js"></script>
+		<script>
+			var id, newImage, task;
+			mui.plusReady(function() {
+				var WayBillNumber = document.getElementById("WayBillNumber");
+				var Card = document.getElementById("Card");
+				id = plus.webview.currentWebview().name;
+				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+				db.transaction(function(context) {
+					context.executeSql("SELECT * FROM CardUser where id=?", [id], function(context, results) {
+						WayBillNumber.value = results.rows.item(0).WayBillNumber;
+						Card.value = results.rows.item(0).CardID || '';
+						newImage = results.rows.item(0).Image;
+						var img = document.createElement('img');
+						var ul = document.getElementById("images");
+						img.className = "ditem";
+						img.src = newImage;
+						img.setAttribute("onclick", "app.displayFile(this,'../../');");
+						ul.appendChild(img);
+					});
+				});
+				var url = app.getUrl() + 'UploadRealName';
+				task = plus.uploader.createUpload(url, {
+					method: "POST"
+				}, function(t, status) {
+					// 上传完成
+					if(status == 200) {
+						if(JSON.parse(t.responseText).type == 0) {
+							var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+							db.transaction(function(context) {
+								plus.io.resolveLocalFileSystemURL(newImage, function(entry) {
+									entry.remove();
+								});
+								var sql = "Update CardUser set State='已上传' where State='未上传' and WayBillNumber=?";
+								context.executeSql(sql, [WayBillNumber.value],
+									function(context, results) {
+										plus.nativeUI.toast('上传成功');
+										var page = plus.webview.getWebviewById('card-list-sub');
+										mui.fire(page, 'refresh');
+										mui.back();
+									});
+
+							});
+						} else
+							alert(JSON.parse(t.responseText).Message);
+						plus.nativeUI.closeWaiting();
+					} else {
+						plus.nativeUI.toast("Upload failed: " + status);
+					}
+				});
+			});
+			//确定按钮
+			function btn_ok() {
+				var WayBillNumber = document.getElementById("WayBillNumber").value;
+				var images = document.getElementById("images");
+				if(images.children.length == 0) {
+					plus.nativeUI.toast("请上传照片");
+					return;
+				}
+				newImage = images.children[0].src;
+				var CardID = document.getElementById("Card").value;
+				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+				db.transaction(function(context) {
+					context.executeSql('update CardUser set CardID=?,WayBillNumber=?,Image=? where id=?', [CardID, WayBillNumber, newImage, id],
+						function(tx, result) {
+							plus.nativeUI.toast('保存成功');
+							var page = plus.webview.getWebviewById('card-list-sub');
+							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+							mui.fire(page, 'refresh');
+							mui.back();
+						},
+						function(tx, error) {
+							plus.nativeUI.toast(error.message);
+						});
+				});
+			}
+
+			function btn_delete() {
+				var btnArray = ['是', '否'];
+				mui.confirm('是否删除该条数据？', '申通提醒', btnArray, function(e) {
+					if(e.index == 0) {
+						var images = document.getElementById("images");
+						if(images.children.length == 0) {
+							plus.nativeUI.toast("请上传照片");
+							return;
+						}
+						newImage = images.children[0].src;
+						var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+						db.transaction(function(context) {
+							context.executeSql('delete from CardUser where id=?', [id],
+								function(tx, result) {
+									plus.nativeUI.toast('删除成功');
+									//删除照片
+									plus.io.resolveLocalFileSystemURL(newImage, function(entry) {
+										entry.remove();
+									});
+									var page = plus.webview.getWebviewById('card-list-sub');
+									//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+									mui.fire(page, 'refresh');
+									mui.back();
+								},
+								function(tx, error) {
+									plus.nativeUI.toast(error.message);
+								});
+						});
+					}
+				});
+			}
+
+			function btn_update() {
+				var btnArray = ['是', '否'];
+				mui.confirm('是否上传图片到服务器？', '申通提醒', btnArray, function(e) {
+					if(e.index == 0) {
+						//检查网路设置
+						if(plus.networkinfo.getCurrentType() == 1) {
+							plus.nativeUI.toast('请检查网路连接!');
+							return;
+						}
+						var images = document.getElementById("images");
+						if(images.children.length == 0) {
+							plus.nativeUI.toast("请上传照片");
+							return;
+						}
+						newImage = images.children[0].src;
+
+						plus.nativeUI.showWaiting("正在上传文件...");
+						var WayBillNumber = document.getElementById("WayBillNumber");
+						var Card = document.getElementById("Card");
+						var userid = app.getLoginInfo().userid;
+						var username = JSON.parse(app.getLoginInfo().userinfo).realname;
+						var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
+						var Card = {
+							WayBillNumber: WayBillNumber.value,
+							CardID: Card.value,
+							CreateUserName: username,
+							CardImage: newImage
+						};
+						task.addFile(newImage, {
+							key: app.NewGuid()
+						});
+						task.addData("Info", JSON.stringify(Card));
+						task.start();
+					}
+				});
+			}
+
+			function scaned(r) {
+				var WayBillNumber = document.getElementById("WayBillNumber");
+				//在数据库中判断是否已存在
+				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+				db.transaction(function(context) {
+					context.executeSql('CREATE TABLE IF NOT EXISTS CardUser (id,CardID,WayBillNumber,Image,State,CreateDate)');
+					context.executeSql("SELECT 1 FROM CardUser where WayBillNumber like ?", ['%' + r + '%'], function(context, results) {
+						if(results.rows.length > 0) {
+							plus.nativeUI.toast('运单编号已经存在');
+							return;
+						} else {
+							if(WayBillNumber.value != "") {
+								console.log(WayBillNumber.value.indexOf(r))
+								if(WayBillNumber.value.indexOf(r) >= 0)
+									plus.nativeUI.toast("该运单编号已存在");
+								else
+									WayBillNumber.value = WayBillNumber.value + "," + r;
+							} else {
+								WayBillNumber.value = r;
+							}
+						}
+					});
+				});
+			}
+		</script>
+	</body>
+
+</html>
