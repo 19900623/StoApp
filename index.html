@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html class="ui-page-login">
     222222
@@ -315,4 +316,323 @@
 		</script>
 	</body>
 
+=======
+<!DOCTYPE html>
+<html class="ui-page-login">
+     11111
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/style.css" rel="stylesheet" />
+	</head>
+	<style>
+		.area {
+			margin: 20px auto 0px auto;
+		}
+		
+		.mui-input-group {
+			margin-top: 10px;
+		}
+		
+		.mui-input-group:first-child {
+			margin-top: 20px;
+		}
+		
+		.mui-input-group label {
+			width: 22%;
+		}
+		
+		.mui-input-row label~input,
+		.mui-input-row label~select,
+		.mui-input-row label~textarea {
+			width: 78%;
+		}
+		
+		.mui-checkbox input[type=checkbox],
+		.mui-radio input[type=radio] {
+			top: 6px;
+		}
+		
+		.mui-content-padded {
+			margin-top: 25px;
+		}
+		
+		.mui-btn {
+			padding: 10px;
+		}
+	</style>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">登录</h1>
+		</header>
+		<div class="mui-content">
+			<form id='login-form' class="mui-input-group">
+				<div class="mui-input-row">
+					<label>账号</label>
+					<input id='account' type="text" class="mui-input-clear mui-input" placeholder="请输入账号" required="required">
+				</div>
+				<div class="mui-input-row">
+					<label>密码</label>
+					<input id='password' type="password" class="mui-input-clear mui-input" placeholder="请输入密码" required="required">
+				</div>
+			</form>
+			<form class="mui-input-group">
+				<ul class="mui-table-view mui-table-view-chevron">
+					<li class="mui-table-view-cell">
+						记住账号
+						<div id="autoLogin" class="mui-switch">
+							<div class="mui-switch-handle"></div>
+						</div>
+					</li>
+				</ul>
+			</form>
+			<div class="mui-content-padded">
+				<button id='login' class="mui-btn mui-btn-block mui-btn-primary">登录</button>
+			</div>
+			<div class="mui-content-padded oauth-area">
+
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/mui.enterfocus.js"></script>
+		<script src="js/app.js"></script>
+		<script>
+			(function($, doc) {
+				$.init({
+					statusBarBackground: '#f7f7f7'
+				});
+				$.plusReady(function() {
+                    //陈琪测试
+					plus.screen.lockOrientation("portrait-primary");
+					//设置WebService的Url				
+					var settings = app.getSettings();
+					//正式库
+					//var httpUrl = 'http://58.57.35.3:8066';
+					var httpUrl = 'http://oaapp.lyzysoft.com:8066'
+						//测试库
+					//var httpUrl = 'http://192.168.6.164:8080/LeaRun.MobileApp';
+					var url = httpUrl + '/MobileAppService.asmx/';
+					app.setUrl(url);
+					app.setHttpUrl(httpUrl);
+					//检查App升级版本并升级			
+					var url = app.getUrl() + 'GetVersionInfo';
+					if (plus.networkinfo.getCurrentType() != 1)
+						mui.ajax(url, {
+							dataType: 'json', //服务器返回json格式数据
+							type: 'post', //HTTP请求类型
+							success: function(data) {
+								var versionNew = data.apkVersion;
+								var oldVersion;
+								plus.runtime.getProperty(plus.runtime.appid, function(info) {
+									//version属性
+									oldVersion = info.version;
+									//plus.nativeUI.prompt()
+									if (oldVersion < versionNew) {
+										var btnArray = ['是', '否'];
+										mui.confirm('检测到当前最新版本' + versionNew + '，是否更新？', '版本更新', btnArray, function(e) {
+											if (e.index == 0) {
+												var DownUrl = httpUrl + '/App/Sto' + versionNew + '.wgt'; // 下载文件地址
+												var dtask = plus.downloader.createDownload(DownUrl, {}, function(d, status) {
+													if (status == 200) { // 下载成功
+														var path = d.filename;
+														plus.nativeUI.showWaiting("安装更新文件...");
+														plus.runtime.install(path, {}, function() {
+															plus.nativeUI.closeWaiting();
+															plus.nativeUI.alert("应用资源更新完成！", function() {
+																plus.runtime.restart();
+															});
+														}, function(e) {
+															plus.nativeUI.closeWaiting();
+															plus.nativeUI.alert("安装更新文件失败[" + e.code + "]：" + e.message);
+														});
+													} else { //下载失败
+														alert("Download failed: " + status);
+													}
+												});
+												dtask.start();
+											} else {
+												return;
+											}
+										})
+									}
+								});
+							}
+						});
+					var toMain = function() {
+						var nwaiting = plus.nativeUI.showWaiting();
+						var webviewShow = plus.webview.create(
+							'main.html',
+							'main',
+							'', {}
+						); //后台创建webview并打开show.html
+						webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
+							setTimeout(function() {
+								nwaiting.close();
+								//新webview的载入完毕后关闭等待框
+								webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+							}, 1000);
+						}, false);
+					};
+					
+					if (settings.autoLogin) {
+						var logininfo = app.getLoginInfo()
+						doc.getElementById('account').value = JSON.parse(logininfo.userinfo).account;
+					}
+					// close splash
+					setTimeout(function() {
+						//关闭 splash
+						plus.navigator.closeSplashscreen();
+					}, 600);
+					//检查 "登录状态/锁屏状态" 结束
+					var loginButton = doc.getElementById('login');
+					var accountBox = doc.getElementById('account');
+					var passwordBox = doc.getElementById('password');
+					var autoLoginButton = doc.getElementById("autoLogin");
+	
+					loginButton.addEventListener('tap', function(event) {
+						var loginInfo = {
+							account: accountBox.value,
+							password: passwordBox.value,
+							clientid: plus.push.getClientInfo().clientid
+						};
+						if (plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
+							plus.nativeUI.toast('请检查网路连接!');
+							return;
+						}
+						var url = app.getUrl() + 'CheckLogin';
+						mui.ajax(url, {
+							data: loginInfo,
+							dataType: 'json', //服务器返回json格式数据
+							type: 'post', //HTTP请求类型
+							success: function(data) {
+								if (data.State != '3')
+									plus.nativeUI.toast(data.Message);
+								else {
+									var loginInfo = {
+										userid: data.UserID,
+										userinfo: data.UserInfo,
+										userreport: data.UserReport
+									};
+									app.setSettings(settings);
+									app.setLoginInfo(loginInfo);
+									toMain();
+								}
+								return;
+							},
+							error: function(xhr, type, errorThrown) {
+								//异常处理；
+								console.log(type + errorThrown);
+							}
+						});
+					});
+					$.enterfocus('#login-form input', function() {
+						$.trigger(loginButton, 'tap');
+					});
+					autoLoginButton.classList[settings.autoLogin ? 'add' : 'remove']('mui-active')
+					autoLoginButton.addEventListener('toggle', function(event) {
+						var isActive = event.detail.isActive;
+						settings.autoLogin = isActive;
+					}, false);
+					var backButtonPress = 0;
+					$.back = function(event) {
+						backButtonPress++;
+						if (backButtonPress > 1) {
+							plus.runtime.quit();
+						} else {
+							plus.nativeUI.toast('再按一次退出应用');
+						}
+						setTimeout(function() {
+							backButtonPress = 0;
+						}, 1000);
+						return false;
+					};
+					// 监听在线消息事件
+					plus.push.addEventListener("receive", function(msg) {
+						try {
+							//根据消息类型
+							var messageState = JSON.parse(msg.content);
+							var type = messageState.Type;
+							var pageid = '';
+							var pagehtml;
+							switch (type) {
+								case 'LeaveBill':
+									pageid = 'leavebill-workflow'
+									pagehtml = 'leavebill-workflow.html'
+									break;
+								case 'ExpenseBill':
+									pageid = 'expensebill-workflow'
+									pagehtml = 'expensebill-workflow.html'
+									break;
+								case 'Payment_ApplyBills':
+									pageid = 'paymentbill-workflow'
+									pagehtml = 'paymentbill-workflow.html'
+									break;
+								case 'Leaveport_CollectionMoney':
+									pageid = 'collectionmoney-workflow'
+									pagehtml = 'collectionmoney-workflow.html'
+									break;
+								case 'Vehicle_Departure':
+									pageid = 'vehicle-workflow'
+									pagehtml = 'vehicle-workflow.html'
+									break;
+								case 'WorkTask':
+									var nwaiting = plus.nativeUI.showWaiting();
+									var webviewShow = plus.webview.create(
+										'worktask-modify.html',
+										'worktask-modify',
+										'', {
+											name: messageState.MessageID
+										}
+									); //后台创建webview并打开show.html
+									webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
+										setTimeout(function() {
+											nwaiting.close();
+											//新webview的载入完毕后关闭等待框
+											webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+										}, 300);
+									}, false);
+									break;
+								case 'Alert':
+									alert(messageState.MessageID);
+									break;
+								default:
+									break;
+							}
+							if (pageid == "")
+								return;
+							var info = {
+								taskid: messageState.MessageID,
+								type: messageState.type,
+								pageid: pageid,
+								pagehtml: pagehtml
+							}
+							var id = JSON.stringify(info);
+							var nwaiting = plus.nativeUI.showWaiting();
+							var webviewShow = plus.webview.create(
+								info.pagehtml,
+								info.pageid,
+								'', {
+									name: id
+								}
+							); //后台创建webview并打开show.html
+							webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
+								setTimeout(function() {
+									nwaiting.close();
+									//新webview的载入完毕后关闭等待框
+									webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+								}, 300);
+							}, false);
+						} catch (e) {
+							plus.nativeUI.toast(e.message);
+						}
+					}, false);
+				});
+			}(mui, document));
+		</script>
+	</body>
+
+>>>>>>> origin/master
 </html>
