@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "3.03",/*应用版本名称*/
+		"name": "3.07",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -287,7 +287,8 @@
 					"img/basket_full.png",
 					"img/name_manager.png",
 					null,
-					"img/brick_error.png"
+					"img/brick_error.png",
+					"img/report_edit.png"
 				],
 				"refer": [
 					"addresslist.html",
@@ -307,7 +308,8 @@
 					"bomuse-list-main.html",
 					"boxcheck-grid.html",
 					"business/bomuse/bomuse-grid.html",
-					"business/errosend/errosend-grid.html"
+					"business/errosend/errosend-grid.html",
+					"business/workreport/workreport-list-main.html"
 				],
 				"priority": 0
 			},
@@ -337,12 +339,16 @@
 					"js/mui.min.js",
 					"js/app.js",
 					"fonts/mui.ttf",
-					"img/client_account_template.png"
+					"img/client_account_template.png",
+					"img/report_edit.png"
 				],
 				"refer": [
 					"workflow-main.html",
 					"worktask-sub.html",
-					"worktask-main.html"
+					"worktask-main.html",
+					"business/workflow/workflow-main.html",
+					"business/workreport/workreport-main.html",
+					"business/worktask/worktask-main.html"
 				],
 				"priority": 0
 			},
@@ -1453,6 +1459,165 @@
 					"css/mui.poppicker.css",
 					"css/mui.picker.min.css",
 					"img/scan.png"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/workflow/workflow-main.html": {
+				"resources": [
+					"business/workflow/workflow-sub.html",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/workflow/workflow-sub.html": {
+				"resources": [
+					"js/app.js"
+				],
+				"refer": [
+					"business/workflow/vehicle-workflow.html",
+					"business/workflow/paymentbill-workflow.html"
+				],
+				"priority": 0
+			},
+			"business/workflow/vehicle-workflow.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/mui.enterfocus.js"
+				],
+				"refer": [
+					"business/workflow/vehicle-workflow-detail.html"
+				],
+				"priority": 0
+			},
+			"business/workflow/vehicle-workflow-detail.html": {
+				"resources": [
+					"css/app.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/workflow/paymentbill-workflow.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"js/mui.min.js",
+					"js/mui.poppicker.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/mui.enterfocus.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/workreport/workreport-list-sub.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"business/workreport/workreport-modify.html"
+				],
+				"priority": 0
+			},
+			"business/workreport/workreport-input.html": {
+				"resources": [
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/mui.enterfocus.js",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/workreport/workreport-list-main.html": {
+				"resources": [
+					"business/workreport/workreport-list-sub.html",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"business/workreport/workreport-input.html"
+				],
+				"priority": 0
+			},
+			"business/workreport/workreport-modify.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/mui.enterfocus.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/workreport/workreport-main.html": {
+				"resources": [
+					"business/workreport/workreport-sub.html",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/workreport/workreport-sub.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"business/workreport/workreport-modify.html",
+					"business/workreport/workreport-remark.html"
+				],
+				"priority": 0
+			},
+			"business/workreport/workreport-remark.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/worktask/worktask-main.html": {
+				"resources": [
+					"business/worktask/worktask-sub.html",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/worktask/worktask-sub.html": {
+				"resources": [
+					"js/app.js"
 				],
 				"refer": [],
 				"priority": 0

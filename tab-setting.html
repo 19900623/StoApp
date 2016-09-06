@@ -95,15 +95,15 @@
 				var Version = document.getElementById("Version");
 				Version.innerHTML = "当前版本：" + info.version;
 			});
-			var locationString = app.getLoaction();
-			if (JSON.stringify(locationString) != 'true')
-				locationString = false;
-			location.classList[locationString ? 'add' : 'remove']('mui-active')
-			location.addEventListener('toggle', function(event) {
-				var isActive = event.detail.isActive;
-				locationString = isActive;
-				app.setLoaction(locationString);
-			}, false);
+//			var locationString = app.getLoaction();
+//			if (JSON.stringify(locationString) != 'true')
+//				locationString = false;
+//			location.classList[locationString ? 'add' : 'remove']('mui-active')
+//			location.addEventListener('toggle', function(event) {
+//				var isActive = event.detail.isActive;
+//				locationString = isActive;
+//				app.setLoaction(locationString);
+//			}, false);
 		})
 		
 		var closeApp=function()

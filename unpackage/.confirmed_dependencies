@@ -38,7 +38,8 @@
       "img/name_manager.png",
       "js/mui.min.js",
       "css/mui.min.css",
-      "img/brick_error.png"
+      "img/brick_error.png",
+      "img/report_edit.png"
     ],
     "refer": [
       "questionbill-grid.html",
@@ -54,7 +55,8 @@
       "bomuse-list-main.html",
       "boxcheck-grid.html",
       "business/bomuse/bomuse-grid.html",
-      "business/errosend/errosend-grid.html"
+      "business/errosend/errosend-grid.html",
+      "business/workreport/workreport-list-main.html"
     ]
   },
   "tab-setting.html": {
@@ -99,11 +101,17 @@
     "resources": [
       "img/client_account_template.png",
       "img/desktop_network.png",
-      "js/app.js"
+      "js/app.js",
+      "img/report_edit.png",
+      "js/mui.min.js",
+      "css/mui.min.css"
     ],
     "refer": [
       "worktask-main.html",
-      "workflow-main.html"
+      "workflow-main.html",
+      "business/workflow/workflow-main.html",
+      "business/workreport/workreport-main.html",
+      "business/worktask/worktask-main.html"
     ]
   },
   "questionbill-grid.html": {
@@ -851,7 +859,8 @@
   "business/bomuse/bomuse-list-sub.html": {
     "resources": [
       "js/app.js"
-    ]
+    ],
+    "refer": []
   },
   "business/bomuse/bomuse-input.html": {
     "resources": [
@@ -861,7 +870,8 @@
       "css/mui.poppicker.css",
       "css/mui.picker.min.css",
       "js/mui.enterfocus.js"
-    ]
+    ],
+    "refer": []
   },
   "business/bomuse/bomuse-grid.html": {
     "resources": [
@@ -897,7 +907,8 @@
   "business/bomuse/bomuse-tc-list-sub.html": {
     "refer": [
       "business/bomuse/bomuse-tc-modify.html"
-    ]
+    ],
+    "resources": []
   },
   "business/bomuse/bomuse-tc-modify.html": {
     "resources": [
@@ -909,7 +920,8 @@
       "fonts/mui.ttf",
       "css/mui.min.css",
       "js/mui.enterfocus.js"
-    ]
+    ],
+    "refer": []
   },
   "leavebill-workflow.html": {
     "resources": [
@@ -922,7 +934,8 @@
       "fonts/mui.ttf",
       "css/mui.min.css",
       "js/mui.enterfocus.js"
-    ]
+    ],
+    "refer": []
   },
   "business/errosend/errosend-grid.html": {
     "resources": [
@@ -956,6 +969,156 @@
       "css/mui.poppicker.css",
       "css/mui.picker.min.css",
       "img/scan.png"
+    ],
+    "refer": []
+  },
+  "business/workflow/workflow-main.html": {
+    "resources": [
+      "business/workflow/workflow-sub.html",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "business/workflow/workflow-sub.html"
+    ]
+  },
+  "business/workflow/workflow-sub.html": {
+    "refer": [
+      "business/workflow/vehicle-workflow.html",
+      "business/workflow/paymentbill-workflow.html"
+    ],
+    "resources": [
+      "js/app.js"
+    ]
+  },
+  "business/workflow/vehicle-workflow.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "js/mui.poppicker.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/mui.enterfocus.js"
+    ],
+    "refer": [
+      "business/workflow/vehicle-workflow-detail.html"
+    ]
+  },
+  "business/workflow/vehicle-workflow-detail.html": {
+    "resources": [
+      "css/app.css"
+    ],
+    "refer": []
+  },
+  "business/workflow/paymentbill-workflow.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.picker.min.js",
+      "js/mui.min.js",
+      "js/mui.poppicker.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/mui.enterfocus.js"
+    ],
+    "refer": []
+  },
+  "business/workreport/workreport-list-sub.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "business/workreport/workreport-modify.html"
+    ]
+  },
+  "business/workreport/workreport-input.html": {
+    "resources": [
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/mui.enterfocus.js",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "business/workreport/workreport-list-main.html": {
+    "resources": [
+      "business/workreport/workreport-list-sub.html",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "business/workreport/workreport-list-sub.html",
+      "business/workreport/workreport-input.html"
+    ]
+  },
+  "business/workreport/workreport-modify.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "js/mui.poppicker.js",
+      "css/mui.picker.min.css",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/mui.enterfocus.js"
+    ]
+  },
+  "business/workreport/workreport-main.html": {
+    "resources": [
+      "business/workreport/workreport-sub.html",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "business/workreport/workreport-sub.html"
+    ]
+  },
+  "business/workreport/workreport-sub.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "business/workreport/workreport-modify.html",
+      "business/workreport/workreport-remark.html"
+    ]
+  },
+  "business/workreport/workreport-remark.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "js/mui.poppicker.js",
+      "css/mui.picker.min.css"
+    ]
+  },
+  "business/worktask/worktask-main.html": {
+    "resources": [
+      "business/worktask/worktask-sub.html",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "business/worktask/worktask-sub.html"
+    ]
+  },
+  "business/worktask/worktask-sub.html": {
+    "resources": [
+      "js/app.js"
     ]
   }
 }
