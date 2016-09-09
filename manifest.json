@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "3.07",/*应用版本名称*/
+		"name": "3.08",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -1223,7 +1223,8 @@
 					"img/save_money.png",
 					"img/chart_bar.png",
 					"css/app.css",
-					"img/statistics.png"
+					"img/statistics.png",
+					"img/chart_column.png"
 				],
 				"refer": [
 					"report/report-paymore.html",
@@ -1234,7 +1235,8 @@
 					"report/report-waybillpickup-day.html",
 					"report/report-arrivalpay.html",
 					"report/report-cashdelivery.html",
-					"report/report-performance.html"
+					"report/report-performance.html",
+					"report/report-waybillpickup-business.html"
 				],
 				"priority": 0
 			},
@@ -1621,14 +1623,26 @@
 				],
 				"refer": [],
 				"priority": 0
+			},
+			"report/report-waybillpickup-business.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
 			}
 		},
 		"idle": {
 			"resources": [
 				"img/chart_pie(2).png",
 				"css/mui.css",
-				"img/columnchart.png",
-				"img/chart_column.png"
+				"img/columnchart.png"
 			]
 		}
 	},

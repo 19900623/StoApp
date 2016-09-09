@@ -734,7 +734,8 @@
       "img/save_money.png",
       "img/chart_bar.png",
       "css/app.css",
-      "img/statistics.png"
+      "img/statistics.png",
+      "img/chart_column.png"
     ],
     "refer": [
       "report/report-paymore.html",
@@ -745,7 +746,8 @@
       "report/report-waybillpickup-day.html",
       "report/report-arrivalpay.html",
       "report/report-cashdelivery.html",
-      "report/report-performance.html"
+      "report/report-performance.html",
+      "report/report-waybillpickup-business.html"
     ]
   },
   "report/report-paymore.html": {
@@ -1119,6 +1121,17 @@
   "business/worktask/worktask-sub.html": {
     "resources": [
       "js/app.js"
+    ]
+  },
+  "report/report-waybillpickup-business.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
     ]
   }
 }

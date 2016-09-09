@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>Hello MUI</title>
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../css/mui.picker.min.css" />
+		<link href="../css/mui.poppicker.css" rel="stylesheet" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			/*跨webview需要手动指定位置*/
+			
+			#topPopover {
+				height: 190px;
+			}
+			.mui-popover {
+				height: 450px;
+			}
+			.mui-content {
+				padding: 10px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" href="#topPopover">查询</a>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">业务部取件报表</h1>
+		</header>
+		<!--弹出详细信息-->
+		<div id="popover" class="mui-popover">
+			<div class="mui-popover-arrow"></div>
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell"><a href="#">测试数据</a></li>
+						<li class="mui-table-view-cell"><a href="#">时效票数：6345</a></li>
+						<li class="mui-table-view-cell"><a href="#">传统票数：3530</a></li>
+						<li class="mui-table-view-cell"><a href="#">传统淘宝票数：6842</a></li>
+						<li class="mui-table-view-cell"><a href="#">淘宝票数：175226</a></li>
+						<li class="mui-table-view-cell"><a href="#">其他票数：22</a></li>
+						<li class="mui-table-view-cell"><a href="#">时效利润：48167.46</a></li>
+						<li class="mui-table-view-cell"><a href="#">传统利润：26086.5</a></li>
+						<li class="mui-table-view-cell"><a href="#">传统淘宝利润：43040.07</a></li>
+						<li class="mui-table-view-cell"><a href="#">淘宝利润：103283.41</a></li>
+						<li class="mui-table-view-cell"><a href="#">其他利润：204.13</a></li>
+						<li class="mui-table-view-cell"><a href="#">总票数：191965</a></li>
+						<li class="mui-table-view-cell"><a href="#">总利润：220781.57</a></li>
+						<li class="mui-table-view-cell"><a href="#">平均利润：1.15</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div style="margin-top: 45px;">
+			<ul class="mui-table-view mui-table-view-chevron" id="list">
+			</ul>
+		</div>
+		<!--右上角弹出菜单-->
+		<div id="topPopover" class="mui-popover">
+			<div class="mui-popover-arrow"></div>
+			<div class="mui-scroll-wrapper">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>开始时间</label>
+						<input type="text" id="StartTime" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>结束时间</label>
+						<input type="text" id="EndTime" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>取件人</label>
+						<input type="text" id="UserName" class="mui-input">
+					</div>
+				</form>
+				<div class="mui-button-row" style="margin-top:10px;">
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_search()" id="buttonok">搜索</button>&nbsp;&nbsp;
+				</div>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/mui.picker.min.js"></script>
+
+		<script type="text/javascript" charset="utf-8">
+			var topcode = "01.05";
+			parentcode = "";
+			var start = "";
+			var end = "";
+			mui.init({});
+			mui.plusReady(function() {});			
+			mui('.mui-scroll-wrapper').scroll();
+			(function($) {
+				//$.swipeoutOpen(el,direction)//打开指定列的滑动菜单，el:指定列的dom对象，direction：取值left|right，指定打开的是左侧或右侧滑动菜单
+				//$.swipeoutClose(el);//关闭指定列的滑动菜单，el:指定列的dom对象
+				setTimeout(function() {
+					$.swipeoutOpen(document.getElementById("list").querySelector('li:first-child'), 'right');
+					setTimeout(function() {
+						$.swipeoutClose(document.getElementById("list").querySelector('li:first-child'));
+					}, 1000);
+				}, 1000);
+				//后退
+				$('#list').on('tap', '.mui-icon-undo', function(event) {
+					var elem = this;
+					var li = elem.parentNode.parentNode;
+					var divs = li.childNodes;
+					var preinp;
+					for (var i =0; i< divs.length; i++){
+						var div = divs[i];
+						if(div.className === "mui-slider-handle") {
+							preinp = div.getElementsByTagName("input")[0];
+							break;
+						}
+					}
+					//加载上级列表
+					parentcode = preinp.value.substr(0, preinp.value.length - 3);
+					LodingData(parentcode, "", start, end);
+				});
+				//显示下级
+				$('#list').on('tap', '.mui-icon-bars', function(event) {
+					var elem = this;
+					var li = elem.parentNode.parentNode;
+					var divs = li.childNodes;
+					var preinp;
+					var curinp;
+					for (var i =0; i< divs.length; i++){
+						var div = divs[i];
+						if(div.className === "mui-slider-handle") {
+							preinp = div.getElementsByTagName("input")[0];
+							curinp = div.getElementsByTagName("input")[1];
+							break;
+						}
+					}
+					//加载下级列表
+					parentcode = preinp.value;
+					LodingData(curinp.value, "", start, end);
+				});
+				//向左拖拽后显示操作图标，释放后自动触发的业务逻辑
+				//显示详情
+				$('#list').on('slideleft', '.mui-table-view-cell', function(event) {
+					var elem = this;
+					var divs = elem.childNodes;
+					for (var i =0; i< divs.length; i++){
+						var div = divs[i];
+						if(div.className === "mui-slider-handle") {
+							var pop = div.getElementsByTagName("div")[0];
+							var popover = document.getElementById("popover");
+							var popContent = popover.querySelector(".mui-scroll-wrapper").querySelector(".mui-scroll");
+							popContent.innerHTML = pop.innerHTML;				
+							mui('#popover').popover('toggle', elem);
+							
+							setTimeout(function() {
+								$.swipeoutClose(elem);
+							}, 0);
+							break;
+						}
+					}
+				});
+			})(mui);
+			
+			//选择开始时间事件			
+			document.getElementById("StartTime").addEventListener('tap', function() {
+				var options = {
+					type: "date",
+					beginYear: "2015",
+					endYear: "2030"
+				}
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+					document.getElementById("StartTime").value = rs.text.replace(new RegExp('-', "gm"), '/');
+					picker.dispose();
+				});
+			});
+			//选择结时间事件			
+			document.getElementById("EndTime").addEventListener('tap', function() {
+				var options = {
+					type: "date",
+					beginYear: "2015",
+					endYear: "2030"
+				}
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+					document.getElementById("EndTime").value = rs.text.replace(new RegExp('-', "gm"), '/');
+					picker.dispose();
+				});
+			});
+
+			//加载数据
+			function LodingData(code, name, start, end) {
+				var table = document.getElementById("list");
+				while(table.firstChild)
+					table.removeChild(table.firstChild);
+				var fragment = document.createDocumentFragment();
+				var url = app.getUrl() + 'GetWaybillPickUpReport';
+				mui.ajax(url, {
+					data: {
+						departCode: code,
+						name: name,
+						start: start,
+						end: end
+					},
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+						if(data) {
+							for(var i = 0; i < data.length; i++) {
+								li = document.createElement('li');
+								li.className = 'mui-table-view-cell mui-collapse';
+								var htmlText = '<div class="mui-slider-left mui-disabled">';
+								if(code != topcode){
+									htmlText += '<a class="mui-btn mui-btn-grey mui-icon mui-icon-undo"></a>';
+								}
+								if(data[i].code != ""){
+									htmlText += '<a class="mui-btn mui-btn-yellow mui-icon mui-icon-bars"></a>';
+								}
+								htmlText += '</div>';
+								htmlText += '<div class="mui-slider-right mui-disabled">';
+								htmlText += '<a href="#popover" class="mui-btn mui-btn-red mui-icon mui-icon-more"></a>';
+								htmlText += '</div>';
+								htmlText += '<div class="mui-slider-handle">';
+								htmlText += '<input type="hidden" value="' + code + '" />';
+								htmlText += '<input type="hidden" value="' + data[i].code + '" />';
+								htmlText += '<input type="hidden" value="popover' + data[i].code + '" />';
+								htmlText += data[i].scan_name;
+								htmlText += '<div class="mui-popover">';
+								htmlText += '<ul class="mui-table-view">';
+								htmlText += '<li class="mui-table-view-cell"><a href="#">' + data[i].scan_name; + '</a>';
+								htmlText += '</li><li class="mui-table-view-cell"><a href="#">时效票数：' + data[i].sxnum + '</a>';
+								htmlText += '</li><li class="mui-table-view-cell"><a href="#">传统票数：' + data[i].ctnum + '</a>';
+								htmlText += '</li><li class="mui-table-view-cell"><a href="#">传统淘宝票数：' + data[i].cttbnum + '</a>';
+								htmlText += '</li><li class="mui-table-view-cell"><a href="#">淘宝票数：' + data[i].tbnum + '</a>';
+								htmlText += '</li><li class="mui-table-view-cell"><a href="#">其他票数：' + data[i].othernum + '</a>';
+								htmlText += '</li><li class="mui-table-view-cell"><a href="#">时效利润：' + data[i].sxmoney + '</a>';
+								htmlText += '</li><li class="mui-table-view-cell"><a href="#">传统利润：' + data[i].ctmoney + '</a>';
+								htmlText += '</li><li class="mui-table-view-cell"><a href="#">传统淘宝利润：' + data[i].cttbmoney + '</a>';
+								htmlText += '</li><li class="mui-table-view-cell"><a href="#">淘宝利润：' + data[i].tbmoney + '</a>';
+								htmlText += '</li><li class="mui-table-view-cell"><a href="#">其他利润：' + data[i].othermoney + '</a>';
+								htmlText += '</li><li class="mui-table-view-cell"><a href="#">总票数：' + data[i].sumnum + '</a>';
+								htmlText += '</li><li class="mui-table-view-cell"><a href="#">总利润：' + data[i].summoney + '</a>';
+								htmlText += '</li><li class="mui-table-view-cell"><a href="#">平均利润：' + data[i].avgmoney + '</a>';
+								htmlText += '</li></ul>';
+								htmlText += '</div>';
+								htmlText += '</div>';
+								li.innerHTML = htmlText;
+								fragment.appendChild(li);
+							}
+							table.appendChild(fragment);
+						}
+					},
+				});
+			}
+
+			function btn_search() {
+				if(document.getElementById("StartTime").value == '') {
+					plus.nativeUI.toast("请选择开始时间");
+					return;
+				}
+				if(document.getElementById("EndTime").value == '') {
+					plus.nativeUI.toast("请选择结束时间");
+					return;
+				}		
+				var name = document.getElementById("UserName").value ;
+				start = document.getElementById("StartTime").value;
+				end = document.getElementById("EndTime").value;
+				LodingData(topcode, name, start, end);
+				mui('#topPopover').popover('toggle');	//收起右上角弹出菜单
+			}
+		</script>
+</body>
+</html>
