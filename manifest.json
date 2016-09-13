@@ -288,7 +288,8 @@
 					"img/name_manager.png",
 					null,
 					"img/brick_error.png",
-					"img/report_edit.png"
+					"img/report_edit.png",
+					"img/books.png"
 				],
 				"refer": [
 					"addresslist.html",
@@ -309,7 +310,8 @@
 					"boxcheck-grid.html",
 					"business/bomuse/bomuse-grid.html",
 					"business/errosend/errosend-grid.html",
-					"business/workreport/workreport-list-main.html"
+					"business/workreport/workreport-list-main.html",
+					"business/knowledgelib/knowledgelib_list.html"
 				],
 				"priority": 0
 			},
@@ -1629,6 +1631,28 @@
 					"js/mui.picker.min.js",
 					"css/mui.poppicker.css",
 					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/knowledgelib/knowledgelib_list.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"business/knowledgelib/knowledgelib_detail.html"
+				],
+				"priority": 0
+			},
+			"business/knowledgelib/knowledgelib_detail.html": {
+				"resources": [
 					"js/app.js",
 					"js/mui.min.js",
 					"fonts/mui.ttf",
