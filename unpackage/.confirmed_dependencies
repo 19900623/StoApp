@@ -40,7 +40,10 @@
       "css/mui.min.css",
       "img/brick_error.png",
       "img/report_edit.png",
-      "img/books.png"
+      "img/books.png",
+      "js/app.js",
+      "img/newspaper.png",
+      "img/car.png"
     ],
     "refer": [
       "questionbill-grid.html",
@@ -58,7 +61,15 @@
       "business/bomuse/bomuse-grid.html",
       "business/errosend/errosend-grid.html",
       "business/workreport/workreport-list-main.html",
-      "business/knowledgelib/knowledgelib_list.html"
+      "business/knowledgelib/knowledgelib_list.html",
+      "business/knowledgelib/knowledgelib_list_main.html",
+      "business/addresslist/addresslist.html",
+      "business/boxcheck/boxcheck-grid.html",
+      "business/card/card-list-main.html",
+      "business/salary/salary-grid.html",
+      "business/notice/notice_list_main.html",
+      "business/vehicle/vehicle_grid.html",
+      "business/vehicle/vehicle_reg.html"
     ]
   },
   "tab-setting.html": {
@@ -946,7 +957,8 @@
       "img/script_edit.png",
       "fonts/mui.ttf",
       "css/mui.min.css",
-      "js/mui.min.js"
+      "js/mui.min.js",
+      "js/app.js"
     ],
     "refer": [
       "business/errosend/errosend-list-main.html"
@@ -1153,6 +1165,198 @@
       "js/mui.min.js",
       "fonts/mui.ttf",
       "css/mui.min.css"
+    ]
+  },
+  "business/knowledgelib/knowledgelib_list_main.html": {
+    "resources": [
+      "business/knowledgelib/knowledgelib_list_sub.html",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "business/knowledgelib/knowledgelib_list_sub.html"
+    ]
+  },
+  "business/knowledgelib/knowledgelib_list_sub.html": {
+    "resources": [
+      "js/app.js"
+    ]
+  },
+  "business/addresslist/addresslist.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "fonts/mui.ttf"
+    ],
+    "refer": [
+      "business/addresslist/addresslist-indexed.html",
+      "business/addresslist/addresslist-detail.html"
+    ]
+  },
+  "business/addresslist/addresslist-indexed.html": {
+    "resources": [
+      "js/pinyin.js",
+      "css/mui.indexedlist.css",
+      "js/mui.indexedlist.js"
+    ]
+  },
+  "business/addresslist/addresslist-detail.html": {
+    "resources": [
+      "css/mui.picker.min.css",
+      "css/mui.poppicker.css"
+    ]
+  },
+  "business/boxcheck/boxcheck-grid.html": {
+    "resources": [
+      "img/script_edit.png",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "business/boxcheck/boxcheck-list-main.html"
+    ]
+  },
+  "business/card/card-list-main.html": {
+    "resources": [
+      "js/app.js",
+      "business/card/card-list-sub.html",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "business/card/card-list-sub.html"
+    ]
+  },
+  "business/salary/salary-grid.html": {
+    "resources": [
+      "img/date.png",
+      "js/mui.min.js",
+      "img/coins.png",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "business/salary/salary.html",
+      "business/salary/month-date.html"
+    ]
+  },
+  "business/salary/salary.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.picker.min.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ]
+  },
+  "business/salary/month-date.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.picker.min.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css"
+    ]
+  },
+  "business/notice/notice_list_main.html": {
+    "resources": [
+      "business/notice/notice_list_sub.html",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "business/notice/notice_list_sub.html"
+    ]
+  },
+  "business/notice/notice_list_sub.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "fonts/mui.ttf"
+    ],
+    "refer": [
+      "business/notice/notice_detail.html"
+    ]
+  },
+  "business/notice/notice_detail.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ]
+  },
+  "business/vehicle/vehicle_grid.html": {
+    "resources": [
+      "js/app.js",
+      "img/car_taxi.png",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "img/car.png",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "business/vehicle/vehicle_reg.html",
+      "barcode.html",
+      "barcode_scan.html"
+    ]
+  },
+  "business/vehicle/vehicle_reg.html": {
+    "resources": [
+      "img/scan.png",
+      "css/common.css",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/app.js",
+      "js/common.js",
+      "js/mui.picker.min.js",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "js/mui.enterfocus.js",
+      "fonts/mui.ttf"
+    ],
+    "refer": [
+      "barcode.html",
+      "barcode_scan.html"
+    ]
+  },
+  "business/boxcheck/boxcheck-list-main.html": {
+    "resources": [
+      "business/boxcheck/boxcheck-list-sub.html"
+    ],
+    "refer": [
+      "business/boxcheck/boxcheck-list-sub.html",
+      "business/boxcheck/boxcheck-input.html"
+    ]
+  },
+  "business/boxcheck/boxcheck-input.html": {
+    "resources": [
+      "js/common.js",
+      "js/mui.picker.min.js",
+      "css/common.css",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/mui.enterfocus.js",
+      "img/scan.png"
+    ],
+    "refer": [
+      "barcode_scan.html"
+    ]
+  },
+  "barcode.html": {
+    "resources": [
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/common.js"
     ]
   }
 }

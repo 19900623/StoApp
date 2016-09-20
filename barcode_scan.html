@@ -23,7 +23,7 @@
 				wo = ws.opener();
 				// 开始扫描
 				ws.addEventListener('show', function() {
-					var filter = [plus.barcode.CODE128];
+					var filter = [plus.barcode.CODE128, plus.barcode.QR, plus.barcode.EAN13];
 					scan = new plus.barcode.Barcode('bcid', filter);
 					scan.onmarked = onmarked;
 					scan.start();

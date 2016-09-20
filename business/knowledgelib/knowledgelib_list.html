@@ -25,9 +25,9 @@
 			mui.init({
 				swipeBack: true //启用右滑关闭功能
 			});
-			mui.plusReady(function() {
+			mui.plusReady(function() {				
 				var fragment = document.createDocumentFragment();
-				var li = document.createElement('li');
+//				var li = document.createElement('li');
 				var url = app.getUrl() + 'GetKnowledgeList';
 				var columnname = '';
 				mui.ajax(url, {
@@ -41,8 +41,8 @@
 							//console.log(JSON.stringify(data));
 							for (var i = 0; i < data.length; i++) {
 								if (columnname != data[i].columnname) {
-									li = document.createElement('li');
-									ul = document.createElement('ul');
+									var li = document.createElement('li');
+									var ul = document.createElement('ul');
 									li.className = 'mui-table-view-cell mui-collapse';
 									li.innerHTML = '<a class="mui-navigate-right" href="#">' + data[i].columnname + '</a>';
 									ul.className = 'mui-table-view mui-table-view-chevron'

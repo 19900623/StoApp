@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>车辆使用登记</title>
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
+		<link rel="stylesheet" href="../../css/common.css" type="text/css" charset="utf-8" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+		<script src="../../js/common.js"></script>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.enterfocus.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<style>
+			.mui-btn {margin: 0 10px;}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">车辆使用登记</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>车牌号</label>
+						<input type="hidden" id="CarID" />
+						<input type="text" id="CarNumber" class="mui-input-clear mui-input" required="required">
+						<img src="../../img/scan.png" style="position: absolute; right: 0px;top: 1.5px ;width: 2em; height: 2em;" onclick="clicked('../../barcode_scan.html',true,true)" />
+					</div>
+				</form>
+				<div class="mui-input-row" style="margin: 5px 0px 0px;">
+					<textarea id="Remark" rows="3" placeholder="备注" class="mui-input-clear mui-input"></textarea>
+				</div>
+				<div class="mui-button-row">
+					<button type="button" class="mui-btn mui-btn-success" onclick="btn_submit('1')" id="btnRepay">还车</button>
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_submit('0')" id="btnBorrow">借车</button>
+					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			mui.init({});
+			mui.plusReady(function() {
+				document.getElementById("btnRepay").style.display = "none";
+				document.getElementById("btnBorrow").style.display = "none";
+				//				clicked('../../barcode_scan.html',true,true);
+				var nwaiting = plus.nativeUI.showWaiting();
+				var webviewShow = plus.webview.create(
+					'../../barcode_scan.html',
+					'barcode_scan',
+					'', {}
+				); //后台创建webview并打开show.html
+				webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
+					setTimeout(function() {
+						nwaiting.close();
+						//新webview的载入完毕后关闭等待框
+						webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+					}, 3);
+				}, false);
+			});
+			
+			//提交
+			//参数：type（0-借车，1-还车）
+			function btn_submit(type) {
+				var CarRegID = document.getElementById("CarID").value;
+				var CarNumber = document.getElementById("CarNumber").value;
+				var Remark = document.getElementById("Remark").value;
+				var UserInfo = app.getLoginInfo().userinfo;
+				var url = app.getUrl() + 'SubmitVehicleReg';
+//				console.log(type)
+//				console.log(CarRegID)
+//				console.log(CarNumber)
+//				console.log(Remark)
+//				console.log(JSON.stringify(UserInfo))
+				mui.ajax(url, {
+					data: {
+						type: type,
+						code: CarNumber,
+						remark: Remark,
+						userinfo: UserInfo,
+						vehicle_id: CarRegID
+					},
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+//						console.log(JSON.stringify(data))
+						if(data.Success){
+							mui.toast(data.Message);
+							mui.back();
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						//异常处理；
+						console.log(xhr + type + errorThrown);
+					}
+				});
+			}
+			
+			function scaned(r) {
+				var url = app.getUrl() + 'GetVehicle';
+				var userinfo = eval('(' + app.getLoginInfo().userinfo + ')');
+//				console.log(JSON.stringify(userinfo));
+//				console.log(userinfo.code);
+				mui.ajax(url, {
+					data: {
+						code: r
+					},
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+						if(data) {
+							switch(data.Code) {
+								case "-1": //错误或未识别
+									mui.alert(data.Message);
+									mui.back();
+									break;
+								case "0": //不存在
+									mui.alert(data.Message)
+									mui.back();
+									break;
+								case "1": //未借出
+//									console.log(JSON.stringify(data));
+									if(data.Result.Type == "借车") {
+										document.getElementById("btnBorrow").style.display = "";
+										var CarNumber = document.getElementById("CarNumber");
+										CarNumber.value = data.Result.CarCode;
+									} else if(data.Result.Type == "还车") {
+										//未被借出，提示未借出，不用还车并跳转
+										mui.alert("该车尚未借出，不用还车");
+//										mui.toast('该车尚未借出，不用还车');
+										mui.back();
+									}
+									break;
+								case "2": //已借出
+									console.log(JSON.stringify(data.Result));
+									if(data.Result.Type == "借车") {
+										//已借出，且是借车人扫码，提示并跳转										
+										if(data.Result.CarInfo.Vehicle_RegCode == userinfo.code) {
+											mui.alert("该车已被您借出，如需还车请扫描还车二维码");
+											mui.back();
+										}
+										else{//已借出，不是借车人扫码，提示已被借出，是否转借
+											var btnArray = ['否', '是'];
+											mui.confirm('该已被借出，是否转借出？', '', btnArray, function(e) {
+												if (e.index == 1) {
+													document.getElementById("btnBorrow").style.display = "";
+													var CarID = document.getElementById("CarID");
+													CarID.value = data.Result.CarInfo.Vehicle_RegId;
+													var CarNumber = document.getElementById("CarNumber");
+													CarNumber.value = data.Result.CarCode;
+												} else {
+													mui.back();
+												}
+											})
+										}
+									} else if(data.Result.Type == "还车") {										
+										if(data.Result.CarInfo.Vehicle_RegCode == userinfo.code) {
+											document.getElementById("btnRepay").style.display = "";
+											var CarID = document.getElementById("CarID");
+											CarID.value = data.Result.CarInfo.Vehicle_RegId;
+											var CarNumber = document.getElementById("CarNumber");
+											CarNumber.value = data.Result.CarCode;
+										}
+										else{//已借出，且不是借车人，提示非借车人， 不能还车并跳转
+											mui.alert("您不是借车人，不能还车");
+											mui.back();
+										}
+									}
+									break;
+							}
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						//异常处理；
+						console.log(xhr + type + errorThrown);
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>
