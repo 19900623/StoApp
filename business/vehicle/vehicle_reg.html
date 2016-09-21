@@ -149,7 +149,7 @@
 										}
 										else{//已借出，不是借车人扫码，提示已被借出，是否转借
 											var btnArray = ['否', '是'];
-											mui.confirm('该已被借出，是否转借出？', '', btnArray, function(e) {
+											mui.confirm('该车已被'+data.Result.CarInfo.Vehicle_RegName+'借出，是否转借出？', '', btnArray, function(e) {
 												if (e.index == 1) {
 													document.getElementById("btnBorrow").style.display = "";
 													var CarID = document.getElementById("CarID");
