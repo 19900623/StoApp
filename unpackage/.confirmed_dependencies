@@ -69,7 +69,8 @@
       "business/salary/salary-grid.html",
       "business/notice/notice_list_main.html",
       "business/vehicle/vehicle_grid.html",
-      "business/vehicle/vehicle_reg.html"
+      "business/vehicle/vehicle_reg.html",
+      "business/vehicle/vehicle_main.html"
     ]
   },
   "tab-setting.html": {
@@ -117,14 +118,16 @@
       "js/app.js",
       "img/report_edit.png",
       "js/mui.min.js",
-      "css/mui.min.css"
+      "css/mui.min.css",
+      "img/newspaper.png"
     ],
     "refer": [
       "worktask-main.html",
       "workflow-main.html",
       "business/workflow/workflow-main.html",
       "business/workreport/workreport-main.html",
-      "business/worktask/worktask-main.html"
+      "business/worktask/worktask-main.html",
+      "business/notice/notice_list_main.html"
     ]
   },
   "questionbill-grid.html": {
@@ -1302,7 +1305,8 @@
       "js/mui.min.js",
       "fonts/mui.ttf",
       "img/car.png",
-      "css/mui.min.css"
+      "css/mui.min.css",
+      "business/vehicle/vehicle_reg.html"
     ],
     "refer": [
       "business/vehicle/vehicle_reg.html",
@@ -1322,11 +1326,15 @@
       "js/mui.min.js",
       "css/mui.min.css",
       "js/mui.enterfocus.js",
-      "fonts/mui.ttf"
+      "fonts/mui.ttf",
+      "business/vehicle/vehicle_grid.html",
+      "business/vehicle/vehicle_main.html"
     ],
     "refer": [
       "barcode.html",
-      "barcode_scan.html"
+      "barcode_scan.html",
+      "business/vehicle/vehicle_grid.html",
+      "business/vehicle/vehicle_main.html"
     ]
   },
   "business/boxcheck/boxcheck-list-main.html": {
@@ -1357,6 +1365,28 @@
       "fonts/mui.ttf",
       "css/mui.min.css",
       "js/common.js"
+    ]
+  },
+  "business/vehicle/vehicle_main.html": {
+    "resources": [
+      "business/vehicle/vehicle_sub.html",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "business/vehicle/vehicle_reg.html",
+      "js/app.js"
+    ],
+    "refer": [
+      "business/vehicle/vehicle_sub.html",
+      "business/vehicle/vehicle_reg.html"
+    ]
+  },
+  "business/vehicle/vehicle_sub.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "fonts/mui.ttf",
+      "js/app.js"
     ]
   }
 }
