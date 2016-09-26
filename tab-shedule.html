@@ -33,6 +33,11 @@
 					<span style="font-family: '微软雅黑'; font-size:large;display: inline-block; padding: 10px 6px;">工作汇报</span>
 					<span class="mui-badge mui-badge-primary" id="WorkReportCount">0</span>
 				</li>
+				<li class="mui-table-view-cell mui-media" id="notice">
+					<img class="mui-media-object mui-pull-left" src="img/newspaper.png">
+					<span style="font-family: '微软雅黑'; font-size:large;display: inline-block; padding: 10px 6px;">公告通知</span>
+					<span class="mui-badge mui-badge-primary" id="noticeCount">0</span>
+				</li>
 			</ul>
 		</div>
 	</body>
@@ -58,6 +63,7 @@
 			document.getElementById("WorkFlow").addEventListener('tap', function(event) {app.openPage('business/workflow/workflow-main.html','workflow-main');});
 			document.getElementById("WorkTask").addEventListener('tap', function(event) {app.openPage('business/worktask/worktask-main.html','worktask-main');});
 			document.getElementById("WorkReport").addEventListener('tap', function(event) {app.openPage('business/workreport/workreport-main.html','workreport-main');});
+			document.getElementById("notice").addEventListener('tap', function(event) {app.openPage('business/notice/notice_list_main.html','notice_list_main');});
 		});
 
 		function Init() {
@@ -68,6 +74,7 @@
 			var WorkFlowCount = document.getElementById("WorkFlowCount")
 			var WorkTaskCount = document.getElementById("WorkTaskCount")
 			var WorkReportCount = document.getElementById("WorkReportCount")
+			var noticeCount = document.getElementById("noticeCount")
 			var url = app.getUrl() + 'GetWorkFlowCount';
 			mui.ajax(url, {
 				data: info,
@@ -78,11 +85,10 @@
 						WorkFlowCount.innerHTML = data[0].workflownumber;
 						WorkTaskCount.innerHTML = data[0].worktasknumber;
 						WorkReportCount.innerHTML = data[0].workreportnumber;
+						noticeCount.innerHTML = data[0].noticenumber;
 					}
 				}
 			});
 		}
-
 	</script>
-
 </html>
