@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "3.10",/*应用版本名称*/
+		"name": "3.11",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -287,7 +287,9 @@
 					null,
 					"img/brick_error.png",
 					"img/report_edit.png",
-					"img/books.png"
+					"img/books.png",
+					"img/car.png",
+					"img/newspaper.png"
 				],
 				"refer": [
 					"addresslist.html",
@@ -309,7 +311,8 @@
 					"business/bomuse/bomuse-grid.html",
 					"business/errosend/errosend-grid.html",
 					"business/workreport/workreport-list-main.html",
-					"business/knowledgelib/knowledgelib_list.html"
+					"business/knowledgelib/knowledgelib_list.html",
+					"business/vehicle/vehicle_reg.html"
 				],
 				"priority": 0
 			},
@@ -1657,6 +1660,25 @@
 					"css/mui.min.css"
 				],
 				"refer": [],
+				"priority": 0
+			},
+			"business/vehicle/vehicle_reg.html": {
+				"resources": [
+					"js/common.js",
+					"js/mui.picker.min.js",
+					"css/common.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"img/scan.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/mui.enterfocus.js"
+				],
+				"refer": [
+					"barcode_scan.html"
+				],
 				"priority": 0
 			}
 		},
