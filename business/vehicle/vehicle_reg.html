@@ -100,7 +100,7 @@
 				
 				var UserInfo = app.getLoginInfo().userinfo;
 				var url = app.getUrl() + 'SubmitVehicleReg';
-				console.log(JSON.stringify(UserInfo))
+//				console.log(JSON.stringify(UserInfo))
 				mui.ajax(url, {
 					data: {
 						type: type,
@@ -113,13 +113,19 @@
 					type: 'post',
 					dataType: 'json',
 					success: function(data) {
-						console.log(JSON.stringify(data))
+//						console.log(JSON.stringify(data))
 						if(data.Success){
 							mui.toast(data.Message);
+							var page = plus.webview.getWebviewById('vehicle_sub');
+							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+							mui.fire(page, 'refresh');
 							mui.back();
 						}
 						else{
 							mui.toast(data.Message);
+							var page = plus.webview.getWebviewById('vehicle_sub');
+							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+							mui.fire(page, 'refresh');
 							mui.back();
 						}
 					},

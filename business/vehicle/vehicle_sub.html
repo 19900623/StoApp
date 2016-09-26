@@ -57,7 +57,7 @@
 						type: 'post',
 						dataType: 'json',
 						success: function(data) {
-							console.log(data)
+//							console.log(data)
 							if (data.Code > 0) {
 								var jsonData = eval('(' + data.codes + ')');
 								for (var i = 0; i < jsonData.length; i++) {
@@ -128,13 +128,13 @@
 						pageSize: 10
 					};
 					var url = app.getUrl() + 'GetVehicleList';
-							console.log(url)
+//							console.log(url)
 					mui.ajax(url, {
 						data: messageInfo,
 						type: 'post',
 						dataType: 'json',
 						success: function(data) {
-							console.log(data)
+//							console.log(data)
 							if (data.Code > 0) {
 								var jsonData = eval('(' + data.codes + ')');
 								for (var i = 0; i < jsonData.length; i++) {
