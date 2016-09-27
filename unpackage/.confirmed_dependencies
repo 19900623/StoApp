@@ -70,7 +70,8 @@
       "business/notice/notice_list_main.html",
       "business/vehicle/vehicle_grid.html",
       "business/vehicle/vehicle_reg.html",
-      "business/vehicle/vehicle_main.html"
+      "business/vehicle/vehicle_main.html",
+      "business/questionbill/questionbill-grid.html"
     ]
   },
   "tab-setting.html": {
@@ -1092,7 +1093,8 @@
       "fonts/mui.ttf",
       "css/mui.min.css",
       "js/mui.enterfocus.js"
-    ]
+    ],
+    "refer": []
   },
   "business/workreport/workreport-main.html": {
     "resources": [
@@ -1122,7 +1124,8 @@
       "js/mui.picker.min.js",
       "js/mui.poppicker.js",
       "css/mui.picker.min.css"
-    ]
+    ],
+    "refer": []
   },
   "business/worktask/worktask-main.html": {
     "resources": [
@@ -1138,7 +1141,8 @@
   "business/worktask/worktask-sub.html": {
     "resources": [
       "js/app.js"
-    ]
+    ],
+    "refer": []
   },
   "report/report-waybillpickup-business.html": {
     "resources": [
@@ -1149,7 +1153,8 @@
       "js/mui.min.js",
       "fonts/mui.ttf",
       "css/mui.min.css"
-    ]
+    ],
+    "refer": []
   },
   "business/knowledgelib/knowledgelib_list.html": {
     "resources": [
@@ -1168,7 +1173,8 @@
       "js/mui.min.js",
       "fonts/mui.ttf",
       "css/mui.min.css"
-    ]
+    ],
+    "refer": []
   },
   "business/knowledgelib/knowledgelib_list_main.html": {
     "resources": [
@@ -1184,7 +1190,8 @@
   "business/knowledgelib/knowledgelib_list_sub.html": {
     "resources": [
       "js/app.js"
-    ]
+    ],
+    "refer": []
   },
   "business/addresslist/addresslist.html": {
     "resources": [
@@ -1203,13 +1210,15 @@
       "js/pinyin.js",
       "css/mui.indexedlist.css",
       "js/mui.indexedlist.js"
-    ]
+    ],
+    "refer": []
   },
   "business/addresslist/addresslist-detail.html": {
     "resources": [
       "css/mui.picker.min.css",
       "css/mui.poppicker.css"
-    ]
+    ],
+    "refer": []
   },
   "business/boxcheck/boxcheck-grid.html": {
     "resources": [
@@ -1257,7 +1266,8 @@
       "js/mui.min.js",
       "fonts/mui.ttf",
       "css/mui.min.css"
-    ]
+    ],
+    "refer": []
   },
   "business/salary/month-date.html": {
     "resources": [
@@ -1265,7 +1275,8 @@
       "js/mui.picker.min.js",
       "css/mui.poppicker.css",
       "css/mui.picker.min.css"
-    ]
+    ],
+    "refer": []
   },
   "business/notice/notice_list_main.html": {
     "resources": [
@@ -1296,7 +1307,8 @@
       "js/mui.min.js",
       "fonts/mui.ttf",
       "css/mui.min.css"
-    ]
+    ],
+    "refer": []
   },
   "business/vehicle/vehicle_grid.html": {
     "resources": [
@@ -1365,7 +1377,8 @@
       "fonts/mui.ttf",
       "css/mui.min.css",
       "js/common.js"
-    ]
+    ],
+    "refer": []
   },
   "business/vehicle/vehicle_main.html": {
     "resources": [
@@ -1387,6 +1400,32 @@
       "css/mui.min.css",
       "fonts/mui.ttf",
       "js/app.js"
+    ],
+    "refer": []
+  },
+  "business/questionbill/questionbill-list-main.html": {
+    "resources": [
+      "business/questionbill/questionbill-list-sub.html",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "business/questionbill/questionbill-list-sub.html"
+    ]
+  },
+  "business/questionbill/questionbill-grid.html": {
+    "resources": [
+      "img/script_edit.png",
+      "js/app.js",
+      "img/script_error.png",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "business/questionbill/questionbill-list-main.html"
     ]
   }
 }

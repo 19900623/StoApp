@@ -44,7 +44,7 @@
 				setTimeout(function() {
 					var fragment = document.createDocumentFragment();
 					var li;
-					var UserInfo = eval('(' + app.getLoginInfo().userinfo + ')');
+					var UserInfo = JSON.parse(app.getLoginInfo().userinfo);	
 					count = 1;
 					var messageInfo = {
 						usercode: UserInfo.code,
@@ -59,7 +59,7 @@
 						success: function(data) {
 //							console.log(data)
 							if (data.Code > 0) {
-								var jsonData = eval('(' + data.codes + ')');
+								var jsonData = JSON.parse(data.codes);
 								for (var i = 0; i < jsonData.length; i++) {
 									li = document.createElement('li');
 									li.className = 'mui-table-view-cell';
@@ -121,7 +121,7 @@
 					count = count + 1;
 					var fragment = document.createDocumentFragment();
 					var li;
-					var UserInfo = eval('(' + app.getLoginInfo().userinfo + ')');
+					var UserInfo = JSON.parse(app.getLoginInfo().userinfo);
 					var messageInfo = {
 						usercode: UserInfo.code,
 						pageNumber: count,
@@ -136,7 +136,7 @@
 						success: function(data) {
 //							console.log(data)
 							if (data.Code > 0) {
-								var jsonData = eval('(' + data.codes + ')');
+								var jsonData = JSON.parse(data.codes);
 								for (var i = 0; i < jsonData.length; i++) {
 									li = document.createElement('li');
 									li.className = 'mui-table-view-cell';

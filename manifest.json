@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "3.11",/*应用版本名称*/
+		"name": "3.12",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -312,7 +312,9 @@
 					"business/errosend/errosend-grid.html",
 					"business/workreport/workreport-list-main.html",
 					"business/knowledgelib/knowledgelib_list.html",
-					"business/vehicle/vehicle_reg.html"
+					"business/vehicle/vehicle_reg.html",
+					"business/vehicle/vehicle_main.html",
+					"business/questionbill/questionbill-grid.html"
 				],
 				"priority": 0
 			},
@@ -1678,6 +1680,44 @@
 				],
 				"refer": [
 					"barcode_scan.html"
+				],
+				"priority": 0
+			},
+			"business/vehicle/vehicle_main.html": {
+				"resources": [
+					"business/vehicle/vehicle_sub.html",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"business/vehicle/vehicle_reg.html"
+				],
+				"priority": 0
+			},
+			"business/questionbill/questionbill-list-main.html": {
+				"resources": [
+					"business/questionbill/questionbill-list-sub.html",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/questionbill/questionbill-grid.html": {
+				"resources": [
+					"img/script_edit.png",
+					"js/app.js",
+					"img/script_error.png",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"business/questionbill/questionbill-list-main.html"
 				],
 				"priority": 0
 			}
