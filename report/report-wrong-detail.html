@@ -74,10 +74,11 @@
 						<label>结束时间</label>
 						<input type="text" id="EndTime" class="mui-input" required="required" readonly="readonly">
 					</div>
-					<!--<div class="mui-input-row">
-						<label>取件人</label>
-						<input type="text" id="UserName" class="mui-input">
-					</div>-->
+					<div class="mui-input-row">
+						<label>部门</label>
+						<input type="hidden" id="Code">
+						<input type="text" id="Depart" class="mui-input" required="required" readonly="readonly">
+					</div>
 				</form>
 				<div class="mui-button-row" style="margin-top:10px;">
 					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_search()" id="buttonok">搜索</button>&nbsp;&nbsp;
@@ -92,33 +93,66 @@
 		mui.init({
 			swipeBack: true //启用右滑关闭功能
 		});
+		mui.plusReady(function() {	
+			//选择开始时间事件			
+			document.getElementById("StartTime").addEventListener('tap', function() {
+				var options = {
+					type: "date",
+					beginYear: "2015",
+					endYear: "2030"
+				}
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+					document.getElementById("StartTime").value = rs.text.replace(new RegExp('-', "gm"), '/');
+					picker.dispose();
+				});
+			});
+			//选择结时间事件			
+			document.getElementById("EndTime").addEventListener('tap', function() {
+				var options = {
+					type: "date",
+					beginYear: "2015",
+					endYear: "2030"
+				}
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+					document.getElementById("EndTime").value = rs.text.replace(new RegExp('-', "gm"), '/');
+					picker.dispose();
+				});
+			});
+			
+			//-----------------------------------------
+			//级联部门
+			var url = app.getUrl() + 'GetDepartmentJson';
+			mui.ajax(url, {
+				type: 'post',
+				dataType: 'json',
+				success: function(data) {
+					console.log(JSON.stringify(data))
+					document.getElementById("Depart").addEventListener('tap', function(event) {						
+						var picker = new mui.PopPicker({
+							layer: 3
+						});
+						picker.setData(data);
+						picker.show(function(items) {
+							console.log(items[2]);
+							if(JSON.stringify(items[2]) == "{}"){
+								document.getElementById("Code").value = (items[1] || {}).value;
+								document.getElementById("Depart").value = (items[1] || {}).text;
+							}
+							else{
+								document.getElementById("Code").value = (items[2] || {}).value;
+								document.getElementById("Depart").value = (items[2] || {}).text;
+							}
+							//返回 false 可以阻止选择框的关闭
+							//return false;
+						});
+					}, false);
+				}
+			});
+		});
 		
-		//选择开始时间事件			
-		document.getElementById("StartTime").addEventListener('tap', function() {
-			var options = {
-				type: "date",
-				beginYear: "2015",
-				endYear: "2030"
-			}
-			var picker = new mui.DtPicker(options);
-			picker.show(function(rs) {
-				document.getElementById("StartTime").value = rs.text.replace(new RegExp('-', "gm"), '/');
-				picker.dispose();
-			});
-		});
-		//选择结时间事件			
-		document.getElementById("EndTime").addEventListener('tap', function() {
-			var options = {
-				type: "date",
-				beginYear: "2015",
-				endYear: "2030"
-			}
-			var picker = new mui.DtPicker(options);
-			picker.show(function(rs) {
-				document.getElementById("EndTime").value = rs.text.replace(new RegExp('-', "gm"), '/');
-				picker.dispose();
-			});
-		});
+		
 		//搜索
 		function btn_search() {
 			if(document.getElementById("StartTime").value == '') {
@@ -128,8 +162,12 @@
 			if(document.getElementById("EndTime").value == '') {
 				plus.nativeUI.toast("请选择结束时间");
 				return;
-			}		
-			var code = "01.05.01.02";
+			}
+			if(document.getElementById("Code").value == '') {
+				plus.nativeUI.toast("请选择部门");
+				return;
+			}
+			var code = document.getElementById("Code").value;
 			var start = document.getElementById("StartTime").value;
 			var end = document.getElementById("EndTime").value;
 			LodingData(code, start, end);
