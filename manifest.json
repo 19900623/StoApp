@@ -1238,7 +1238,12 @@
 					"img/chart_bar.png",
 					"css/app.css",
 					"img/statistics.png",
-					"img/chart_column.png"
+					"img/chart_column.png",
+					"img/client_account_template.png",
+					"img/cell_delete.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css"
 				],
 				"refer": [
 					"report/report-paymore.html",
@@ -1250,7 +1255,9 @@
 					"report/report-arrivalpay.html",
 					"report/report-cashdelivery.html",
 					"report/report-performance.html",
-					"report/report-waybillpickup-business.html"
+					"report/report-waybillpickup-business.html",
+					"report/report-custom-dept.html",
+					"report/report-wrong-detail.html"
 				],
 				"priority": 0
 			},
@@ -1904,6 +1911,29 @@
 					"css/mui.min.css",
 					"fonts/mui.ttf",
 					"js/app.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/report-custom-dept.html": {
+				"resources": [
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/app.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/report-wrong-detail.html": {
+				"resources": [
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
 				],
 				"refer": [],
 				"priority": 0
