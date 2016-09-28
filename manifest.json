@@ -1720,6 +1720,16 @@
 					"business/questionbill/questionbill-list-main.html"
 				],
 				"priority": 0
+			},
+			"business/vehicle/vehicle_sub.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
 			}
 		},
 		"idle": {

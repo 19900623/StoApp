@@ -44,7 +44,7 @@
 				setTimeout(function() {
 					var fragment = document.createDocumentFragment();
 					var li;
-					var UserInfo = JSON.parse(app.getLoginInfo().userinfo);	
+					var UserInfo = JSON.parse(app.getLoginInfo().userinfo|| "{}");	
 					count = 1;
 					var messageInfo = {
 						usercode: UserInfo.code,
@@ -121,7 +121,7 @@
 					count = count + 1;
 					var fragment = document.createDocumentFragment();
 					var li;
-					var UserInfo = JSON.parse(app.getLoginInfo().userinfo);
+					var UserInfo = JSON.parse(app.getLoginInfo().userinfo|| "{}");	
 					var messageInfo = {
 						usercode: UserInfo.code,
 						pageNumber: count,
