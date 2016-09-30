@@ -24,34 +24,15 @@
 					</a>
 				</li>			
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a onclick="app.openPage('business/leavebill/leavebill-list-main.html','leavebill-list-main')">
-						<img src="img/allow_users_edit_ranges.png">
-						<div class="mui-media-body">请假条</div>
+					<a onclick="app.openPage('tab-work-help.html','tab-work-help')">
+						<img src="img/google_voice.png">
+						<div class="mui-media-body">工作辅助</div>
 					</a>
-				</li>				
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a onclick="app.openPage('business/workreport/workreport-list-main.html','workreport-list-main')">
-						<img src="img/report_edit.png">
-						<div class="mui-media-body">工作汇报</div>
-					</a>
-				</li>
-								
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a onclick="app.openPage('business/addresslist/addresslist.html','addresslist')">
-						<img src="img/blackberry.png">
-						<div class="mui-media-body">通讯录</div>
-					</a>
-				</li>
+				</li>												
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
 					<a onclick="app.openPage('business/questionbill/questionbill-grid.html','questionbill-grid')">
 						<img src="img/cell_delete.png">
 						<div class="mui-media-body">大字错写</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a onclick="app.openPage('business/lighthouse/lighthouse-list-main.html','lighthouse-list-main')">
-						<img src="img/subdomains.png">
-						<div class="mui-media-body">百事通</div>
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
@@ -91,18 +72,6 @@
 					</a>
 				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a onclick="app.openPage('business/knowledgelib/knowledgelib_list.html','errosend-grid')">
-						<img src="img/books.png">
-						<div class="mui-media-body">知识库</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-					<a onclick="app.openPage('business/notice/notice_list_main.html','errosend-grid')">
-						<img src="img/newspaper.png">
-						<div class="mui-media-body">公告通知</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
 					<a onclick="app.openPage('business/vehicle/vehicle_main.html','errosend-grid')">
 						<img src="img/car.png">
 						<div class="mui-media-body">车辆登记</div>
@@ -117,12 +86,9 @@
 		mui.init({
 			swipeBack: true //启用右滑关闭功能
 		});
-		var questiongridPage
+
 		mui.plusReady(function() {
-			questiongridPage = mui.preload({
-				url: 'questionbill-grid.html',
-				id: 'questionbill-grid'
-			});
+			
 		});
 	</script>
 
