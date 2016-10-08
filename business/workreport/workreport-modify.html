@@ -11,6 +11,7 @@
 		<link rel="stylesheet" href="../../css/mui.min.css">
 		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
 		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+		<link href="../../css/style.css" rel="stylesheet" />
 		<style>
 			html,
 			body {
@@ -18,20 +19,6 @@
 				overflow:hidden ; /*隐藏滚动条*/ 
 			}
 			/*.mui-btn {margin: 0 5px;}*/
-			#profile{margin-bottom: 20px;}
-			.mui-nowrap{ word-break:keep-all; white-space:nowrap; overflow: auto; }
-			.mui-profile{ display: block; width: 45px; height: 45px; line-height: 45px; text-align: center; font-size: 12px; color: #fff; border-radius: 50%; overflow: hidden; }
-			.mui-profile-text{ display: block; width: 45px; text-align: center; font-size: 14px; color: #666;}
-			.profile-box{ *float: left; margin: 3px; *clear:right; display:inline-block; }
-			.profile-box:nth-child(9n+1) .mui-profile { background-color: rgba(210,170,84,0.9); }
-			.profile-box:nth-child(9n+2) .mui-profile { background-color: rgba(108,160,182,0.9); }
-			.profile-box:nth-child(9n+3) .mui-profile { background-color: rgba(129,165,93,0.9); }
-			.profile-box:nth-child(9n+4) .mui-profile { background-color: rgba(209,109,82,0.9); }
-			.profile-box:nth-child(9n+5) .mui-profile { background-color: rgba(109,108,168,0.9); }
-			.profile-box:nth-child(9n+6) .mui-profile { background-color: rgba(196,126,184,0.9); }
-			.profile-box:nth-child(9n+7) .mui-profile { background-color: rgba(120,180,135,0.9); }
-			.profile-box:nth-child(9n+8) .mui-profile { background-color: rgba(210,84,145,0.9); }
-			.profile-box:nth-child(9n+9) .mui-profile { background-color: rgba(160,113,99,0.9); }
 		</style>
 	</head>
 
@@ -54,16 +41,16 @@
 				</form>
 				<br>
 				<div class="mui-input-row">
-					<textarea id="TodayWork" rows="3" placeholder="今日完成工作" class="mui-input-clear mui-input"></textarea>
+					<textarea id="TodayWork" rows="2" placeholder="今日完成工作" class="mui-input-clear mui-input"></textarea>
 				</div>
 				<div class="mui-input-row">
-					<textarea id="TodayUnWork" rows="3" placeholder="未完成工作" class="mui-input-clear mui-input"></textarea>
+					<textarea id="TodayUnWork" rows="2" placeholder="未完成工作" class="mui-input-clear mui-input"></textarea>
 				</div>
 				<div class="mui-input-row">
-					<textarea id="TodayCoWork" rows="3" placeholder="需协调工作" class="mui-input-clear mui-input"></textarea>
+					<textarea id="TodayCoWork" rows="2" placeholder="需协调工作" class="mui-input-clear mui-input"></textarea>
 				</div>
 				<div class="mui-input-row">
-					<textarea id="TodayRemark" rows="3" placeholder="备注" class="mui-input-clear mui-input"></textarea>
+					<textarea id="TodayRemark" rows="2" placeholder="备注" class="mui-input-clear mui-input"></textarea>
 				</div>
 				<!--<div class="mui-input-row">
 					<textarea id="Remark" rows="4" placeholder="领导批注" class="mui-input-clear mui-input" readonly="readonly"></textarea>
@@ -71,12 +58,14 @@
 				<div class="mui-input-row">
 					发给谁<span style="font-size: 12px; color: #999;">（点击头像删除）</span>
 					<a onclick="app.openPage('../../employee_select.html','employee_select')">添加人员</a>
+				</div>
+				<div class="mui-input-row">
 					<div id="profile" class="mui-nowrap">
 						<!--<div id="head_none" class="profile-box">
 							<a><span class="mui-profile" ></span></a>
 						</div>-->
 					</div>
-				</div>				
+				</div>
 				<div class="mui-button-row">
 					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_commit()" id="buttoncommit">发布</button>&nbsp;&nbsp;
 					<button type="button" class="mui-btn mui-btn-success" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
@@ -102,7 +91,6 @@
 			mui.init({});
 			mui.plusReady(function() {
 				//加载默认值
-//				issend = 1
 				var userinfo = JSON.parse(app.getLoginInfo().userinfo);
 				Title.value = userinfo.realname + "的" + Type.value;
 				var picker = new mui.PopPicker();
@@ -142,7 +130,11 @@
 							TodayCoWork.value = data[0].todaycowork;
 							TodayRemark.value = data[0].todayremark;
 //							Remark.value = data[0].remark;
-
+							
+							//未选择发给谁，不显示发布按钮
+//							document.getElementById("buttoncommit").classList.add("mui-disabled");
+//							document.getElementById("buttoncommit").setAttribute("disabled", "disabled");
+							
 							if(data[0].state == "2") {
 								document.getElementById("buttoncommit").style.display = "none";
 								document.getElementById("buttondel").style.display = "none";
@@ -151,6 +143,7 @@
 								TodayUnWork.readOnly = true;
 								TodayCoWork.readOnly = true;
 								TodayRemark.readOnly = true;
+								//加载发布人
 							}
 						}
 					}
@@ -166,7 +159,7 @@
 					for(var i=0; i < jsonArr.length; i++){
 //						console.log(JSON.stringify(jsonArr[i]));
 						var div = document.createElement('div');
-						div.id = jsonArr[i].id;						
+						div.id = jsonArr[i].id;
 						var name = jsonArr[i].name;
 						if(name.length > 2){
 							name = name.substr(name.length - 2, name.length);
@@ -180,17 +173,18 @@
 						}, false);
 						profile.appendChild(div);
 					}
+					//显示发布按钮
+					document.getElementById("buttoncommit").classList.remove("mui-disabled");
+					document.getElementById("buttoncommit").removeAttribute("disabled");
 				}
 			}
-			var issend = 0;
+			
 			function btn_ok() {
 				//验证
 				if(TodayWork.value == "" && TodayUnWork.value == "" && TodayCoWork.value == "") {
 					plus.nativeUI.toast("汇报内容至少有一项不能为空");
 					return;
 				}
-				console.log(JSON.stringify(jsonArr));
-				return;
 				//var userid = app.getLoginInfo().userid;
 				//调用方法
 				var billInfo = {
@@ -203,9 +197,9 @@
 					TodayRemark: TodayRemark.value
 				};
 				var url = app.getUrl() + 'ModifyWorkReport';
+//				console.log(JSON.stringify(billInfo))
 				mui.ajax(url, {
 					data: {
-						send: JSON.stringify(jsonArr),
 						Info: JSON.stringify(billInfo)
 					},
 					type: 'post', //HTTP请求类型
@@ -224,15 +218,12 @@
 			}
 			//发布按钮
 			function btn_commit() {
-				if(issend == 0){
-					mui.toast("请先指定发送人确认后，再发布？");
+				if(!!!jsonArr){
+					mui.toast("请先指定发送给谁？");
 					return;
 				}
-//				if(!!!jsonArr){
-//					mui.toast("请先指定发送给谁？");
-//					return;
-//				}
 				console.log(JSON.stringify(jsonArr));
+				console.log(plus.webview.currentWebview().name);
 				var btnArray = ['是', '否'];
 				mui.confirm('是否发布该条数据？', '申通提醒', btnArray, function(e) {
 					if(e.index == 0) {
@@ -240,7 +231,7 @@
 						mui.ajax(url, {
 							data: {
 								id: plus.webview.currentWebview().name,
-								username:JSON.parse(app.getLoginInfo().userinfo).realname
+								rec: JSON.stringify(jsonArr)
 							},
 							type: 'post', //HTTP请求类型
 							success: function(data) {

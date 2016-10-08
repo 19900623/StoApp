@@ -21,11 +21,13 @@
 			.sub-counts{float: right; font-size: 14px; color: #999;}
 			
 			#nav{ height: 40px; line-height: 40px; font-size: 16px;}
+			#nav a.curr{color: #000;}
 			#profile{margin-bottom: 5px;}
 			.mui-nowrap{ word-break:keep-all; white-space:nowrap; overflow: auto; }
 			.mui-profile{ display: block; width: 30px; height: 30px; line-height: 30px; text-align: center; font-size: 12px; color: #fff; border-radius: 50%; overflow: hidden; }
 			/*.mui-profile-text{ display: block; width: 35px; text-align: center; font-size: 12px; color: #666;}*/
 			.profile-box{ *float: left; margin: 3px; *clear:right; display:inline-block; }
+			.profile-box .profile-none{display: block; width: 30px; height: 30px; line-height: 30px; background: none; border: 1px dashed #999; border-radius: 50%; overflow: hidden;}
 			.profile-box:nth-child(9n+1) .mui-profile { background-color: rgba(210,170,84,0.9); }
 			.profile-box:nth-child(9n+2) .mui-profile { background-color: rgba(108,160,182,0.9); }
 			.profile-box:nth-child(9n+3) .mui-profile { background-color: rgba(129,165,93,0.9); }
@@ -48,9 +50,14 @@
 			<div id="toolbar" style="margin: 0 5px;">
 				<div id="nav" class="mui-nowrap"></div>
 				<!--已选中<span style="font-size: 12px; color: #999;">（点击头像删除）</span>-->
-				<div id="profile" class="mui-nowrap">
+				<!--<div style="float: left;">
 					<div id="head_none" class="profile-box">
 						<span class="mui-profile" style=" background: none; border: 1px dashed #999;"></span>
+					</div>
+				</div>-->
+				<div id="profile" class="mui-nowrap">
+					<div class="profile-box">
+						<span class="profile-none" ></span>
 					</div>
 				</div>
 			</div>
@@ -126,36 +133,35 @@
 					wo.evalJS("selected('" + JSON.stringify(result) + "');");
 					mui.back();
 				}, false);
-				mui('.mui-indexed-list-inner').on('change', 'input', function() {
-					var count = list.querySelectorAll('input[type="checkbox"]:checked').length;
-					var value = count ? "确定(" + count + ")" : "确定";
-					done.innerHTML = value;
-					if (count) {
-						if (done.classList.contains("mui-disabled")) {
-							done.classList.remove("mui-disabled");
-						}
-					} else {
-						if (!done.classList.contains("mui-disabled")) {
-							done.classList.add("mui-disabled");
-						}
-					}
-				});
 				
 				var UserInfo = JSON.parse(app.getLoginInfo().userinfo|| "{}");
 				var nav = document.getElementById('nav');
 				var alink = document.createElement('a');
 				alink.id = UserInfo.companyid;
-				console.log(JSON.stringify(app.getLoginInfo()))
+				alink.className = "curr";
+//				console.log(JSON.stringify(app.getLoginInfo()))
 				alink.innerText = app.getLoginInfo().company;
 				nav.appendChild(alink);
-//				alink.addEventListener('tap', function() {
-//					console.log(this.id)
-//					LoadingData(UserInfo.companyid, this.id);
-//				}, false);
-//				console.log(JSON.stringify(UserInfo))
 				//加载列表
 				LoadingData(UserInfo.companyid, UserInfo.companyid);
 			});
+			
+			//根据选中结果数组，改变确定按钮的计数
+			function changeDone(){
+				var count = result.length;
+				var value = count ? "确定(" + count + ")" : "确定";
+				done.innerHTML = value;
+				if (count) {
+					if (done.classList.contains("mui-disabled")) {
+						done.classList.remove("mui-disabled");
+					}
+				} else {
+					if (!done.classList.contains("mui-disabled")) {
+						done.classList.add("mui-disabled");
+					}
+				}
+			}
+			
 			//加载数据
 			function LoadingData(companyid, parentid){
 				var fragment = document.createDocumentFragment();
@@ -198,12 +204,30 @@
 										if(jsonData[i].sort == "employee"){
 											ali.className = 'mui-table-view-cell mui-indexed-list-item mui-checkbox mui-left'
 											ali.id = jsonData[i].id;
-											ali.innerHTML = '<input type="checkbox" />' + jsonData[i].fullname;
+//											ali.innerHTML = '<input type="checkbox" checked="checked" />' + 
 											ali.setAttribute('data-value',jsonData[i].fullname);
-											ali.setAttribute('data-tags',jsonData[i].fullname);
-											ali.addEventListener('tap', function(event) {
-												//添加
-												var profile = document.getElementById('profile');
+											ali.setAttribute('data-tags',jsonData[i].fullname);											
+											var ckb = document.createElement('input');
+											ckb.setAttribute('type', 'checkbox');
+//											ckb.setAttribute('checked', 'checked');
+											//遍历头像，如果已选择过，则li选中
+											var profile = document.getElementById('profile');
+											var nodes = profile.children;
+											for(var g=0; g < nodes.length; g++){
+												if(nodes[g].id == ali.id){
+													ckb.setAttribute('checked', 'checked');
+												}
+											}
+											ali.appendChild(ckb);
+											ali.innerHTML += jsonData[i].fullname;
+											
+											ali.addEventListener('tap', function(event) {												
+												//如果虚圈存在，移除
+												var isText = profile.firstElementChild.firstElementChild.innerHTML;
+												if(!isText){
+													profile.innerHTML = '';
+												}
+												
 												if(!this.querySelector('input[type="checkbox"]').checked){
 													var name = this.innerText;
 													if(name.length > 2){
@@ -212,14 +236,43 @@
 													var div = document.createElement('div');
 													div.id = this.id;
 													div.className = "profile-box";
-													div.innerHTML = '<a><span class="mui-profile">'
-													+ name + '</span></a>';
+													div.innerHTML = '<span class="mui-profile">'
+													+ name + '</span>';
+													//添加点击移除事件
+													div.addEventListener('tap', function(e){
+														var nodes = profile.children;
+														for(var k=0; k < nodes.length; k++){
+															if(nodes[k].id == this.id){
+																profile.removeChild(nodes[k]);
+																result.splice(k,1);
+																changeDone();
+															}
+														}
+														
+														//如果没有选中项，显示第一个虚圈
+														if(nodes.length == 0){
+															var div = document.createElement('div');
+															div.className = "profile-box";
+															div.innerHTML = '<span class="profile-none" ></span>';
+															profile.appendChild(div);
+														}
+														
+														//去掉列表中checkbox的选中状态
+														var lis = table.children;
+														for(var m=0; m < lis.length; m++){
+															if(lis[m].id == this.id){
+																lis[m].querySelector('input[type="checkbox"]').checked = false;
+																//去掉的同时修改确定按钮的计数
+																changeDone();
+															}
+														}
+													});
 													profile.appendChild(div);
 													var obj = {};
 													obj["id"] = this.id;
 													obj["name"] = this.innerText;
 													result.push(obj);
-													document.getElementById('head_none').style.display = 'none';
+													changeDone();
 												}
 												else{
 													//移除
@@ -227,11 +280,16 @@
 													for(var k=0; k < nodes.length; k++){
 														if(nodes[k].id == this.id){
 															profile.removeChild(nodes[k]);
+															result.splice(k,1);
+															changeDone();
 														}
 													}
-													//如果没有选中项，显示head_none
-													if(nodes.length == 1){
-														document.getElementById('head_none').style.display = 'block';
+													//如果没有选中项，显示第一个虚圈
+													if(nodes.length == 0){
+														var div = document.createElement('div');
+														div.className = "profile-box";
+														div.innerHTML = '<span class="profile-none" ></span>';
+														profile.appendChild(div);
 													}
 												}
 											});
@@ -243,9 +301,28 @@
 											ali.innerHTML += '<span class="sub-counts">' + jsonData[i].subcounts + '</span>';
 											ali.setAttribute('data-value',jsonData[i].fullname);
 											ali.setAttribute('data-tags',jsonData[i].fullname);
-											ali.addEventListener('tap', function(event) {
-												//nav 添加导航
-												nav.innerHTML += ' &gt; <a id="' + this.id + '">' + this.firstChild.innerText + '</a>';
+											ali.addEventListener('tap', function(event) {												
+												nav.innerHTML += ' &gt; <a id="' + this.id + '" class="curr">' + this.firstChild.innerText + '</a>';
+												var child = nav.children;
+												//添加点击导航事件
+												for(var s=0; s < child.length-1; s++){
+													child[s].className = "";
+													child[s].addEventListener("tap", function(e){
+														this.className = "curr";
+														var ind = 0;
+														//取得当前点击的导航索引
+														for(var c=0; c < nav.childNodes.length; c++){
+															if(nav.childNodes.item(c).textContent == this.innerText){
+																ind = c;
+															}
+														}
+														//移除当前点击的后面的导航
+														for(var c = nav.childNodes.length-1; c > ind; c--){
+																nav.removeChild(nav.childNodes[c]);
+														}
+														LoadingData(companyid, this.id);
+													});
+												}
 //												console.log(nav.innerHTML);
 												//加载下级数据
 												LoadingData(companyid, this.id);

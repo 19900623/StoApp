@@ -1104,7 +1104,8 @@
 			"css/mui.min.css",
 			"js/mui.enterfocus.js",
 			"js/common.js",
-			"css/mui.poppicker.css"
+			"css/mui.poppicker.css",
+			"css/style.css"
 		],
 		"refer": [
 			"employee_select.html"

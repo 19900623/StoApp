@@ -109,13 +109,13 @@
 					TodayUnWork: TodayUnWork.value,
 					TodayCoWork: TodayCoWork.value,
 					TodayRemark: TodayRemark.value,
-					UserID: userid,
-					UserName:JSON.parse(app.getLoginInfo().userinfo).realname
+					CreateUserId: userid,
+					CreateUserName:JSON.parse(app.getLoginInfo().userinfo).realname
 				};
 				var url = app.getUrl() + 'AddWorkReport';
 				var nwaiting = plus.nativeUI.showWaiting();
 				console.log(JSON.stringify(billInfo));
-				console.log(url);
+//				console.log(url);
 				mui.ajax(url, {
 					data: {
 						Info: JSON.stringify(billInfo)
