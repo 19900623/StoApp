@@ -1,0 +1,269 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/mui.indexedlist.css" rel="stylesheet" />
+		<style>
+			html,
+			body {
+				height: 100%;
+				overflow: hidden;
+				background-color: #efeff4;
+			}			
+			.mui-bar {
+				-webkit-box-shadow: none;
+				box-shadow: none;
+			}
+			.sub-counts{float: right; font-size: 14px; color: #999;}
+			
+			#nav{ height: 40px; line-height: 40px; font-size: 16px;}
+			#profile{margin-bottom: 5px;}
+			.mui-nowrap{ word-break:keep-all; white-space:nowrap; overflow: auto; }
+			.mui-profile{ display: block; width: 30px; height: 30px; line-height: 30px; text-align: center; font-size: 12px; color: #fff; border-radius: 50%; overflow: hidden; }
+			/*.mui-profile-text{ display: block; width: 35px; text-align: center; font-size: 12px; color: #666;}*/
+			.profile-box{ *float: left; margin: 3px; *clear:right; display:inline-block; }
+			.profile-box:nth-child(9n+1) .mui-profile { background-color: rgba(210,170,84,0.9); }
+			.profile-box:nth-child(9n+2) .mui-profile { background-color: rgba(108,160,182,0.9); }
+			.profile-box:nth-child(9n+3) .mui-profile { background-color: rgba(129,165,93,0.9); }
+			.profile-box:nth-child(9n+4) .mui-profile { background-color: rgba(209,109,82,0.9); }
+			.profile-box:nth-child(9n+5) .mui-profile { background-color: rgba(109,108,168,0.9); }
+			.profile-box:nth-child(9n+6) .mui-profile { background-color: rgba(196,126,184,0.9); }
+			.profile-box:nth-child(9n+7) .mui-profile { background-color: rgba(120,180,135,0.9); }
+			.profile-box:nth-child(9n+8) .mui-profile { background-color: rgba(210,84,145,0.9); }
+			.profile-box:nth-child(9n+9) .mui-profile { background-color: rgba(160,113,99,0.9); }
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<button id='done' type="button" class=" mui-btn mui-btn-primary mui-pull-right mui-disabled" style="height: 30px;">确定</button>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">选人</h1>
+		</header>
+		<div class="mui-content">
+			<div id="toolbar" style="margin: 0 5px;">
+				<div id="nav" class="mui-nowrap"></div>
+				<!--已选中<span style="font-size: 12px; color: #999;">（点击头像删除）</span>-->
+				<div id="profile" class="mui-nowrap">
+					<div id="head_none" class="profile-box">
+						<span class="mui-profile" style=" background: none; border: 1px dashed #999;"></span>
+					</div>
+				</div>
+			</div>
+			<div id='list' class="mui-indexed-list">
+				<div class="mui-indexed-list-search mui-input-row mui-search">
+					<input type="search" class="mui-input-clear mui-indexed-list-search-input" placeholder="搜索姓名">
+				</div>
+				<div class="mui-indexed-list-bar">
+					<a>A</a>
+					<a>B</a>
+					<a>C</a>
+					<a>D</a>
+					<a>E</a>
+					<a>F</a>
+					<a>G</a>
+					<a>H</a>
+					<a>I</a>
+					<a>J</a>
+					<a>K</a>
+					<a>L</a>
+					<a>M</a>
+					<a>N</a>
+					<a>O</a>
+					<a>P</a>
+					<a>Q</a>
+					<a>R</a>
+					<a>S</a>
+					<a>T</a>
+					<a>U</a>
+					<a>V</a>
+					<a>W</a>
+					<a>X</a>
+					<a>Y</a>
+					<a>Z</a>
+				</div>
+				<div class="mui-indexed-list-alert"></div>
+				<div class="mui-indexed-list-inner">
+					<div id="tip" class="mui-indexed-list-empty-alert">没有数据</div>
+					<ul class="mui-table-view" id="table">
+						<!--<li data-group="A" class="mui-table-view-divider mui-indexed-list-group">A</li>
+						<li data-value="AKU" data-tags="AKeSu" class="mui-table-view-cell mui-indexed-list-item">阿克苏机场</li>-->
+					</ul>
+				</div>
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/mui.indexedlist.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/pinyin.js"></script>
+		<script type="text/javascript">
+			var result = [];	//结果值JSON数组
+			mui.init();
+			mui.ready(function() {
+				var header = document.querySelector('header.mui-bar');
+				var list = document.getElementById('list');
+				var toolbar = document.getElementById('toolbar');
+				//calc hieght
+				list.style.height = (document.body.offsetHeight - header.offsetHeight - toolbar.offsetHeight) + 'px';
+				//create
+				window.indexedList = new mui.IndexedList(list);
+				
+				var done = document.getElementById('done');	//确定按钮
+				done.addEventListener('tap', function() {
+					var ws = null,
+						wo = null;
+					if (ws || !window.plus) {
+						return;
+					}
+					// 获取窗口对象
+					ws = plus.webview.currentWebview();
+					wo = ws.opener();
+//					console.log(JSON.stringify(result));
+					wo.evalJS("selected('" + JSON.stringify(result) + "');");
+					mui.back();
+				}, false);
+				mui('.mui-indexed-list-inner').on('change', 'input', function() {
+					var count = list.querySelectorAll('input[type="checkbox"]:checked').length;
+					var value = count ? "确定(" + count + ")" : "确定";
+					done.innerHTML = value;
+					if (count) {
+						if (done.classList.contains("mui-disabled")) {
+							done.classList.remove("mui-disabled");
+						}
+					} else {
+						if (!done.classList.contains("mui-disabled")) {
+							done.classList.add("mui-disabled");
+						}
+					}
+				});
+				
+				var UserInfo = JSON.parse(app.getLoginInfo().userinfo|| "{}");
+				var nav = document.getElementById('nav');
+				var alink = document.createElement('a');
+				alink.id = UserInfo.companyid;
+				console.log(JSON.stringify(app.getLoginInfo()))
+				alink.innerText = app.getLoginInfo().company;
+				nav.appendChild(alink);
+//				alink.addEventListener('tap', function() {
+//					console.log(this.id)
+//					LoadingData(UserInfo.companyid, this.id);
+//				}, false);
+//				console.log(JSON.stringify(UserInfo))
+				//加载列表
+				LoadingData(UserInfo.companyid, UserInfo.companyid);
+			});
+			//加载数据
+			function LoadingData(companyid, parentid){
+				var fragment = document.createDocumentFragment();
+				var url = app.getUrl() + 'GetEmployeeList';
+				mui.ajax(url, {
+					data: {
+						companyid: companyid,
+						parentid: parentid
+					},
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+//						console.log(JSON.stringify(data))
+						if (data.Success) {
+							var jsonData = JSON.parse(data.codes);
+							if(jsonData.length > 0){
+								document.getElementById("tip").style.display = "none";
+							}
+							else{
+								document.getElementById("tip").style.display = "block";
+							}
+							var py = document.querySelectorAll('.mui-indexed-list-bar a');	//取得A-Z所有字母
+							for(var p = 0; p < py.length; p++)
+							{	
+								var bool = true;
+								var pinyin = py[p].text;
+								for (var i = 0; i < jsonData.length; i++) {
+									var newpinyin = getFirstLetter(jsonData[i].fullname);
+//									console.log(pinyin + "-" + newpinyin)
+									if (pinyin == newpinyin) {
+										if(bool){
+											var li = document.createElement('li');
+											li.className = 'mui-table-view-divider mui-indexed-list-group';
+											li.setAttribute('data-group',newpinyin);
+											li.innerHTML = newpinyin;
+											fragment.appendChild(li);
+											bool = false;
+										}
+										var ali = document.createElement('li');
+										if(jsonData[i].sort == "employee"){
+											ali.className = 'mui-table-view-cell mui-indexed-list-item mui-checkbox mui-left'
+											ali.id = jsonData[i].id;
+											ali.innerHTML = '<input type="checkbox" />' + jsonData[i].fullname;
+											ali.setAttribute('data-value',jsonData[i].fullname);
+											ali.setAttribute('data-tags',jsonData[i].fullname);
+											ali.addEventListener('tap', function(event) {
+												//添加
+												var profile = document.getElementById('profile');
+												if(!this.querySelector('input[type="checkbox"]').checked){
+													var name = this.innerText;
+													if(name.length > 2){
+														name = name.substr(name.length - 2, name.length);
+													}
+													var div = document.createElement('div');
+													div.id = this.id;
+													div.className = "profile-box";
+													div.innerHTML = '<a><span class="mui-profile">'
+													+ name + '</span></a>';
+													profile.appendChild(div);
+													var obj = {};
+													obj["id"] = this.id;
+													obj["name"] = this.innerText;
+													result.push(obj);
+													document.getElementById('head_none').style.display = 'none';
+												}
+												else{
+													//移除
+													var nodes = profile.children;
+													for(var k=0; k < nodes.length; k++){
+														if(nodes[k].id == this.id){
+															profile.removeChild(nodes[k]);
+														}
+													}
+													//如果没有选中项，显示head_none
+													if(nodes.length == 1){
+														document.getElementById('head_none').style.display = 'block';
+													}
+												}
+											});
+										}
+										else{
+											ali.className = 'mui-table-view-cell mui-indexed-list-item'
+											ali.id = jsonData[i].id;
+											ali.innerHTML = '<span>' + jsonData[i].fullname + '</span>';
+											ali.innerHTML += '<span class="sub-counts">' + jsonData[i].subcounts + '</span>';
+											ali.setAttribute('data-value',jsonData[i].fullname);
+											ali.setAttribute('data-tags',jsonData[i].fullname);
+											ali.addEventListener('tap', function(event) {
+												//nav 添加导航
+												nav.innerHTML += ' &gt; <a id="' + this.id + '">' + this.firstChild.innerText + '</a>';
+//												console.log(nav.innerHTML);
+												//加载下级数据
+												LoadingData(companyid, this.id);
+											});
+										}
+										fragment.appendChild(ali);
+									}
+								}
+							}							
+							var table = document.getElementById("table");
+							while(table.firstChild)
+								table.removeChild(table.firstChild);
+							table.appendChild(fragment);
+						}
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

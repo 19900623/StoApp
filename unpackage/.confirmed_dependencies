@@ -1075,7 +1075,9 @@
 			"js/app.js",
 			"js/mui.min.js",
 			"fonts/mui.ttf",
-			"css/mui.min.css"
+			"css/mui.min.css",
+			"js/mui.picker.min.js",
+			"js/mui.poppicker.js"
 		],
 		"refer": []
 	},
@@ -1100,7 +1102,12 @@
 			"js/mui.min.js",
 			"fonts/mui.ttf",
 			"css/mui.min.css",
-			"js/mui.enterfocus.js"
+			"js/mui.enterfocus.js",
+			"js/common.js",
+			"css/mui.poppicker.css"
+		],
+		"refer": [
+			"employee_select.html"
 		]
 	},
 	"business/workreport/workreport-main.html": {
@@ -1415,6 +1422,17 @@
 			"js/mui.picker.min.js",
 			"css/mui.poppicker.css",
 			"css/mui.picker.min.css"
+		]
+	},
+	"employee_select.html": {
+		"resources": [
+			"js/pinyin.js",
+			"css/mui.indexedlist.css",
+			"js/mui.indexedlist.js",
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
 		]
 	}
 }
