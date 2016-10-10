@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "3.12",/*应用版本名称*/
+		"name": "3.14",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -289,7 +289,8 @@
 					"img/report_edit.png",
 					"img/books.png",
 					"img/car.png",
-					"img/newspaper.png"
+					"img/newspaper.png",
+					"img/google_voice.png"
 				],
 				"refer": [
 					"addresslist.html",
@@ -314,7 +315,9 @@
 					"business/knowledgelib/knowledgelib_list.html",
 					"business/vehicle/vehicle_reg.html",
 					"business/vehicle/vehicle_main.html",
-					"business/questionbill/questionbill-grid.html"
+					"business/questionbill/questionbill-grid.html",
+					"tab-work-help.html",
+					"business/expensebill/expensebill-list-main.html"
 				],
 				"priority": 0
 			},
@@ -345,7 +348,8 @@
 					"js/app.js",
 					"fonts/mui.ttf",
 					"img/client_account_template.png",
-					"img/report_edit.png"
+					"img/report_edit.png",
+					"img/newspaper.png"
 				],
 				"refer": [
 					"workflow-main.html",
@@ -1727,6 +1731,69 @@
 					"js/mui.min.js",
 					"fonts/mui.ttf",
 					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"tab-work-help.html": {
+				"resources": [
+					"img/allow_users_edit_ranges.png",
+					"img/subdomains.png",
+					"img/books.png",
+					"img/blackberry.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"css/app.css",
+					"css/mui.min.css",
+					"img/newspaper.png",
+					"img/report_edit.png",
+					"img/client_account_template.png"
+				],
+				"refer": [
+					"business/leavebill/leavebill-list-main.html",
+					"business/leavebill/leavebill-list-view-main.html"
+				],
+				"priority": 0
+			},
+			"business/expensebill/expensebill-list-sub.html": {
+				"resources": [
+					"js/app.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/expensebill/expensebill-list-main.html": {
+				"resources": [
+					"business/expensebill/expensebill-list-sub.html",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/leavebill/leavebill-list-sub.html": {
+				"resources": [
+					"js/app.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/leavebill/leavebill-list-main.html": {
+				"resources": [
+					"business/leavebill/leavebill-list-sub.html",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/leavebill/leavebill-list-view-main.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
 				],
 				"refer": [],
 				"priority": 0
