@@ -25,7 +25,7 @@
 			<h1 id="title" class="mui-title">新增汇报</h1>
 		</header>
 		<div class="mui-content">
-			<div class="mui-content-padded" style="margin: 5px;">
+			<div class="mui-content-padded">
 				<form class="mui-input-group" id="bill-form">
 					<div class="mui-input-row">
 						<label>汇报标题</label>
@@ -99,7 +99,7 @@
 				if(TodayWork.value == "" && TodayUnWork.value == "" && TodayCoWork.value == "") {
 					plus.nativeUI.toast("汇报内容至少有一项不能为空");
 					return;
-				}			
+				}
 				var userid = app.getLoginInfo().userid;
 				//调用方法
 				var billInfo = {

@@ -1,0 +1,298 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link href="../../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			.mui-btn {margin: 0 5px;}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">把枪备案登记</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>开始时间</label>
+						<input type="text" id="StartTime" data-options='{"type":"datetime"}' class="mui-input" placeholder="请选择开始时间" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>结束时间</label>
+						<input type="text" id="EndTime" data-options='{"type":"datetime"}' class="mui-input" placeholder="请选择结束时间" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>扫描类型</label>
+						<input type="text" id="Type" class="mui-input" placeholder="请选择扫描类型" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>原因</label>
+						<input type="text" id="Reason" class="mui-input" placeholder="请选择原因" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>票数</label>
+						<input type="tel" id="Count" class="mui-input" placeholder="请输入票数" onKeypress="return (/^\d*$/.test(String.fromCharCode(event.keyCode)))" required="required">
+					</div>
+				</form>
+				<br>
+				<div class="mui-input-row">
+					<textarea id="Remark" rows="3" placeholder="备注" class="mui-input-clear mui-input"></textarea>
+				</div>
+				<div class="mui-button-row">
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_commit()" id="buttoncommit">提交</button>
+					<button type="button" class="mui-btn mui-btn-success" onclick="btn_ok()" id="buttonok">确认</button>
+					<button type="button" class="mui-btn mui-btn-danger" onclick="btn_delete()" id="buttondel">删除</button>
+					<button type="button" class="mui-btn mui-btn-yellow" onclick="mui.back()">取消</button>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script type="text/javascript">
+			var StartTime = document.getElementById("StartTime");
+			var EndTime = document.getElementById("EndTime");
+			var Type = document.getElementById("Type");
+			var Reason = document.getElementById("Reason");
+			var Count = document.getElementById("Count");
+			var Remark = document.getElementById("Remark");
+			var userinfo = JSON.parse(app.getLoginInfo().userinfo);	//登录用户信息
+			mui.init();
+			mui.plusReady(function() {
+				//初始隐藏提交按钮和删除按钮
+				document.getElementById("buttoncommit").style.display = "none";
+				document.getElementById("buttondel").style.display = "none";
+				//加载默认值
+				StartTime.addEventListener('tap', function() {
+					AddDtPicker(this);
+				}, false);
+				EndTime.addEventListener('tap', function() {
+					AddDtPicker(this);
+				}, false);
+				
+				var TypePicker = new mui.PopPicker();
+				TypePicker.setData([{
+					value: '收件',
+					text: '收件'
+				}, {
+					value: '派件',
+					text: '派件'
+				}, {
+					value: '签收',
+					text: '签收'
+				}, {
+					value: '发件',
+					text: '发件'
+				}, {
+					value: '到件',
+					text: '到件'
+				}, {
+					value: '疑难件',
+					text: '疑难件'
+				}, {
+					value: '装袋',
+					text: '装袋'
+				}, {
+					value: '其他',
+					text: '其他'
+				}]);
+				Type.addEventListener('tap', function(event) {
+					TypePicker.show(function(items) {
+						Type.value = items[0].text;
+						//返回 false 可以阻止选择框的关闭
+						//return false;
+						TypePicker.dispose();
+					});
+				}, false);
+				
+				var ReasonPicker = new mui.PopPicker();
+				ReasonPicker.setData([{
+					value: '巴枪原因',
+					text: '巴枪原因'
+				}, {
+					value: '总公司原因',
+					text: '总公司原因'
+				}, {
+					value: '其他原因',
+					text: '其他原因'
+				}]);
+				Reason.addEventListener('tap', function(event) {
+					ReasonPicker.show(function(items) {
+						Reason.value = items[0].text;
+						//返回 false 可以阻止选择框的关闭
+						//return false;
+						ReasonPicker.dispose();
+					});
+				}, false);
+				
+				//加载编辑默认值
+				var id = plus.webview.currentWebview().name;	//编辑ID
+				if(id){
+					var url = app.getUrl() + 'GetGunRecordsById';
+					mui.ajax(url, {
+						data: {
+							id: id
+						},
+						type: 'post', //HTTP请求类型
+						dataType: 'json',
+						success: function(data) {
+//							console.log(JSON.stringify(data))
+							if(data.Success) {
+								var jsonData = JSON.parse(data.codes);	//转JSON对象								
+								StartTime.value = jsonData.StartTime;
+								EndTime.value = jsonData.EndTime;
+								Type.value = jsonData.ScanType;
+								Reason.value = jsonData.Reason;
+								Count.value = jsonData.Count;
+								Remark.value = jsonData.Mark;
+								
+								//修改时显示提交和删除按钮
+								document.getElementById("buttoncommit").style.display = "block";
+								document.getElementById("buttondel").style.display = "block";
+								
+								if(jsonData.FlowState) {
+									document.getElementById("buttoncommit").style.display = "none";
+									document.getElementById("buttondel").style.display = "none";
+									document.getElementById("buttonok").style.display = "none";
+									StartTime.readOnly = true;
+									EndTime.readOnly = true;
+									Type.readOnly = true;
+									Reason.readOnly = true;
+									Count.readOnly = true;
+									Remark.readOnly = true;
+								}
+							}
+							else{
+								mui.alert(data.Message);
+							}
+						}
+					});
+				}
+			});
+			//添加DtPicker
+			function AddDtPicker(el){
+				var optionsJson = el.getAttribute('data-options') || '{}';
+				var options = JSON.parse(optionsJson);
+				options["beginDate"] = new Date();
+//				options["beginYear"] = dt.getFullYear();
+//				console.log(JSON.stringify(options))
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+					el.value = rs.text;
+					picker.dispose();
+				});
+			}
+			
+			//确认
+			function btn_ok(){
+				if(StartTime.value == ""){
+					mui.toast(StartTime.placeholder);
+					return;
+				}
+				if(EndTime.value == ""){
+					mui.toast(EndTime.placeholder);
+					return;
+				}
+				if(Type.value == ""){
+					mui.toast(Type.placeholder);
+					return;
+				}
+				if(Reason.value == ""){
+					mui.toast(Reason.placeholder);
+					return;
+				}
+				if(Count.value == ""){
+					mui.toast(Count.placeholder);
+					return;
+				}
+				//调用方法
+				var billInfo = {
+					StartTime : StartTime.value
+			       ,EndTime : EndTime.value
+			       ,ScanType : Type.value
+			       ,Count : Count.value
+			       ,Reason : Reason.value
+			       ,Mark : Remark.value
+				};
+				var id = plus.webview.currentWebview().name;
+				if(!!id){
+					billInfo["ID"] = id;
+					billInfo["ModifyTime"] = new Date().format("yyyy-MM-dd hh:mm:ss");
+					billInfo["ModifyUser"] = userinfo.realname;
+				}
+				else{
+					billInfo["CreateTime"] = new Date().format("yyyy-MM-dd hh:mm:ss");
+					billInfo["CreateUser"] = userinfo.realname;
+				}
+				console.log(JSON.stringify(billInfo));
+				var url = app.getUrl() + 'EditGunRecords';
+				mui.ajax(url, {
+					data: {
+						entity: JSON.stringify(billInfo)
+					},
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+						console.log(data)
+						if(data.Success) {
+							plus.nativeUI.toast(data.Message);
+							var page = plus.webview.getWebviewById('form-input');
+							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+							mui.fire(page, 'refresh');
+							mui.back();
+						} else {
+							plus.nativeUI.toast(data.Message);
+						}
+					}
+				});
+			}
+			
+			//提交
+			function btn_commit(){
+				
+			}
+			
+			//删除
+			function btn_delete() {
+				var btnArray = ['是', '否'];
+				mui.confirm('是否删除该条数据？', '申通提醒', btnArray, function(e) {
+					if(e.index == 0) {
+						var url = app.getUrl() + 'DeleteGunRecordsById';
+						mui.ajax(url, {
+							data: {
+								id: plus.webview.currentWebview().name,
+							},
+							type: 'post',
+							dataType: 'json',
+							success: function(data) {
+								if(data.Success) {
+									plus.nativeUI.toast('删除成功');
+									var page = plus.webview.getWebviewById('form-input');
+									//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+									mui.fire(page, 'refresh');
+									mui.back();
+								} else {
+									plus.nativeUI.toast(data.Message);
+								}
+							}
+						});
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

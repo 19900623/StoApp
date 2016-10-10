@@ -18,7 +18,7 @@
 				background-color: #efeff4;
 				overflow:hidden ; /*隐藏滚动条*/ 
 			}
-			/*.mui-btn {margin: 0 5px;}*/
+			.mui-btn {margin: 0 5px;}
 		</style>
 	</head>
 
@@ -55,7 +55,7 @@
 				<!--<div class="mui-input-row">
 					<textarea id="Remark" rows="4" placeholder="领导批注" class="mui-input-clear mui-input" readonly="readonly"></textarea>
 				</div>-->
-				<div class="mui-input-row">
+				<div id="Received" class="mui-input-row">
 					发给谁<span style="font-size: 12px; color: #999;">（点击头像删除）</span>
 					<a onclick="app.openPage('../../employee_select.html','employee_select')">添加人员</a>
 				</div>
@@ -67,9 +67,9 @@
 					</div>
 				</div>
 				<div class="mui-button-row">
-					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_commit()" id="buttoncommit">发布</button>&nbsp;&nbsp;
-					<button type="button" class="mui-btn mui-btn-success" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
-					<button type="button" class="mui-btn mui-btn-danger" onclick="btn_delete()" id="buttondel">删除</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_commit()" id="buttoncommit">发布</button>
+					<button type="button" class="mui-btn mui-btn-success" onclick="btn_ok()" id="buttonok">确认</button>
+					<button type="button" class="mui-btn mui-btn-danger" onclick="btn_delete()" id="buttondel">删除</button>
 					<button type="button" class="mui-btn mui-btn-primary" onclick="mui.back()">取消</button>
 				</div>
 			</div>
@@ -122,20 +122,20 @@
 					type: 'post', //HTTP请求类型
 					dataType: 'json',
 					success: function(data) {
+						console.log(JSON.stringify(data))
 						if(data) {
-							Title.value = data[0].title;
-							Type.value = data[0].type;
-							TodayWork.value = data[0].todaywork;
-							TodayUnWork.value = data[0].todayunwork;
-							TodayCoWork.value = data[0].todaycowork;
-							TodayRemark.value = data[0].todayremark;
-//							Remark.value = data[0].remark;
+							Title.value = data.Title;
+							Type.value = data.Type;
+							TodayWork.value = data.TodayWork;
+							TodayUnWork.value = data.TodayUnWork;
+							TodayCoWork.value = data.TodayCoWork;
+							TodayRemark.value = data.TodayRemark;
 							
 							//未选择发给谁，不显示发布按钮
-//							document.getElementById("buttoncommit").classList.add("mui-disabled");
-//							document.getElementById("buttoncommit").setAttribute("disabled", "disabled");
+							document.getElementById("buttoncommit").classList.add("mui-disabled");
+							document.getElementById("buttoncommit").setAttribute("disabled", "disabled");
 							
-							if(data[0].state == "2") {
+							if(data.State == "2") {
 								document.getElementById("buttoncommit").style.display = "none";
 								document.getElementById("buttondel").style.display = "none";
 								document.getElementById("buttonok").style.display = "none";
@@ -144,6 +144,24 @@
 								TodayCoWork.readOnly = true;
 								TodayRemark.readOnly = true;
 								//加载发布人
+								if(data.Received){
+									for(var j=0; j < data.Received.length; j++){
+										var div = document.createElement('div');
+										var name = data.Received[j].UserName;
+										if(name.length > 2){
+											name = name.substr(name.length - 2, name.length);
+										}
+										div.className = "profile-box";
+										div.innerHTML = '<span class="mui-profile">'
+										+ name + '</span>';
+										profile.appendChild(div);
+									}
+								}
+								//隐藏添加人员按钮
+								var rec = document.getElementById("Received");
+								for(var i=1; i < rec.childNodes.length; i++){
+									rec.removeChild(rec.childNodes.item(i));
+								}
 							}
 						}
 					}
@@ -165,9 +183,8 @@
 							name = name.substr(name.length - 2, name.length);
 						}
 						div.className = "profile-box";
-						div.innerHTML = '<a><span class="mui-profile">'
-						+ name + '</span>'
-						+ '</a>';
+						div.innerHTML = '<span class="mui-profile">'
+						+ name + '</span>';
 						div.addEventListener('tap', function() {
 							profile.removeChild(this);
 						}, false);
