@@ -291,7 +291,8 @@
 					"js/app.js",
 					"img/newspaper.png",
 					"img/car.png",
-					"img/cash_register.png"
+					"img/cash_register.png",
+					"img/google_voice.png"
 				],
 				"refer": [
 					"addresslist.html",
@@ -1811,6 +1812,38 @@
 			"business/leavebill/leavebill-list-view-main.html": {
 				"resources": [
 					"js/mui.picker.min.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/report-wrong-detail.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/gunrecords/pullrefresh_main.html": {
+				"resources": [
+					"business/gunrecords/pullrefresh_sub.html"
+				],
+				"refer": [
+					"business/gunrecords/form-input.html"
+				],
+				"priority": 0
+			},
+			"business/gunrecords/form-input.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
 					"css/mui.poppicker.css",
 					"css/mui.picker.min.css"
 				],
