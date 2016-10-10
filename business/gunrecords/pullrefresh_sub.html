@@ -89,7 +89,7 @@
 					var UserInfo = JSON.parse(app.getLoginInfo().userinfo|| "{}");	
 					count = 1;
 					var messageInfo = {
-						UserName: "",
+						UserName: UserInfo.realname,
 						pageNumber: 1,
 						pageSize: 10
 					};
@@ -196,8 +196,9 @@
 					count = count + 1;
 					var fragment = document.createDocumentFragment();
 					var UserInfo = JSON.parse(app.getLoginInfo().userinfo|| "{}");	
+//					console.log(app.getLoginInfo().userinfo)
 					var messageInfo = {
-						UserName: "",
+						UserName: UserInfo.realname,
 						pageNumber: count,
 						pageSize: 10
 					};
