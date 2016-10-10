@@ -1,0 +1,232 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>进港违规明细</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/mui.picker.min.css" />
+		<link href="../css/mui.poppicker.css" rel="stylesheet" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			/*跨webview需要手动指定位置*/
+			
+			/*.mui-popover {
+				height: 450px;
+			}*/
+			
+			#topPopover {
+				height: 190px;
+			}
+			
+			.mui-table h4,
+			.mui-table h5,
+			.mui-table .mui-h5,
+			.mui-table .mui-h6,
+			.mui-table p {
+				margin-top: 0;
+			}
+			
+			.mui-table h4 {
+				line-height: 21px;
+				font-weight: 500;
+			}
+			
+			.mui-table .oa-icon {
+				position: absolute;
+				right: 0;
+				bottom: 0;
+			}
+			
+			.mui-table .oa-icon-star-filled {
+				color: #f14e41;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" href="#topPopover">查询</a>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">进港违规明细</h1>
+		</header>
+		<div style="margin-top: 45px;">
+			<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed" id="list">
+				<!--<ul class="mui-table-view mui-table-view-chevron" id="list">-->
+			</ul>
+		</div>
+		<!--右上角弹出菜单-->
+		<div id="topPopover" class="mui-popover">
+			<div class="mui-popover-arrow"></div>
+			<div class="mui-scroll-wrapper">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>开始时间</label>
+						<input type="text" id="StartTime" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>结束时间</label>
+						<input type="text" id="EndTime" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>部门</label>
+						<input type="hidden" id="Code">
+						<input type="text" id="Depart" class="mui-input" required="required" readonly="readonly">
+					</div>
+				</form>
+				<div class="mui-button-row" style="margin-top:10px;">
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_search()" id="buttonok">搜索</button>&nbsp;&nbsp;
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/app.js"></script>
+	<script src="../js/mui.picker.min.js"></script>
+	<script type="text/javascript">
+		mui.init({
+			swipeBack: true //启用右滑关闭功能
+		});
+		mui.plusReady(function() {	
+			//选择开始时间事件			
+			document.getElementById("StartTime").addEventListener('tap', function() {
+				var options = {
+					type: "date",
+					beginYear: "2015",
+					endYear: "2030"
+				}
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+					document.getElementById("StartTime").value = rs.text.replace(new RegExp('-', "gm"), '/');
+					picker.dispose();
+				});
+			});
+			//选择结时间事件			
+			document.getElementById("EndTime").addEventListener('tap', function() {
+				var options = {
+					type: "date",
+					beginYear: "2015",
+					endYear: "2030"
+				}
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+					document.getElementById("EndTime").value = rs.text.replace(new RegExp('-', "gm"), '/');
+					picker.dispose();
+				});
+			});
+			
+			//-----------------------------------------
+			//级联部门
+			var url = app.getUrl() + 'GetDepartmentJson';
+			mui.ajax(url, {
+				type: 'post',
+				dataType: 'json',
+				success: function(data) {
+					console.log(JSON.stringify(data))
+					document.getElementById("Depart").addEventListener('tap', function(event) {						
+						var picker = new mui.PopPicker({
+							layer: 3
+						});
+						picker.setData(data);
+						picker.show(function(items) {
+							console.log(items[2]);
+							if(JSON.stringify(items[2]) == "{}"){
+								document.getElementById("Code").value = (items[1] || {}).value;
+								document.getElementById("Depart").value = (items[1] || {}).text;
+							}
+							else{
+								document.getElementById("Code").value = (items[2] || {}).value;
+								document.getElementById("Depart").value = (items[2] || {}).text;
+							}
+							//返回 false 可以阻止选择框的关闭
+							//return false;
+						});
+					}, false);
+				}
+			});
+		});
+		
+		
+		//搜索
+		function btn_search() {
+			if(document.getElementById("StartTime").value == '') {
+				plus.nativeUI.toast("请选择开始时间");
+				return;
+			}
+			if(document.getElementById("EndTime").value == '') {
+				plus.nativeUI.toast("请选择结束时间");
+				return;
+			}
+			if(document.getElementById("Code").value == '') {
+				plus.nativeUI.toast("请选择部门");
+				return;
+			}
+			var code = document.getElementById("Code").value;
+			var start = document.getElementById("StartTime").value;
+			var end = document.getElementById("EndTime").value;
+			LodingData(code, start, end);
+			mui('#topPopover').popover('toggle');	//收起右上角弹出菜单
+		}
+		
+		//加载数据
+		function LodingData(code, start, end) {
+			var table = document.getElementById("list");
+			while(table.firstChild)
+				table.removeChild(table.firstChild);
+			var fragment = document.createDocumentFragment();
+			var url = app.getUrl() + 'GetWrongDetail';
+			mui.ajax(url, {
+				data: {
+					departCode: code,
+					start: start,
+					end: end
+				},
+				type: 'post',
+				dataType: 'json',
+				success: function(data) {
+					console.log(JSON.stringify(data))
+					if(data.Success) {
+						var jsonData = JSON.parse(data.codes);	//转JSON对象
+						for(var i = 0; i < jsonData.length; i++) {
+							li = document.createElement('li');
+							li.className = 'mui-table-view-cell';
+							var htmlText = '<div class="mui-table">'
+							+ '<div class="mui-table-cell mui-col-xs-10">'
+							+ 	'<h4 class="mui-ellipsis-2">'
+							+ 		jsonData[i].sendname
+							+ 	'</h4>'
+							+ 	'<p class="mui-h6 mui-ellipsis">'
+							+ 		'运单号：' + jsonData[i].billcode
+							+ 	'</p>'
+							+ 	'<p class="mui-h6 mui-ellipsis">'
+							+ 		'类型：' + jsonData[i].searchtype
+							+ 	'</p>'
+							+ '</div>'
+							+ '<div class="mui-table-cell mui-col-xs-5 mui-text-right">'
+							+ 	'<span class="mui-h5">'
+							+ 		new Date(jsonData[i].create_date.replace('T',' ')).format("yyyy-MM-dd hh:mm:ss")
+							+ 	'</span>'
+							+ 	'<p class="mui-h6 mui-ellipsis">'
+							+ 		'创建人：' + jsonData[i].create_name
+							+ 	'</p>'
+							+ '</div>'
+							li.innerHTML = htmlText;
+							fragment.appendChild(li);
+						}
+						table.appendChild(fragment);
+					}
+					else{
+						mui.alert(data.Message);
+					}
+				},
+			});
+		}
+	</script>
+
+</html>

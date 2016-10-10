@@ -25,21 +25,30 @@
 			<h1 id="title" class="mui-title">新增汇报</h1>
 		</header>
 		<div class="mui-content">
-			<div class="mui-content-padded" style="margin: 5px;">
+			<div class="mui-content-padded">
 				<form class="mui-input-group" id="bill-form">
 					<div class="mui-input-row">
 						<label>汇报标题</label>
-						<input type="text" id="Title" class="mui-input-clear mui-input" required="required">
+						<input type="text" id="Title" class="mui-input" required="required" readonly="readonly">
 					</div>
 					<div class="mui-input-row">
 						<label>汇报类型</label>
-						<input type="text" id="Type" class="mui-input-clear mui-input" required="required">
+						<input type="text" id="Type" class="mui-input" required="required" readonly="readonly" value="日汇报">
 					</div>
 				</form>
-				<div class="mui-input-row" style="margin: 5px 0px;">
-					<textarea id="Describe" rows="10" placeholder="汇报内容" class="mui-input-clear mui-input"></textarea>
+				<br>
+				<div class="mui-input-row">
+					<textarea id="TodayWork" rows="3" placeholder="今日完成工作" class="mui-input-clear mui-input"></textarea>
 				</div>
-
+				<div class="mui-input-row">
+					<textarea id="TodayUnWork" rows="3" placeholder="未完成工作" class="mui-input-clear mui-input"></textarea>
+				</div>
+				<div class="mui-input-row">
+					<textarea id="TodayCoWork" rows="3" placeholder="需协调工作" class="mui-input-clear mui-input"></textarea>
+				</div>
+				<div class="mui-input-row">
+					<textarea id="TodayRemark" rows="3" placeholder="备注" class="mui-input-clear mui-input"></textarea>
+				</div>
 				<div class="mui-button-row">
 					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
 					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
@@ -49,47 +58,64 @@
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/app.js"></script>
 		<script src="../../js/mui.enterfocus.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
 		<script>
+			var Title = document.getElementById("Title");
+			var Type = document.getElementById("Type");
+			var TodayWork = document.getElementById("TodayWork");
+			var TodayUnWork = document.getElementById("TodayUnWork");
+			var TodayCoWork = document.getElementById("TodayCoWork");
+			var TodayRemark = document.getElementById("TodayRemark");
 			mui.init({});
 			mui.plusReady(function() {
-							
+				//加载默认值
+				var userinfo = JSON.parse(app.getLoginInfo().userinfo);
+				Title.value = userinfo.realname + "的" + Type.value;
+				var picker = new mui.PopPicker();
+					picker.setData([{
+						value: '日汇报',
+						text: '日汇报'
+					}, {
+						value: '周汇报',
+						text: '周汇报'
+					}, {
+						value: '月汇报',
+						text: '月汇报'
+					}]);
+				Type.addEventListener('tap', function(event) {
+					picker.show(function(items) {
+						Type.value = items[0].text;
+						Title.value = userinfo.realname + "的" + Type.value;
+						//返回 false 可以阻止选择框的关闭
+						//return false;
+					});
+				}, false);
 			});
 			
 				
-			function btn_ok() {			
-				var Title = document.getElementById("Title");
-				var Type = document.getElementById("Type");
-				var Describe = document.getElementById("Describe");
-
+			function btn_ok() {
 				//验证
-				if (Title.value == "") {
-					plus.nativeUI.toast("汇报标题不能为空");
-					Title.focus();
+				if(TodayWork.value == "" && TodayUnWork.value == "" && TodayCoWork.value == "") {
+					plus.nativeUI.toast("汇报内容至少有一项不能为空");
 					return;
 				}
-				if (Type.value == "") {
-					plus.nativeUI.toast("汇报类型不能为空");
-					Type.focus();
-					return;
-				}
-				if (Describe.value == "") {
-					plus.nativeUI.toast("汇报内容不能为空");
-					Describe.focus();
-					return;
-				}				
 				var userid = app.getLoginInfo().userid;
 				//调用方法
 				var billInfo = {
 					Title: Title.value,
 					Type: Type.value,
-					Describe: Describe.value,
-					UserID: userid,
-					UserName:JSON.parse(app.getLoginInfo().userinfo).realname
+					TodayWork: TodayWork.value,
+					TodayUnWork: TodayUnWork.value,
+					TodayCoWork: TodayCoWork.value,
+					TodayRemark: TodayRemark.value,
+					CreateUserId: userid,
+					CreateUserName:JSON.parse(app.getLoginInfo().userinfo).realname
 				};
 				var url = app.getUrl() + 'AddWorkReport';
 				var nwaiting = plus.nativeUI.showWaiting();
 				console.log(JSON.stringify(billInfo));
-				console.log(url);
+//				console.log(url);
 				mui.ajax(url, {
 					data: {
 						Info: JSON.stringify(billInfo)

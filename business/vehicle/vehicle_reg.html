@@ -11,11 +11,6 @@
 		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
 		<link rel="stylesheet" href="../../css/common.css" type="text/css" charset="utf-8" />
 		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
-		<script src="../../js/common.js"></script>
-		<script src="../../js/mui.min.js"></script>
-		<script src="../../js/app.js"></script>
-		<script src="../../js/mui.enterfocus.js"></script>
-		<script src="../../js/mui.picker.min.js"></script>
 		<style>
 			.mui-btn {margin: 0 10px;}
 		</style>
@@ -37,8 +32,8 @@
 					</div>
 					<div class="mui-input-row" id="divMileage">
 						<label>行驶里程</label>
-						<!--<input type="tel" id="CarMileage" class="mui-input-clear mui-input" onKeypress="return /^\d*(\.)?\d*$/.test(this.value + String.fromCharCode(event.keyCode)) ? String.fromCharCode(event.keyCode):''" required="required">-->
-						<input type="tel" id="CarMileage" class="mui-input-clear mui-input" onKeypress="return (/[\d.]/.test(String.fromCharCode(event.keyCode)))" required="required">
+						<input type="tel" id="CarMileage" class="mui-input-clear mui-input" onKeypress="return (/^\d+\.?\d*$/.test(this.value + String.fromCharCode(event.keyCode)))" required="required">
+						<!--<input type="tel" id="CarMileage" class="mui-input-clear mui-input" onKeypress="return (/[\d.]/.test(String.fromCharCode(event.keyCode)))" required="required">-->
 					</div>
 				</form>
 				<div class="mui-input-row" style="margin: 5px 0px 0px;" id="divRemark">
@@ -51,6 +46,11 @@
 				</div>
 			</div>
 		</div>
+		<script src="../../js/common.js"></script>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.enterfocus.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
 		<script>
 			mui.init({});
 			mui.plusReady(function() {

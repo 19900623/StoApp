@@ -288,9 +288,10 @@
 					"img/brick_error.png",
 					"img/report_edit.png",
 					"img/books.png",
-					"img/car.png",
+					"js/app.js",
 					"img/newspaper.png",
-					"img/google_voice.png"
+					"img/car.png",
+					"img/cash_register.png"
 				],
 				"refer": [
 					"addresslist.html",
@@ -317,7 +318,8 @@
 					"business/vehicle/vehicle_main.html",
 					"business/questionbill/questionbill-grid.html",
 					"tab-work-help.html",
-					"business/expensebill/expensebill-list-main.html"
+					"business/expensebill/expensebill-list-main.html",
+					"business/gunrecords/pullrefresh_main.html"
 				],
 				"priority": 0
 			},
@@ -357,7 +359,8 @@
 					"worktask-main.html",
 					"business/workflow/workflow-main.html",
 					"business/workreport/workreport-main.html",
-					"business/worktask/worktask-main.html"
+					"business/worktask/worktask-main.html",
+					"business/notice/notice_list_main.html"
 				],
 				"priority": 0
 			},
@@ -1233,7 +1236,12 @@
 					"img/chart_bar.png",
 					"css/app.css",
 					"img/statistics.png",
-					"img/chart_column.png"
+					"img/chart_column.png",
+					"img/client_account_template.png",
+					"img/cell_delete.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css"
 				],
 				"refer": [
 					"report/report-paymore.html",
@@ -1245,7 +1253,9 @@
 					"report/report-arrivalpay.html",
 					"report/report-cashdelivery.html",
 					"report/report-performance.html",
-					"report/report-waybillpickup-business.html"
+					"report/report-waybillpickup-business.html",
+					"report/report-custom-dept.html",
+					"report/report-wrong-detail.html"
 				],
 				"priority": 0
 			},
@@ -1442,7 +1452,8 @@
 					"img/script_edit.png",
 					"fonts/mui.ttf",
 					"css/mui.min.css",
-					"js/mui.min.js"
+					"js/mui.min.js",
+					"js/app.js"
 				],
 				"refer": [
 					"business/errosend/errosend-list-main.html"
@@ -1553,7 +1564,9 @@
 					"js/app.js",
 					"js/mui.min.js",
 					"fonts/mui.ttf",
-					"css/mui.min.css"
+					"css/mui.min.css",
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js"
 				],
 				"refer": [],
 				"priority": 0
@@ -1579,9 +1592,15 @@
 					"js/mui.min.js",
 					"fonts/mui.ttf",
 					"css/mui.min.css",
-					"js/mui.enterfocus.js"
+					"js/mui.enterfocus.js",
+					"js/common.js",
+					"css/mui.poppicker.css",
+					"css/style.css",
+					null
 				],
-				"refer": [],
+				"refer": [
+					"employee_select.html"
+				],
 				"priority": 0
 			},
 			"business/workreport/workreport-main.html": {

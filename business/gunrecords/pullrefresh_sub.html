@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../../css/mui.min.css">
+	</head>
+
+	<body>
+		<!--下拉刷新容器-->
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<!--数据列表-->
+				<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed" id="list">
+					
+				</ul>
+			</div>
+		</div> 
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script>
+			mui.init({
+				pullRefresh: {
+					container: '#pullrefresh',
+					down: {
+						callback: pulldownRefresh
+					},
+					up: {
+						contentrefresh: '正在加载...',
+						callback: pullupRefresh
+					}
+				}
+			});
+			(function($) {
+				//$.swipeoutOpen(el,direction)//打开指定列的滑动菜单，el:指定列的dom对象，direction：取值left|right，指定打开的是左侧或右侧滑动菜单
+				//$.swipeoutClose(el);//关闭指定列的滑动菜单，el:指定列的dom对象
+				setTimeout(function() {
+					$.swipeoutOpen(document.getElementById("list").querySelector('li:first-child'), 'right');
+					setTimeout(function() {
+						$.swipeoutClose(document.getElementById("list").querySelector('li:first-child'));
+					}, 1000);
+				}, 1000);
+				//删除
+				$('#list').on('tap', '.mui-icon-trash', function(event) {
+					var elem = this;
+					var li = elem.parentNode.parentNode;
+					var divs = li.childNodes;
+					for (var i =0; i< divs.length; i++){
+						var div = divs[i];
+						if(div.className === "mui-slider-handle") {
+							//删除操作后，刷新
+							mui.confirm('是否删除该条数据？', '申通提醒', ['是', '否'], function(e) {
+								if(e.index == 0) {
+								var url = app.getUrl() + 'DeleteGunRecordsById';
+								mui.ajax(url, {
+									data: {
+										id: div.id
+									},
+									type: 'post',
+									dataType: 'json',
+									success: function(data) {
+										if(data.Success){
+											mui.toast(data.Message);
+										}
+										else{
+											mui.toast(data.Message);
+										}
+									}
+								});
+								pulldownRefresh();
+								}
+							});
+							break;
+						}
+					}
+				});
+			})(mui);
+			
+			/**
+			 * 下拉刷新具体业务实现
+			 */
+			function pulldownRefresh() {
+				setTimeout(function() {
+					var fragment = document.createDocumentFragment();
+					var UserInfo = JSON.parse(app.getLoginInfo().userinfo|| "{}");	
+					count = 1;
+					var messageInfo = {
+						UserName: "",
+						pageNumber: 1,
+						pageSize: 10
+					};
+					var url = app.getUrl() + 'GetGunRecordsList';
+					mui.ajax(url, {
+						data: messageInfo,
+						type: 'post',
+						dataType: 'json',
+						success: function(data) {
+							if(data.Success) {
+								var jsonData = JSON.parse(data.codes);	//转JSON对象
+								for(var i = 0; i < jsonData.length; i++) {
+									var li = document.createElement('li');
+									li.className = 'mui-table-view-cell';
+									li.innerHTML = '<div class="mui-slider-right mui-disabled">'
+									+ '<a class="mui-btn mui-btn-red mui-icon mui-icon-trash"></a>'
+									+ '</div>';
+									
+									var divBox = document.createElement('div');
+									divBox.id = jsonData[i].id;
+									divBox.className = "mui-slider-handle";
+									divBox.innerHTML = '<div class="mui-table">'
+									+ '<div class="mui-table-cell mui-col-xs-10">'
+									+ 	'<h4 class="mui-ellipsis-2">'
+									+ 		jsonData[i].scantype + '&nbsp;&nbsp;&nbsp;&nbsp;' + jsonData[i].reason
+									+ 	'</h4>'
+									+ 	'<p class="mui-h6 mui-ellipsis">'
+									+ 		'开始时间：' + jsonData[i].starttime.replace('T',' ')
+									+ 	'</p>'
+									+ 	'<p class="mui-h6 mui-ellipsis">'
+									+ 		'结束时间：' + jsonData[i].endtime.replace('T',' ')
+									+ 	'</p>'
+									+ '</div>'
+									+ '<div class="mui-table-cell mui-col-xs-5 mui-text-right">'
+									+ 	'<span class="mui-h5">'
+									+ 		jsonData[i].createuser
+//									+ 		new Date(jsonData[i].createtime.replace('T',' ')).toLocaleString()
+//									+ 		jsonData[i].createtime.replace('T',' ')
+									+ 	'</span>'
+									+ 	'<p class="mui-h6 mui-ellipsis">'
+									+ 		'票数：' + jsonData[i].count
+									+ 	'</p>'
+									+ 	'<p class="mui-h6 mui-ellipsis">'
+									+ 		(jsonData[i].flowstate == '1' ? '<span style="color:#f00">未通过</span>'
+											: jsonData[i].flowstate == '2' ? '<span style="color:#00f">审核中</span>'
+											: jsonData[i].flowstate == '3' ? '<span style="color:#f0f">结束流程</span>'
+											: jsonData[i].flowstate == '4' ? '<span style="color:#0f0">审核通过</span>'
+											: '未提交')
+									+ 	'</p>'
+									+ '</div>';
+									//添加点击事件
+									divBox.addEventListener('tap', function(event) {
+										//处理切换时，数据未从数据库更新完毕
+										var nwaiting = plus.nativeUI.showWaiting();
+										var webviewShow = plus.webview.create(
+											'form-input.html',
+											'form-input',
+											'', {
+												name: this.id
+											}
+										); //后台创建webview并打开show.html
+										webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
+											setTimeout(function() {
+												nwaiting.close();
+												//新webview的载入完毕后关闭等待框
+												webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+											}, 300);
+										}, false);
+									});
+									li.appendChild(divBox);
+									fragment.appendChild(li);
+								}
+								var table = document.body.querySelector('.mui-table-view');
+								while (table.firstChild)
+									table.removeChild(table.firstChild);
+								table.appendChild(fragment);
+								if (jsonData.length < 10) {
+									//参数为true代表没有更多数据了。
+									mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+								} else {
+									//当没有更多数据后要刷新状态，否则不能下拉
+									mui('#pullrefresh').pullRefresh().refresh(true);
+								}
+							} else {
+//								mui.alert(data.Message);
+								var table = document.body.querySelector('.mui-table-view');
+								while (table.firstChild)
+									table.removeChild(table.firstChild);
+								//参数为true代表没有更多数据了。
+								mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+							}
+						},
+					});
+					mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+				}, 150);
+			}
+			var count = 0;
+			/**
+			 * 上拉加载具体业务实现
+			 */
+			function pullupRefresh() {
+				setTimeout(function() {
+					var table = document.body.querySelector('.mui-table-view');
+					count = count + 1;
+					var fragment = document.createDocumentFragment();
+					var UserInfo = JSON.parse(app.getLoginInfo().userinfo|| "{}");	
+					var messageInfo = {
+						UserName: "",
+						pageNumber: count,
+						pageSize: 10
+					};
+					var url = app.getUrl() + 'GetGunRecordsList';
+					mui.ajax(url, {
+						data: messageInfo,
+						type: 'post',
+						dataType: 'json',
+						success: function(data) {
+							console.log(JSON.stringify(data))
+							if(data.Success) {
+								var jsonData = JSON.parse(data.codes);	//转JSON对象
+								for(var i = 0; i < jsonData.length; i++) {
+									var li = document.createElement('li');
+									li.className = 'mui-table-view-cell';
+									li.innerHTML = '<div class="mui-slider-right mui-disabled">'
+									+ '<a class="mui-btn mui-btn-red mui-icon mui-icon-trash"></a>'
+									+ '</div>';
+									
+									var divBox = document.createElement('div');
+									divBox.id = jsonData[i].id;
+									divBox.className = "mui-slider-handle";
+									divBox.innerHTML = '<div class="mui-table">'
+									+ '<div class="mui-table-cell mui-col-xs-10">'
+									+ 	'<h4 class="mui-ellipsis-2">'
+									+ 		jsonData[i].scantype + '&nbsp;&nbsp;&nbsp;&nbsp;' + jsonData[i].reason
+									+ 	'</h4>'
+									+ 	'<p class="mui-h6 mui-ellipsis">'
+									+ 		'开始时间：' + jsonData[i].starttime.replace('T',' ')
+									+ 	'</p>'
+									+ 	'<p class="mui-h6 mui-ellipsis">'
+									+ 		'结束时间：' + jsonData[i].endtime.replace('T',' ')
+									+ 	'</p>'
+									+ '</div>'
+									+ '<div class="mui-table-cell mui-col-xs-5 mui-text-right">'
+									+ 	'<span class="mui-h5">'
+									+ 		jsonData[i].createuser
+//									+ 		new Date(jsonData[i].createtime.replace('T',' ')).toLocaleString()
+//									+ 		jsonData[i].createtime.replace('T',' ')
+									+ 	'</span>'
+									+ 	'<p class="mui-h6 mui-ellipsis">'
+									+ 		'票数：' + jsonData[i].count
+									+ 	'</p>'
+									+ 	'<p class="mui-h6 mui-ellipsis">'
+									+ 		(jsonData[i].flowstate == '1' ? '<span style="color:#f00">未通过</span>'
+											: jsonData[i].flowstate == '2' ? '<span style="color:#00f">审核中</span>'
+											: jsonData[i].flowstate == '3' ? '<span style="color:#f0f">结束流程</span>'
+											: jsonData[i].flowstate == '4' ? '<span style="color:#0f0">审核通过</span>'
+											: '未提交')
+									+ 	'</p>'
+									+ '</div>';
+									//添加点击事件
+									divBox.addEventListener('tap', function(event) {
+										//处理切换时，数据未从数据库更新完毕
+										var nwaiting = plus.nativeUI.showWaiting();
+										var webviewShow = plus.webview.create(
+											'form-input.html',
+											'form-input',
+											'', {
+												name: this.id
+											}
+										); //后台创建webview并打开show.html
+										webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
+											setTimeout(function() {
+												nwaiting.close();
+												//新webview的载入完毕后关闭等待框
+												webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+											}, 300);
+										}, false);
+									});
+									li.appendChild(divBox);
+									fragment.appendChild(li);
+								}
+								table.appendChild(fragment);
+								if (jsonData.length < 10) {
+									mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+								} //参数为true代表没有更多数据了。
+								else {
+									mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
+								}
+							} else {
+								mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+							}
+						},
+					});
+				}, 150);
+			}
+			if (mui.os.plus) {
+				mui.plusReady(function() {
+					setTimeout(function() {
+						mui('#pullrefresh').pullRefresh().pullupLoading();
+					}, 1000);
+
+				});
+			} else {
+				mui.ready(function() {
+					mui('#pullrefresh').pullRefresh().pullupLoading();
+				});
+			}
+			window.addEventListener('refresh', function(event) {
+				pulldownRefresh();
+			});
+		</script>
+	</body>
+
+</html>

@@ -9,8 +9,6 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<link rel="stylesheet" href="../../css/mui.min.css">
-		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
-		<link href="css/mui.poppicker.css" rel="stylesheet" />
 		<style>
 			html,
 			body {
@@ -36,8 +34,18 @@
 						<input type="text" id="Type" class="mui-input-clear mui-input" required="required"  readonly="readonly">
 					</div>
 				</form>
-				<div class="mui-input-row" style="margin: 5px 0px;">
-					<textarea id="Describe" rows="8" placeholder="汇报内容" class="mui-input-clear mui-input" readonly="readonly"></textarea>
+				<br>
+				<div class="mui-input-row">
+					<textarea id="TodayWork" rows="3" placeholder="今日完成工作" class="mui-input-clear mui-input" readonly="readonly"></textarea>
+				</div>
+				<div class="mui-input-row">
+					<textarea id="TodayUnWork" rows="3" placeholder="未完成工作" class="mui-input-clear mui-input" readonly="readonly"></textarea>
+				</div>
+				<div class="mui-input-row">
+					<textarea id="TodayCoWork" rows="3" placeholder="需协调工作" class="mui-input-clear mui-input" readonly="readonly"></textarea>
+				</div>
+				<div class="mui-input-row">
+					<textarea id="TodayRemark" rows="3" placeholder="备注" class="mui-input-clear mui-input" readonly="readonly"></textarea>
 				</div>
 				<div class="mui-input-row">
 					<textarea id="Remark" rows="4" placeholder="领导备注" class="mui-input-clear mui-input" ></textarea>
@@ -52,8 +60,6 @@
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/app.js"></script>
 		<script src="../../js/mui.enterfocus.js"></script>
-		<script src="../../js/mui.picker.min.js"></script>
-		<script src="../../js/mui.poppicker.js"></script>
 		<script>
 			var Title = document.getElementById("Title");
 			var Type = document.getElementById("Type");
@@ -73,8 +79,10 @@
 						if(data) {
 							Title.value = data[0].title;
 							Type.value = data[0].type;
-							Describe.value = data[0].describe;
-							Remark.value = data[0].remark;
+							TodayWork.value = data[0].todaywork;
+							TodayUnWork.value = data[0].todayunwork;
+							TodayCoWork.value = data[0].todaycowork;
+							TodayRemark.value = data[0].todayremark;
 						}
 					}
 				});
@@ -84,22 +92,18 @@
 				//验证
 				if(Remark.value == "") {
 					plus.nativeUI.toast("备注不能为空");
-					Title.focus();
+					Remark.focus();
 					return;
 				}
-
 
 				var userid = app.getLoginInfo().userid;
 				//调用方法
 				var billInfo = {
-					ID:plus.webview.currentWebview().name,
-					Title: Title.value,
-					Type: Type.value,
-					Describe: Describe.value,
-					Remark:Remark.value,
-					PZUserName:JSON.parse(app.getLoginInfo().userinfo).realname
+					id:plus.webview.currentWebview().name,
+					username: JSON.parse(app.getLoginInfo().userinfo).realname,
+					remark: Remark.value
 				};
-				var url = app.getUrl() + 'ModifyWorkReport';
+				var url = app.getUrl() + 'WorkReportPZ';
 				mui.ajax(url, {
 					data: {
 						Info: JSON.stringify(billInfo)
@@ -118,7 +122,6 @@
 					}
 				});
 			}
-
 		</script>
 	</body>
 

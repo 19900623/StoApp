@@ -7,3 +7,18 @@ body {
 }
 .mui-content{height: 100%;}
 
+/* 选择头像 */
+#profile{margin-bottom: 10px;}
+.mui-nowrap{ word-break:keep-all; white-space:nowrap; overflow: auto; }
+.mui-profile{ display: block; width: 45px; height: 45px; line-height: 45px; text-align: center; font-size: 12px; color: #fff; border-radius: 50%; overflow: hidden; }
+.mui-profile-text{ display: block; width: 45px; text-align: center; font-size: 14px; color: #666;}
+.profile-box{ *float: left; margin: 3px; *clear:right; display:inline-block; }
+.profile-box:nth-child(9n+1) .mui-profile { background-color: rgba(210,170,84,0.9); }
+.profile-box:nth-child(9n+2) .mui-profile { background-color: rgba(108,160,182,0.9); }
+.profile-box:nth-child(9n+3) .mui-profile { background-color: rgba(129,165,93,0.9); }
+.profile-box:nth-child(9n+4) .mui-profile { background-color: rgba(209,109,82,0.9); }
+.profile-box:nth-child(9n+5) .mui-profile { background-color: rgba(109,108,168,0.9); }
+.profile-box:nth-child(9n+6) .mui-profile { background-color: rgba(196,126,184,0.9); }
+.profile-box:nth-child(9n+7) .mui-profile { background-color: rgba(120,180,135,0.9); }
+.profile-box:nth-child(9n+8) .mui-profile { background-color: rgba(210,84,145,0.9); }
+.profile-box:nth-child(9n+9) .mui-profile { background-color: rgba(160,113,99,0.9); }
