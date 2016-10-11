@@ -1631,7 +1631,12 @@
 				"resources": [
 					"js/mui.picker.min.js",
 					"js/mui.poppicker.js",
-					"css/mui.picker.min.css"
+					"css/mui.picker.min.css",
+					"js/mui.enterfocus.js",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
 				],
 				"refer": [],
 				"priority": 0
@@ -1767,11 +1772,13 @@
 					"css/mui.min.css",
 					"img/newspaper.png",
 					"img/report_edit.png",
-					"img/client_account_template.png"
+					"img/client_account_template.png",
+					"fonts/mui.ttf"
 				],
 				"refer": [
 					"business/leavebill/leavebill-list-main.html",
-					"business/leavebill/leavebill-list-view-main.html"
+					"business/leavebill/leavebill-list-view-main.html",
+					"business/workreport/workreport-list-main.html"
 				],
 				"priority": 0
 			},
@@ -1833,7 +1840,11 @@
 			},
 			"business/gunrecords/pullrefresh_main.html": {
 				"resources": [
-					"business/gunrecords/pullrefresh_sub.html"
+					"business/gunrecords/pullrefresh_sub.html",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
 				],
 				"refer": [
 					"business/gunrecords/form-input.html"
@@ -1846,6 +1857,17 @@
 					"js/mui.poppicker.js",
 					"css/mui.poppicker.css",
 					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/notice/notice_list_main.html": {
+				"resources": [
+					"business/notice/notice_list_sub.html",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
 				],
 				"refer": [],
 				"priority": 0

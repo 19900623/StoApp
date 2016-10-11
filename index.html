@@ -91,10 +91,10 @@
 					var settings = app.getSettings();
 					//正式库
 					//var httpUrl = 'http://58.57.35.3:8066';
-					var httpUrl = 'http://oaapp.lyzysoft.com:8066'
+//					var httpUrl = 'http://oaapp.lyzysoft.com:8066'
 					//测试库
 					//var httpUrl = 'http://192.168.6.164:8080/LeaRun.MobileApp';
-//					var httpUrl = 'http://192.168.6.166/LeaRun.MobileApp';
+					var httpUrl = 'http://192.168.6.166/LeaRun.MobileApp';
 					var url = httpUrl + '/MobileAppService.asmx/';
 					app.setUrl(url);
 					app.setHttpUrl(httpUrl);
@@ -199,6 +199,7 @@
 										userinfo: data.UserInfo,
 										userreport: data.UserReport
 									};
+//									console.log(JSON.stringify(loginInfo))
 									app.setSettings(settings);
 									app.setLoginInfo(loginInfo);
 									toMain();
@@ -300,6 +301,23 @@
 									var webviewShow = plus.webview.create(
 										'business/knowledgelib/knowledgelib_detail.html',
 										'knowledgelib_detail',
+										'', {
+											name: messageState.MessageID
+										}
+									); //后台创建webview并打开show.html
+									webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
+										setTimeout(function() {
+											nwaiting.close();
+											//新webview的载入完毕后关闭等待框
+											webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+										}, 300);
+									}, false);
+									break;
+								case 'Notice':
+									var nwaiting = plus.nativeUI.showWaiting();
+									var webviewShow = plus.webview.create(
+										'business/notice/notice_detail.html',
+										'notice_detail',
 										'', {
 											name: messageState.MessageID
 										}
