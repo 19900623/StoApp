@@ -227,5 +227,24 @@
 			"fonts/mui.ttf",
 			"css/mui.min.css"
 		]
+	},
+	"business/notice/notice_list_sub.html": {
+		"refer": [
+			"business/notice/notice_detail.html"
+		],
+		"resources": [
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
+		]
+	},
+	"business/notice/notice_detail.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
+		]
 	}
 }

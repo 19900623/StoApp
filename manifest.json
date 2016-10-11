@@ -1871,6 +1871,28 @@
 				],
 				"refer": [],
 				"priority": 0
+			},
+			"business/notice/notice_list_sub.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"business/notice/notice_detail.html"
+				],
+				"priority": 0
+			},
+			"business/notice/notice_detail.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
 			}
 		},
 		"idle": {
