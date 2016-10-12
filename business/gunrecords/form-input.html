@@ -72,9 +72,6 @@
 			var userinfo = JSON.parse(app.getLoginInfo().userinfo);	//登录用户信息
 			mui.init();
 			mui.plusReady(function() {
-				//初始隐藏提交按钮和删除按钮
-				document.getElementById("buttoncommit").style.display = "none";
-				document.getElementById("buttondel").style.display = "none";
 				//加载默认值
 				StartTime.addEventListener('tap', function() {
 					AddDtPicker(this);
@@ -158,11 +155,7 @@
 								Reason.value = jsonData.Reason;
 								Count.value = jsonData.Count;
 								Remark.value = jsonData.Mark;
-								
-								//修改时显示提交和删除按钮
-								document.getElementById("buttoncommit").style.display = "block";
-								document.getElementById("buttondel").style.display = "block";
-								
+																
 								if(jsonData.FlowState) {
 									document.getElementById("buttoncommit").style.display = "none";
 									document.getElementById("buttondel").style.display = "none";
@@ -180,6 +173,11 @@
 							}
 						}
 					});
+				}
+				else{
+					//新增时隐藏提交按钮和删除按钮
+					document.getElementById("buttoncommit").style.display = "none";
+					document.getElementById("buttondel").style.display = "none";
 				}
 			});
 			//添加DtPicker
@@ -237,7 +235,7 @@
 					billInfo["CreateTime"] = new Date().format("yyyy-MM-dd hh:mm:ss");
 					billInfo["CreateUser"] = userinfo.realname;
 				}
-				console.log(JSON.stringify(billInfo));
+//				console.log(JSON.stringify(billInfo));
 				var url = app.getUrl() + 'EditGunRecords';
 				mui.ajax(url, {
 					data: {
@@ -246,10 +244,10 @@
 					type: 'post',
 					dataType: 'json',
 					success: function(data) {
-						console.log(data)
+//						console.log(data)
 						if(data.Success) {
 							plus.nativeUI.toast(data.Message);
-							var page = plus.webview.getWebviewById('form-input');
+							var page = plus.webview.getWebviewById('pullrefresh_sub.html');
 							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
 							mui.fire(page, 'refresh');
 							mui.back();
@@ -262,7 +260,38 @@
 			
 			//提交
 			function btn_commit(){
-				
+				var taskId = plus.webview.currentWebview().name;	//编辑ID
+				if(!!taskId){
+					//判断不能重复提交
+//					if()
+	                //执行流程
+	                var dataInfo = {
+	                	taskId: taskId
+	                	,stepid: '416e6091-177e-44d9-8599-a0334a6d76d2'
+	                	,executyType: 1
+	                	,userid: userinfo.userid
+	                }
+	                var url = app.getUrl() + 'SubmitGunRecords';
+	                mui.ajax(url, {
+						data: dataInfo,
+						type: 'post',
+						dataType: 'json',
+						success: function(data) {
+							if(data.Success) {
+								plus.nativeUI.toast('提交成功');
+								var page = plus.webview.getWebviewById('pullrefresh_sub.html');
+								//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+								mui.fire(page, 'refresh');
+								mui.back();
+							} else {
+								plus.nativeUI.toast(data.Message);
+							}
+						},
+						error: function(xhr, type, errorThrown) {
+							console.log(JSON.stringify(xhr))
+						}
+					});
+				}
 			}
 			
 			//删除
@@ -280,7 +309,7 @@
 							success: function(data) {
 								if(data.Success) {
 									plus.nativeUI.toast('删除成功');
-									var page = plus.webview.getWebviewById('form-input');
+									var page = plus.webview.getWebviewById('pullrefresh_sub.html');
 									//触发列表界面的自定义事件（refresh）,从而进行数据刷新
 									mui.fire(page, 'refresh');
 									mui.back();

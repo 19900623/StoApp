@@ -91,10 +91,10 @@
 					var settings = app.getSettings();
 					//正式库
 					//var httpUrl = 'http://58.57.35.3:8066';
-//					var httpUrl = 'http://oaapp.lyzysoft.com:8066'
+					var httpUrl = 'http://oaapp.lyzysoft.com:8066'
 					//测试库
 					//var httpUrl = 'http://192.168.6.164:8080/LeaRun.MobileApp';
-					var httpUrl = 'http://192.168.6.166/LeaRun.MobileApp';
+//					var httpUrl = 'http://192.168.6.166/LeaRun.MobileApp';
 					var url = httpUrl + '/MobileAppService.asmx/';
 					app.setUrl(url);
 					app.setHttpUrl(httpUrl);
@@ -296,7 +296,7 @@
 										}, 300);
 									}, false);
 									break;
-								case 'KnowledgeLib':
+								case 'KnowledgeLib':	//知识库
 									var nwaiting = plus.nativeUI.showWaiting();
 									var webviewShow = plus.webview.create(
 										'business/knowledgelib/knowledgelib_detail.html',
@@ -313,7 +313,7 @@
 										}, 300);
 									}, false);
 									break;
-								case 'Notice':
+								case 'Notice':	//公告
 									var nwaiting = plus.nativeUI.showWaiting();
 									var webviewShow = plus.webview.create(
 										'business/notice/notice_detail.html',
@@ -329,6 +329,10 @@
 											webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
 										}, 300);
 									}, false);
+									break;
+								case 'Performance':	//个人奖惩
+									pageid = 'report-performance'
+									pagehtml = 'report/report-performance.html'
 									break;
 								case 'Alert':
 									alert(messageState.MessageID);

@@ -75,14 +75,13 @@
 						PageNumber: 1,
 						PageSize: 10
 					};
-							console.log(JSON.stringify(messageInfo))
+//							console.log(JSON.stringify(messageInfo))
 					var url = app.getUrl() + 'GetWorkReportList';
 					mui.ajax(url, {
 						data: messageInfo,
 						type: 'post',
 						dataType: 'json',
 						success: function(data) {
-							console.log(JSON.stringify(messageInfo))
 							if (data) {
 								for (var i = 0; i < data.length; i++) {
 									li = document.createElement('li');

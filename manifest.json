@@ -320,7 +320,8 @@
 					"business/questionbill/questionbill-grid.html",
 					"tab-work-help.html",
 					"business/expensebill/expensebill-list-main.html",
-					"business/gunrecords/pullrefresh_main.html"
+					"business/gunrecords/pullrefresh_main.html",
+					"business/boxcheck/boxcheck-grid.html"
 				],
 				"priority": 0
 			},
@@ -1778,7 +1779,10 @@
 				"refer": [
 					"business/leavebill/leavebill-list-main.html",
 					"business/leavebill/leavebill-list-view-main.html",
-					"business/workreport/workreport-list-main.html"
+					"business/workreport/workreport-list-main.html",
+					"business/notice/notice_list_main.html",
+					"business/knowledgelib/knowledgelib_list.html",
+					"business/addresslist/addresslist.html"
 				],
 				"priority": 0
 			},
@@ -1856,7 +1860,11 @@
 					"js/mui.picker.min.js",
 					"js/mui.poppicker.js",
 					"css/mui.poppicker.css",
-					"css/mui.picker.min.css"
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
 				],
 				"refer": [],
 				"priority": 0
@@ -1886,6 +1894,96 @@
 			},
 			"business/notice/notice_detail.html": {
 				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/gunrecords/pullrefresh_sub.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"fonts/mui.ttf"
+				],
+				"refer": [
+					"business/gunrecords/form-input.html"
+				],
+				"priority": 0
+			},
+			"business/boxcheck/boxcheck-list-main.html": {
+				"resources": [
+					"business/boxcheck/boxcheck-list-sub.html"
+				],
+				"refer": [
+					"business/boxcheck/boxcheck-input.html"
+				],
+				"priority": 0
+			},
+			"business/boxcheck/boxcheck-grid.html": {
+				"resources": [
+					"img/script_edit.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"business/boxcheck/boxcheck-list-main.html"
+				],
+				"priority": 0
+			},
+			"business/boxcheck/boxcheck-input.html": {
+				"resources": [
+					"js/common.js",
+					"js/mui.picker.min.js",
+					"css/common.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/mui.enterfocus.js",
+					"img/scan.png"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/addresslist/addresslist.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"business/addresslist/addresslist-indexed.html",
+					"business/addresslist/addresslist-detail.html"
+				],
+				"priority": 0
+			},
+			"business/addresslist/addresslist-indexed.html": {
+				"resources": [
+					"js/pinyin.js",
+					"css/mui.indexedlist.css",
+					"js/mui.indexedlist.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"employee_select.html": {
+				"resources": [
+					"js/pinyin.js",
+					"css/mui.indexedlist.css",
+					"js/mui.indexedlist.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/addresslist/addresslist-detail.html": {
+				"resources": [
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
 					"js/app.js",
 					"js/mui.min.js",
 					"fonts/mui.ttf",
