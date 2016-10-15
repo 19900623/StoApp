@@ -7,9 +7,9 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<link href="../css/mui.min.css" rel="stylesheet" />
-		<link rel="stylesheet" href="../css/mui.picker.min.css" />
-		<link href="../css/mui.poppicker.css" rel="stylesheet" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
 		<style>
 			html,
 			body {
@@ -86,9 +86,9 @@
 			</div>
 		</div>
 	</body>
-	<script src="../js/mui.min.js"></script>
-	<script src="../js/app.js"></script>
-	<script src="../js/mui.picker.min.js"></script>
+	<script src="../../js/mui.min.js"></script>
+	<script src="../../js/app.js"></script>
+	<script src="../../js/mui.picker.min.js"></script>
 	<script type="text/javascript">
 		mui.init({
 			swipeBack: true //启用右滑关闭功能
@@ -128,14 +128,12 @@
 				type: 'post',
 				dataType: 'json',
 				success: function(data) {
-					console.log(JSON.stringify(data))
 					document.getElementById("Depart").addEventListener('tap', function(event) {						
 						var picker = new mui.PopPicker({
 							layer: 3
 						});
 						picker.setData(data);
 						picker.show(function(items) {
-							console.log(items[2]);
 							if(JSON.stringify(items[2]) == "{}"){
 								document.getElementById("Code").value = (items[1] || {}).value;
 								document.getElementById("Depart").value = (items[1] || {}).text;

@@ -68,10 +68,10 @@
 				setTimeout(function() {
 					var fragment = document.createDocumentFragment();
 					var li;
-					var logininfo = app.getLoginInfo();
 					count = 1;
+					var userinfo = JSON.parse(app.getLoginInfo().userinfo);
 					var messageInfo = {
-						Userid: logininfo.userid,
+						UserName: userinfo.realname,
 						PageNumber: 1,
 						PageSize: 10
 					};
@@ -86,10 +86,9 @@
 									li = document.createElement('li');
 									li.className = 'mui-table-view-cell';
 									li.id = data[i].id;
-									var htmlText = '<div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '标题：' + data[i].title + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '类型:' + data[i].type + '&nbsp;&nbsp;状态:' + data[i].readflag  + '</br>姓名:'+data[i].username+'&nbsp;&nbsp;发布日期:' + data[i].publishdate + '</p>' + '</div>' + '</div>';
+									var htmlText = '<div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '标题：' + data[i].title + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '类型：' + data[i].type + '</br>发布日期：' + new Date(data[i].publishdate.replace("T"," ")).format("yyyy-MM-dd hh:mm:ss") + '</p>' + '</div>' + '</div>';
 									li.innerHTML = htmlText;
-									li.addEventListener('tap', function(event) {
-									
+									li.addEventListener('tap', function(event) {									
 										//处理切换时，数据未从数据库更新完毕
 										var nwaiting = plus.nativeUI.showWaiting();
 										var webviewShow = plus.webview.create(
@@ -142,13 +141,13 @@
 					count = count + 1;
 					var fragment = document.createDocumentFragment();
 					var li;
-					var logininfo = app.getLoginInfo();
+					var userinfo = JSON.parse(app.getLoginInfo().userinfo);
 					var messageInfo = {
-						Userid: logininfo.userid,
+						UserName: userinfo.realname,
 						PageNumber: count,
-						PageSize: 10,
-						State:''
+						PageSize: 10
 					};
+					console.log(JSON.stringify(messageInfo))
 					var url = app.getUrl() + 'GetWorkReportMainList';
 					mui.ajax(url, {
 						data: messageInfo,
@@ -160,7 +159,7 @@
 									li = document.createElement('li');
 									li.className = 'mui-table-view-cell';
 									li.id = data[i].id;
-									var htmlText = '<div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '标题：' + data[i].title + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '类型:' + data[i].type + '&nbsp;&nbsp;状态:' + data[i].readflag  + '</br>姓名:'+data[i].username+'&nbsp;&nbsp;发布日期:' + data[i].publishdate + '</p>' + '</div>' + '</div>';
+									var htmlText = '<div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '标题：' + data[i].title + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '类型：' + data[i].type + '</br>发布日期：' + new Date(data[i].publishdate.replace("T"," ")).format("yyyy-MM-dd hh:mm:ss") + '</p>' + '</div>' + '</div>';
 									li.innerHTML = htmlText;
 									li.addEventListener('tap', function(event) {
 										//处理切换时，数据未从数据库更新完毕
@@ -192,7 +191,7 @@
 							} else {
 								mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
 							}
-						},
+						}
 					});
 				}, 150);
 			}
@@ -208,6 +207,7 @@
 					mui('#pullrefresh').pullRefresh().pullupLoading();
 				});
 			}
+			
 			window.addEventListener('refresh', function(event) {
 				pulldownRefresh();
 			});

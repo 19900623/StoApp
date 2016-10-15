@@ -320,7 +320,8 @@
 					"business/questionbill/questionbill-grid.html",
 					"tab-work-help.html",
 					"business/expensebill/expensebill-list-main.html",
-					"business/gunrecords/pullrefresh_main.html"
+					"business/gunrecords/pullrefresh_main.html",
+					"business/boxcheck/boxcheck-grid.html"
 				],
 				"priority": 0
 			},
@@ -337,7 +338,8 @@
 					"tab-shedule-main.html"
 				],
 				"refer": [
-					"report/tab-echarts.html"
+					"report/tab-echarts.html",
+					null
 				],
 				"priority": 0
 			},
@@ -1242,7 +1244,10 @@
 					"img/cell_delete.png",
 					"js/app.js",
 					"js/mui.min.js",
-					"css/mui.min.css"
+					"css/mui.min.css",
+					"img/text_signature.png",
+					"img/small_business.png",
+					"img/phone_vintage.png"
 				],
 				"refer": [
 					"report/report-paymore.html",
@@ -1256,7 +1261,10 @@
 					"report/report-performance.html",
 					"report/report-waybillpickup-business.html",
 					"report/report-custom-dept.html",
-					"report/report-wrong-detail.html"
+					"report/report-wrong-detail.html",
+					"report/sign_ratio/sign-radio-grid.html",
+					"report/business/business-grid.html",
+					"report/service/service-grid.html"
 				],
 				"priority": 0
 			},
@@ -1502,7 +1510,8 @@
 				],
 				"refer": [
 					"business/workflow/vehicle-workflow.html",
-					"business/workflow/paymentbill-workflow.html"
+					"business/workflow/paymentbill-workflow.html",
+					"business/workflow/expensebill-workflow.html"
 				],
 				"priority": 0
 			},
@@ -1631,7 +1640,12 @@
 				"resources": [
 					"js/mui.picker.min.js",
 					"js/mui.poppicker.js",
-					"css/mui.picker.min.css"
+					"css/mui.picker.min.css",
+					"js/mui.enterfocus.js",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
 				],
 				"refer": [],
 				"priority": 0
@@ -1767,11 +1781,16 @@
 					"css/mui.min.css",
 					"img/newspaper.png",
 					"img/report_edit.png",
-					"img/client_account_template.png"
+					"img/client_account_template.png",
+					"fonts/mui.ttf"
 				],
 				"refer": [
 					"business/leavebill/leavebill-list-main.html",
-					"business/leavebill/leavebill-list-view-main.html"
+					"business/leavebill/leavebill-list-view-main.html",
+					"business/workreport/workreport-list-main.html",
+					"business/notice/notice_list_main.html",
+					"business/knowledgelib/knowledgelib_list.html",
+					"business/addresslist/addresslist.html"
 				],
 				"priority": 0
 			},
@@ -1833,7 +1852,11 @@
 			},
 			"business/gunrecords/pullrefresh_main.html": {
 				"resources": [
-					"business/gunrecords/pullrefresh_sub.html"
+					"business/gunrecords/pullrefresh_sub.html",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
 				],
 				"refer": [
 					"business/gunrecords/form-input.html"
@@ -1844,6 +1867,392 @@
 				"resources": [
 					"js/mui.picker.min.js",
 					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/notice/notice_list_main.html": {
+				"resources": [
+					"business/notice/notice_list_sub.html",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/notice/notice_list_sub.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"business/notice/notice_detail.html"
+				],
+				"priority": 0
+			},
+			"business/notice/notice_detail.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/gunrecords/pullrefresh_sub.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"fonts/mui.ttf"
+				],
+				"refer": [
+					"business/gunrecords/form-input.html"
+				],
+				"priority": 0
+			},
+			"business/boxcheck/boxcheck-list-main.html": {
+				"resources": [
+					"business/boxcheck/boxcheck-list-sub.html"
+				],
+				"refer": [
+					"business/boxcheck/boxcheck-input.html"
+				],
+				"priority": 0
+			},
+			"business/boxcheck/boxcheck-grid.html": {
+				"resources": [
+					"img/script_edit.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"business/boxcheck/boxcheck-list-main.html"
+				],
+				"priority": 0
+			},
+			"business/boxcheck/boxcheck-input.html": {
+				"resources": [
+					"js/common.js",
+					"js/mui.picker.min.js",
+					"css/common.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/mui.enterfocus.js",
+					"img/scan.png"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/addresslist/addresslist.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"business/addresslist/addresslist-indexed.html",
+					"business/addresslist/addresslist-detail.html"
+				],
+				"priority": 0
+			},
+			"business/addresslist/addresslist-indexed.html": {
+				"resources": [
+					"js/pinyin.js",
+					"css/mui.indexedlist.css",
+					"js/mui.indexedlist.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"employee_select.html": {
+				"resources": [
+					"js/pinyin.js",
+					"css/mui.indexedlist.css",
+					"js/mui.indexedlist.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/addresslist/addresslist-detail.html": {
+				"resources": [
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/sign_ratio/sign-radio-grid.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"img/text_signature.png",
+					"fonts/mui.ttf"
+				],
+				"refer": [
+					"report/sign_ratio/sign-radio-group.html",
+					"report/sign_ratio/sign-radio-exception.html"
+				],
+				"priority": 0
+			},
+			"report/sign_ratio/sign-radio-group.html": {
+				"resources": [
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/app.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					null
+				],
+				"refer": [
+					"report/sign_ratio/sign-radio-group-detail.html"
+				],
+				"priority": 0
+			},
+			"report/report-custom-dept.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/sign_ratio/sign-radio-group-detail.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/sign_ratio/sign-radio-exception.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"js/mui.min.js",
+					"js/mui.poppicker.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [
+					"report/sign_ratio/sign-radio-exception-detail.html"
+				],
+				"priority": 0
+			},
+			"report/sign_ratio/sign-radio-exception-detail.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/business/business-grid.html": {
+				"resources": [
+					"img/text_signature.png",
+					"img/chart_column.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"img/cell_delete.png",
+					"img/client_account_template.png"
+				],
+				"refer": [
+					"report/business/report-waybillpickup.html",
+					"report/business/report-custom-dept.html",
+					"report/business/report-wrong-detail.html",
+					"report/sign_ratio/sign-radio-grid.html"
+				],
+				"priority": 0
+			},
+			"report/business/report-waybillpickup.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/business/report-custom-dept.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/business/report-wrong-detail.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/service/service-grid.html": {
+				"resources": [
+					"img/outlook_ignore_email.png",
+					"img/telephone.png",
+					"img/table_torn.png",
+					"img/blackberry.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"img/cell_delete.png"
+				],
+				"refer": [
+					"report/sign_ratio/sign-radio-grid.html",
+					"report/service/port_lost_group.html",
+					"report/service/damaged_rate_group.html",
+					"report/service/big_error_group.html",
+					"report/service/complaints_report.html",
+					"report/service/tel_bill_report.html"
+				],
+				"priority": 0
+			},
+			"report/service/port_lost_group.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"report/service/port_lost_group_detail.html"
+				],
+				"priority": 0
+			},
+			"report/service/port_lost_group_detail.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/service/damaged_rate_group.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"report/service/port_lost_group_detail.html",
+					"report/service/damaged_rate_detail.html"
+				],
+				"priority": 0
+			},
+			"report/service/damaged_rate_detail.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/service/big_error_group.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"js/mui.min.js",
+					"js/mui.poppicker.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [
+					"report/service/damaged_rate_detail.html"
+				],
+				"priority": 0
+			},
+			"report/service/complaints_report.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"report/service/complaints_detail.html"
+				],
+				"priority": 0
+			},
+			"report/service/complaints_detail.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/service/tel_bill_report.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"js/mui.min.js",
+					"js/mui.poppicker.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
 					"css/mui.poppicker.css",
 					"css/mui.picker.min.css"
 				],

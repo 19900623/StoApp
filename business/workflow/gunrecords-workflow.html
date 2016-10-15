@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>把枪审批</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<style>
+			.mui-btn {margin: 0 10px;}
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">把枪备案审批</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>开始时间</label>
+						<input type="text" id="StartTime" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>结束时间</label>
+						<input type="text" id="EndTime" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>扫描类型</label>
+						<input type="text" id="Type" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>原因</label>
+						<input type="text" id="Reason" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>票数</label>
+						<input type="tel" id="Count" class="mui-input" required="required" readonly="readonly">
+					</div>
+				</form>
+				<br>
+				<div class="mui-input-row">
+					<textarea id="Remark" rows="3" placeholder="备注" class="mui-input-clear mui-input" readonly="readonly"></textarea>
+				</div>
+				<div class="mui-card">
+					<form class="mui-input-group">
+						<div class="mui-input-row mui-radio">
+							<label>同意</label>
+							<input name="radio1" type="radio" value="1" checked>
+						</div>
+						<div class="mui-input-row mui-radio">
+							<label>拒绝</label>
+							<input name="radio1" type="radio" value="3">
+						</div>
+
+					</form>
+					<div class="mui-input-row" style="margin: 5px 5px;">
+						<textarea id="Opnion" rows="2" placeholder="审批意见" class="mui-input-clear mui-input"></textarea>
+					</div>
+				</div>
+				<br>
+				<div class="mui-button-row">
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>
+					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script type="text/javascript">
+			var StartTime = document.getElementById("StartTime");
+			var EndTime = document.getElementById("EndTime");
+			var Type = document.getElementById("Type");
+			var Reason = document.getElementById("Reason");
+			var Count = document.getElementById("Count");
+			var Remark = document.getElementById("Remark");
+			var userinfo = JSON.parse(app.getLoginInfo().userinfo);	//登录用户信息
+			mui.init()
+			mui.plusReady(function() {
+				//加载默认值
+				var id = JSON.parse(plus.webview.currentWebview().name).taskid;
+//				var id = plus.webview.currentWebview().name;	//编辑ID
+				if(id){
+					var url = app.getUrl() + 'GetGunRecordsById';
+					mui.ajax(url, {
+						data: {
+							id: id
+						},
+						type: 'post', //HTTP请求类型
+						dataType: 'json',
+						success: function(data) {
+//							console.log(JSON.stringify(data))
+							if(data.Success) {
+								var jsonData = JSON.parse(data.codes);	//转JSON对象	
+								StartTime.value = jsonData.StartTime;
+								EndTime.value = jsonData.EndTime;
+								Type.value = jsonData.ScanType;
+								Reason.value = jsonData.Reason;
+								Count.value = jsonData.Count;
+								Remark.value = jsonData.Mark;
+							}
+							else{
+								mui.alert(data.Message);
+							}
+						}
+					});
+				}
+				
+				var buttonok = document.getElementById('buttonok');
+				mui.enterfocus('#bill-form input', function() {
+					mui.trigger(buttonok, 'tap');
+				});
+			});
+			//确定按钮
+			function btn_ok() {
+				var ExcuteType;
+				var obj = document.getElementsByName("radio1");
+				for (var i = 0; i < obj.length; i++) {
+					if (obj[i].checked) {
+						ExcuteType=obj[i].value;
+					}
+				}
+				var MessageID = JSON.parse(plus.webview.currentWebview().name).taskid;
+				var Opinion=document.getElementById("Opnion").value;
+				var url = app.getUrl() + 'ExcuteFlow';
+				var UserID = app.getLoginInfo().userid;
+				mui.ajax(url, {
+					data: {
+						UserID: UserID,
+						MessageID: MessageID,
+						Opinion: Opinion,
+						ExcuteType:ExcuteType
+					},
+					type: 'post', //HTTP请求类型
+					success: function(data) {
+						if (data == "") {
+							plus.nativeUI.toast('流程执行成功');
+							var page = plus.webview.getWebviewById('workflow-sub');
+							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+							mui.fire(page, 'refresh');
+							mui.back();
+						} else {
+							plus.nativeUI.toast(data);
+						}
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

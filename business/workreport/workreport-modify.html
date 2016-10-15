@@ -122,7 +122,7 @@
 					type: 'post', //HTTP请求类型
 					dataType: 'json',
 					success: function(data) {
-						console.log(JSON.stringify(data))
+//						console.log(JSON.stringify(data))
 						if(data) {
 							Title.value = data.Title;
 							Type.value = data.Type;
@@ -214,7 +214,7 @@
 					TodayRemark: TodayRemark.value
 				};
 				var url = app.getUrl() + 'ModifyWorkReport';
-//				console.log(JSON.stringify(billInfo))
+				console.log(JSON.stringify(billInfo))
 				mui.ajax(url, {
 					data: {
 						Info: JSON.stringify(billInfo)
@@ -239,8 +239,8 @@
 					mui.toast("请先指定发送给谁？");
 					return;
 				}
-				console.log(JSON.stringify(jsonArr));
-				console.log(plus.webview.currentWebview().name);
+//				console.log(JSON.stringify(jsonArr));
+//				console.log(plus.webview.currentWebview().name);
 				var btnArray = ['是', '否'];
 				mui.confirm('是否发布该条数据？', '申通提醒', btnArray, function(e) {
 					if(e.index == 0) {

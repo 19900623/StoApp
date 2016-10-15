@@ -20,7 +20,7 @@
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">编辑工作汇报</h1>
+			<h1 id="title" class="mui-title">批注工作汇报</h1>
 		</header>
 		<div class="mui-content">
 			<div class="mui-content-padded" style="margin: 5px;">
@@ -76,13 +76,14 @@
 					type: 'post', //HTTP请求类型
 					dataType: 'json',
 					success: function(data) {
+						console.log(JSON.stringify(data))
 						if(data) {
-							Title.value = data[0].title;
-							Type.value = data[0].type;
-							TodayWork.value = data[0].todaywork;
-							TodayUnWork.value = data[0].todayunwork;
-							TodayCoWork.value = data[0].todaycowork;
-							TodayRemark.value = data[0].todayremark;
+							Title.value = data.Title;
+							Type.value = data.Type;
+							TodayWork.value = data.TodayWork;
+							TodayUnWork.value = data.TodayUnWork;
+							TodayCoWork.value = data.TodayCoWork;
+							TodayRemark.value = data.TodayRemark;
 						}
 					}
 				});
@@ -103,15 +104,14 @@
 					username: JSON.parse(app.getLoginInfo().userinfo).realname,
 					remark: Remark.value
 				};
+				console.log(JSON.stringify(billInfo))
 				var url = app.getUrl() + 'WorkReportPZ';
 				mui.ajax(url, {
-					data: {
-						Info: JSON.stringify(billInfo)
-					},
+					data: billInfo,
 					type: 'post', //HTTP请求类型
 					success: function(data) {
 						if(data == "") {
-							plus.nativeUI.toast('修改成功');
+							plus.nativeUI.toast('批注成功');
 							var page = plus.webview.getWebviewById('workreport-sub');
 							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
 							mui.fire(page, 'refresh');

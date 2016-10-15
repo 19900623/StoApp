@@ -25,31 +25,37 @@
 				swipeBack: true //启用右滑关闭功能
 			});
 			mui.plusReady(function() {
-				var name = plus.webview.currentWebview().name;
-				var title = plus.webview.currentWebview().title;
-				var content = unescape(plus.webview.currentWebview().content);
-				if(name){
-//					console.log("有值：" + name);
+				var noticeid = plus.webview.currentWebview().name;
+				var userid = plus.webview.currentWebview().userid;
+				if(noticeid){
+//					console.log("有值：" + noticeid);
 					var url = app.getUrl() + 'GetNoticeByID';
 					mui.ajax(url, {
 						data: {
-							id: name
+							id: noticeid
 						},
 						type: 'post',
 						dataType: 'json',
 						success: function(data) {
+//							console.log(JSON.stringify(data))
 							if (data) {
 //								document.getElementById("title").innerHTML = data.title;
 								document.getElementById("detail-title").innerHTML = data.Title;
 								document.getElementById("detail-content").innerHTML = data.Describe;
+								//如果未读，修改已读状态
+								if(!!userid){
+									mui.ajax(app.getUrl() + 'UpdateNoticeState', {
+										data: {
+											userid: userid,
+											noticeid: noticeid
+										},
+										type: 'post',
+										dataType: 'json'
+									});
+								}
 							}
 						}
 					});
-				}
-				else{
-//					document.getElementById("title").innerHTML = title;
-					document.getElementById("detail-title").innerHTML = title;
-					document.getElementById("detail-content").innerHTML = content;
 				}
 			});
 		</script>
