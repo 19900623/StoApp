@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "3.14",/*应用版本名称*/
+		"name": "3.15",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -200,11 +200,11 @@
 					}
 				},
 				"android": {
-					"ldpi": "G:/手机端更新/png/2.png",
-					"mdpi": "G:/手机端更新/png/1.png",
-					"hdpi": "G:/手机端更新/png/480x762.png",
-					"xhdpi": "G:/手机端更新/png/720.png",
-					"xxhdpi": "G:/手机端更新/png/1080.png"
+					"ldpi": "G:/非项目/手机端更新/png/2.png",
+					"mdpi": "G:/非项目/手机端更新/png/1.png",
+					"hdpi": "G:/非项目/手机端更新/png/480x762.png",
+					"xhdpi": "G:/非项目/手机端更新/png/720.png",
+					"xxhdpi": "G:/非项目/手机端更新/png/1080.png"
 				}
 			},
 			"debug": false
