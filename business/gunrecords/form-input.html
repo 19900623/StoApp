@@ -266,25 +266,24 @@
 //					if()
 	                //执行流程
 	                var dataInfo = {
-	                	taskId: taskId
-	                	,stepid: '416e6091-177e-44d9-8599-a0334a6d76d2'
-	                	,executyType: 1
+	                	taskid: taskId
+	                	,nodeid: '416e6091-177e-44d9-8599-a0334a6d76d2'
 	                	,userid: userinfo.userid
 	                }
-	                var url = app.getUrl() + 'SubmitGunRecords';
+	                var url = app.getUrl() + 'StartFlow';
 	                mui.ajax(url, {
 						data: dataInfo,
 						type: 'post',
 						dataType: 'json',
 						success: function(data) {
-							if(data.Success) {
+							if (data == "") {
 								plus.nativeUI.toast('提交成功');
 								var page = plus.webview.getWebviewById('pullrefresh_sub.html');
 								//触发列表界面的自定义事件（refresh）,从而进行数据刷新
 								mui.fire(page, 'refresh');
 								mui.back();
 							} else {
-								plus.nativeUI.toast(data.Message);
+								plus.nativeUI.toast(data);
 							}
 						},
 						error: function(xhr, type, errorThrown) {

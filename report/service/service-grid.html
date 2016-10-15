@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>客服部报表</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">客服部报表</h1>
+		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view mui-grid-view mui-grid-9">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a onclick="app.openPage('port_lost_group.html','port_lost_group')">
+						<img src="../../img/outlook_ignore_email.png">
+						<div class="mui-media-body">进港遗失</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a onclick="app.openPage('damaged_rate_group.html','damaged_rate_group')">
+						<img src="../../img/table_torn.png">
+						<div class="mui-media-body">破损率</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a onclick="app.openPage('big_error_group.html','big_error_group')">
+						<img src="../../img/cell_delete.png">
+						<div class="mui-media-body">大字错写</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a onclick="app.openPage('complaints_report.html','complaints_report')">
+						<img src="../../img/blackberry.png">
+						<div class="mui-media-body">投诉报表</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a onclick="app.openPage('tel_bill_report.html','tel_bill_report')">
+						<img src="../../img/telephone.png">
+						<div class="mui-media-body">电话订单</div>
+					</a>
+				</li>
+			</ul>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+	</body>
+
+</html>

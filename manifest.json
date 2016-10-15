@@ -338,7 +338,8 @@
 					"tab-shedule-main.html"
 				],
 				"refer": [
-					"report/tab-echarts.html"
+					"report/tab-echarts.html",
+					null
 				],
 				"priority": 0
 			},
@@ -1243,7 +1244,10 @@
 					"img/cell_delete.png",
 					"js/app.js",
 					"js/mui.min.js",
-					"css/mui.min.css"
+					"css/mui.min.css",
+					"img/text_signature.png",
+					"img/small_business.png",
+					"img/phone_vintage.png"
 				],
 				"refer": [
 					"report/report-paymore.html",
@@ -1257,7 +1261,10 @@
 					"report/report-performance.html",
 					"report/report-waybillpickup-business.html",
 					"report/report-custom-dept.html",
-					"report/report-wrong-detail.html"
+					"report/report-wrong-detail.html",
+					"report/sign_ratio/sign-radio-grid.html",
+					"report/business/business-grid.html",
+					"report/service/service-grid.html"
 				],
 				"priority": 0
 			},
@@ -1503,7 +1510,8 @@
 				],
 				"refer": [
 					"business/workflow/vehicle-workflow.html",
-					"business/workflow/paymentbill-workflow.html"
+					"business/workflow/paymentbill-workflow.html",
+					"business/workflow/expensebill-workflow.html"
 				],
 				"priority": 0
 			},
@@ -1988,6 +1996,265 @@
 					"js/mui.min.js",
 					"fonts/mui.ttf",
 					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/sign_ratio/sign-radio-grid.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"img/text_signature.png",
+					"fonts/mui.ttf"
+				],
+				"refer": [
+					"report/sign_ratio/sign-radio-group.html",
+					"report/sign_ratio/sign-radio-exception.html"
+				],
+				"priority": 0
+			},
+			"report/sign_ratio/sign-radio-group.html": {
+				"resources": [
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/app.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					null
+				],
+				"refer": [
+					"report/sign_ratio/sign-radio-group-detail.html"
+				],
+				"priority": 0
+			},
+			"report/report-custom-dept.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/sign_ratio/sign-radio-group-detail.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/sign_ratio/sign-radio-exception.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"js/mui.min.js",
+					"js/mui.poppicker.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [
+					"report/sign_ratio/sign-radio-exception-detail.html"
+				],
+				"priority": 0
+			},
+			"report/sign_ratio/sign-radio-exception-detail.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/business/business-grid.html": {
+				"resources": [
+					"img/text_signature.png",
+					"img/chart_column.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"img/cell_delete.png",
+					"img/client_account_template.png"
+				],
+				"refer": [
+					"report/business/report-waybillpickup.html",
+					"report/business/report-custom-dept.html",
+					"report/business/report-wrong-detail.html",
+					"report/sign_ratio/sign-radio-grid.html"
+				],
+				"priority": 0
+			},
+			"report/business/report-waybillpickup.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/business/report-custom-dept.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/business/report-wrong-detail.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/service/service-grid.html": {
+				"resources": [
+					"img/outlook_ignore_email.png",
+					"img/telephone.png",
+					"img/table_torn.png",
+					"img/blackberry.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"img/cell_delete.png"
+				],
+				"refer": [
+					"report/sign_ratio/sign-radio-grid.html",
+					"report/service/port_lost_group.html",
+					"report/service/damaged_rate_group.html",
+					"report/service/big_error_group.html",
+					"report/service/complaints_report.html",
+					"report/service/tel_bill_report.html"
+				],
+				"priority": 0
+			},
+			"report/service/port_lost_group.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"report/service/port_lost_group_detail.html"
+				],
+				"priority": 0
+			},
+			"report/service/port_lost_group_detail.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/service/damaged_rate_group.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"report/service/port_lost_group_detail.html",
+					"report/service/damaged_rate_detail.html"
+				],
+				"priority": 0
+			},
+			"report/service/damaged_rate_detail.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/service/big_error_group.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"js/mui.min.js",
+					"js/mui.poppicker.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [
+					"report/service/damaged_rate_detail.html"
+				],
+				"priority": 0
+			},
+			"report/service/complaints_report.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"report/service/complaints_detail.html"
+				],
+				"priority": 0
+			},
+			"report/service/complaints_detail.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/service/tel_bill_report.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"js/mui.min.js",
+					"js/mui.poppicker.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
 				],
 				"refer": [],
 				"priority": 0

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>异常分析分组统计</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link href="../../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+		<style>			
+			#topPopover {
+				height: 150px;
+			}
+			
+			.mui-popover {
+				height: 70%;
+			}
+			/*.mui-content {
+				padding: 10px;
+			}*/
+			.mui-navigate-right {color: #000;}
+			.mui-badge{float: right; margin-right: 30px;}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" href="#topPopover">查询</a>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">当日签收率异常分析</h1>
+		</header>
+			
+		<!--弹出详细信息-->
+		<div id="popover" class="mui-popover">
+			<div class="mui-popover-arrow"></div>
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell"><a href="#">测试数据</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="mui-content" style="margin-top: -15px;">
+			<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed" id="list">
+
+			</ul>
+		</div>
+
+		<!--右上角弹出菜单-->
+		<div id="topPopover" class="mui-popover">
+			<div class="mui-popover-arrow"></div>
+			<div class="mui-scroll-wrapper">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>开始时间</label>
+						<input type="text" id="StartTime" data-options='{"type":"date", "beginYear": "2015", "endYear": "2030"}' class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>结束时间</label>
+						<input type="text" id="EndTime" data-options='{"type":"date", "beginYear": "2015", "endYear": "2030"}' class="mui-input" required="required" readonly="readonly">
+					</div>
+				</form>
+				<div class="mui-button-row" style="margin-top:10px;">
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_search()" id="buttonok">搜索</button>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		
+		<script type="text/javascript">
+			var StartTime = document.getElementById("StartTime");
+			var EndTime = document.getElementById("EndTime");
+			mui.init();
+			mui.plusReady(function() {
+				StartTime.addEventListener('tap', function() {
+					AddDtPicker(this);
+				}, false);
+				EndTime.addEventListener('tap', function() {
+					AddDtPicker(this);
+				}, false);
+			});
+
+			//添加DtPicker
+			function AddDtPicker(el) {
+				var optionsJson = el.getAttribute('data-options') || '{}';
+				var options = JSON.parse(optionsJson);
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+					el.value = rs.text;
+					picker.dispose();
+				});
+			}
+			
+			(function($) {
+				//$.swipeoutOpen(el,direction)//打开指定列的滑动菜单，el:指定列的dom对象，direction：取值left|right，指定打开的是左侧或右侧滑动菜单
+				//$.swipeoutClose(el);//关闭指定列的滑动菜单，el:指定列的dom对象
+				setTimeout(function() {
+					$.swipeoutOpen(document.getElementById("list").querySelector('li:first-child'), 'right');
+					setTimeout(function() {
+						$.swipeoutClose(document.getElementById("list").querySelector('li:first-child'));
+					}, 1000);
+				}, 1000);				
+//				mui.toast("试试向左滑动会出现什么");
+					
+				//滑动
+				$('#list').on('slideleft', '.mui-table-view-cell', function(event) {
+					var elem = this;
+					var divs = elem.childNodes;
+					for (var i =0; i< divs.length; i++){
+						var div = divs[i];
+						if(div.className === "mui-slider-handle") {
+							var pop = div.getElementsByTagName("div")[0];
+							var popover = document.getElementById("popover");
+							var popContent = popover.querySelector(".mui-scroll-wrapper").querySelector(".mui-scroll");
+							$('.mui-scroll-wrapper').scroll();
+							popContent.innerHTML = pop.innerHTML;
+							mui('#popover').popover('toggle', elem);
+							
+							setTimeout(function() {
+								$.swipeoutClose(elem);
+							}, 0);
+							break;
+						}
+					}
+				});
+			})(mui);
+
+			function btn_search() {
+				if(StartTime.value == '') {
+					mui.toast("请选择开始时间");
+					return;
+				}
+				if(EndTime.value == '') {
+					mui.toast("请选择结束时间");
+					return;
+				}
+				var table = document.getElementById("list");
+				while(table.firstChild)
+					table.removeChild(table.firstChild);
+				var fragment = document.createDocumentFragment();
+				var url = app.getUrl() + 'SignRadioTypeReport';
+				mui.ajax(url, {
+					data: {
+						start: StartTime.value,
+						end: EndTime.value
+					},
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+						if(data.Success) {
+							var dataInfo = JSON.parse(data.codes);
+//							console.log(data.codes)
+							for(var i = 0; i < dataInfo.length; i++){
+								var li = document.createElement('li');
+								li.className = 'mui-table-view-cell';
+//								li.innerHTML = '<div class="mui-slider-right mui-disabled">'
+//								+ '<a href="#popover" class="mui-btn mui-btn-yellow mui-icon mui-icon-more"></a>'
+//								+ '</div>';
+								var item = document.createElement('div');
+								item.className = "mui-slider-handle";
+								var id = {
+									start: StartTime.value
+									,end: EndTime.value
+									,type: dataInfo[i].errortype
+								}
+								item.id = JSON.stringify(id);
+								item.innerHTML = '<a class="mui-navigate-right">'
+//								item.innerHTML = ''
+								+ dataInfo[i].errortype
+								+ 	'<span class="mui-badge">'
+								+		dataInfo[i].counts
+								+	'</span>'
+								+ '</a>'
+//								+ '<div class="mui-popover">'
+//								+ '<ul class="mui-table-view">'
+//								+ '<li class="mui-table-view-cell"><a>' + dataInfo[i].groupname + '</a>'
+//								+ '</li><li class="mui-table-view-cell"><a>派件票数：' + dataInfo[i].sendcount + '</a>'
+//								+ '</li><li class="mui-table-view-cell"><a>签收超时票数：' + dataInfo[i].signcount + '</a>'
+//								+ '</li><li class="mui-table-view-cell"><a>真实签收率：' + dataInfo[i].realradio.toFixed(2) + '%' + '</a>'
+//								+ '</li><li class="mui-table-view-cell"><a>一派派件票数：' + dataInfo[i].onesendcount + '</a>'
+//								+ '</li><li class="mui-table-view-cell"><a>一派签收超时票数：' + dataInfo[i].onesigncount + '</a>'
+//								+ '</li><li class="mui-table-view-cell"><a>一派真实签收率：' + dataInfo[i].onerealradio.toFixed(2) + '%' + '</a>'
+//								+ '</li><li class="mui-table-view-cell"><a>二派派件票数：' + dataInfo[i].twosendcount + '</a>'
+//								+ '</li><li class="mui-table-view-cell"><a>二派超时票数：' + dataInfo[i].twosigncount + '</a>'
+//								+ '</li><li class="mui-table-view-cell"><a>二派真实签收率：' + dataInfo[i].tworealradio.toFixed(2) + '%' + '</a>'
+//								+ '</li></ul>'
+//								+ '</div>';
+								
+								item.addEventListener('tap', function(event){
+									//处理切换时，数据未从数据库更新完毕
+									var nwaiting = plus.nativeUI.showWaiting();
+									var webviewShow = plus.webview.create(
+										'sign-rate-exception-detail.html',
+										'sign-rate-exception-detail',
+										'', {name: this.id}
+									); //后台创建webview并打开show.html
+									webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
+										setTimeout(function() {
+											nwaiting.close();
+											//新webview的载入完毕后关闭等待框
+											webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+										}, 300);
+									}, false);
+								});
+								li.appendChild(item);
+								fragment.appendChild(li);
+							}
+							table.appendChild(fragment);
+						}
+						mui.toast(data.Message)
+					},
+					error: function(XMLHttpRequest, textStatus, errorThrown) {
+						console.log(JSON.stringify(XMLHttpRequest));
+					}
+				});
+				mui('#topPopover').popover('toggle'); //收起右上角弹出菜单
+			}
+		</script>
+	</body>
+
+</html>

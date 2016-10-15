@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>快件破损率分组统计</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link href="../../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+		<style>			
+			#topPopover {
+				height: 120px;
+			}
+			
+			.mui-popover {
+				height: 70%;
+			}
+			/*.mui-content {
+				padding: 10px;
+			}*/
+			.mui-navigate-right {color: #000;}
+			.mui-badge{float: right; margin-right: 30px;}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" href="#topPopover">查询</a>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">快件破损率分组统计</h1>
+		</header>
+		<div class="mui-content" style="margin-top: -15px;">
+			<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed" id="list">
+
+			</ul>
+		</div>
+		<!--右上角弹出菜单-->
+		<div id="topPopover" class="mui-popover">
+			<div class="mui-popover-arrow"></div>
+			<div class="mui-scroll-wrapper">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>查询月份</label>
+						<input type="text" id="StartTime" data-options='{"type":"month", "beginYear": "2015", "endYear": "2030"}' class="mui-input" required="required" readonly="readonly">
+					</div>
+				</form>
+				<div class="mui-button-row" style="margin-top:10px;">
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_search()" id="buttonok">搜索</button>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		
+		<script type="text/javascript">
+			var StartTime = document.getElementById("StartTime");
+			mui.init();
+			mui.plusReady(function() {
+				StartTime.addEventListener('tap', function() {
+					AddDtPicker(this);
+				}, false);
+			});
+
+			//添加DtPicker
+			function AddDtPicker(el) {
+				var optionsJson = el.getAttribute('data-options') || '{}';
+				var options = JSON.parse(optionsJson);
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+					el.value = rs.text;
+					picker.dispose();
+				});
+			}
+
+			function btn_search() {
+				if(StartTime.value == '') {
+					mui.toast("请选择查询月份");
+					return;
+				}
+				var table = document.getElementById("list");
+				while(table.firstChild)
+					table.removeChild(table.firstChild);
+				var fragment = document.createDocumentFragment();
+				var url = app.getUrl() + 'GetDamagedRateGroup';
+				mui.ajax(url, {
+					data: {
+						month: StartTime.value
+					},
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+						if(data.Success) {
+							var dataInfo = JSON.parse(data.codes);
+							console.log(data.codes)
+							for(var i = 0; i < dataInfo.length; i++){
+								var li = document.createElement('li');
+								li.className = 'mui-table-view-cell';
+								var item = document.createElement('div');
+								item.className = "mui-slider-handle";
+								var id = {
+									month: StartTime.value
+									,groupname: dataInfo[i].group
+								}
+								item.id = JSON.stringify(id);
+								
+								item.innerHTML = '<div class="mui-table">'
+								+ '<div class="mui-table-cell mui-col-xs-10">'
+								+ 	'<h4 class="mui-ellipsis-2">'
+								+ 		dataInfo[i].group
+								+ 	'</h4>'
+								+ 	'<p class="mui-h6 mui-ellipsis">'
+								+ 		'破损率：' + dataInfo[i].probability.toFixed(2) + '‰'
+								+ 	'</p>'
+								+ 	'<p class="mui-h6 mui-ellipsis">'
+								+ 		'平均破损率：' + dataInfo[i].average.toFixed(2) + '‰'
+								+ 	'</p>'
+								+ '</div>'
+								+ '<div class="mui-table-cell mui-col-xs-5 mui-text-right">'
+								+ 	'<span class="mui-h5">'
+								+ 		'破损：' + dataInfo[i].breakcount
+								+	'</span>'
+								+ 	'<p class="mui-h6 mui-ellipsis">'
+								+		'发件：' + dataInfo[i].sendcount
+								+ 	'</p>'
+								+ '</div>';
+								
+								item.addEventListener('tap', function(event){
+									//处理切换时，数据未从数据库更新完毕
+									var nwaiting = plus.nativeUI.showWaiting();
+									var webviewShow = plus.webview.create(
+										'damaged_rate_detail.html',
+										'damaged_rate_detail',
+										'', {name: this.id}
+									); //后台创建webview并打开show.html
+									webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
+										setTimeout(function() {
+											nwaiting.close();
+											//新webview的载入完毕后关闭等待框
+											webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+										}, 300);
+									}, false);
+								});
+								li.appendChild(item);
+								fragment.appendChild(li);
+							}
+							table.appendChild(fragment);
+						}
+						else{
+							mui.toast(data.Message);
+						}
+					},
+					error: function(XMLHttpRequest, textStatus, errorThrown) {
+						console.log(JSON.stringify(XMLHttpRequest));
+					}
+				});
+				mui('#topPopover').popover('toggle'); //收起右上角弹出菜单
+			}
+		</script>
+	</body>
+
+</html>
