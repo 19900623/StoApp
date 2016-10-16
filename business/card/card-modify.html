@@ -9,7 +9,9 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
 		<link rel="stylesheet" href="../../css/common.css" type="text/css" charset="utf-8" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
 		<style>
 			html,
 			body {
@@ -55,6 +57,19 @@
 						<label>身份证号</label>
 						<input type="text" id="Card" class="mui-input-clear mui-input" required="required">
 					</div>
+					<div class="mui-input-row">
+						<label>省</label>
+						<input type="text" id="Province" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>市</label>
+						<input type="text" id="City" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>区</label>
+						<input type="text" id="Area" class="mui-input" required="required" readonly="readonly">
+					</div>
+
 				</form>
 				<ul id="images" class="dlist">
 
@@ -71,19 +86,53 @@
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/app.js"></script>
 		<script src="../../js/mui.enterfocus.js"></script>
-		<script type="text/javascript" src="../../js/common.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script type="text/javascript " src="../../js/common.js"></script>
 		<script>
 			var id, newImage, task;
 			mui.plusReady(function() {
+
+				var city = "";
+				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+				db.transaction(function(context) {
+					context.executeSql("SELECT * FROM Province", [], function(context, results) {
+						city = results.rows.item(0).city;
+						console.log(city)
+						document.getElementById("Province").addEventListener('tap', function(event) {
+							//级联部门
+							var picker = new mui.PopPicker({
+								layer: 3
+							});
+							picker.setData(JSON.parse(city));
+							picker.show(function(items) {
+								document.getElementById("Province").value = (items[0] || {}).text;
+								document.getElementById("City").value = (items[1] || {}).text;
+								document.getElementById("Area").value = items[2].text||'';
+								//返回 false 可以阻止选择框的关闭
+								//return false;
+							});
+						}, false);
+
+					});
+				});
+				
 				var WayBillNumber = document.getElementById("WayBillNumber");
 				var Card = document.getElementById("Card");
+				var Province = document.getElementById("Province");
+				var City = document.getElementById("City");
+				var Area = document.getElementById("Area");
 				id = plus.webview.currentWebview().name;
 				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 				db.transaction(function(context) {
-					context.executeSql("SELECT * FROM CardUser where id=?", [id], function(context, results) {
+					context.executeSql("SELECT * FROM CardUserNew where id=?", [id], function(context, results) {
 						WayBillNumber.value = results.rows.item(0).WayBillNumber;
 						Card.value = results.rows.item(0).CardID || '';
 						newImage = results.rows.item(0).Image;
+						
+						Province.value = results.rows.item(0).Province || '';
+						City.value = results.rows.item(0).City || '';
+						Area.value = results.rows.item(0).Area || '';
 						var img = document.createElement('img');
 						var ul = document.getElementById("images");
 						img.className = "ditem";
@@ -104,7 +153,7 @@
 								plus.io.resolveLocalFileSystemURL(newImage, function(entry) {
 									entry.remove();
 								});
-								var sql = "Update CardUser set State='已上传' where State='未上传' and WayBillNumber=?";
+								var sql = "Update CardUserNew set State='已上传' where State='未上传' and WayBillNumber=?";
 								context.executeSql(sql, [WayBillNumber.value],
 									function(context, results) {
 										plus.nativeUI.toast('上传成功');
@@ -132,9 +181,13 @@
 				}
 				newImage = images.children[0].src;
 				var CardID = document.getElementById("Card").value;
+				var Province = document.getElementById("Province").value;
+				var City = document.getElementById("City").value;
+				var Area = document.getElementById("Area").value;
 				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+				
 				db.transaction(function(context) {
-					context.executeSql('update CardUser set CardID=?,WayBillNumber=?,Image=? where id=?', [CardID, WayBillNumber, newImage, id],
+					context.executeSql('update CardUserNew set CardID=?,WayBillNumber=?,Image=?,Province=?,City=?,Area=? where id=?', [CardID, WayBillNumber, newImage,Province, City, Area,id],
 						function(tx, result) {
 							plus.nativeUI.toast('保存成功');
 							var page = plus.webview.getWebviewById('card-list-sub');
@@ -160,7 +213,7 @@
 						newImage = images.children[0].src;
 						var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 						db.transaction(function(context) {
-							context.executeSql('delete from CardUser where id=?', [id],
+							context.executeSql('delete from CardUserNew where id=?', [id],
 								function(tx, result) {
 									plus.nativeUI.toast('删除成功');
 									//删除照片
@@ -202,11 +255,18 @@
 						var userid = app.getLoginInfo().userid;
 						var username = JSON.parse(app.getLoginInfo().userinfo).realname;
 						var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
+						var Province = document.getElementById("Province");
+						var City = document.getElementById("City");
+						var Area = document.getElementById("Area");
+
 						var Card = {
 							WayBillNumber: WayBillNumber.value,
 							CardID: Card.value,
 							CreateUserName: username,
-							CardImage: newImage
+							CardImage: newImage,
+							CONSIGNEEPROVINCENAME: Province.value,
+							CONSIGNEECITYNAME: City.value,
+							CONSIGNEEAREANAME: Area.value
 						};
 						task.addFile(newImage, {
 							key: app.NewGuid()
@@ -222,7 +282,7 @@
 				//在数据库中判断是否已存在
 				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 				db.transaction(function(context) {
-					context.executeSql('CREATE TABLE IF NOT EXISTS CardUser (id,CardID,WayBillNumber,Image,State,CreateDate)');
+					context.executeSql('CREATE TABLE IF NOT EXISTS CardUserNew (id,CardID,WayBillNumber,Image,State,CreateDate,Province,City,Area)');
 					context.executeSql("SELECT 1 FROM CardUser where WayBillNumber like ?", ['%' + r + '%'], function(context, results) {
 						if(results.rows.length > 0) {
 							plus.nativeUI.toast('运单编号已经存在');

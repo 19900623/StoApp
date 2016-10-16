@@ -62,7 +62,7 @@
 					var li;
 					var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 					db.transaction(function(context) {
-						context.executeSql("SELECT * FROM CardUser where State='未上传' order by CreateDate desc", [], function(context, results) {
+						context.executeSql("SELECT * FROM CardUserNew where State='未上传' order by CreateDate desc", [], function(context, results) {
 							var len = results.rows.length;
 							for (var i = 0; i < len; i++) {
 								li = document.createElement('li');
