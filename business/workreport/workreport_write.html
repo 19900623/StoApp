@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>写日志</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link href="../../css/style.css" rel="stylesheet" >
+	</head>
+
+	<body>
+		<div>
+			<ul class="mui-table-view mui-grid-view mui-grid-9" id="list">		
+				<!--<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a onclick="app.openPage('business/leavebill/leavebill-list-main.html','leavebill-list-main')">
+						<span class="mui-icon iconfont icon-calendar"></span>
+						<div class="mui-media-body">日报</div>
+					</a>
+				</li>		
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a onclick="app.openPage('business/leavebill/leavebill-list-view-main.html','leavebill-list-view-main')">
+						<span class="mui-icon iconfont icon-calendar"></span>
+						<div class="mui-media-body">周报</div>
+					</a>
+				</li>-->
+			</ul>
+			</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			(function($) {
+				var url = app.getUrl() + 'GetReportsModelList';				
+				$.post(url, 
+					function(data){
+						if(data.Success){
+							var list = JSON.parse(data.codes);
+							$("#list")[0].innerHTML = "";
+							$.each(list, function() {
+//								console.log(JSON.stringify(this))
+								var li = document.createElement("li");
+								li.className = "mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"
+								var a = document.createElement("a");
+								var param = {ModelID:this.ModelID, ModelName:this.ModelName}
+								a.id = JSON.stringify(param);
+								a.innerHTML = '<span class="mui-icon iconfont icon-calendar"></span>'
+								+ '<div class="mui-media-body">'
+								+ this.ModelName
+								+ '</div>'
+								a.addEventListener('tap', function(event){
+									var nwaiting = plus.nativeUI.showWaiting();
+									var webviewShow = plus.webview.create(
+										'workreport_form.html',
+										'workreport_form',
+										'', {name: this.id}
+									); //后台创建webview并打开show.html
+									webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
+										setTimeout(function() {
+											nwaiting.close();
+											//新webview的载入完毕后关闭等待框
+											webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+										}, 300);
+									}, false);
+								});
+								li.appendChild(a)
+								$("#list")[0].appendChild(li);
+//								console.log()
+							});
+						}
+						else{
+							$.toast(data.Message)
+						}
+					}, 'json'
+				);
+			})(mui);
+			
+		</script>
+	</body>
+
+</html>

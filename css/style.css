@@ -1,3 +1,4 @@
+@import url("iconfont.css");
 .ui-page-login,
 body {
 	width: 100%;
@@ -6,6 +7,10 @@ body {
 	padding: 0px;
 }
 .mui-content{height: 100%;}
+
+.mui-bar-tab .mui-tab-item.mui-active{color:#ff8800}
+
+
 
 /* 选择头像 */
 #profile{margin-bottom: 10px;}

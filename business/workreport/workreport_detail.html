@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title"></h1>
+		</header>
+		<div class="mui-content" id="mui-form">
+		</div>
+		
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script type="text/javascript">
+			var modelID;	//模板ID
+			mui.init();
+			mui.plusReady(function(){
+				//修改时隐藏人员选择
+				var param = JSON.parse(mui.currentWebview.name);
+				mui('#title')[0].innerText = param.ModelName;	//给标题赋值
+				modelID = param.ModelID;
+				InitForm(modelID);	//初始化表单
+			});
+			
+			//初始化表单
+			function InitForm(modelid){
+				var url = app.getUrl() + 'GetModelAttrList';
+				var content = mui('.mui-content')[0];	//表单容器
+				content.innerHTML = "";
+				mui.post(url, {ModelID: modelid},
+					function(data){
+						if(data.Success){
+							var list = JSON.parse(data.codes);	//POST返回的JSON结果
+							mui.each(list, function(i, item){
+								var div = document.createElement("div");	//字段容器
+								div.className = 'mui-input-row';
+								var html = '<label>' + this.AttrName +'</label>';	//字段名
+								div.innerHTML = html;
+								switch (this.CtrlType) {	//控件类型
+									case 'input':
+										var inp = document.createElement("input");
+										inp.id = this.CtrlID;
+										inp.name = this.AttrID;
+										inp.type = 'text'
+										inp.className = 'mui-input';
+										inp.placeholder = !!this.Placeholder ? this.Placeholder : '';
+										if(this.AllowNull == 0){
+											inp.required = 'required';
+										}
+										if (this.Readonly == 1) {
+				                            inp.readOnly = 'readonly';
+				                        }
+										//输入监听事件，当不为空时，核查所有必填项，如果全不为空，则激活提交按钮
+										inp.addEventListener("input",function(e){
+											if(this.value){
+												CheckDataValid();
+											};
+										},false)
+										div.appendChild(inp);
+										break;
+									case 'select':
+										var inp = document.createElement("input");
+										inp.id = this.CtrlID;
+										inp.name = this.AttrID;
+										inp.type = 'text'
+										inp.className = 'mui-input';
+										inp.placeholder = this.Placeholder;
+										inp.readOnly = 'readonly';
+										if(this.AllowNull == 0){
+											inp.required = 'required';
+										}
+										if (this.Readonly == 1) {
+				                            inp.readOnly = 'readonly';
+				                        }
+										var DefaultVal = this.DefaultVal.split(',');	//select选项值
+										inp.addEventListener('tap', function(event) {
+											var picker = new mui.PopPicker();
+											picker.setData(DefaultVal);
+											picker.show(function(items) {
+												inp.value = items[0];
+												CheckDataValid();
+												//返回 false 可以阻止选择框的关闭
+												//return false;
+											});
+										});
+										div.appendChild(inp);
+										break;
+									case 'textarea':
+										div.className = "mui-input-row sto-input-row";
+										var txt = document.createElement("textarea");
+										txt.id = this.CtrlID;
+										txt.name = this.AttrID;
+										txt.className = 'mui-input';
+										txt.rows = 3;
+										txt.placeholder = !!this.Placeholder ? this.Placeholder : '';
+										if(this.AllowNull == 0){
+											check++;
+											txt.required = 'required';
+										}
+										if (this.Readonly == 1) {
+				                            txt.readOnly = 'readonly';
+				                        }
+										//输入监听事件，当不为空时，核查所有必填项，如果全不为空，则激活提交按钮
+										txt.addEventListener("input",function(e){
+											if(this.value){
+												CheckDataValid();
+											};
+										},false)
+										div.appendChild(txt);
+										break;
+								}
+//								console.log(div.innerHTML)
+								content.appendChild(div);	//添加到表单容器
+							});
+						}
+					},'json'
+				);
+			}
+		</script>
+	</body>
+
+</html>

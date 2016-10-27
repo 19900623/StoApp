@@ -1,0 +1,338 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link href="../../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+		<link href="../../css/style.css" rel="stylesheet" >
+		<style>
+			.mui-content{}
+			.mui-input-row{background: #fff;}
+			.sto-input-row{ border-bottom: 1px solid #e2e2e2; background: none;}
+			.sto-input-row label{ display: block; width: 100%; padding: 10px 15px;}
+			.sto-input-row label~input, .sto-input-row label~select, .sto-input-row label~textarea{
+				border: none; 
+				background: #fff;
+				width: 100%;
+				padding: 10px 15px;
+			}
+			.profile-list{float: left; max-width: calc(100% - 60px); min-width: 1px; text-align: left;}
+			.profile-add{float: left; text-align:center; width: 60px;}
+			.profile-add a{color: #888;}
+			.profile-add .add-pic{font-size: 48px; line-height: 48px;}
+			.profile-add .add-text{font-size: 14px; display: block;}
+			.mui-content button,input[type=submit] {
+				color: #fff;
+				font-size: 16px;
+				width: 100%;
+				height: 40px;
+				/*border: 1px solid #ff8800;
+				background-color: #ff8800;*/
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title"></h1>
+		</header>
+		<div class="mui-content" id="mui-form">
+				<!--<div class="mui-input-row">
+					<label>汇报标题</label>
+					<input type="text" id="Title" class="mui-input" required="required" placeholder="今日完成工作">
+				</div>
+				<div class="mui-input-row">
+					<label>汇报类型</label>
+					<input type="text" id="Type" class="mui-input" required="required" readonly="readonly" value="日汇报">
+				</div>
+				<div class="mui-input-row">
+					<label>汇报类型</label>
+					<textarea id="TodayWork" rows="2" placeholder="今日完成工作" ></textarea>
+				</div>
+				<div class="mui-input-row">
+					<textarea id="TodayUnWork" rows="2" placeholder="未完成工作" class="mui-input"></textarea>
+				</div>
+				<div class="mui-input-row" id="NextWorkShow">
+					<textarea id="NextWork" rows="2" placeholder="下阶段工作计划" class="mui-input-clear mui-input"></textarea>
+				</div>
+				<div class="mui-input-row">
+					<textarea id="TodayCoWork" rows="2" placeholder="需协调工作" class="mui-input-clear mui-input"></textarea>
+				</div>
+				<div class="mui-input-row">
+					<textarea id="TodayRemark" rows="2" placeholder="备注" class="mui-input-clear mui-input"></textarea>
+				</div>-->
+		</div>
+		<div class="mui-content" style="padding:10px; background: #fff;">
+			<div id="Received" class="mui-input-row">
+				<span style="color: #888;">发给谁</span><span style="font-size: 12px; color: #999;">（点击头像删除）</span>
+			</div>
+			<div class="mui-input-row" style="overflow: hidden;">
+				<div class="profile-add">
+					<a onclick="app.openPage('../../employee_select.html','employee_select')">
+						<span class="icon iconfont add-pic">&#xe7a7;</span>
+						<!--<span class="mui-icon iconfont icon-edit"></span>-->
+						<span class="add-text">添加人员</span>
+					</a>
+				</div>
+				<div id="profile" class="mui-nowrap profile-list">
+				</div>
+			</div>
+			<div class="mui-button-row">
+				<button type="button" class="mui-btn mui-btn-primary mui-disabled" onclick="btn_submit()" id="btnsubmit">提交</button>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script type="text/javascript">
+			var modelID;	//模板ID
+			var arrJson;	//审阅人
+			var check = 0;
+			mui.init();
+			mui.plusReady(function(){
+				//修改时隐藏人员选择
+				var param = JSON.parse(mui.currentWebview.name);
+				mui('#title')[0].innerText = param.ModelName;	//给标题赋值
+				modelID = param.ModelID;
+				InitForm(modelID);	//初始化表单
+				document.getElementById("btnsubmit").setAttribute("disabled", "disabled");	//提交按钮失效
+				//默认加载汇报人，如果没有，加载上次汇报人
+				
+//				document.getElementById("btnsubmit").classList.remove("mui-disabled");
+//				document.getElementById("btnsubmit").removeAttribute("disabled");
+			});
+			
+			//初始化表单
+			function InitForm(modelid){
+				var url = app.getUrl() + 'GetModelAttrList';
+				var content = mui('.mui-content')[0];	//表单容器
+				content.innerHTML = "";
+				mui.post(url, {ModelID: modelid},
+					function(data){
+						if(data.Success){
+							var list = JSON.parse(data.codes);	//POST返回的JSON结果
+							mui.each(list, function(i, item){
+								var div = document.createElement("div");	//字段容器
+								div.className = 'mui-input-row';
+								var html = '<label>' + this.AttrName +'</label>';	//字段名
+								div.innerHTML = html;
+								switch (this.CtrlType) {	//控件类型
+									case 'input':
+										var inp = document.createElement("input");
+										inp.id = this.CtrlID;
+										inp.name = this.AttrID + '|' + this.AttrName;
+										inp.type = 'text'
+										inp.className = 'mui-input';
+										inp.placeholder = !!this.Placeholder ? this.Placeholder : '';
+										if(this.AllowNull == 0){
+											inp.required = 'required';
+										}
+										if (this.Readonly == 1) {
+				                            inp.readOnly = 'readonly';
+				                        }
+										//输入监听事件，当不为空时，核查所有必填项，如果全不为空，则激活提交按钮
+										inp.addEventListener("input",function(e){
+											if(this.value){
+												CheckDataValid();
+											};
+										},false)
+										div.appendChild(inp);
+										break;
+									case 'select':
+										var inp = document.createElement("input");
+										inp.id = this.CtrlID;
+										inp.name = this.AttrID + '|' + this.AttrName;
+										inp.type = 'text'
+										inp.className = 'mui-input';
+										inp.placeholder = this.Placeholder;
+										inp.readOnly = 'readonly';
+										if(this.AllowNull == 0){
+											inp.required = 'required';
+										}
+										if (this.Readonly == 1) {
+				                            inp.readOnly = 'readonly';
+				                        }
+										var DefaultVal = this.DefaultVal.split(',');	//select选项值
+										inp.addEventListener('tap', function(event) {
+											var picker = new mui.PopPicker();
+											picker.setData(DefaultVal);
+											picker.show(function(items) {
+												inp.value = items[0];
+												CheckDataValid();
+												//返回 false 可以阻止选择框的关闭
+												//return false;
+											});
+										});
+										div.appendChild(inp);
+										break;
+									case 'textarea':
+										div.className = "mui-input-row sto-input-row";
+										var txt = document.createElement("textarea");
+										txt.id = this.CtrlID;
+										txt.name = this.AttrID + '|' + this.AttrName;
+										txt.className = 'mui-input';
+										txt.rows = 3;
+										txt.placeholder = !!this.Placeholder ? this.Placeholder : '';
+										if(this.AllowNull == 0){
+											check++;
+											txt.required = 'required';
+										}
+										if (this.Readonly == 1) {
+				                            txt.readOnly = 'readonly';
+				                        }
+										//输入监听事件，当不为空时，核查所有必填项，如果全不为空，则激活提交按钮
+										txt.addEventListener("input",function(e){
+											if(this.value){
+												CheckDataValid();
+											};
+										},false)
+										div.appendChild(txt);
+										break;
+								}
+//								console.log(div.innerHTML)
+								content.appendChild(div);	//添加到表单容器
+							});
+						}
+					},'json'
+				);
+			}
+			//添加审阅人
+			function selected(result){
+				//先清空
+				var profile = document.getElementById('profile');
+				profile.innerHTML = '';
+				arrJson = JSON.parse(result);
+				if(!!arrJson){
+					for(var i=0; i < arrJson.length; i++){
+//						console.log(JSON.stringify(arrJson[i]));
+						var div = document.createElement('div');
+						div.id = arrJson[i].id;
+						var name = arrJson[i].name;
+						if(name.length > 2){
+							name = name.substr(name.length - 2, name.length);
+						}
+						div.className = "profile-box";
+						div.innerHTML = '<span class="mui-profile">'
+						+ name + '</span>'
+						+ '<span class="mui-profile-text">'
+						+ arrJson[i].name + '</span>';
+						
+						div.addEventListener('tap', function() {
+							profile.removeChild(this);
+						}, false);
+						profile.appendChild(div);
+						CheckDataValid();
+					}
+				}
+			}
+			
+			//核查数据验证
+			function CheckDataValid(){
+				//必填项输入完成后，激活提交
+				var controls = mui('#mui-form')[0].querySelectorAll('input,select,textarea');
+				for(var i=0; i<controls.length; i++){
+					if(controls[i].required && controls[i].value == ''){
+						mui.toast(controls[i].placeholder);
+						return controls[i].placeholder;
+					}
+				}
+				if(!!!arrJson){	//发给谁不能为空
+					mui.toast('请先指定发送给谁');
+					return '请先指定发送给谁';
+				}
+				//显示发布按钮
+				document.getElementById("btnsubmit").classList.remove("mui-disabled");
+				document.getElementById("btnsubmit").removeAttribute("disabled");
+				return '';
+			}
+			
+			//取得表单控件的数据
+			function GetControlsData() {
+		        var reVal = [];
+		        var controls = mui('#mui-form')[0].querySelectorAll('input,select,textarea');
+		        
+		        for(var i=0; i<controls.length; i++){
+		        	var id = controls[i].id;
+		        	var id_name = controls[i].name.split('|');
+		        	var attrid = id_name[0];
+		        	var attrname = id_name[1];
+		        	var value = controls[i].value;
+		        	var type = controls[i].type;
+		        	switch (type) {
+		                case "checkbox":
+		                    var obj = {
+		                        AttrID: attrid,
+		                        AttrName: attrname,
+		                        CtrlID: id
+		                    };
+		                    if(controls[i].attributes("checked")){
+		                        obj["AttrVal"] = 1;
+		                    } else {
+		                        obj["AttrVal"] = 0;
+		                    }
+		                    reVal.push(obj);
+		                    break;
+		                default:
+		                    reVal.push({
+		                        AttrID: attrid,
+		                        AttrName: attrname,
+		                        CtrlID: id,
+		                        AttrVal: value
+		                    });
+		                    break;
+		            }
+		       }
+		        return reVal
+		    }
+			
+			//发布按钮
+			function btn_submit(){
+				var ret = CheckDataValid();	//提交前再核查一遍表单
+				if(!!ret){
+					mui.toast(ret);
+				}
+				var userinfo = JSON.parse(app.getLoginInfo().userinfo);
+				var datalist = GetControlsData();//取得表单控件的数据
+				var postData = {
+					ReportID: '',
+		            UserID: userinfo.userid,
+		            UserName: userinfo.realname,
+		            ModelID: modelID,
+		            DataList: JSON.stringify(datalist),
+		            TasterList: JSON.stringify(arrJson)
+		        }
+//				console.log(JSON.stringify(postData))
+//				return
+				var url = app.getUrl() + 'PublishWorkReport';
+				mui.ajax(url, {
+					data: postData,
+					type: 'post', //HTTP请求类型
+					dataType: 'json',
+					success: function(data) {
+						mui.toast(data.Message);
+//						console.log(data.Message);
+						if(data.Success){
+							//成功打开详情
+							mui.back();
+							data.codes	//汇报ID
+						}
+						else{
+							mui.back();
+						}
+					},
+					error:function(xhr,type,errorThrown){
+						//异常处理；
+						console.log(JSON.stringify(xhr));
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

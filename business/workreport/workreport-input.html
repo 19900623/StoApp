@@ -38,16 +38,19 @@
 				</form>
 				<br>
 				<div class="mui-input-row">
-					<textarea id="TodayWork" rows="3" placeholder="今日完成工作" class="mui-input-clear mui-input"></textarea>
+					<textarea id="TodayWork" rows="2" placeholder="今日完成工作" class="mui-input-clear mui-input"></textarea>
 				</div>
 				<div class="mui-input-row">
-					<textarea id="TodayUnWork" rows="3" placeholder="未完成工作" class="mui-input-clear mui-input"></textarea>
+					<textarea id="TodayUnWork" rows="2" placeholder="未完成工作" class="mui-input-clear mui-input"></textarea>
+				</div>
+				<div class="mui-input-row" id="NextWorkShow">
+					<textarea id="NextWork" rows="2" placeholder="下阶段工作计划" class="mui-input-clear mui-input"></textarea>
 				</div>
 				<div class="mui-input-row">
-					<textarea id="TodayCoWork" rows="3" placeholder="需协调工作" class="mui-input-clear mui-input"></textarea>
+					<textarea id="TodayCoWork" rows="2" placeholder="需协调工作" class="mui-input-clear mui-input"></textarea>
 				</div>
 				<div class="mui-input-row">
-					<textarea id="TodayRemark" rows="3" placeholder="备注" class="mui-input-clear mui-input"></textarea>
+					<textarea id="TodayRemark" rows="2" placeholder="备注" class="mui-input-clear mui-input"></textarea>
 				</div>
 				<div class="mui-button-row">
 					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
@@ -65,10 +68,12 @@
 			var Type = document.getElementById("Type");
 			var TodayWork = document.getElementById("TodayWork");
 			var TodayUnWork = document.getElementById("TodayUnWork");
+			var NextWork = document.getElementById("NextWork");
 			var TodayCoWork = document.getElementById("TodayCoWork");
 			var TodayRemark = document.getElementById("TodayRemark");
 			mui.init({});
 			mui.plusReady(function() {
+				document.getElementById("NextWorkShow").style.display = "none";//隐藏工作计划
 				//加载默认值
 				var userinfo = JSON.parse(app.getLoginInfo().userinfo);
 				Title.value = userinfo.realname + "的" + Type.value;
@@ -87,6 +92,20 @@
 					picker.show(function(items) {
 						Type.value = items[0].text;
 						Title.value = userinfo.realname + "的" + Type.value;
+						if(items[0].text == "周汇报"){
+							TodayWork.placeholder = "本周完成工作";
+							TodayUnWork.placeholder = "本周工作总结";
+							NextWork.placeholder = "下周工作计划";
+							TodayCoWork.placeholder = "需协调与帮助";
+							document.getElementById("NextWorkShow").style.display = "block";//显示工作计划
+						}
+						if(items[0].text == "月汇报"){
+							TodayWork.placeholder = "本月完成工作";
+							TodayUnWork.placeholder = "本月工作总结";
+							NextWork.placeholder = "下月工作计划";
+							TodayCoWork.placeholder = "需协调与帮助";
+							document.getElementById("NextWorkShow").style.display = "block";//显示工作计划
+						}
 						//返回 false 可以阻止选择框的关闭
 						//return false;
 					});
@@ -107,6 +126,7 @@
 					Type: Type.value,
 					TodayWork: TodayWork.value,
 					TodayUnWork: TodayUnWork.value,
+					NextWork: NextWork.value,
 					TodayCoWork: TodayCoWork.value,
 					TodayRemark: TodayRemark.value,
 					CreateUserId: userid,

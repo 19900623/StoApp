@@ -1,1 +1,459 @@
-null
+{
+	"index.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"css/style.css",
+			"js/mui.enterfocus.js",
+			"fonts/mui.ttf",
+			"css/iconfont.css"
+		],
+		"refer": [
+			"main.html"
+		]
+	},
+	"tab-setting.html": {
+		"resources": [
+			"img/erweima.png",
+			"img/me_logo.png",
+			"js/mui.view.js",
+			"fonts/mui.ttf"
+		],
+		"refer": []
+	},
+	"tab-applications.html": {
+		"resources": [
+			"img/basket_full.png",
+			"img/google_voice.png",
+			"img/car.png",
+			"img/name_manager.png",
+			"img/vcard.png",
+			"img/cell_delete.png",
+			"img/client_account_template.png",
+			"img/cash_register.png",
+			"img/visa_2.png",
+			"img/brick_error.png",
+			"img/account_balances.png",
+			"css/app.css"
+		],
+		"refer": [
+			"tab-work-help.html",
+			"business/questionbill/questionbill-grid.html"
+		]
+	},
+	"main.html": {
+		"refer": [
+			"tab-setting.html",
+			"tab-applications.html",
+			"tab-shedule-main.html",
+			"report/tab-echarts.html"
+		],
+		"resources": [
+			"tab-shedule-main.html"
+		]
+	},
+	"tab-shedule-main.html": {
+		"refer": [
+			"tab-shedule.html"
+		],
+		"resources": [
+			"tab-shedule.html",
+			"js/mui.min.js",
+			"css/mui.min.css"
+		]
+	},
+	"report/tab-echarts.html": {
+		"resources": [
+			"img/card_money.png",
+			"img/coins_add.png",
+			"img/company_generosity.png",
+			"img/statistics.png",
+			"css/app.css",
+			"img/combined_chart.png",
+			"img/calendar_link.png",
+			"js/page.js",
+			"img/coins_delete.png",
+			"img/save_money.png",
+			"img/small_business.png",
+			"img/chart_bar.png",
+			"img/phone_vintage.png"
+		],
+		"refer": [
+			"report/service/service-grid.html",
+			"report/business/business-grid.html"
+		]
+	},
+	"tab-shedule.html": {
+		"resources": [
+			"img/newspaper.png",
+			"img/report_edit.png",
+			"img/desktop_network.png",
+			"img/client_account_template.png"
+		],
+		"refer": [
+			"business/notice/notice_list_main.html",
+			"business/workflow/workflow-main.html",
+			"business/workreport/workreport-main.html"
+		]
+	},
+	"report/service/service-grid.html": {
+		"resources": [
+			"img/outlook_ignore_email.png",
+			"img/telephone.png",
+			"img/table_torn.png",
+			"img/blackberry.png",
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"img/cell_delete.png"
+		],
+		"refer": [
+			"report/service/port_lost_group.html",
+			"report/service/big_error_group.html",
+			"report/service/complaints_report.html",
+			"report/service/damaged_rate_group.html",
+			"report/service/tel_bill_report.html"
+		]
+	},
+	"report/service/port_lost_group.html": {
+		"resources": [
+			"js/mui.picker.min.js",
+			"js/mui.poppicker.js",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css"
+		],
+		"refer": [
+			"report/service/port_lost_group_detail.html"
+		]
+	},
+	"report/service/port_lost_group_detail.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
+		],
+		"refer": []
+	},
+	"report/service/big_error_group.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.picker.min.js",
+			"js/mui.min.js",
+			"js/mui.poppicker.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css"
+		],
+		"refer": []
+	},
+	"report/service/complaints_report.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.picker.min.js",
+			"js/mui.min.js",
+			"js/mui.poppicker.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css"
+		],
+		"refer": [
+			"report/service/complaints_detail.html"
+		]
+	},
+	"report/business/business-grid.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"img/cell_delete.png",
+			"img/text_signature.png",
+			"img/client_account_template.png",
+			"img/chart_column.png"
+		],
+		"refer": [
+			"report/business/report-custom-dept.html",
+			"report/business/report-waybillpickup.html",
+			"report/sign_rate/sign-rate-grid.html"
+		]
+	},
+	"report/business/report-waybillpickup.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.picker.min.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css"
+		],
+		"refer": []
+	},
+	"report/service/damaged_rate_group.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.picker.min.js",
+			"js/mui.min.js",
+			"js/mui.poppicker.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css"
+		],
+		"refer": [
+			"report/service/damaged_rate_detail.html"
+		]
+	},
+	"report/sign_rate/sign-rate-group.html": {
+		"resources": [
+			"js/mui.picker.min.js",
+			"js/mui.poppicker.js",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css"
+		],
+		"refer": [
+			"report/sign_rate/sign-rate-group-detail.html"
+		]
+	},
+	"report/sign_rate/sign-rate-grid.html": {
+		"refer": [
+			"report/sign_rate/sign-rate-group.html",
+			"report/sign_rate/sign-rate-exception.html"
+		],
+		"resources": []
+	},
+	"report/sign_rate/sign-rate-exception.html": {
+		"resources": [
+			"js/mui.picker.min.js",
+			"js/mui.poppicker.js",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css"
+		],
+		"refer": []
+	},
+	"report/service/tel_bill_report.html": {
+		"resources": [
+			"js/mui.picker.min.js",
+			"js/mui.poppicker.js",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css"
+		],
+		"refer": []
+	},
+	"default.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"css/style.css",
+			"js/mui.enterfocus.js",
+			"fonts/mui.ttf"
+		],
+		"refer": [
+			"main.html"
+		]
+	},
+	"login.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"css/style.css",
+			"js/mui.enterfocus.js",
+			"fonts/mui.ttf",
+			"css/iconfont.css"
+		],
+		"refer": [
+			"home.html"
+		]
+	},
+	"home.html": {
+		"resources": [
+			"tab-shedule-main.html",
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"css/style.css",
+			"css/iconfont.css",
+			"fonts/iconfont.ttf"
+		],
+		"refer": [
+			"tab-setting.html",
+			"tab-applications.html",
+			"tab-shedule-main.html",
+			"report/tab-echarts.html",
+			"tab_workspace.html"
+		]
+	},
+	"tab-work-help.html": {
+		"resources": [
+			"img/allow_users_edit_ranges.png",
+			"img/subdomains.png",
+			"img/books.png",
+			"img/blackberry.png",
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"img/newspaper.png",
+			"img/report_edit.png",
+			"img/client_account_template.png"
+		],
+		"refer": [
+			"business/workreport/workreport-list-main.html",
+			"business/workreport/workreport_index.html"
+		]
+	},
+	"business/workreport/workreport-list-main.html": {
+		"resources": [
+			"business/workreport/workreport-list-sub.html",
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"fonts/mui.ttf"
+		],
+		"refer": [
+			"business/workreport/workreport-list-sub.html",
+			"business/workreport/workreport-input.html"
+		]
+	},
+	"tab_workspace.html": {
+		"resources": [
+			"fonts/mui.ttf",
+			"img/erweima.png",
+			"img/me_logo.png",
+			"js/mui.view.js"
+		],
+		"refer": []
+	},
+	"business/notice/notice_list_main.html": {
+		"resources": [
+			"business/notice/notice_list_sub.html",
+			"fonts/mui.ttf",
+			"js/app.js",
+			"js/mui.min.js",
+			"css/mui.min.css"
+		],
+		"refer": [
+			"business/notice/notice_list_sub.html"
+		]
+	},
+	"business/workflow/workflow-main.html": {
+		"resources": [
+			"business/workflow/workflow-sub.html"
+		],
+		"refer": [
+			"business/workflow/workflow-sub.html"
+		]
+	},
+	"business/workreport/workreport-input.html": {
+		"resources": [
+			"js/mui.picker.min.js",
+			"js/mui.poppicker.js",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css",
+			"js/mui.enterfocus.js",
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
+		],
+		"refer": []
+	},
+	"business/workreport/workreport-sub.html": {
+		"refer": [
+			"business/workreport/workreport-remark.html"
+		]
+	},
+	"business/workreport/workreport-main.html": {
+		"resources": [
+			"business/workreport/workreport-sub.html"
+		],
+		"refer": [
+			"business/workreport/workreport-sub.html"
+		]
+	},
+	"business/workreport/workreport-remark.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/mui.enterfocus.js"
+		]
+	},
+	"business/workreport/workreport-list-sub.html": {
+		"resources": [
+			"js/app.js"
+		]
+	},
+	"business/workreport/workreport_index.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/style.css",
+			"fonts/iconfont.ttf",
+			"business/workreport/workreport_write.html"
+		],
+		"refer": [
+			"business/workreport/workreport_write.html",
+			"business/workreport/workreport_read.html"
+		]
+	},
+	"business/workreport/workreport_write.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"js/app.js",
+			"css/iconfont.css",
+			"css/style.css",
+			"fonts/iconfont.ttf"
+		],
+		"refer": [
+			"business/workreport/workreport_form.html"
+		]
+	},
+	"business/questionbill/questionbill-grid.html": {
+		"resources": [
+			"img/script_edit.png",
+			"img/script_error.png"
+		]
+	},
+	"business/workreport/workreport_form.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"fonts/mui.ttf",
+			"js/app.js",
+			"css/iconfont.css",
+			"css/style.css",
+			"fonts/iconfont.ttf",
+			"js/mui.picker.min.js",
+			"js/mui.poppicker.js",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css"
+		],
+		"refer": [
+			"employee_select.html"
+		]
+	},
+	"employee_select.html": {
+		"resources": [
+			"js/pinyin.js",
+			"css/mui.indexedlist.css",
+			"js/mui.indexedlist.js",
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
+		]
+	}
+}
