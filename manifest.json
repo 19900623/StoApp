@@ -219,7 +219,8 @@
 					"fonts/mui.ttf",
 					"css/mui.min.css",
 					"css/style.css",
-					"js/mui.enterfocus.js"
+					"js/mui.enterfocus.js",
+					"css/iconfont.css"
 				],
 				"refer": [
 					"main.html",
@@ -1790,7 +1791,8 @@
 					"business/workreport/workreport-list-main.html",
 					"business/notice/notice_list_main.html",
 					"business/knowledgelib/knowledgelib_list.html",
-					"business/addresslist/addresslist.html"
+					"business/addresslist/addresslist.html",
+					"business/workreport/workreport_index.html"
 				],
 				"priority": 0
 			},
@@ -1983,7 +1985,11 @@
 				"resources": [
 					"js/pinyin.js",
 					"css/mui.indexedlist.css",
-					"js/mui.indexedlist.js"
+					"js/mui.indexedlist.js",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
 				],
 				"refer": [],
 				"priority": 0
@@ -2092,7 +2098,8 @@
 					"report/business/report-waybillpickup.html",
 					"report/business/report-custom-dept.html",
 					"report/business/report-wrong-detail.html",
-					"report/sign_ratio/sign-radio-grid.html"
+					"report/sign_ratio/sign-radio-grid.html",
+					"report/sign_rate/sign-rate-grid.html"
 				],
 				"priority": 0
 			},
@@ -2100,7 +2107,11 @@
 				"resources": [
 					"js/mui.picker.min.js",
 					"css/mui.poppicker.css",
-					"css/mui.picker.min.css"
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
 				],
 				"refer": [],
 				"priority": 0
@@ -2255,6 +2266,162 @@
 					"css/mui.min.css",
 					"css/mui.poppicker.css",
 					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/sign_rate/sign-rate-group.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [
+					"report/sign_rate/sign-rate-group-detail.html"
+				],
+				"priority": 0
+			},
+			"report/sign_rate/sign-rate-grid.html": {
+				"resources": [],
+				"refer": [
+					"report/sign_rate/sign-rate-group.html",
+					"report/sign_rate/sign-rate-exception.html"
+				],
+				"priority": 0
+			},
+			"report/sign_rate/sign-rate-exception.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"default.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"css/style.css",
+					"js/mui.enterfocus.js",
+					"fonts/mui.ttf"
+				],
+				"refer": [
+					"main.html"
+				],
+				"priority": 0
+			},
+			"login.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"css/style.css",
+					"js/mui.enterfocus.js",
+					"fonts/mui.ttf",
+					"css/iconfont.css"
+				],
+				"refer": [
+					"home.html"
+				],
+				"priority": 0
+			},
+			"home.html": {
+				"resources": [
+					"tab-shedule-main.html",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/style.css",
+					"css/iconfont.css",
+					"fonts/iconfont.ttf"
+				],
+				"refer": [
+					"tab-setting.html",
+					"tab-applications.html",
+					"report/tab-echarts.html",
+					"tab_workspace.html"
+				],
+				"priority": 0
+			},
+			"tab_workspace.html": {
+				"resources": [
+					"fonts/mui.ttf",
+					"img/erweima.png",
+					"img/me_logo.png",
+					"js/mui.view.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/workreport/workreport_index.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/iconfont.css",
+					"css/mui.min.css",
+					"css/style.css",
+					"fonts/iconfont.ttf",
+					"business/workreport/workreport_write.html"
+				],
+				"refer": [
+					"business/workreport/workreport_read.html",
+					"business/workreport/workreport_read_main.html"
+				],
+				"priority": 0
+			},
+			"business/workreport/workreport_write.html": {
+				"resources": [
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"js/app.js",
+					"css/iconfont.css",
+					"css/style.css",
+					"fonts/iconfont.ttf"
+				],
+				"refer": [
+					"business/workreport/workreport_form.html"
+				],
+				"priority": 0
+			},
+			"business/workreport/workreport_form.html": {
+				"resources": [
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"fonts/mui.ttf",
+					"js/app.js",
+					"css/iconfont.css",
+					"css/style.css",
+					"fonts/iconfont.ttf",
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [
+					"employee_select.html"
+				],
+				"priority": 0
+			},
+			"business/workreport/workreport_read_main.html": {
+				"resources": [
+					"business/workreport/workreport_read_sub.html",
+					"js/mui.min.js",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/workreport/workreport_read_sub.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css"
 				],
 				"refer": [],
 				"priority": 0

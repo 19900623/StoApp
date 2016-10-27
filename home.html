@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/style.css">
+	</head>
+
+	<body>
+		<nav class="mui-bar mui-bar-tab">
+			<a id="tab_messages" class="mui-tab-item" href="tab-shedule-main.html">
+				<span class="mui-icon iconfont icon-mark"></span>
+				<span class="mui-tab-label">消息</span>
+			</a>
+			<a id="tab_reports" class="mui-tab-item" href="report/tab-echarts.html">
+				<span class="mui-icon iconfont icon-rankfill"></span>
+				<span class="mui-tab-label">报表</span>
+			</a>
+			<a id="tab_workspace" class="mui-tab-item mui-active" href="tab-applications.html">
+				<span class="mui-icon iconfont icon-apps"></span>
+				<span class="mui-tab-label">工作</span>
+			</a>
+			<!--<a class="mui-tab-item" href="tab-applications.html">
+				<span class="mui-icon iconfont icon-peoplelist"></span>
+				<span class="mui-tab-label">联系人</span>
+			</a>-->
+			<a id="tab_my" class="mui-tab-item" href="tab-setting.html">
+				<span class="mui-icon iconfont icon-people"></span>
+				<span class="mui-tab-label">我</span>
+			</a>
+		</nav>
+		<script src="js/app.js"></script>
+		<script src="js/mui.min.js"></script>
+		<script>
+			//mui初始化
+			mui.init({
+			    subpages:[{
+			      url:'tab-shedule-main.html',
+			      id:'tab_messages',
+			      styles:{
+			        top:'0px',//mui标题栏默认高度为45px；
+			        bottom:'51px'//默认为0px，可不定义；
+			      }
+			    },{
+			      url:'report/tab-echarts.html',
+			      id:'tab_reports',
+			      styles:{
+			        top:'0px',//mui标题栏默认高度为45px；
+			        bottom:'51px'//默认为0px，可不定义；
+			      }
+			    },{
+			      url:'tab-applications.html',
+			      id:'tab_workspace',
+			      styles:{
+			        top:'0px',//mui标题栏默认高度为45px；
+			        bottom:'51px'//默认为0px，可不定义；
+			      }
+			    },{
+			      url:'tab-setting.html',
+			      id:'tab_my',
+			      styles:{
+			        top:'0px',//mui标题栏默认高度为45px；
+			        bottom:'51px'//默认为0px，可不定义；
+			      }
+			    }]
+			});
+//			var subpages = ['tab-shedule-main.html', 'report/tab-echarts.html', 'tab_workspace.html', 'tab-applications.html', 'tab-setting.html'];
+//			var subpage_style = {
+//				top: '0px',
+//				bottom: '51px'
+//			};
+			var aniShow = {};
+			
+			//创建子页面，首个选项卡页面显示，其它均隐藏；
+			mui.plusReady(function() {
+				window.addEventListener('swipeleft',function(event){
+					console.log("向左滑动")
+				});
+				window.addEventListener('swiperight',function(event){
+					console.log("向右滑动")
+				});
+//				var self = plus.webview.currentWebview();
+//				for (var i = 0; i < 4; i++) {
+//					var temp = {};
+//					var sub = plus.webview.create(subpages[i], subpages[i], subpage_style);
+//					if (i > 0) {
+//						sub.hide();
+//					} else {
+//						temp[subpages[i]] = "true";
+//						mui.extend(aniShow, temp);
+//					}
+//					self.append(sub);
+//				}
+				var backButtonPress = 0;
+				//登录后不能返回到登录界面，再次登录会有问题
+				mui.back = function(event) {
+					backButtonPress++;
+					if (backButtonPress > 1) {
+						plus.runtime.quit();
+					} else {
+						plus.nativeUI.toast('再按一次退出应用');
+					}
+					setTimeout(function() {
+						backButtonPress = 0;
+					}, 1000);
+					return false;
+				};
+				//记录定位
+				//setInterval("LogLocation()", 1000 * 10);
+			});
+			var activeTab = "tab_workspace"
+			//选项卡点击事件
+			mui('.mui-bar-tab').on('tap', 'a', function(e) {
+				var targetTab = this.getAttribute('id');
+				//如果当前tab已激活，跳出
+				if(this.className.indexOf("mui-active") > 0){
+					return;
+				}
+//				console.log(this.getAttribute('href'))
+//				mui.openWindow({
+//				    url: this.getAttribute('href'),
+//				    id: this.getAttribute('id'),
+//				    styles:{
+//				      top:"0px",//新页面顶部位置
+//				      bottom:"51px",//新页面底部位置
+//				    },
+//				    extras:{
+//				    	//自定义扩展参数，可以用来处理页面间传值
+//				    },
+//				    createNew:false,//是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+//				    show:{
+//				      autoShow:true,//页面loaded事件发生后自动显示，默认为true
+//				      aniShow:"slide-in-right",//页面显示动画，默认为”slide-in-right“；
+//				      duration:"100ms"//页面动画持续时间，Android平台默认100毫秒，iOS平台默认200毫秒；
+//				    },
+//				    waiting:{
+//				      autoShow:true,//自动显示等待框，默认为true
+//				      title:'正在加载...',//等待对话框上显示的提示内容
+////				      options:{
+////				        width:waiting-dialog-widht,//等待框背景区域宽度，默认根据内容自动计算合适宽度
+////				        height:waiting-dialog-height,//等待框背景区域高度，默认根据内容自动计算合适高度
+////				      }
+//				    }
+//				})
+
+
+//				//更换标题
+////				title.innerHTML = this.querySelector('.mui-tab-label').innerHTML;
+				//显示目标选项卡
+				if (mui.os.ios || aniShow[targetTab]) {
+					plus.webview.show(targetTab);
+				} else {
+					var temp = {};
+					temp[targetTab] = "true";
+					mui.extend(aniShow, temp);
+					plus.webview.show(targetTab, "fade-in", 100);
+				}
+				//隐藏当前;
+				plus.webview.hide(activeTab);
+				//更改当前活跃的选项卡
+				activeTab = targetTab;
+			});
+			//自定义事件，模拟点击“首页选项卡”
+			document.addEventListener('gohome', function() {
+				var defaultTab = document.getElementById("defaultTab");
+				//模拟首页点击
+				mui.trigger(defaultTab, 'tap');
+				//切换选项卡高亮
+				var current = document.querySelector(".mui-bar-tab>.mui-tab-item.mui-active");
+				if (defaultTab !== current) {
+					current.classList.remove('mui-active');
+					defaultTab.classList.add('mui-active');
+				}
+			});
+			//记录行车记录
+			function LogLocation() {
+				var locationString = app.getLoaction();
+				if (JSON.stringify(locationString) == 'true') {
+					//记录定位日志，如果有网络将本地数据传向网络，如果无网络将本地数据上传。
+					plus.geolocation.getCurrentPosition(function(position) {
+						var codns = position.coords;
+						var id = app.NewGuid();
+						var pos = codns.longitude + ',' + codns.latitude;
+						var username = JSON.parse(app.getLoginInfo().userinfo).realname;
+						var list = new Array();
+						var d = new Date().format('yyyy-MM-dd hh:mm:ss');
+						var info = {
+							ID: id,
+							Pos: pos,
+							UserName: username,
+							PosDate: d
+						};
+						list.push(info);
+						var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+						if (plus.networkinfo.getCurrentType() == 1) {
+							db.transaction(function(context) {
+								context.executeSql('CREATE TABLE IF NOT EXISTS Location (ID,Username,Pos,Posdate)');
+								var sql = "INSERT INTO Location (ID,Username,Pos, Posdate) VALUES (?,?,?,?)";
+								context.executeSql(sql, [id, username, pos, d],
+									function(tx, result) {
+										console.log('保存本地坐标成功');
+									},
+									function(tx, error) {
+										console.log('保存本地坐标失败' + error.message);
+									});
+							});
+						} else {
+							db.transaction(function(context) {
+								context.executeSql('CREATE TABLE IF NOT EXISTS Location (ID,Username,Pos,Posdate)');
+								context.executeSql("SELECT * FROM Location", [], function(context, results) {
+									var len = results.rows.length;
+									console.log(len);
+									for (var i = 0; i < len; i++) {
+										var info = {
+											ID: results.rows.item(i).ID,
+											Pos: results.rows.item(i).Pos,
+											UserName: results.rows.item(i).Username,
+											PosDate: results.rows.item(i).Posdate
+										}
+										list.push(info);
+									}
+									//上传服务器
+									var url = app.getUrl() + 'UploadLocation';
+									mui.ajax(url, {
+										data: {
+											info: JSON.stringify(list)
+										},
+										type: 'post',
+										dataType: 'json',
+										success: function(data) {
+											if (data == "" || data == null) {
+												var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+												db.transaction(function(context) {
+													context.executeSql('CREATE TABLE IF NOT EXISTS Location (ID,Username,Pos,Posdate)');
+													var sql = 'DELETE FROM Location';
+													context.executeSql(sql);
+												});
+											}
+										}
+									});
+								});
+							});
+						}
+					}, function(e) {
+						console.log("获取定位位置信息失败：" + e.message);
+						callback(false);
+					}, {
+						provider: 'baidu'
+					});
+				}
+			}
+		</script>
+	</body>
+
+</html>

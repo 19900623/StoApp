@@ -368,11 +368,17 @@
 	"business/workreport/workreport-sub.html": {
 		"refer": [
 			"business/workreport/workreport-remark.html"
+		],
+		"resources": [
+			"js/app.js"
 		]
 	},
 	"business/workreport/workreport-main.html": {
 		"resources": [
-			"business/workreport/workreport-sub.html"
+			"business/workreport/workreport-sub.html",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
 		],
 		"refer": [
 			"business/workreport/workreport-sub.html"
@@ -405,7 +411,8 @@
 		],
 		"refer": [
 			"business/workreport/workreport_write.html",
-			"business/workreport/workreport_read.html"
+			"business/workreport/workreport_read.html",
+			"business/workreport/workreport_read_main.html"
 		]
 	},
 	"business/workreport/workreport_write.html": {
@@ -453,6 +460,23 @@
 			"js/app.js",
 			"js/mui.min.js",
 			"fonts/mui.ttf",
+			"css/mui.min.css"
+		]
+	},
+	"business/workreport/workreport_read_main.html": {
+		"resources": [
+			"business/workreport/workreport_read_sub.html",
+			"js/mui.min.js",
+			"css/mui.min.css"
+		],
+		"refer": [
+			"business/workreport/workreport_read_sub.html"
+		]
+	},
+	"business/workreport/workreport_read_sub.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.min.js",
 			"css/mui.min.css"
 		]
 	}
