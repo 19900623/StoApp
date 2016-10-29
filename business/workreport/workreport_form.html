@@ -93,7 +93,6 @@
 		<script type="text/javascript">
 			var modelID;	//模板ID
 			var arrJson;	//审阅人
-			var check = 0;
 			mui.init();
 			mui.plusReady(function(){
 				//修改时隐藏人员选择
@@ -180,7 +179,6 @@
 										txt.rows = 3;
 										txt.placeholder = !!this.Placeholder ? this.Placeholder : '';
 										if(this.AllowNull == 0){
-											check++;
 											txt.required = 'required';
 										}
 										if (this.Readonly == 1) {

@@ -9,7 +9,8 @@
 .sto-table-view { position: relative; margin-top: 0; margin-bottom: 0; padding-left: 0; list-style: none; }
 .sto-listbox { width: 100%; margin: 10px 0; padding: 5px 10px; background: #fff; }
 .sto-listbox .sto-title { padding: 5px 0; overflow: hidden; }
-.sto-listbox .sto-tag { float: right; }
+.sto-listbox .sto-modelname { float: right; }
+.sto-tag{position: absolute; display: block; margin-top:25px; right: 60px; padding: 3px; color: #ff6600; border: 1px solid #ff6600;  transform:rotate(-30deg); -webkit-transform:rotate(-30deg);}
 .sto-listbox .sto-tip { font-size: 12px; color: #0062CC; text-align: right; }
 .sto-listbox h5 { display: inline; }
 .sto-h5 { font-size: 14px; font-weight: 400; color: #333; }
@@ -25,17 +26,18 @@
     <!--数据列表-->
     <ul class="sto-table-view">
       <!--<li>
-						<div class="sto-listbox">
-							<div class="sto-title">
-								<h5 class="sto-tag">日报</h5><h4>李凯辉</h4>
-		                    	<h5>2016-10-27 16:23:25</h5>
-							</div>
-		                    <p class="sto-h5 sto-ellipsis"><span class="sto-field">今日完成工作：</span>申请交行信息卡100元等你拿，申请交行信息卡申请交行信息卡申请交行信息卡申请交行信息卡李明明，申请交行信息卡，100元等你拿，</p>
-		                    <p class="sto-h5 sto-ellipsis"><span class="sto-field">今日完成工作：</span>申请交行信息卡，100元等你拿，</p>
-		                    <p class="sto-h5 sto-ellipsis"><span class="sto-field">今日完成工作：</span>李明明，申请交行信息卡，100元等你拿，</p>
-		                	<div class="sto-tip">查看全文&gt;</div>
-		            	</div>
-					</li>-->
+					<div class="sto-listbox">
+						<div class="sto-title">
+							<span class="sto-tag">已批复</span>
+							<h5 class="sto-modelname">日报</h5><h4>李凯辉</h4>
+        		<h5>2016-10-27 16:23:25</h5>
+						</div>
+	                    <p class="sto-h5 sto-ellipsis"><span class="sto-field">今日完成工作：</span>申请交行信息卡100元等你拿，申请交行信息卡申请交行信息卡申请交行信息卡申请交行信息卡李明明，申请交行信息卡，100元等你拿，</p>
+	                    <p class="sto-h5 sto-ellipsis"><span class="sto-field">今日完成工作：</span>申请交行信息卡，100元等你拿，</p>
+	                    <p class="sto-h5 sto-ellipsis"><span class="sto-field">今日完成工作：</span>李明明，申请交行信息卡，100元等你拿，</p>
+	                	<div class="sto-tip">查看全文&gt;</div>
+	            	</div>
+				</li>-->
     </ul>
   </div>
 </div>
@@ -60,16 +62,23 @@
 	 */
 	function pulldownRefresh() {
 		setTimeout(function() {
+			var type = mui.currentWebview.type
 			var fragment = document.createDocumentFragment();
 			count = 1;
 			var logininfo = app.getLoginInfo();
 			var messageInfo = {
-				userid: logininfo.userid,
-				replyuserid: '',
 				modelid: '',
 				page: 1,
 				rows: 10
 			};
+			if(type == 'reply'){
+				messageInfo['userid'] = '';
+				messageInfo['replyuserid'] = logininfo.userid;
+			}
+			else{
+				messageInfo['userid'] = logininfo.userid;
+				messageInfo['replyuserid'] = '';
+			}
 			var url = app.getUrl() + 'GetWorkReportList';
 			mui.ajax(url, {
 				data: messageInfo,
@@ -77,15 +86,18 @@
 				dataType: 'json',
 				success: function(data) {
 					if(data.Success) {
+//						console.log(data.codes)
 						var reportData = JSON.parse(data.codes);
 						mui.each(reportData, function(index, item) {
-							//									console.log(JSON.stringify(reportData));
 							var li = document.createElement('li');
-							li.id = this.reportid;
+							li.id = this.reportid + '|' + this.modelname ;
 							var html = '' +
 								'<div class="sto-listbox">' +
-								'	<div class="sto-title">' +
-								'		<h5 class="sto-tag">' +
+								'	<div class="sto-title">';
+								if(type == 'reply'){
+									html += (this.status == 1 ? '<span class="sto-tag">已批复</span>' : '');
+								}
+								html += '		<h5 class="sto-modelname">' +
 								this.modelname +
 								'		</h5>' +
 								'		<h4>' +
@@ -101,7 +113,7 @@
 									html += '' +
 										'	<p class="sto-h5 sto-ellipsis">' +
 										'		<span class="sto-field">' +
-										this.attrname + '：' +
+										this.attrname + ':' +
 										'		</span>' +
 										this.attrval +
 										' </p>';
@@ -158,17 +170,24 @@
 	 */
 	function pullupRefresh() {
 		setTimeout(function() {
+			var type = mui.currentWebview.type
 			var table = document.body.querySelector('.sto-table-view');
 			count = count + 1;
 			var fragment = document.createDocumentFragment();
 			var logininfo = app.getLoginInfo();
 			var messageInfo = {
-				userid: logininfo.userid,
-				replyuserid: '',
 				modelid: '',
 				page: count,
 				rows: 10
 			};
+			if(type == 'reply'){
+				messageInfo['userid'] = '';
+				messageInfo['replyuserid'] = logininfo.userid;
+			}
+			else{
+				messageInfo['userid'] = logininfo.userid;
+				messageInfo['replyuserid'] = '';
+			}
 			//					console.log(JSON.stringify(messageInfo))
 			var url = app.getUrl() + 'GetWorkReportLists';
 			mui.ajax(url, {
@@ -176,17 +195,21 @@
 				type: 'post',
 				dataType: 'json',
 				success: function(data) {
-					//							console.log(JSON.stringify(data));
+//												console.log(JSON.stringify(data));
 					if(data.Success) {
 						var reportData = JSON.parse(data.codes);
 						mui.each(reportData, function(index, item) {
 							//									console.log(JSON.stringify(reportData));
 							var li = document.createElement('li');
-							li.id = this.reportid;
+							li.id = this.reportid + '|' + this.modelname;
+//							console.log(this.status)
 							var html = '' +
 								'<div class="sto-listbox">' +
-								'	<div class="sto-title">' +
-								'		<h5 class="sto-tag">' +
+								'	<div class="sto-title">';
+								if(type == 'reply'){
+									html += (this.status == 1 ? '<span class="sto-tag">已批复</span>' : '');
+								}
+								html += '		<h5 class="sto-modelname">' +
 								this.modelname +
 								'		</h5>' +
 								'		<h4>' +
@@ -202,7 +225,7 @@
 									html += '' +
 										'	<p class="sto-h5 sto-ellipsis">' +
 										'		<span class="sto-field">' +
-										this.attrname +
+										this.attrname + ':' +
 										'		</span>' +
 										this.attrval +
 										' </p>';

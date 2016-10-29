@@ -3,9 +3,34 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title></title>
+		<title>汇报详情</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<style>
+			.sto-content-row{ padding: 10px; border-bottom: 1px solid #e2e2e2; background: #fff;}
+			.sto-content-row p{ color: #333; border-bottom: 1px;}
+			.sto-content-tip{color: #999; font-size: 14px;}
+			.sto-comment{ margin-top: 10px;}
+			.sto-comment-box{margin-bottom: 10px; border-bottom: 1px solid #e2e2e2;}
+			.sto-comment .sto-date-right{float: right;}
+			.mui-bar-tab{padding:6px; height: 40px;}
+			.mui-bar-tab input{margin: 0; height: 40px; width: calc(100% - 70px);}
+			.mui-bar-tab button{float: right; color: #fff; width: 60px; height: 40px; border: none; background: #007AFF;}
+			
+			/*.profile-list{float: left; max-width: calc(100% - 60px); min-width: 1px; text-align: left;}
+			.profile-add{float: left; text-align:center; width: 60px;}
+			.profile-add a{color: #888;}
+			.profile-add .add-pic{font-size: 48px; line-height: 48px;}
+			.profile-add .add-text{font-size: 14px; display: block;}*/
+			
+			/*.sto-input-row label{ display: block; width: 100%; padding: 10px 15px;}
+			.sto-input-row label~input, .sto-input-row label~select, .sto-input-row label~textarea{
+				border: none; 
+				background: #fff;
+				width: 100%;
+				padding: 10px 15px;
+			}*/
+		</style>
 	</head>
 
 	<body>
@@ -13,116 +38,139 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 id="title" class="mui-title"></h1>
 		</header>
-		<div class="mui-content" id="mui-form">
-			尚未完善
-		</div>
-		
+		<div class="mui-content" style="padding-bottom: 51px;">
+			<!--<div class="sto-content-row sto-subject">
+				<h4>李凯辉</h4>
+            	<h5>2016-10-27 16:23:25</h5>
+			</div>
+			<div class="sto-content-row">
+				<h5 class="mui-h5">今日完成工作</h5>
+				<p>申请交行信息卡100元等你拿，申请交行信息卡申请交行信息卡申请交行信息卡申请交行信息卡李明明，申请交行信息卡，100元等你拿</p>
+			</div>
+			<div class="sto-content-row">
+				<h5 class="mui-h5">今日未完成工作</h5>
+				<p>申请交行信息卡，100元等你拿</p>
+			</div>
+			<div class="sto-content-row">
+				<h5 class="mui-h5">明日工作计划</h5>
+				<p>申请交行信息卡100元等你拿，100元等你拿</p>
+			</div>
+			<div class="sto-content-row">
+				已读
+			</div>
+			<div class="sto-content-row sto-comment">
+				<h5 class="mui-h5">共有<span style="font-weight: bold;">3</span>条批复</h5>
+				<div class="sto-comment-box">
+					<span class="mui-h5">陈琪</span><span class="mui-h6 sto-date-right">2016-10-26 12:32</span>
+					<p>不错</p>
+				</div>
+				<div class="sto-comment-box">
+					<span class="mui-h5">李凯辉</span><span class="mui-h6 sto-date-right">2016-10-26 12:32</span>
+					<p>嗯，是不错</p>
+				</div>
+				<span class="sto-content-tip">暂无批复...</span>
+			</div>-->
+    	</div>
+    	<nav class="mui-bar mui-bar-tab">
+    		<input type="text" id="txtContent" placeholder="批注内容..." />
+    		<button id="btnSubmit" onclick="btn_submit()">提交</button>
+		</nav>
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/app.js"></script>
-		<script type="text/javascript">
-			var modelID;	//模板ID
-			mui.init();
+		<script>
+			var reportid;	//模板ID
+			mui.init({});
+			var html;	//内容容器
 			mui.plusReady(function(){
-				//修改时隐藏人员选择
-				var param = JSON.parse(mui.currentWebview.name);
-				mui('#title')[0].innerText = param.ModelName;	//给标题赋值
-				modelID = param.ModelID;
-				InitForm(modelID);	//初始化表单
-			});
-			
-			//初始化表单
-			function InitForm(modelid){
-				var url = app.getUrl() + 'GetModelAttrList';
-				var content = mui('.mui-content')[0];	//表单容器
-				content.innerHTML = "";
-				mui.post(url, {ModelID: modelid},
+				var param = mui.currentWebview.name.split('|');
+				mui('#title')[0].innerText = param[1];	//给标题赋值
+				var url = app.getUrl() + 'GetWorkReportById';
+				reportid = param[0];
+				mui.post(url, {reportid: reportid},
 					function(data){
 						if(data.Success){
-							var list = JSON.parse(data.codes);	//POST返回的JSON结果
-							mui.each(list, function(i, item){
-								var div = document.createElement("div");	//字段容器
-								div.className = 'mui-input-row';
-								var html = '<label>' + this.AttrName +'</label>';	//字段名
-								div.innerHTML = html;
-								switch (this.CtrlType) {	//控件类型
-									case 'input':
-										var inp = document.createElement("input");
-										inp.id = this.CtrlID;
-										inp.name = this.AttrID;
-										inp.type = 'text'
-										inp.className = 'mui-input';
-										inp.placeholder = !!this.Placeholder ? this.Placeholder : '';
-										if(this.AllowNull == 0){
-											inp.required = 'required';
-										}
-										if (this.Readonly == 1) {
-				                            inp.readOnly = 'readonly';
-				                        }
-										//输入监听事件，当不为空时，核查所有必填项，如果全不为空，则激活提交按钮
-										inp.addEventListener("input",function(e){
-											if(this.value){
-												CheckDataValid();
-											};
-										},false)
-										div.appendChild(inp);
-										break;
-									case 'select':
-										var inp = document.createElement("input");
-										inp.id = this.CtrlID;
-										inp.name = this.AttrID;
-										inp.type = 'text'
-										inp.className = 'mui-input';
-										inp.placeholder = this.Placeholder;
-										inp.readOnly = 'readonly';
-										if(this.AllowNull == 0){
-											inp.required = 'required';
-										}
-										if (this.Readonly == 1) {
-				                            inp.readOnly = 'readonly';
-				                        }
-										var DefaultVal = this.DefaultVal.split(',');	//select选项值
-										inp.addEventListener('tap', function(event) {
-											var picker = new mui.PopPicker();
-											picker.setData(DefaultVal);
-											picker.show(function(items) {
-												inp.value = items[0];
-												CheckDataValid();
-												//返回 false 可以阻止选择框的关闭
-												//return false;
-											});
-										});
-										div.appendChild(inp);
-										break;
-									case 'textarea':
-										div.className = "mui-input-row sto-input-row";
-										var txt = document.createElement("textarea");
-										txt.id = this.CtrlID;
-										txt.name = this.AttrID;
-										txt.className = 'mui-input';
-										txt.rows = 3;
-										txt.placeholder = !!this.Placeholder ? this.Placeholder : '';
-										if(this.AllowNull == 0){
-											check++;
-											txt.required = 'required';
-										}
-										if (this.Readonly == 1) {
-				                            txt.readOnly = 'readonly';
-				                        }
-										//输入监听事件，当不为空时，核查所有必填项，如果全不为空，则激活提交按钮
-										txt.addEventListener("input",function(e){
-											if(this.value){
-												CheckDataValid();
-											};
-										},false)
-										div.appendChild(txt);
-										break;
-								}
-//								console.log(div.innerHTML)
-								content.appendChild(div);	//添加到表单容器
-							});
+							var reportData = JSON.parse(data.codes);
+							console.log(JSON.stringify(reportData))
+							html = ''
+							+ '<div class="sto-content-row sto-subject">'
+							+ '<h4>'+ reportData.UserName +'</h4>'
+							+ '<h5>2016-10-27 16:23:25</h5>'
+							+ '</div>';
+							
+							var ReportContent = JSON.parse(reportData.ReportContent);
+							var ReplyContent = JSON.parse(reportData.ReplyContent);
+							LoadReportContent(ReportContent);
+							LoadReplyContent(ReplyContent);
+							mui('.mui-content')[0].innerHTML = html;
 						}
-					},'json'
+					}
 				);
+			});
+			
+			function LoadReportContent(data){
+//				console.log(JSON.stringify(data))
+				if(!!data){
+					mui.each(data,function(){
+						if(!!this.AttrVal)
+							html += ''
+							+ '<div class="sto-content-row">'
+							+ '	<h5 class="mui-h5">'+ this.AttrName +'</h5>'
+							+ '	<p>'+ this.AttrVal +'</p>'
+							+ '</div>'
+					});
+				}
+			}
+			
+			function LoadReplyContent(data){
+				html += '<div class="sto-content-row sto-comment">';
+				if(JSON.stringify(data) == '[]'){
+					html += '<span class="sto-content-tip">暂无批复...</span>';
+				}
+				else{
+					mui.each(data, function(){
+						//如果已批复过，隐藏提交功能
+						if(this.ReplyUserID == app.getLoginInfo().userid){
+							mui('.mui-bar-tab')[0].style.display = 'none';
+						}
+						html += '<h5 class="mui-h5">共有<span style="font-weight: bold;">'+ data.length +'</span>条批复</h5>'
+						+ '<div class="sto-comment-box">'
+						+ '	<span class="mui-h5">'+ this.ReplyUserName +'</span>'
+						+ '	<span class="mui-h6 sto-date-right">'+ (new Date(this.ReplyDate.replace('T',' ')).format("M月d日 hh:mm")) +'</span>'
+						+ '	<p>'+ this.ReplyContent +'</p>'
+						+ '</div>'
+					});
+				}
+				html += '</div>';
+			}
+			
+			function btn_submit(){
+				var logininfo = app.getLoginInfo();
+				var val = mui('#txtContent')[0].value;
+				var url = app.getUrl() + 'ReportReply';
+				mui.ajax(url,{
+					data:{
+						ReportID:reportid,
+						ReplyUserID: logininfo.userid,
+						ReplyContent: val
+					},
+					dataType:'json',//服务器返回json格式数据
+					type:'post',//HTTP请求类型
+					timeout:10000,//超时时间设置为10秒；
+					success:function(data){
+						if(data.Success){
+							mui.toast('提交成功');
+							mui.fire(page, 'refresh');
+							mui.back();
+						}
+						else{
+							mui.toast(data.Message);
+						}
+					},
+					error:function(xhr,type,errorThrown){
+						//异常处理；
+						console.log(JSON.stringify(xhr));
+					}
+				});
 			}
 		</script>
 	</body>
