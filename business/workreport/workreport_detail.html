@@ -78,19 +78,25 @@
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/app.js"></script>
 		<script>
-			var reportid;	//模板ID
+			var reportid;
 			mui.init({});
 			var html;	//内容容器
 			mui.plusReady(function(){
 				var param = mui.currentWebview.name.split('|');
+				var type = mui.currentWebview.type;
 				mui('#title')[0].innerText = param[1];	//给标题赋值
+				
+				//如果不用审批，则隐藏提交功能
+				if(type != 'reply'){
+					mui('.mui-bar-tab')[0].style.display = 'none';
+				}
 				var url = app.getUrl() + 'GetWorkReportById';
 				reportid = param[0];
 				mui.post(url, {reportid: reportid},
 					function(data){
 						if(data.Success){
 							var reportData = JSON.parse(data.codes);
-							console.log(JSON.stringify(reportData))
+//							console.log(JSON.stringify(reportData))
 							html = ''
 							+ '<div class="sto-content-row sto-subject">'
 							+ '<h4>'+ reportData.UserName +'</h4>'

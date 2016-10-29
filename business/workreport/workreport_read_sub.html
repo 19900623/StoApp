@@ -129,7 +129,8 @@
 									'workreport_detail.html',
 									'workreport_detail',
 									'', {
-										name: this.id
+										name: this.id,
+										type: type
 									}
 								); //后台创建webview并打开show.html
 								webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
@@ -242,7 +243,8 @@
 									'workreport_detail.html',
 									'workreport_detail',
 									'', {
-										name: this.id
+										name: this.id,
+										type: type
 									}
 								); //后台创建webview并打开show.html
 								webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
