@@ -2426,7 +2426,7 @@
 				"refer": [],
 				"priority": 0
 			}
-		},
+		}, 
 		"idle": {
 			"resources": [
 				"img/chart_pie(2).png",

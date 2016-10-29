@@ -48,15 +48,23 @@
 						<input type="text" id="WayBillNumber" class="mui-input-clear mui-input" style="padding-right: 2em" required="required">
 						<img src="../../img/scan.png" style="position: absolute; right: 0px;top: 1.5px ;width: 2em; height: 2em;" onclick="clicked('../../barcode_scan.html',true,true)" />
 					</div>
-					<!--<div class="mui-input-row">
-						<label>姓名</label>
-						<input type="text" id="UserName" class="mui-input-clear mui-input" required="required">
-					</div>-->
-
 					<div class="mui-input-row">
 						<label>身份证号</label>
 						<input type="text" id="Card" class="mui-input-clear mui-input" required="required">
 					</div>
+					<div class="mui-input-row">
+						<label>省</label>
+						<input type="text" id="Province" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>市</label>
+						<input type="text" id="City" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>区</label>
+						<input type="text" id="Area" class="mui-input" required="required" readonly="readonly">
+					</div>
+
 				</form>
 				<ul id="images" class="dlist">
 
@@ -76,33 +84,103 @@
 		<script type="text/javascript " src="../../js/common.js"></script>
 		<script>
 			mui.init({});
-			mui.plusReady(function() {});
+
+			mui.plusReady(function() {
+				//级联部门
+				var picker = new mui.PopPicker({
+					layer: 3
+				});
+				var city = "";
+				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+				db.transaction(function(context) {
+					context.executeSql('CREATE TABLE IF NOT EXISTS Province (city)');
+					db.transaction(function(context) {
+						context.executeSql("SELECT * FROM Province", [], function(context, results) {
+							var len = results.rows.length;
+							console.log(len);
+							if(len > 0) {
+								city = results.rows.item(0).city;
+								plus.nativeUI.closeWaiting();
+								document.getElementById("Province").addEventListener('tap', function(event) {
+									picker.setData(JSON.parse(city));
+									picker.show(function(items) {
+										document.getElementById("Province").value = (items[0] || {}).text;
+										document.getElementById("City").value = (items[1] || {}).text;
+										document.getElementById("Area").value = items[2].text||'';
+										//返回 false 可以阻止选择框的关闭
+										//return false;
+									});
+								}, false);
+
+							} else {
+								var url = app.getUrl() + 'GetBaseProvinceCity';
+								plus.nativeUI.showWaiting();
+								mui.ajax(url, {
+									type: 'post',
+									dataType: 'json',
+									success: function(data) {
+										plus.nativeUI.closeWaiting();
+										document.getElementById("Province").addEventListener('tap', function(event) {
+											var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
+
+											db.transaction(function(context) {
+												var sql = "INSERT INTO Province (city) VALUES (?)";
+												context.executeSql(sql, [JSON.stringify(data)],
+													function(tx, result) {},
+													function(tx, error) {
+														plus.nativeUI.toast(error.message);
+													});
+											});
+
+											picker.setData(city);
+											picker.show(function(items) {
+												document.getElementById("Province").value = (items[0] || {}).text;
+												document.getElementById("City").value = (items[1] || {}).text;
+												document.getElementById("Area").value = (items[2] || {}).text;
+												//返回 false 可以阻止选择框的关闭
+												//return false;
+											});
+										}, false);
+									}
+								});
+							}
+						});
+					});
+				});
+			});
 			var newImage = "";
 
 			function btn_ok() {
 				var WayBillNumber = document.getElementById("WayBillNumber").value;
 				var CardID = document.getElementById("Card").value;
 				var id = app.NewGuid();
+				var Province = document.getElementById("Province").value;
+				var City = document.getElementById("City").value;
+				var Area = document.getElementById("Area").value;
 				//验证
-				if (WayBillNumber == "") {
+				if(WayBillNumber == "") {
 					plus.nativeUI.toast("运单编号不能为空");
 					return;
 				}
 				var images = document.getElementById("images");
-				if (images.children.length == 0) {
+				if(images.children.length == 0) {
 					plus.nativeUI.toast("请上传照片");
 					return;
 				}
-				newImage=images.children[0].src
+				if(City == "") {
+					plus.nativeUI.toast("请选择省市区");
+					return;
+				}
+				newImage = images.children[0].src
 
 				var d = new Date().format('yyyy-MM-dd hh:mm');
 				var wt = plus.nativeUI.showWaiting();
 				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 				db.transaction(function(context) {
-					context.executeSql('CREATE TABLE IF NOT EXISTS CardUser (id,CardID,WayBillNumber,Image,State,CreateDate)');
+					context.executeSql('CREATE TABLE IF NOT EXISTS CardUserNew (id,CardID,WayBillNumber,Image,State,CreateDate,Province,City,Area)');
 					db.transaction(function(context) {
-						var sql = "INSERT INTO CardUser (id,CardID,WayBillNumber,Image,State,CreateDate) VALUES (?,?,?,?, '未上传',?)";
-						context.executeSql(sql, [id, CardID, WayBillNumber, newImage, d],
+						var sql = "INSERT INTO CardUserNew (id,CardID,WayBillNumber,Image,State,CreateDate,Province,City,Area) VALUES (?,?,?,?, '未上传',?,?,?,?)";
+						context.executeSql(sql, [id, CardID, WayBillNumber, newImage, d, Province,City,Area],
 							function(tx, result) {
 								plus.nativeUI.toast('添加成功');
 								var page = plus.webview.getWebviewById('card-list-sub');
@@ -118,21 +196,21 @@
 					});
 				});
 			}
-			
+
 			function scaned(r) {
 				var WayBillNumber = document.getElementById("WayBillNumber");
 				//在数据库中判断是否已存在
 				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 				db.transaction(function(context) {
-					context.executeSql('CREATE TABLE IF NOT EXISTS CardUser (id,CardID,WayBillNumber,Image,State,CreateDate)');
-					context.executeSql("SELECT 1 FROM CardUser where WayBillNumber like ? ", ['%' + r + '%'], function(context, results) {
-						if (results.rows.length > 0) {
+					context.executeSql('CREATE TABLE IF NOT EXISTS CardUserNew (id,CardID,WayBillNumber,Image,State,CreateDate,Province,City,Area)');
+					context.executeSql("SELECT 1 FROM CardUserNew where WayBillNumber like ? ", ['%' + r + '%'], function(context, results) {
+						if(results.rows.length > 0) {
 							plus.nativeUI.toast('运单编号已经存在');
 							return;
 						} else {
-							if (WayBillNumber.value != "") {
+							if(WayBillNumber.value != "") {
 								console.log(WayBillNumber.value.indexOf(r))
-								if (WayBillNumber.value.indexOf(r) >= 0)
+								if(WayBillNumber.value.indexOf(r) >= 0)
 									plus.nativeUI.toast("该运单编号已存在");
 								else
 									WayBillNumber.value = WayBillNumber.value + "," + r;

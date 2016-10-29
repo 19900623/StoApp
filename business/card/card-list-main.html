@@ -83,7 +83,7 @@
 						var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
 						var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 						db.transaction(function(context) {
-							context.executeSql("SELECT * FROM CardUser where State='未上传' order by CreateDate desc", [], function(context, results) {
+							context.executeSql("SELECT * FROM CardUserNew where State='未上传' order by CreateDate desc", [], function(context, results) {
 								var len = results.rows.length;
 								var k = 0;
 								for (var i = 0; i < len; i++) {
@@ -91,7 +91,10 @@
 										WayBillNumber: results.rows.item(i).WayBillNumber,
 										CardID: results.rows.item(i).CardID,
 										CreateUserName: username,
-										CardImage: results.rows.item(i).Image
+										CardImage: results.rows.item(i).Image,
+									    CONSIGNEEPROVINCENAME:results.rows.item(i).Province,
+							            CONSIGNEECITYNAME:results.rows.item(i).City,
+							            CONSIGNEEAREANAME:results.rows.item(i).Area
 									};
 									var url = app.getUrl() + 'UploadRealName';
 									task = plus.uploader.createUpload(url, {
@@ -100,17 +103,18 @@
 										k++;
 										// 上传完成
 										if (status == 200) {
+						
 											if (JSON.parse(t.responseText).type == 0) {
 												var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 												db.transaction(function(context) {
 													//删除照片
-													context.executeSql("SELECT * FROM CardUser where WayBillNumber=?", [JSON.parse(t.responseText).Message], function(context, results) {
+													context.executeSql("SELECT * FROM CardUserNew where WayBillNumber=?", [JSON.parse(t.responseText).Message], function(context, results) {
 														var newImage = results.rows.item(0).Image
 														plus.io.resolveLocalFileSystemURL(newImage, function(entry) {
 															entry.remove();
 														});
 													});
-													var sql = "Update CardUser set State='已上传' where WayBillNumber=?";
+													var sql = "Update CardUserNew set State='已上传' where WayBillNumber=?";
 													context.executeSql(sql, [JSON.parse(t.responseText).Message]);
 												});
 											} else
