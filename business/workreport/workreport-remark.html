@@ -36,16 +36,19 @@
 				</form>
 				<br>
 				<div class="mui-input-row">
-					<textarea id="TodayWork" rows="3" placeholder="今日完成工作" class="mui-input-clear mui-input" readonly="readonly"></textarea>
+					<textarea id="TodayWork" rows="2" placeholder="今日完成工作" class="mui-input-clear mui-input" readonly="readonly"></textarea>
 				</div>
 				<div class="mui-input-row">
-					<textarea id="TodayUnWork" rows="3" placeholder="未完成工作" class="mui-input-clear mui-input" readonly="readonly"></textarea>
+					<textarea id="TodayUnWork" rows="2" placeholder="未完成工作" class="mui-input-clear mui-input" readonly="readonly"></textarea>
+				</div>
+				<div class="mui-input-row" id="NextWorkShow">
+					<textarea id="NextWork" rows="2" placeholder="下阶段工作计划" class="mui-input-clear mui-input" readonly="readonly"></textarea>
 				</div>
 				<div class="mui-input-row">
-					<textarea id="TodayCoWork" rows="3" placeholder="需协调工作" class="mui-input-clear mui-input" readonly="readonly"></textarea>
+					<textarea id="TodayCoWork" rows="2" placeholder="需协调工作" class="mui-input-clear mui-input" readonly="readonly"></textarea>
 				</div>
 				<div class="mui-input-row">
-					<textarea id="TodayRemark" rows="3" placeholder="备注" class="mui-input-clear mui-input" readonly="readonly"></textarea>
+					<textarea id="TodayRemark" rows="2" placeholder="备注" class="mui-input-clear mui-input" readonly="readonly"></textarea>
 				</div>
 				<div class="mui-input-row">
 					<textarea id="Remark" rows="4" placeholder="领导备注" class="mui-input-clear mui-input" ></textarea>
@@ -63,7 +66,12 @@
 		<script>
 			var Title = document.getElementById("Title");
 			var Type = document.getElementById("Type");
-			var Describe = document.getElementById("Describe");
+			var TodayWork = document.getElementById("TodayWork");
+			var TodayUnWork = document.getElementById("TodayUnWork");
+			var NextWork = document.getElementById("NextWork");
+			var TodayCoWork = document.getElementById("TodayCoWork");
+			var TodayRemark = document.getElementById("TodayRemark");
+//			var Describe = document.getElementById("Describe");
 			var Remark = document.getElementById("Remark");
 			mui.init({});
 			mui.plusReady(function() {
@@ -82,6 +90,7 @@
 							Type.value = data.Type;
 							TodayWork.value = data.TodayWork;
 							TodayUnWork.value = data.TodayUnWork;
+							NextWork.value = data.NextWork;
 							TodayCoWork.value = data.TodayCoWork;
 							TodayRemark.value = data.TodayRemark;
 						}

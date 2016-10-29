@@ -46,6 +46,9 @@
 				<div class="mui-input-row">
 					<textarea id="TodayUnWork" rows="2" placeholder="未完成工作" class="mui-input-clear mui-input"></textarea>
 				</div>
+				<div class="mui-input-row" id="NextWorkShow">
+					<textarea id="NextWork" rows="2" placeholder="下阶段工作计划" class="mui-input-clear mui-input"></textarea>
+				</div>
 				<div class="mui-input-row">
 					<textarea id="TodayCoWork" rows="2" placeholder="需协调工作" class="mui-input-clear mui-input"></textarea>
 				</div>
@@ -80,11 +83,12 @@
 		<script src="../../js/mui.picker.min.js"></script>
 		<script src="../../js/mui.poppicker.js"></script>
 		<script>
-			var jsonArr;
+			var arrJson;
 			var Title = document.getElementById("Title");
 			var Type = document.getElementById("Type");
 			var TodayWork = document.getElementById("TodayWork");
 			var TodayUnWork = document.getElementById("TodayUnWork");
+			var NextWork = document.getElementById("NextWork");
 			var TodayCoWork = document.getElementById("TodayCoWork");
 			var TodayRemark = document.getElementById("TodayRemark");
 //			var Remark = document.getElementById("Remark");
@@ -108,6 +112,20 @@
 					picker.show(function(items) {
 						Type.value = items[0].text;
 						Title.value = userinfo.realname + "的" + Type.value;
+						if(items[0].text == "周汇报"){
+							TodayWork.placeholder = "本周完成工作";
+							TodayUnWork.placeholder = "本周工作总结";
+							NextWork.placeholder = "下周工作计划";
+							TodayCoWork.placeholder = "需协调与帮助";
+							document.getElementById("NextWorkShow").style.display = "block";//显示工作计划
+						}
+						if(items[0].text == "月汇报"){
+							TodayWork.placeholder = "本月完成工作";
+							TodayUnWork.placeholder = "本月工作总结";
+							NextWork.placeholder = "下月工作计划";
+							TodayCoWork.placeholder = "需协调与帮助";
+							document.getElementById("NextWorkShow").style.display = "block";//显示工作计划
+						}
 						//返回 false 可以阻止选择框的关闭
 						//return false;
 					});
@@ -128,6 +146,7 @@
 							Type.value = data.Type;
 							TodayWork.value = data.TodayWork;
 							TodayUnWork.value = data.TodayUnWork;
+							NextWork.value = data.NextWork;
 							TodayCoWork.value = data.TodayCoWork;
 							TodayRemark.value = data.TodayRemark;
 							
@@ -141,6 +160,7 @@
 								document.getElementById("buttonok").style.display = "none";
 								TodayWork.readOnly = true;
 								TodayUnWork.readOnly = true;
+								NextWork.readOnly = true;
 								TodayCoWork.readOnly = true;
 								TodayRemark.readOnly = true;
 								//加载发布人
@@ -172,13 +192,13 @@
 				//先清空
 				var profile = document.getElementById('profile');
 				profile.innerHTML = '';
-				jsonArr = JSON.parse(result);
-				if(!!jsonArr){
-					for(var i=0; i < jsonArr.length; i++){
-//						console.log(JSON.stringify(jsonArr[i]));
+				arrJson = JSON.parse(result);
+				if(!!arrJson){
+					for(var i=0; i < arrJson.length; i++){
+//						console.log(JSON.stringify(arrJson[i]));
 						var div = document.createElement('div');
-						div.id = jsonArr[i].id;
-						var name = jsonArr[i].name;
+						div.id = arrJson[i].id;
+						var name = arrJson[i].name;
 						if(name.length > 2){
 							name = name.substr(name.length - 2, name.length);
 						}
@@ -210,6 +230,7 @@
 					Type: Type.value,
 					TodayWork: TodayWork.value,
 					TodayUnWork: TodayUnWork.value,
+					NextWork: NextWork.value,
 					TodayCoWork: TodayCoWork.value,
 					TodayRemark: TodayRemark.value
 				};
@@ -235,11 +256,11 @@
 			}
 			//发布按钮
 			function btn_commit() {
-				if(!!!jsonArr){
+				if(!!!arrJson){
 					mui.toast("请先指定发送给谁？");
 					return;
 				}
-//				console.log(JSON.stringify(jsonArr));
+//				console.log(JSON.stringify(arrJson));
 //				console.log(plus.webview.currentWebview().name);
 				var btnArray = ['是', '否'];
 				mui.confirm('是否发布该条数据？', '申通提醒', btnArray, function(e) {
@@ -248,7 +269,7 @@
 						mui.ajax(url, {
 							data: {
 								id: plus.webview.currentWebview().name,
-								rec: JSON.stringify(jsonArr)
+								rec: JSON.stringify(arrJson)
 							},
 							type: 'post', //HTTP请求类型
 							success: function(data) {

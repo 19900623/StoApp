@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="css/mui.min.css">
+		<!--<link rel="stylesheet" href="css/style.css">-->
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			
+			.mui-table-view {
+				margin-top: 4px;
+			}
+			
+			.head-img {
+				width: 40px;
+				height: 40px;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div class="mui-content">
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view mui-table-view-chevron">
+						<li class="mui-table-view-cell mui-media">
+							<a class="mui-navigate-right" href="#account">
+								<img class="mui-media-object mui-pull-left head-img" id="head-img" src="img/me_logo.png">
+								<div class="mui-media-body">
+									临沂申通办公OA
+									<p class='mui-ellipsis' id='Name'></p>
+								</div>
+							</a>
+						</li>
+					</ul>
+					<ul class="mui-table-view mui-table-view-chevron">
+						<li class="mui-table-view-cell">
+							<a href="#account" class="mui-navigate-right" id="Version">当前版本：</a>
+						</li>
+					</ul>
+
+                    
+                    <ul class="mui-table-view" >
+                    	<div align="center">
+						<img src="img/erweima.png" style="width: 11em;height: 11em; align-self: center;">
+							</div>
+					</ul>
+					
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell" style="text-align: center;">
+							<a onclick="toPassword()">更改密码</a>
+						</li>
+					</ul>
+					
+                    
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell" style="text-align: center;">
+							<a onclick="closeApp()">退出登录</a>
+						</li>
+					</ul>
+					
+				</div>
+			</div>
+		</div>
+
+	</body>
+	<script src="js/mui.min.js "></script>
+	<script src="js/mui.view.js "></script>
+	<script src="js/app.js"></script>
+	<script>
+		//mui初始化
+		mui.init();
+		mui.plusReady(function() {
+			var Name = document.getElementById("Name");
+			var location = document.getElementById("location");
+			Name.innerHTML = '姓名：' + JSON.parse(app.getLoginInfo().userinfo).realname + '&nbsp;&nbsp;工号：' + JSON.parse(app.getLoginInfo().userinfo).code;
+			plus.runtime.getProperty(plus.runtime.appid, function(info) {
+				var Version = document.getElementById("Version");
+				Version.innerHTML = "当前版本：" + info.version;
+			});
+//			var locationString = app.getLoaction();
+//			if (JSON.stringify(locationString) != 'true')
+//				locationString = false;
+//			location.classList[locationString ? 'add' : 'remove']('mui-active')
+//			location.addEventListener('toggle', function(event) {
+//				var isActive = event.detail.isActive;
+//				locationString = isActive;
+//				app.setLoaction(locationString);
+//			}, false);
+		})
+		
+		var closeApp=function()
+		{
+             plus.runtime.quit();
+		}
+		
+		var toPassword = function() {
+			var nwaiting = plus.nativeUI.showWaiting();
+			var cardPage = plus.webview.create(
+				'password.html',
+				'password'
+			); //后台创建webview并打开show.html
+			cardPage.addEventListener("loaded", function() { //注册新webview的载入完成事件
+				setTimeout(function() {
+					nwaiting.close();
+					//新webview的载入完毕后关闭等待框
+					cardPage.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+				}, 300);
+			}, false);
+		};		
+	</script>
+
+</html>

@@ -1,0 +1,289 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>看日志-子页面</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<link href="../../css/mui.min.css" rel="stylesheet" />
+<style>
+.sto-table-view { position: relative; margin-top: 0; margin-bottom: 0; padding-left: 0; list-style: none; }
+.sto-listbox { width: 100%; margin: 10px 0; padding: 5px 10px; background: #fff; }
+.sto-listbox .sto-title { padding: 5px 0; overflow: hidden; }
+.sto-listbox .sto-modelname { float: right; }
+.sto-tag{position: absolute; display: block; margin-top:25px; right: 60px; padding: 3px; color: #ff6600; border: 1px solid #ff6600;  transform:rotate(-30deg); -webkit-transform:rotate(-30deg);}
+.sto-listbox .sto-tip { font-size: 12px; color: #0062CC; text-align: right; }
+.sto-listbox h5 { display: inline; }
+.sto-h5 { font-size: 14px; font-weight: 400; color: #333; }
+.sto-h5 .sto-field { color: #888; }
+.sto-ellipsis { overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+</style>
+</head>
+
+<body>
+<!--下拉刷新容器-->
+<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+  <div class="mui-scroll"> 
+    <!--数据列表-->
+    <ul class="sto-table-view">
+      <!--<li>
+					<div class="sto-listbox">
+						<div class="sto-title">
+							<span class="sto-tag">已批复</span>
+							<h5 class="sto-modelname">日报</h5><h4>李凯辉</h4>
+        		<h5>2016-10-27 16:23:25</h5>
+						</div>
+	                    <p class="sto-h5 sto-ellipsis"><span class="sto-field">今日完成工作：</span>申请交行信息卡100元等你拿，申请交行信息卡申请交行信息卡申请交行信息卡申请交行信息卡李明明，申请交行信息卡，100元等你拿，</p>
+	                    <p class="sto-h5 sto-ellipsis"><span class="sto-field">今日完成工作：</span>申请交行信息卡，100元等你拿，</p>
+	                    <p class="sto-h5 sto-ellipsis"><span class="sto-field">今日完成工作：</span>李明明，申请交行信息卡，100元等你拿，</p>
+	                	<div class="sto-tip">查看全文&gt;</div>
+	            	</div>
+				</li>-->
+    </ul>
+  </div>
+</div>
+<script src="../../js/mui.min.js"></script> 
+<script src="../../js/app.js"></script> 
+<script>
+	mui.init({
+		pullRefresh: {
+			container: '#pullrefresh',
+			down: {
+				callback: pulldownRefresh
+			},
+			up: {
+				contentrefresh: '正在加载...',
+				callback: pullupRefresh
+			}
+		}
+	});
+	var count = 0;
+	/**
+	 * 下拉刷新具体业务实现
+	 */
+	function pulldownRefresh() {
+		setTimeout(function() {
+			var type = mui.currentWebview.type
+			var fragment = document.createDocumentFragment();
+			count = 1;
+			var logininfo = app.getLoginInfo();
+			var messageInfo = {
+				modelid: '',
+				page: 1,
+				rows: 10
+			};
+			if(type == 'reply'){
+				messageInfo['userid'] = '';
+				messageInfo['replyuserid'] = logininfo.userid;
+			}
+			else{
+				messageInfo['userid'] = logininfo.userid;
+				messageInfo['replyuserid'] = '';
+			}
+			var url = app.getUrl() + 'GetWorkReportList';
+			mui.ajax(url, {
+				data: messageInfo,
+				type: 'post',
+				dataType: 'json',
+				success: function(data) {
+					if(data.Success) {
+//						console.log(data.codes)
+						var reportData = JSON.parse(data.codes);
+						mui.each(reportData, function(index, item) {
+							var li = document.createElement('li');
+							li.id = this.reportid + '|' + this.modelname ;
+							var html = '' +
+								'<div class="sto-listbox">' +
+								'	<div class="sto-title">';
+								if(type == 'reply'){
+									html += (this.status == 1 ? '<span class="sto-tag">已批复</span>' : '');
+								}
+								html += '		<h5 class="sto-modelname">' +
+								this.modelname +
+								'		</h5>' +
+								'		<h4>' +
+								this.username +
+								'		</h4>' +
+								'    	<h5>' + this.createdate.replace('T', ' ') + '</h5>' +
+								'	</div>';
+
+							//									console.log(this.reportcontent);
+							var reportContent = JSON.parse(this.reportcontent);
+							mui.each(reportContent, function() {
+								if(!!this.attrval) {
+									html += '' +
+										'	<p class="sto-h5 sto-ellipsis">' +
+										'		<span class="sto-field">' +
+										this.attrname + ':' +
+										'		</span>' +
+										this.attrval +
+										' </p>';
+								}
+							});
+							html += '	<div class="sto-tip">查看全文&gt;</div>' +
+								'</div>';
+							li.innerHTML = html;
+							li.addEventListener('tap', function(event) {
+								//处理切换时，数据未从数据库更新完毕
+								var nwaiting = plus.nativeUI.showWaiting();
+								var webviewShow = plus.webview.create(
+									'workreport_detail.html',
+									'workreport_detail',
+									'', {
+										name: this.id
+									}
+								); //后台创建webview并打开show.html
+								webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
+									setTimeout(function() {
+										nwaiting.close();
+										//新webview的载入完毕后关闭等待框
+										webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+									}, 800);
+								}, false);
+							});
+							fragment.appendChild(li);
+						});
+						var table = document.body.querySelector('.sto-table-view');
+						while(table.firstChild)
+							table.removeChild(table.firstChild);
+						table.appendChild(fragment);
+						if(data.length < 10) {
+							//参数为true代表没有更多数据了。
+							mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+						} else {
+							//当没有更多数据后要刷新状态，否则不能下拉
+							mui('#pullrefresh').pullRefresh().refresh(true);
+						}
+					} else {
+						var table = document.body.querySelector('.mui-table-view');
+						while(table.firstChild)
+							table.removeChild(table.firstChild);
+						//参数为true代表没有更多数据了。
+						mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+					}
+				}
+			});
+			mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+		}, 150);
+	}
+	/**
+	 * 上拉加载具体业务实现
+	 */
+	function pullupRefresh() {
+		setTimeout(function() {
+			var type = mui.currentWebview.type
+			var table = document.body.querySelector('.sto-table-view');
+			count = count + 1;
+			var fragment = document.createDocumentFragment();
+			var logininfo = app.getLoginInfo();
+			var messageInfo = {
+				modelid: '',
+				page: count,
+				rows: 10
+			};
+			if(type == 'reply'){
+				messageInfo['userid'] = '';
+				messageInfo['replyuserid'] = logininfo.userid;
+			}
+			else{
+				messageInfo['userid'] = logininfo.userid;
+				messageInfo['replyuserid'] = '';
+			}
+			//					console.log(JSON.stringify(messageInfo))
+			var url = app.getUrl() + 'GetWorkReportLists';
+			mui.ajax(url, {
+				data: messageInfo,
+				type: 'post',
+				dataType: 'json',
+				success: function(data) {
+//												console.log(JSON.stringify(data));
+					if(data.Success) {
+						var reportData = JSON.parse(data.codes);
+						mui.each(reportData, function(index, item) {
+							//									console.log(JSON.stringify(reportData));
+							var li = document.createElement('li');
+							li.id = this.reportid + '|' + this.modelname;
+//							console.log(this.status)
+							var html = '' +
+								'<div class="sto-listbox">' +
+								'	<div class="sto-title">';
+								if(type == 'reply'){
+									html += (this.status == 1 ? '<span class="sto-tag">已批复</span>' : '');
+								}
+								html += '		<h5 class="sto-modelname">' +
+								this.modelname +
+								'		</h5>' +
+								'		<h4>' +
+								this.username +
+								'		</h4>' +
+								'    	<h5>' + this.createdate.replace('T', ' ') + '</h5>' +
+								'	</div>';
+
+							//									console.log(this.reportcontent);
+							var reportContent = JSON.parse(this.reportcontent);
+							mui.each(reportContent, function() {
+								if(!!this.attrval) {
+									html += '' +
+										'	<p class="sto-h5 sto-ellipsis">' +
+										'		<span class="sto-field">' +
+										this.attrname + ':' +
+										'		</span>' +
+										this.attrval +
+										' </p>';
+								}
+							});
+
+							html += '	<div class="sto-tip">查看全文&gt;</div>' +
+								'</div>';
+							li.innerHTML = html;
+							li.addEventListener('tap', function(event) {
+								//处理切换时，数据未从数据库更新完毕
+								var nwaiting = plus.nativeUI.showWaiting();
+								var webviewShow = plus.webview.create(
+									'workreport_detail.html',
+									'workreport_detail',
+									'', {
+										name: this.id
+									}
+								); //后台创建webview并打开show.html
+								webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
+									setTimeout(function() {
+										nwaiting.close();
+										//新webview的载入完毕后关闭等待框
+										webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+									}, 800);
+								}, false);
+							});
+							fragment.appendChild(li);
+						});
+						table.appendChild(fragment);
+						if(data.length < 10) {
+							mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+						} //参数为true代表没有更多数据了。
+						else {
+							mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
+						}
+					} else {
+						mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+					}
+				}
+			});
+		}, 150);
+	}
+	if(mui.os.plus) {
+		mui.plusReady(function() {
+			setTimeout(function() {
+				mui('#pullrefresh').pullRefresh().pullupLoading();
+			}, 100);
+		});
+	} else {
+		mui.ready(function() {
+			mui('#pullrefresh').pullRefresh().pullupLoading();
+		});
+	}
+
+	window.addEventListener('refresh', function(event) {
+		pulldownRefresh();
+	});
+</script>
+</body>
+</html>

@@ -219,7 +219,8 @@
 					"fonts/mui.ttf",
 					"css/mui.min.css",
 					"css/style.css",
-					"js/mui.enterfocus.js"
+					"js/mui.enterfocus.js",
+					"css/iconfont.css"
 				],
 				"refer": [
 					"main.html",
@@ -321,10 +322,7 @@
 					"tab-work-help.html",
 					"business/expensebill/expensebill-list-main.html",
 					"business/gunrecords/pullrefresh_main.html",
-					"business/boxcheck/boxcheck-grid.html",
-					"business/waybill/waybill-grid.html",
-					"business/salary/salary-grid.html",
-					"business/card/card-list-main.html"
+					"business/boxcheck/boxcheck-grid.html"
 				],
 				"priority": 0
 			},
@@ -1492,8 +1490,7 @@
 					"css/common.css",
 					"css/mui.poppicker.css",
 					"css/mui.picker.min.css",
-					"img/scan.png",
-					"js/mui.enterfocus.js"
+					"img/scan.png"
 				],
 				"refer": [],
 				"priority": 0
@@ -1746,9 +1743,7 @@
 					"fonts/mui.ttf",
 					"css/mui.min.css"
 				],
-				"refer": [
-					"business/questionbill/questionbill-input.html"
-				],
+				"refer": [],
 				"priority": 0
 			},
 			"business/questionbill/questionbill-grid.html": {
@@ -1796,7 +1791,8 @@
 					"business/workreport/workreport-list-main.html",
 					"business/notice/notice_list_main.html",
 					"business/knowledgelib/knowledgelib_list.html",
-					"business/addresslist/addresslist.html"
+					"business/addresslist/addresslist.html",
+					"business/workreport/workreport_index.html"
 				],
 				"priority": 0
 			},
@@ -1814,9 +1810,7 @@
 					"fonts/mui.ttf",
 					"css/mui.min.css"
 				],
-				"refer": [
-					"business/expensebill/expensebill-input.html"
-				],
+				"refer": [],
 				"priority": 0
 			},
 			"business/leavebill/leavebill-list-sub.html": {
@@ -1991,7 +1985,11 @@
 				"resources": [
 					"js/pinyin.js",
 					"css/mui.indexedlist.css",
-					"js/mui.indexedlist.js"
+					"js/mui.indexedlist.js",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
 				],
 				"refer": [],
 				"priority": 0
@@ -2272,20 +2270,6 @@
 				"refer": [],
 				"priority": 0
 			},
-			"report/sign_rate/sign-rate-exception.html": {
-				"resources": [
-					"js/app.js",
-					"js/mui.picker.min.js",
-					"js/mui.min.js",
-					"js/mui.poppicker.js",
-					"fonts/mui.ttf",
-					"css/mui.min.css",
-					"css/mui.poppicker.css",
-					"css/mui.picker.min.css"
-				],
-				"refer": [],
-				"priority": 0
-			},
 			"report/sign_rate/sign-rate-group.html": {
 				"resources": [
 					"js/mui.picker.min.js",
@@ -2293,160 +2277,156 @@
 					"css/mui.poppicker.css",
 					"css/mui.picker.min.css"
 				],
-				"refer": [],
+				"refer": [
+					"report/sign_rate/sign-rate-group-detail.html"
+				],
 				"priority": 0
 			},
 			"report/sign_rate/sign-rate-grid.html": {
-				"resources": [
-					"js/app.js",
-					"js/mui.min.js",
-					"fonts/mui.ttf",
-					"css/mui.min.css",
-					"img/text_signature.png"
-				],
-				"refer": [
-					"report/sign_rate/sign-rate-exception.html",
-					"report/sign_rate/sign-rate-group.html"
-				],
-				"priority": 0
-			},
-			"business/expensebill/expensebill-input.html": {
-				"resources": [
-					"js/mui.enterfocus.js"
-				],
-				"refer": [],
-				"priority": 0
-			},
-			"business/waybill/waybill-grid.html": {
-				"resources": [
-					"img/script_edit.png",
-					"js/app.js",
-					"js/mui.min.js",
-					"img/advanced_data_grid.png",
-					"fonts/mui.ttf",
-					"css/mui.min.css"
-				],
-				"refer": [
-					"business/waybill/waybill-list-main.html"
-				],
-				"priority": 0
-			},
-			"business/questionbill/questionbill-input.html": {
-				"resources": [
-					"js/common.js",
-					"js/mui.picker.min.js",
-					"css/common.css",
-					"js/mui.poppicker.js",
-					"css/mui.poppicker.css",
-					"css/mui.picker.min.css",
-					"js/mui.enterfocus.js",
-					"img/scan.png"
-				],
-				"refer": [],
-				"priority": 0
-			},
-			"business/waybill/waybill-list-main.html": {
-				"resources": [
-					"business/waybill/waybill-list-sub.html"
-				],
-				"refer": [
-					"business/waybill/waybill-input.html"
-				],
-				"priority": 0
-			},
-			"business/waybill/waybill-input.html": {
-				"resources": [
-					"js/common.js",
-					"js/mui.picker.min.js",
-					"css/common.css",
-					"css/mui.poppicker.css",
-					"css/mui.picker.min.css",
-					"js/mui.enterfocus.js",
-					"img/scan.png"
-				],
-				"refer": [],
-				"priority": 0
-			},
-			"business/salary/salary-grid.html": {
-				"resources": [
-					"img/date.png",
-					"js/mui.min.js",
-					"img/coins.png",
-					"fonts/mui.ttf",
-					"css/mui.min.css"
-				],
-				"refer": [
-					"business/salary/month-date.html"
-				],
-				"priority": 0
-			},
-			"business/salary/month-date.html": {
-				"resources": [
-					"js/app.js",
-					"js/mui.picker.min.js",
-					"css/mui.poppicker.css",
-					"css/mui.picker.min.css"
-				],
-				"refer": [],
-				"priority": 0
-			},
-			"business/card/card-input.html": {
-				"resources": [
-					"js/common.js",
-					"js/mui.picker.min.js",
-					"css/common.css",
-					"js/mui.poppicker.js",
-					"css/mui.poppicker.css",
-					"css/mui.picker.min.css",
-					"img/scan.png",
-					"js/app.js",
-					"js/mui.min.js",
-					"fonts/mui.ttf",
-					"css/mui.min.css",
-					"js/mui.enterfocus.js"
-				],
-				"refer": [],
-				"priority": 0
-			},
-			"business/card/card-list-main.html": {
-				"resources": [
-					"business/card/card-list-sub.html",
-					"fonts/mui.ttf",
-					"js/app.js",
-					"js/mui.min.js",
-					"css/mui.min.css"
-				],
-				"refer": [
-					"business/card/card-input.html"
-				],
-				"priority": 0
-			},
-			"business/card/card-list-sub.html": {
 				"resources": [],
 				"refer": [
-					"business/card/card-modify.html"
+					"report/sign_rate/sign-rate-group.html",
+					"report/sign_rate/sign-rate-exception.html"
 				],
 				"priority": 0
 			},
-			"business/card/card-modify.html": {
+			"report/sign_rate/sign-rate-exception.html": {
 				"resources": [
-					"js/app.js",
-					"js/common.js",
-					"js/mui.min.js",
-					"css/common.css",
-					"fonts/mui.ttf",
-					"css/mui.min.css",
-					"js/mui.enterfocus.js",
-					"img/scan.png",
-					"js/mui.poppicker.js",
 					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
 					"css/mui.poppicker.css",
 					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"default.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"css/style.css",
+					"js/mui.enterfocus.js",
+					"fonts/mui.ttf"
+				],
+				"refer": [
+					"main.html"
+				],
+				"priority": 0
+			},
+			"login.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"css/style.css",
+					"js/mui.enterfocus.js",
+					"fonts/mui.ttf",
+					"css/iconfont.css"
+				],
+				"refer": [
+					"home.html"
+				],
+				"priority": 0
+			},
+			"home.html": {
+				"resources": [
+					"tab-shedule-main.html",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/style.css",
+					"css/iconfont.css",
+					"fonts/iconfont.ttf"
+				],
+				"refer": [
+					"tab-setting.html",
+					"tab-applications.html",
+					"report/tab-echarts.html",
+					"tab_workspace.html"
+				],
+				"priority": 0
+			},
+			"tab_workspace.html": {
+				"resources": [
+					"fonts/mui.ttf",
+					"img/erweima.png",
+					"img/me_logo.png",
+					"js/mui.view.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/workreport/workreport_index.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/iconfont.css",
+					"css/mui.min.css",
+					"css/style.css",
+					"fonts/iconfont.ttf",
+					"business/workreport/workreport_write.html"
+				],
+				"refer": [
+					"business/workreport/workreport_read.html",
+					"business/workreport/workreport_read_main.html"
+				],
+				"priority": 0
+			},
+			"business/workreport/workreport_write.html": {
+				"resources": [
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"js/app.js",
+					"css/iconfont.css",
+					"css/style.css",
+					"fonts/iconfont.ttf"
+				],
+				"refer": [
+					"business/workreport/workreport_form.html"
+				],
+				"priority": 0
+			},
+			"business/workreport/workreport_form.html": {
+				"resources": [
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"fonts/mui.ttf",
+					"js/app.js",
+					"css/iconfont.css",
+					"css/style.css",
+					"fonts/iconfont.ttf",
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [
+					"employee_select.html"
+				],
+				"priority": 0
+			},
+			"business/workreport/workreport_read_main.html": {
+				"resources": [
+					"business/workreport/workreport_read_sub.html",
+					"js/mui.min.js",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/workreport/workreport_read_sub.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css"
 				],
 				"refer": [],
 				"priority": 0
 			}
-		},
+		}, 
 		"idle": {
 			"resources": [
 				"img/chart_pie(2).png",
