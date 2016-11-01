@@ -188,7 +188,7 @@
 				type: 'post',
 				dataType: 'json',
 				success: function(data) {
-					console.log(JSON.stringify(data))
+//					console.log(JSON.stringify(data))
 					if(data.Success) {
 						var jsonData = JSON.parse(data.codes);	//转JSON对象
 						for(var i = 0; i < jsonData.length; i++) {

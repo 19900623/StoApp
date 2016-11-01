@@ -1,16 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 
 	<head>
 		<meta charset="UTF-8">
-		<title>进港遗失分组统计</title>
+		<title>派件报表</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
 		<link href="../../css/mui.picker.min.css" rel="stylesheet" />
 		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
 		<style>			
 			#topPopover {
-				height: 150px;
+				height: 190px;
 			}
 			
 			.mui-popover {
@@ -19,8 +19,8 @@
 			/*.mui-content {
 				padding: 10px;
 			}*/
-			.mui-navigate-right {color: #000;}
-			.mui-badge{float: right; margin-right: 30px;}
+			/*.mui-navigate-right {color: #000;}
+			.mui-badge{float: right; margin-right: 30px;}*/
 		</style>
 	</head>
 
@@ -28,7 +28,7 @@
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" href="#topPopover">查询</a>
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">进港遗失分组统计</h1>
+			<h1 id="title" class="mui-title">派件报表</h1>
 		</header>
 		<div class="mui-content" style="margin-top: -15px;">
 			<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed" id="list">
@@ -42,11 +42,16 @@
 				<form class="mui-input-group" id="bill-form">
 					<div class="mui-input-row">
 						<label>开始时间</label>
-						<input type="text" id="StartTime" data-options='{"type":"date", "beginYear": "2015", "endYear": "2030"}' class="mui-input" required="required" readonly="readonly">
+						<input type="text" id="StartTime" data-options='{"type":"date", "beginYear": "2015"}' class="mui-input" required="required" readonly="readonly">
 					</div>
 					<div class="mui-input-row">
 						<label>结束时间</label>
-						<input type="text" id="EndTime" data-options='{"type":"date", "beginYear": "2015", "endYear": "2030"}' class="mui-input" required="required" readonly="readonly">
+						<input type="text" id="EndTime" data-options='{"type":"date", "beginYear": "2015"}' class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>部门</label>
+						<input type="hidden" id="Code">
+						<input type="text" id="Depart" class="mui-input" required="required" readonly="readonly">
 					</div>
 				</form>
 				<div class="mui-button-row" style="margin-top:10px;">
@@ -58,7 +63,6 @@
 		<script src="../../js/app.js"></script>
 		<script src="../../js/mui.picker.min.js"></script>
 		<script src="../../js/mui.poppicker.js"></script>
-		
 		<script type="text/javascript">
 			var StartTime = document.getElementById("StartTime");
 			var EndTime = document.getElementById("EndTime");
@@ -71,18 +75,45 @@
 					AddDtPicker(this);
 				}, false);
 			});
-
 			//添加DtPicker
-			function AddDtPicker(el) {
+			function AddDtPicker(el){
 				var optionsJson = el.getAttribute('data-options') || '{}';
 				var options = JSON.parse(optionsJson);
+				options["endYear"] = new Date().getFullYear();
 				var picker = new mui.DtPicker(options);
 				picker.show(function(rs) {
 					el.value = rs.text;
 					picker.dispose();
 				});
 			}
-
+			//-----------------------------------------
+			//级联部门
+			var url = app.getUrl() + 'GetDepartmentJson';
+			mui.ajax(url, {
+				type: 'post',
+				dataType: 'json',
+				success: function(data) {
+					document.getElementById("Depart").addEventListener('tap', function(event) {						
+						var picker = new mui.PopPicker({
+							layer: 3
+						});
+						picker.setData(data);
+						picker.show(function(items) {
+							if(JSON.stringify(items[2]) == "{}"){
+								document.getElementById("Code").value = (items[1] || {}).value;
+								document.getElementById("Depart").value = (items[1] || {}).text;
+							}
+							else{
+								document.getElementById("Code").value = (items[2] || {}).value;
+								document.getElementById("Depart").value = (items[2] || {}).text;
+							}
+							//返回 false 可以阻止选择框的关闭
+							//return false;
+						});
+					}, false);
+				}
+			});
+			
 			function btn_search() {
 				if(StartTime.value == '') {
 					mui.toast("请选择开始时间");
@@ -92,83 +123,70 @@
 					mui.toast("请选择结束时间");
 					return;
 				}
+				if(document.getElementById("Code").value == '') {
+					plus.nativeUI.toast("请选择部门");
+					return;
+				}
+				mui('#topPopover').popover('toggle');	//收起右上角弹出菜单
+				
+				var code = document.getElementById("Code").value;
+				var start = document.getElementById("StartTime").value;
+				var end = document.getElementById("EndTime").value;
+				LodingData(code, start, end);
+			}
+			
+			//加载数据
+			function LodingData(code, start, end) {
 				var table = document.getElementById("list");
 				while(table.firstChild)
 					table.removeChild(table.firstChild);
 				var fragment = document.createDocumentFragment();
-				var url = app.getUrl() + 'GetPortLostGroupReport';
+				var url = app.getUrl() + 'GetDeliveryReports';
 				mui.ajax(url, {
 					data: {
-						start: StartTime.value,
-						end: EndTime.value
+						departCode: code,
+						start: start,
+						end: end
 					},
 					type: 'post',
 					dataType: 'json',
 					success: function(data) {
+//						console.log(JSON.stringify(data))
 						if(data.Success) {
-							var dataInfo = JSON.parse(data.codes);
-//							console.log(data.codes)
-							for(var i = 0; i < dataInfo.length; i++){
-								var li = document.createElement('li');
+							var jsonData = JSON.parse(data.codes);	//转JSON对象
+							for(var i = 0; i < jsonData.length; i++) {
+								li = document.createElement('li');
 								li.className = 'mui-table-view-cell';
-								var item = document.createElement('div');
-								item.className = "mui-slider-handle";
-								var id = {
-									start: StartTime.value
-									,end: EndTime.value
-									,groupname: dataInfo[i].groupname
-								}
-								item.id = JSON.stringify(id);
-								
-								item.innerHTML = '<a class="mui-navigate-right"><div class="mui-table">'
+								var htmlText = '<div class="mui-table">'
 								+ '<div class="mui-table-cell mui-col-xs-10">'
 								+ 	'<h4 class="mui-ellipsis-2">'
-								+ 		dataInfo[i].groupname
+								+ 		jsonData[i].派件员
 								+ 	'</h4>'
 								+ 	'<p class="mui-h6 mui-ellipsis">'
-								+ 		'票数：' + dataInfo[i].num
+								+ 		'正常提成：' + jsonData[i].正常提成
 								+ 	'</p>'
 								+ 	'<p class="mui-h6 mui-ellipsis">'
-								+ 		'费用：' + dataInfo[i].fees
+								+ 		'一半提成：' + jsonData[i].一半提成
 								+ 	'</p>'
 								+ '</div>'
-//								+ '<div class="mui-table-cell mui-col-xs-5 mui-text-right">'
-//								+ 	'<span class="mui-h5 mui-badge">'
-//								+		dataInfo[i].num
-//								+	'</span>'
-//								+ '</div>';
-								+ '</a>';
-								
-								item.addEventListener('tap', function(event){
-									//处理切换时，数据未从数据库更新完毕
-									var nwaiting = plus.nativeUI.showWaiting();
-									var webviewShow = plus.webview.create(
-										'port_lost_group_detail.html',
-										'port_lost_group_detail',
-										'', {name: this.id}
-									); //后台创建webview并打开show.html
-									webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
-										setTimeout(function() {
-											nwaiting.close();
-											//新webview的载入完毕后关闭等待框
-											webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
-										}, 300);
-									}, false);
-								});
-								li.appendChild(item);
+								+ '<div class="mui-table-cell mui-col-xs-5 mui-text-right">'
+								+ 	'<span class="mui-h5">'
+								+ 		'总票数：' + jsonData[i].总票数
+								+ 	'</span>'
+								+ 	'<p class="mui-h6 mui-ellipsis">'
+								+ 		'无提成：' + jsonData[i].无提成
+								+ 	'</p>'
+								+ '</div>'
+								li.innerHTML = htmlText;
 								fragment.appendChild(li);
 							}
 							table.appendChild(fragment);
 						}
 						else{
-							mui.toast(data.Message);
+							mui.alert(data.Message);
 						}
 					},
-					error: function(XMLHttpRequest, textStatus, errorThrown) {
-						console.log(JSON.stringify(XMLHttpRequest));
-					}
 				});
-				mui('#topPopover').popover('toggle'); //收起右上角弹出菜单
 			}
 		</script>
 	</body>

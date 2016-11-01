@@ -1,0 +1,231 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>315投诉报表</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link href="../../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+		<style>
+			#topPopover {
+				height: 110px;
+			}
+			.chart {
+				height: 200px;
+				margin: 0px;
+				padding: 0px;
+			}
+			h5 {
+				margin-top: 30px;
+				font-weight: bold;
+			}
+			h5:first-child {
+				margin-top: 15px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" href="#topPopover">查询</a>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">315投诉报表</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+				<h5>投诉票数报表</h5>
+				<div class="chart" id="countsChart"></div>
+				<h5>投诉金额报表</h5>
+				<div class="chart" id="amountChart"></div>
+			</div>
+		</div>
+		<!--右上角弹出菜单-->
+		<div id="topPopover" class="mui-popover">
+			<div class="mui-popover-arrow"></div>
+			<div class="mui-scroll-wrapper">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>查询年份</label>
+						<input type="text" id="StartTime" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<!--<div class="mui-input-row">
+						<label>结束时间</label>
+						<input type="text" id="EndTime" data-options='{"type":"month", "beginYear": "2015"}' class="mui-input" required="required" readonly="readonly">
+					</div>-->
+				</form>
+				<div class="mui-button-row" style="margin-top:10px;">
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_search()" id="buttonok">搜索</button>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script src="../../js/echarts.common.min.js"></script>
+		<script type="text/javascript">
+			var StartTime = document.getElementById("StartTime");
+			mui.init();
+			mui.plusReady(function() {
+				var beginYear = 2015;
+				var endYear = new Date().getFullYear();
+				var pickerOptions = [];
+				for(; beginYear <= endYear; beginYear++){
+					pickerOptions.push({
+						value: beginYear,
+						text: beginYear
+					})
+				}
+				StartTime.addEventListener('tap', function() {
+					ShowPicker(this, pickerOptions);
+				}, false);
+			});
+			
+			//显示选择器
+			function ShowPicker(element, options){
+				var picker = new mui.PopPicker();
+				picker.setData(options);
+				picker.show(function(rs) {
+					element.value = rs[0].text;
+					//返回 false 可以阻止选择框的关闭
+					//return false;
+					picker.dispose();
+				});
+			}
+
+			function btn_search(){
+				if(StartTime.value == '') {
+					mui.toast("请选择年份");
+					return;
+				}
+				mui('#topPopover').popover('toggle'); //收起右上角弹出菜单
+//				mui.toast("正在努力为您查询，请稍后...");
+				
+				var url = app.getUrl() + 'Get315ComplainReport';
+				mui.ajax(url, {
+					data: {
+						dateYear: StartTime.value
+					},
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+						if(data.Success) {
+							var dataInfo = JSON.parse(data.codes);
+//							console.log(data.codes)
+							var xData = [];
+							var counts = [];
+							var amount = [];
+							var last_month_counts = [];
+							var last_month_amount = [];
+							var last_year_counts = [];
+							var last_year_amount = [];
+//							var qoqcounts = [];	//环比
+//							var qoqamount = [];	//环比
+//							var yoycounts =[];	//同比
+//							var yoyamount = [];	//同比
+							mui.each(dataInfo, function(i, item){
+								xData.push(this.date_m + '月');
+								counts.push(this.counts);
+								amount.push(this.amount);
+								last_month_counts.push(this.last_month_counts);
+								last_month_amount.push(this.last_month_amount);
+								last_year_counts.push(this.last_year_counts);
+								last_year_amount.push(this.last_year_amount);
+//								qoqcounts.push(this.qoqcounts);
+//								qoqamount.push(this.qoqamount);
+//								yoycounts.push(this.yoycounts);
+//								yoyamount.push(this.yoyamount);
+							});
+							
+							var countsChart = document.getElementById('countsChart');
+							var countsLegend = ['本月票数', '上月票数', '去年同期'];
+							var countsSeries = [{
+								name:'本月票数',
+					            type:'line',
+					            data: counts
+							},{
+								name:'上月票数',
+					            type:'line',
+					            data: last_month_counts
+							},{
+								name:'去年同期',
+					            type:'line',
+					            data: last_year_counts
+							}];
+							LoadingChart(countsChart, countsLegend, xData, '票数', countsSeries);
+							
+							var amountChart = document.getElementById('amountChart');
+							var amountLegend = ['本月金额', '上月金额', '去年同期'];
+							var amountSeries = [{
+								name:'本月金额',
+					            type:'line',
+					            data: amount
+							},{
+								name:'上月金额',
+					            type:'line',
+					            data: last_month_amount
+							},{
+								name:'去年同期',
+					            type:'line',
+					            data: last_year_amount
+							}];
+							LoadingChart(amountChart, amountLegend, xData, '金额', amountSeries);
+						}
+						else{
+							mui.toast(data.Message);
+						}
+					},
+					error: function(XMLHttpRequest, textStatus, errorThrown) {
+						console.log(JSON.stringify(XMLHttpRequest));
+					}
+				});
+			}
+			
+			/**
+			 * 加载图表
+			 * @method LoadingChart
+			 * @param {element} elem 加载图表的元素对象，非ID
+			 * @param {jsonArr} legendData 图表的图例数组
+			 * @param {jsonArr} xAxisData 图表X轴数据
+			 * @param {string} yAxisName 图表Y轴名称
+			 * @param {jsonArr} seriesData 图表曲线数据
+			 */
+			function LoadingChart(elem, legendData, xAxisData, yAxisName, seriesData){
+				var chartOption = {
+				    tooltip: {
+				        trigger: 'axis'
+				    },
+				    legend: {
+				        data: legendData
+				    },
+				    grid: {
+				        left: '3%',
+				        right: '4%',
+				        bottom: '3%',
+				        containLabel: true
+				    },
+				    toolbox: {
+				        feature: {
+				            saveAsImage: {}
+				        }
+				    },
+				    xAxis: {
+				        type: 'category',
+				        boundaryGap: false,
+				        data: xAxisData
+				    },
+				    yAxis: {
+				        type: 'value',
+				        name: yAxisName
+				    },
+				    series: seriesData
+				};
+				var lineChart = echarts.init(elem);
+				lineChart.setOption(chartOption);
+			}
+		</script>
+	</body>
+
+</html>
