@@ -114,14 +114,14 @@
 			});
 			
 			function LoadReportContent(data){
-//				console.log(JSON.stringify(data))
+				console.log(JSON.stringify(data))
 				if(!!data){
 					mui.each(data,function(){
 						if(!!this.AttrVal)
 							html += ''
 							+ '<div class="sto-content-row">'
 							+ '	<h5 class="mui-h5">'+ this.AttrName +'</h5>'
-							+ '	<p>'+ this.AttrVal +'</p>'
+							+ '	<p>'+ this.AttrVal.replace(/\\n/g, '<br />') +'</p>'
 							+ '</div>'
 					});
 				}

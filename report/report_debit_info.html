@@ -120,6 +120,7 @@
 				var code = deptCode.value;
 				var start = StartTime.value;
 				var username = UserName.value;
+				mui.toast("正在努力为您查询，请稍后...");
 				LodingData(code, username, start);
 			}
 			
@@ -139,6 +140,10 @@
 					type: 'post',
 					dataType: 'json',
 					success: function(data) {
+						if(!!!data){
+							mui.toast("没有查询到结果!");
+							return;
+						}
 						if(data.Success) {
 							var dataInfo = JSON.parse(data.codes);	//转JSON对象
 //							console.log(JSON.stringify(dataInfo))
@@ -201,7 +206,7 @@
 							table.appendChild(fragment);
 						}
 						else{
-							mui.alert(data.Message);
+							mui.toast(data.Message);
 						}
 					},
 				});
