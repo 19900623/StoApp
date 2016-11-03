@@ -62,7 +62,11 @@
 		<script type="text/javascript">
 			var StartTime = document.getElementById("StartTime");
 			var EndTime = document.getElementById("EndTime");
-			mui.init();
+			mui.init({
+				gestureConfig:{
+					doubletap:true
+				}
+			});
 			mui.plusReady(function() {
 				StartTime.addEventListener('tap', function() {
 					AddDtPicker(this);

@@ -31,7 +31,11 @@
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/app.js"></script>
 		<script>
-			mui.init({});
+			mui.init({
+				gestureConfig:{
+					doubletap:true
+				}
+			});
 			mui.plusReady(function() {
 				LodingData();
 				mui.toast("正在加载数据，请稍后。。。");

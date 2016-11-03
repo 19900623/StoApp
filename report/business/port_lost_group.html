@@ -3,14 +3,14 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>快件破损率分组统计</title>
+		<title>进港遗失分组统计</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
 		<link href="../../css/mui.picker.min.css" rel="stylesheet" />
 		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
 		<style>			
 			#topPopover {
-				height: 120px;
+				height: 150px;
 			}
 			
 			.mui-popover {
@@ -28,7 +28,7 @@
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" href="#topPopover">查询</a>
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">快件破损率分组统计</h1>
+			<h1 id="title" class="mui-title">进港遗失分组统计</h1>
 		</header>
 		<div class="mui-content" style="margin-top: -15px;">
 			<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed" id="list">
@@ -41,8 +41,12 @@
 			<div class="mui-scroll-wrapper">
 				<form class="mui-input-group" id="bill-form">
 					<div class="mui-input-row">
-						<label>查询月份</label>
-						<input type="text" id="StartTime" data-options='{"type":"month", "beginYear": "2015", "endYear": "2030"}' class="mui-input" required="required" readonly="readonly">
+						<label>开始时间</label>
+						<input type="text" id="StartTime" data-options='{"type":"date", "beginYear": "2015", "endYear": "2030"}' class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>结束时间</label>
+						<input type="text" id="EndTime" data-options='{"type":"date", "beginYear": "2015", "endYear": "2030"}' class="mui-input" required="required" readonly="readonly">
 					</div>
 				</form>
 				<div class="mui-button-row" style="margin-top:10px;">
@@ -57,9 +61,17 @@
 		
 		<script type="text/javascript">
 			var StartTime = document.getElementById("StartTime");
-			mui.init();
+			var EndTime = document.getElementById("EndTime");
+			mui.init({
+				gestureConfig:{
+					doubletap:true
+				}
+			});
 			mui.plusReady(function() {
 				StartTime.addEventListener('tap', function() {
+					AddDtPicker(this);
+				}, false);
+				EndTime.addEventListener('tap', function() {
 					AddDtPicker(this);
 				}, false);
 			});
@@ -77,17 +89,22 @@
 
 			function btn_search() {
 				if(StartTime.value == '') {
-					mui.toast("请选择查询月份");
+					mui.toast("请选择开始时间");
+					return;
+				}
+				if(EndTime.value == '') {
+					mui.toast("请选择结束时间");
 					return;
 				}
 				var table = document.getElementById("list");
 				while(table.firstChild)
 					table.removeChild(table.firstChild);
 				var fragment = document.createDocumentFragment();
-				var url = app.getUrl() + 'GetDamagedRateGroup';
+				var url = app.getUrl() + 'GetPortLostGroupReport';
 				mui.ajax(url, {
 					data: {
-						month: StartTime.value
+						start: StartTime.value,
+						end: EndTime.value
 					},
 					type: 'post',
 					dataType: 'json',
@@ -101,38 +118,37 @@
 								var item = document.createElement('div');
 								item.className = "mui-slider-handle";
 								var id = {
-									month: StartTime.value
-									,groupname: dataInfo[i].group
+									start: StartTime.value
+									,end: EndTime.value
+									,groupname: dataInfo[i].groupname
 								}
 								item.id = JSON.stringify(id);
 								
-								item.innerHTML = '<div class="mui-table">'
+								item.innerHTML = '<a class="mui-navigate-right"><div class="mui-table">'
 								+ '<div class="mui-table-cell mui-col-xs-10">'
 								+ 	'<h4 class="mui-ellipsis-2">'
-								+ 		dataInfo[i].group
+								+ 		dataInfo[i].groupname
 								+ 	'</h4>'
 								+ 	'<p class="mui-h6 mui-ellipsis">'
-								+ 		'破损率：' + dataInfo[i].probability.toFixed(2) + '‰'
+								+ 		'票数：' + dataInfo[i].num
 								+ 	'</p>'
 								+ 	'<p class="mui-h6 mui-ellipsis">'
-								+ 		'平均破损率：' + dataInfo[i].average.toFixed(2) + '‰'
+								+ 		'费用：' + dataInfo[i].fees
 								+ 	'</p>'
 								+ '</div>'
-								+ '<div class="mui-table-cell mui-col-xs-5 mui-text-right">'
-								+ 	'<span class="mui-h5">'
-								+ 		'破损：' + dataInfo[i].breakcount
-								+	'</span>'
-								+ 	'<p class="mui-h6 mui-ellipsis">'
-								+		'发件：' + dataInfo[i].sendcount
-								+ 	'</p>'
-								+ '</div>';
+//								+ '<div class="mui-table-cell mui-col-xs-5 mui-text-right">'
+//								+ 	'<span class="mui-h5 mui-badge">'
+//								+		dataInfo[i].num
+//								+	'</span>'
+//								+ '</div>';
+								+ '</a>';
 								
 								item.addEventListener('tap', function(event){
 									//处理切换时，数据未从数据库更新完毕
 									var nwaiting = plus.nativeUI.showWaiting();
 									var webviewShow = plus.webview.create(
-										'damaged_rate_detail.html',
-										'damaged_rate_detail',
+										'port_lost_group_detail.html',
+										'port_lost_group_detail',
 										'', {name: this.id}
 									); //后台创建webview并打开show.html
 									webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件

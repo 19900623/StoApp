@@ -42,7 +42,7 @@
 					</div>
 					<div class="mui-input-row">
 						<label>业务员</label>
-						<input type="text" id="UserName" class="mui-input">
+						<input type="text" id="UserName" class="mui-input-clear">
 					</div>
 				</form>
 				<div class="mui-button-row" style="margin-top:10px;">
@@ -56,11 +56,21 @@
 		<script src="../js/mui.poppicker.js"></script>
 		<script type="text/javascript">
 			var StartTime = document.getElementById("StartTime");
-			mui.init();
+			var deptCode = document.getElementById("Code");
+			var UserName = document.getElementById("UserName");
+			mui.init({
+				gestureConfig:{
+					doubletap:true
+				}
+			});
 			mui.plusReady(function() {
 				StartTime.addEventListener('tap', function() {
 					AddDtPicker(this);
 				}, false);
+				//业务员默认当前用户
+				var logininfo = app.getLoginInfo();
+				var userinfo = JSON.parse(logininfo.userinfo);
+				UserName.value = userinfo.realname;
 			});
 			//添加DtPicker
 			function AddDtPicker(el){
@@ -105,14 +115,8 @@
 			});
 			
 			function btn_search() {
-				var deptCode = document.getElementById("Code");
-				var UserName = document.getElementById("UserName");
-				if(StartTime.value == '') {
-					mui.toast("请选择月份");
-					return;
-				}
-//				if(deptCode.value == '') {
-//					plus.nativeUI.toast("请选择部门");
+//				if(StartTime.value == '') {
+//					mui.toast("请选择月份");
 //					return;
 //				}
 				mui('#topPopover').popover('toggle');	//收起右上角弹出菜单

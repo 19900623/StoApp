@@ -94,10 +94,10 @@
 //					var state = app.getSate();
 					//正式库
 					//var httpUrl = 'http://58.57.35.3:8066';
-//					var httpUrl = 'http://oaapp.lyzysoft.com:8066'
+					var httpUrl = 'http://oaapp.lyzysoft.com:8066'
 					//测试库
 					//var httpUrl = 'http://192.168.6.164:8080/LeaRun.MobileApp';
-					var httpUrl = 'http://192.168.6.166/LeaRun.MobileApp';
+//					var httpUrl = 'http://192.168.6.166/LeaRun.MobileApp';
 					var url = httpUrl + '/MobileAppService.asmx/';
 					app.setUrl(url);
 					app.setHttpUrl(httpUrl);
@@ -161,9 +161,9 @@
 						}, false);
 					};
 					
-//					if (settings.autoLogin && logininfo.userinfo) {
-//						doc.getElementById('account').value = JSON.parse(logininfo.userinfo).account;
-//					}
+					if (settings.autoLogin && logininfo.userinfo) {
+						doc.getElementById('account').value = JSON.parse(logininfo.userinfo).account;
+					}
 					
 					//检查 "登录状态/锁屏状态" 开始
 //					if (settings.autoLogin && logininfo.userid && settings.gestures) {
@@ -179,6 +179,7 @@
 //						});
 //					} else 
 					if (settings.autoLogin && logininfo.userid) {
+//						$.trigger(loginButton, 'tap');
 						toMain();
 					} else {
 						app.setLoginInfo(null);

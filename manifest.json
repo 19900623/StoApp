@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "3.16",/*应用版本名称*/
+		"name": "3.18",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -1248,7 +1248,8 @@
 					"css/mui.min.css",
 					"img/text_signature.png",
 					"img/small_business.png",
-					"img/phone_vintage.png"
+					"img/phone_vintage.png",
+					"img/account_balances.png"
 				],
 				"refer": [
 					"report/report-paymore.html",
@@ -1265,7 +1266,8 @@
 					"report/report-wrong-detail.html",
 					"report/sign_ratio/sign-radio-grid.html",
 					"report/business/business-grid.html",
-					"report/service/service-grid.html"
+					"report/service/service-grid.html",
+					"report/report_debit_info.html"
 				],
 				"priority": 0
 			},
@@ -2092,7 +2094,13 @@
 					"fonts/mui.ttf",
 					"css/mui.min.css",
 					"img/cell_delete.png",
-					"img/client_account_template.png"
+					"img/client_account_template.png",
+					"img/outlook_ignore_email.png",
+					"img/telephone.png",
+					"img/session_idle_time.png",
+					"img/table_torn.png",
+					"img/telephone_delete.png",
+					"img/blackberry.png"
 				],
 				"refer": [
 					"report/business/report-waybillpickup.html",
@@ -2425,8 +2433,22 @@
 				],
 				"refer": [],
 				"priority": 0
+			},
+			"report/report_debit_info.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"js/mui.min.js",
+					"js/mui.poppicker.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
 			}
-		}, 
+		},
 		"idle": {
 			"resources": [
 				"img/chart_pie(2).png",

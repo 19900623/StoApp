@@ -95,7 +95,11 @@
 			parentcode = "";
 			var start = "";
 			var end = "";
-			mui.init({});
+			mui.init({
+				gestureConfig:{
+					doubletap:true
+				}
+			});
 			mui.plusReady(function() {});			
 			mui('.mui-scroll-wrapper').scroll();
 			(function($) {

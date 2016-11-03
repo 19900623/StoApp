@@ -21,7 +21,11 @@
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/app.js"></script>
 		<script type="text/javascript">		
-			mui.init()
+			mui.init({
+				gestureConfig:{
+					doubletap:true
+				}
+			})
 			mui.plusReady(function() {
 				var param = plus.webview.currentWebview().name;
 				var table = document.getElementById("list");

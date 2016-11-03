@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>快件破损率详细</title>
+		<title>进港遗失明细</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
 	</head>
@@ -11,7 +11,7 @@
 	<body>
 		<header class="mui-bar mui-bar-nav" id="header">
 			<a id="back" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">破损率明细</h1>
+			<h1 id="title" class="mui-title">进港遗失明细</h1>
 		</header>
 		<div class="mui-content" style="margin-top: -15px;">
 			<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed" id="list">
@@ -21,14 +21,18 @@
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/app.js"></script>
 		<script type="text/javascript">		
-			mui.init()
+			mui.init({
+				gestureConfig:{
+					doubletap:true
+				}
+			})
 			mui.plusReady(function() {
 				var param = plus.webview.currentWebview().name;
 				var table = document.getElementById("list");
 				while(table.firstChild)
 					table.removeChild(table.firstChild);
 				var fragment = document.createDocumentFragment();
-				var url = app.getUrl() + 'GetDamagedRateDetail';
+				var url = app.getUrl() + 'GetPortLostDetail';
 				mui.ajax(url, {
 					data: JSON.parse(param),
 					type: 'post',
@@ -36,30 +40,33 @@
 					success: function(data) {
 						if(data.Success) {
 							var dataInfo = JSON.parse(data.codes);
-							var title = document.getElementById("title");
-							title.innerText = JSON.parse(param).groupname + title.innerText;
 //							console.log(JSON.stringify(dataInfo.length))
 							for(var i = 0; i < dataInfo.length; i++){
 								var li = document.createElement('li');
 								li.className = 'mui-table-view-cell';
+//								li.innerHTML = dataInfo[i].sendsite
+//								+ 		'<span class="mui-badge mui-badge-danger">'
+//								+			dataInfo[i].counts
+//								+		'</span>'
+								
 								li.innerHTML = '<div class="mui-slider-handle"><div class="mui-table">'
 								+ '<div class="mui-table-cell mui-col-xs-10">'
 								+ 	'<h4 class="mui-ellipsis-2">'
-								+ 		dataInfo[i].customer
+								+ 		dataInfo[i].运单编号
 								+ 	'</h4>'
 								+ 	'<p class="mui-h6 mui-ellipsis">'
-								+ 		'破损率：' + dataInfo[i].probability.toFixed(2) + '‰'
+								+ 		'分组：' + dataInfo[i].分组
 								+ 	'</p>'
 								+ 	'<p class="mui-h6 mui-ellipsis">'
-								+ 		'平均破损率：' + dataInfo[i].average.toFixed(2) + '‰'
+								+ 		'费用：' + dataInfo[i].费用
 								+ 	'</p>'
 								+ '</div>'
 								+ '<div class="mui-table-cell mui-col-xs-5 mui-text-right">'
 								+ 	'<span class="mui-h5">'
-								+ 		'破损：' + dataInfo[i].breakcount
-								+	'</span>'
+								+ 		dataInfo[i].到件日期.replace('T',' ')
+								+ 	'</span>'
 								+ 	'<p class="mui-h6 mui-ellipsis">'
-								+		'发件：' + dataInfo[i].sendcount
+								+ 		'片区：' + dataInfo[i].片区
 								+ 	'</p>'
 								+ '</div>'
 								+ '</div>';
