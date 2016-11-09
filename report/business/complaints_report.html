@@ -63,9 +63,7 @@
 			var StartTime = document.getElementById("StartTime");
 			var EndTime = document.getElementById("EndTime");
 			mui.init({
-				gestureConfig:{
-					doubletap:true
-				}
+				swipeBack: true //启用右滑关闭功能
 			});
 			mui.plusReady(function() {
 				StartTime.addEventListener('tap', function() {
@@ -111,7 +109,7 @@
 					success: function(data) {
 						if(data.Success) {
 							var dataInfo = JSON.parse(data.codes);
-							console.log(data.codes)
+//							console.log(data.codes)
 							for(var i = 0; i < dataInfo.length; i++){
 								var li = document.createElement('li');
 								li.className = 'mui-table-view-cell';

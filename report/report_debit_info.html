@@ -59,9 +59,7 @@
 			var deptCode = document.getElementById("Code");
 			var UserName = document.getElementById("UserName");
 			mui.init({
-				gestureConfig:{
-					doubletap:true
-				}
+				swipeBack: true //启用右滑关闭功能
 			});
 			mui.plusReady(function() {
 				StartTime.addEventListener('tap', function() {

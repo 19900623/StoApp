@@ -3,12 +3,12 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>时效件报表</title>
+		<title>取件票量占比日统计</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
 		<link href="../../css/mui.picker.min.css" rel="stylesheet" />
 		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
-		<style>
+		<style>			
 			#topPopover {
 				height: 150px;
 			}
@@ -19,10 +19,10 @@
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" href="#topPopover">查询</a>
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">时效件报表</h1>
+			<h1 id="title" class="mui-title">取件票量占比日统计</h1>
 		</header>
 		<div class="mui-content" style="margin-top: -15px;">
-			<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed" id="list">
+			<ul class="mui-table-view mui-table-view-chevron" id="list">
 
 			</ul>
 		</div>
@@ -32,13 +32,22 @@
 			<div class="mui-scroll-wrapper">
 				<form class="mui-input-group" id="bill-form">
 					<div class="mui-input-row">
-						<label>开始时间</label>
+						<label>开始日期</label>
 						<input type="text" id="StartTime" data-options='{"type":"date", "beginYear": "2015"}' class="mui-input" required="required" readonly="readonly">
 					</div>
 					<div class="mui-input-row">
-						<label>结束时间</label>
+						<label>结束日期</label>
 						<input type="text" id="EndTime" data-options='{"type":"date", "beginYear": "2015"}' class="mui-input" required="required" readonly="readonly">
 					</div>
+					<!--<div class="mui-input-row">
+						<label>部门</label>
+						<input type="hidden" id="Code">
+						<input type="text" id="Depart" class="mui-input" required="required" readonly="readonly">
+					</div>-->
+					<!--<div class="mui-input-row">
+						<label>业务员</label>
+						<input type="text" id="UserName" class="mui-input-clear">
+					</div>-->
 				</form>
 				<div class="mui-button-row" style="margin-top:10px;">
 					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_search()" id="buttonok">搜索</button>
@@ -52,6 +61,8 @@
 		<script type="text/javascript">
 			var StartTime = document.getElementById("StartTime");
 			var EndTime = document.getElementById("EndTime");
+//			var deptCode = document.getElementById("Code");
+//			var UserName = document.getElementById("UserName");
 			mui.init({
 				swipeBack: true //启用右滑关闭功能
 			});
@@ -74,68 +85,99 @@
 					picker.dispose();
 				});
 			}
-			
-			function btn_search(){
+			function btn_search() {
 				if(StartTime.value == '') {
-					mui.toast("请选择开始时间");
+					mui.toast("请选择开始日期");
 					return;
 				}
 				if(EndTime.value == '') {
-					mui.toast("请选择结束时间");
+					mui.toast("请选择结束日期");
 					return;
 				}
-				mui('#topPopover').popover('toggle'); //收起右上角弹出菜单
-				mui.toast("正在努力为您查询，请稍后...")
+				mui('#topPopover').popover('toggle');	//收起右上角弹出菜单
+				
+				var start = StartTime.value;
+				var end = EndTime.value;
+//				var code = deptCode.value;
+//				var username = UserName.value;
+				mui.toast("正在努力为您查询，请稍后...");
+				LodingData(start, end, '');
+			}
+			
+			//加载数据
+			function LodingData(start, end, dept) {
 				var table = document.getElementById("list");
 				while(table.firstChild)
 					table.removeChild(table.firstChild);
 				var fragment = document.createDocumentFragment();
-				var url = app.getUrl() + 'GetTimeExpressReport';
+				var url = app.getUrl() + 'GetPickUpPiecesList';
 				mui.ajax(url, {
 					data: {
-						start: StartTime.value,
-						end: EndTime.value
+						start: start,
+						end: end,
+						dept: dept
 					},
 					type: 'post',
 					dataType: 'json',
 					success: function(data) {
+						if(!!!data){
+							mui.toast("没有查询到结果!");
+							return;
+						}
 						if(data.Success) {
-							var dataInfo = JSON.parse(data.codes);
-//							console.log(data.codes)
-							for(var i = 0; i < dataInfo.length; i++){
+							var dataInfo = JSON.parse(data.codes);	//转JSON对象
+//							console.log(JSON.stringify(dataInfo))
+							mui.each(dataInfo, function(){
 								var li = document.createElement('li');
-								li.className = 'mui-table-view-cell';
-								var item = document.createElement('div');
-								item.className = "mui-slider-handle";								
-								item.innerHTML = '<div class="mui-table">'
+								li.className = 'mui-table-view-cell mui-collapse';
+								var htmlText = '<a class="mui-navigate-right" href="#"><div class="mui-table">'
 								+ '<div class="mui-table-cell mui-col-xs-10">'
 								+ 	'<h4 class="mui-ellipsis-2">'
-								+ 		dataInfo[i].分组
+								+ 		this.dept
 								+ 	'</h4>'
 								+ 	'<p class="mui-h6 mui-ellipsis">'
-								+ 		'票数：' + dataInfo[i].票数
+								+ 		'总票量：' + this.counts
 								+ 	'</p>'
 								+ 	'<p class="mui-h6 mui-ellipsis">'
-								+ 		'占比：' + dataInfo[i].占比.toFixed(2)
+								+ 		'人数：' + this.members
+								+ 	'</p>'
+								+ 	'<p class="mui-h6 mui-ellipsis">'
+								+ 		'平均票量：' + this.average
 								+ 	'</p>'
 								+ '</div>'
-								+ '<div class="mui-table-cell mui-col-xs-5 mui-text-right">'
-								+ 	'<span class="mui-h5">'
-								+ 		'排名：' + dataInfo[i].排名
-								+ 	'</span>'
-								+ '</div>';
-								li.appendChild(item);
+								+ '</div>'
+								+ '</a>';
+								var subData = this.children;
+								htmlText += '<ul class="mui-table-view mui-table-view-chevron">';
+								mui.each(subData, function(index, item){
+									htmlText += '<li class="mui-table-view-cell">'
+									+ '<a class="mui-navigate-right" href="#">'
+									+ '	<div class="mui-table">'
+									+ '		<div class="mui-table-cell mui-col-xs-10">'
+									+ '			<h4 class="mui-ellipsis-2">'
+									+ 				item.sendmember
+									+ '			</h4>'
+									+ '			<p class="mui-h6 mui-ellipsis">'
+									+ '				票量：' + item.counts
+									+ '			</p>'
+									+ '			<p class="mui-h6 mui-ellipsis">'
+									+ '				组占比：' + (item.percent * 100).toFixed(2) + '%'
+									+ '			</p>'
+									+ '		</div>'
+									+ '	</div>'
+									+ '</a>'
+									+ '</li>'
+								});
+								htmlText += '</ul>';
+								li.innerHTML = htmlText;
 								fragment.appendChild(li);
-							}
+							});
 							table.appendChild(fragment);
 						}
 						else{
 							mui.toast(data.Message);
 						}
 					},
-					error: function(XMLHttpRequest, textStatus, errorThrown) {
-						console.log(JSON.stringify(XMLHttpRequest));
-					}
 				});
 			}
 		</script>

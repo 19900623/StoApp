@@ -6,7 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<title>取件报表</title>
+		<title>业务取件利润</title>
 		<link rel="stylesheet" href="../../css/mui.min.css">
 		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
 		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
@@ -33,7 +33,7 @@
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" href="#topPopover">查询</a>
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">业务部取件报表</h1>
+			<h1 id="title" class="mui-title">业务取件利润</h1>
 		</header>
 		<!--弹出详细信息-->
 		<div id="popover" class="mui-popover">
@@ -96,9 +96,7 @@
 			var start = "";
 			var end = "";
 			mui.init({
-				gestureConfig:{
-					doubletap:true
-				}
+				swipeBack: false //启用右滑关闭功能
 			});
 			mui.plusReady(function() {});			
 			mui('.mui-scroll-wrapper').scroll();

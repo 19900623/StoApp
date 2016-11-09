@@ -161,41 +161,17 @@
 						}, false);
 					};
 					
-					if (settings.autoLogin && logininfo.userinfo) {
-						doc.getElementById('account').value = JSON.parse(logininfo.userinfo).account;
-					}
-					
-					//检查 "登录状态/锁屏状态" 开始
-//					if (settings.autoLogin && logininfo.userid && settings.gestures) {
-//						$.openWindow({
-//							url: 'unlock.html',
-//							id: 'unlock',
-//							show: {
-//								aniShow: 'pop-in'
-//							},
-//							waiting: {
-//								autoShow: false
-//							}
-//						});
-//					} else 
-					if (settings.autoLogin && logininfo.userid) {
-//						$.trigger(loginButton, 'tap');
-						toMain();
-					} else {
-						app.setLoginInfo(null);
-					}
-					// close splash
-					setTimeout(function() {
-						//关闭 splash
-						plus.navigator.closeSplashscreen();
-					}, 600);
-					//检查 "登录状态/锁屏状态" 结束
 					
 					var loginButton = doc.getElementById('login');
 					var accountBox = doc.getElementById('account');
 					var passwordBox = doc.getElementById('password');
 					var autoLoginButton = doc.getElementById("autoLogin");
-	
+					//登录框赋值
+					if (settings.autoLogin && logininfo.userinfo) {
+						accountBox.value = logininfo.username;
+						passwordBox.value = logininfo.userpassword;
+					}
+					
 					loginButton.addEventListener('tap', function(event) {
 						var loginInfo = {
 							account: accountBox.value,
@@ -217,6 +193,8 @@
 								else {
 									var loginInfo = {
 										userid: data.UserID,
+										username: accountBox.value,
+										userpassword: passwordBox.value,
 										company: data.Company,
 										department: data.Department,
 										userinfo: data.UserInfo,
@@ -235,14 +213,41 @@
 							}
 						});
 					});
-					$.enterfocus('#login-form input', function() {
-						$.trigger(loginButton, 'tap');
-					});
 					autoLoginButton.classList[settings.autoLogin ? 'add' : 'remove']('mui-active')
 					autoLoginButton.addEventListener('toggle', function(event) {
 						var isActive = event.detail.isActive;
 						settings.autoLogin = isActive;
 					}, false);
+					
+					$.enterfocus('#login-form input', function() {
+						$.trigger(loginButton, 'tap');
+					});
+					
+					//检查 "登录状态/锁屏状态" 开始
+//					if (settings.autoLogin && logininfo.userid && settings.gestures) {
+//						$.openWindow({
+//							url: 'unlock.html',
+//							id: 'unlock',
+//							show: {
+//								aniShow: 'pop-in'
+//							},
+//							waiting: {
+//								autoShow: false
+//							}
+//						});
+//					} else 
+					if (settings.autoLogin && logininfo.userid) {
+						$.trigger(loginButton, 'tap');
+					} else {
+						app.setLoginInfo(null);
+					}
+					// close splash
+					setTimeout(function() {
+						//关闭 splash
+						plus.navigator.closeSplashscreen();
+					}, 600);
+					//检查 "登录状态/锁屏状态" 结束
+					
 					var backButtonPress = 0;
 					$.back = function(event) {
 						backButtonPress++;
