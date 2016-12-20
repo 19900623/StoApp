@@ -2332,7 +2332,8 @@
 					"report/sign_rate/sign-rate-group.html",
 					"report/sign_rate/sign-rate-exception.html",
 					"report/sign_rate/sign-rate-report.html",
-					"report/sign_rate/sign_rate_denges.html"
+					"report/sign_rate/sign_rate_denges.html",
+					"report/sign_rate/sign_rate_months.html"
 				],
 				"priority": 0
 			},
@@ -2845,6 +2846,21 @@
 				"priority": 0
 			},
 			"report/sign_rate/sign_rate_denges.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/echarts.common.min.js",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/sign_rate/sign_rate_months.html": {
 				"resources": [
 					"js/mui.picker.min.js",
 					"js/mui.poppicker.js",
