@@ -18,10 +18,16 @@
       "img/client_account_template.png",
       "img/cash_register.png",
       "img/visa_2.png",
-      "img/brick_error.png"
+      "img/brick_error.png",
+      "css/app.css",
+      "img/account_balances.png",
+      "img/server_property.png"
     ],
     "refer": [
-      "tab-work-help.html"
+      "tab-work-help.html",
+      "business/vehicle/vehicle_main.html",
+      "business/card/card-list-main.html",
+      "business/handlerecord/handlerecord_main.html"
     ]
   },
   "main.html": {
@@ -100,7 +106,8 @@
   },
   "business/workflow/workflow-main.html": {
     "resources": [
-      "business/workflow/workflow-sub.html"
+      "business/workflow/workflow-sub.html",
+      "fonts/mui.ttf"
     ],
     "refer": [
       "business/workflow/workflow-sub.html"
@@ -141,7 +148,8 @@
       "report/business/business_summarizing.html",
       "report/business/complaints_report.html",
       "report/business/complaints315_report.html",
-      "report/business/big_error_group.html"
+      "report/business/big_error_group.html",
+      "report/business/complaints_analysis.html"
     ]
   },
   "report/report_debit_info.html": {
@@ -154,7 +162,8 @@
       "css/mui.min.css",
       "css/mui.poppicker.css",
       "css/mui.picker.min.css"
-    ]
+    ],
+    "refer": []
   },
   "report/business/tel_bill_report.html": {
     "resources": [
@@ -166,7 +175,8 @@
       "js/mui.min.js",
       "fonts/mui.ttf",
       "css/mui.min.css"
-    ]
+    ],
+    "refer": []
   },
   "report/business/delivery_report.html": {
     "resources": [
@@ -178,7 +188,8 @@
       "css/mui.min.css",
       "css/mui.poppicker.css",
       "css/mui.picker.min.css"
-    ]
+    ],
+    "refer": []
   },
   "report/business/damaged_rate_group.html": {
     "resources": [
@@ -190,14 +201,19 @@
       "css/mui.min.css",
       "css/mui.poppicker.css",
       "css/mui.picker.min.css"
-    ]
+    ],
+    "refer": []
   },
   "report/sign_rate/sign-rate-group.html": {
     "resources": [
       "js/mui.picker.min.js",
       "js/mui.poppicker.js",
       "css/mui.poppicker.css",
-      "css/mui.picker.min.css"
+      "css/mui.picker.min.css",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
     ],
     "refer": [
       "report/sign_rate/sign-rate-group-detail.html"
@@ -210,12 +226,14 @@
       "fonts/mui.ttf",
       "css/mui.min.css",
       "img/text_signature.png",
-      "img/chart_line.png"
+      "img/chart_line.png",
+      "img/combined_chart.png"
     ],
     "refer": [
       "report/sign_rate/sign-rate-group.html",
       "report/sign_rate/sign-rate-exception.html",
-      "report/sign_rate/sign-rate-report.html"
+      "report/sign_rate/sign-rate-report.html",
+      "report/sign_rate/sign_rate_denges.html"
     ]
   },
   "report/business/report-wrong-detail.html": {
@@ -227,7 +245,8 @@
       "css/mui.min.css",
       "css/mui.poppicker.css",
       "css/mui.picker.min.css"
-    ]
+    ],
+    "refer": []
   },
   "report/business/report-wrong-group.html": {
     "resources": [
@@ -239,7 +258,8 @@
       "css/mui.min.css",
       "css/mui.poppicker.css",
       "css/mui.picker.min.css"
-    ]
+    ],
+    "refer": []
   },
   "report/business/port_lost_group.html": {
     "resources": [
@@ -251,7 +271,8 @@
       "css/mui.min.css",
       "css/mui.poppicker.css",
       "css/mui.picker.min.css"
-    ]
+    ],
+    "refer": []
   },
   "report/business/time_express_report.html": {
     "resources": [
@@ -263,7 +284,8 @@
       "css/mui.min.css",
       "css/mui.poppicker.css",
       "css/mui.picker.min.css"
-    ]
+    ],
+    "refer": []
   },
   "report/business/report-custom-dept.html": {
     "resources": [
@@ -271,7 +293,8 @@
       "js/mui.min.js",
       "fonts/mui.ttf",
       "css/mui.min.css"
-    ]
+    ],
+    "refer": []
   },
   "report/business/report-waybillpickup.html": {
     "resources": [
@@ -282,7 +305,8 @@
       "css/mui.min.css",
       "css/mui.poppicker.css",
       "css/mui.picker.min.css"
-    ]
+    ],
+    "refer": []
   },
   "report/business/send_pieces_report.html": {
     "resources": [
@@ -294,7 +318,8 @@
       "js/mui.min.js",
       "fonts/mui.ttf",
       "css/mui.min.css"
-    ]
+    ],
+    "refer": []
   },
   "business/workreport/workreport_index.html": {
     "resources": [
@@ -328,7 +353,8 @@
     ],
     "refer": [
       "business/workreport/workreport_index.html",
-      "business/notice/notice_list_main.html"
+      "business/notice/notice_list_main.html",
+      "business/leavebill/leavebill-list-main.html"
     ]
   },
   "business/workreport/workreport_read_main.html": {
@@ -361,7 +387,8 @@
       "js/mui.min.js",
       "fonts/mui.ttf",
       "css/mui.min.css"
-    ]
+    ],
+    "refer": []
   },
   "report/business/business_summarizing.html": {
     "resources": [
@@ -373,7 +400,8 @@
       "js/mui.min.js",
       "fonts/mui.ttf",
       "css/mui.min.css"
-    ]
+    ],
+    "refer": []
   },
   "report/report-waybillpickup-day.html": {
     "resources": [
@@ -384,7 +412,8 @@
       "css/mui.min.css",
       "css/mui.poppicker.css",
       "css/mui.picker.min.css"
-    ]
+    ],
+    "refer": []
   },
   "report/business/complaints_report.html": {
     "resources": [
@@ -412,7 +441,8 @@
       "css/mui.poppicker.css",
       "css/mui.picker.min.css",
       "js/echarts.common.min.js"
-    ]
+    ],
+    "refer": []
   },
   "report/business/big_error_group.html": {
     "resources": [
@@ -424,7 +454,8 @@
       "css/mui.min.css",
       "css/mui.poppicker.css",
       "css/mui.picker.min.css"
-    ]
+    ],
+    "refer": []
   },
   "report/business/complaints_detail.html": {
     "resources": [
@@ -432,7 +463,8 @@
       "js/mui.min.js",
       "fonts/mui.ttf",
       "css/mui.min.css"
-    ]
+    ],
+    "refer": []
   },
   "business/workreport/workreport_replies_main.html": {
     "resources": [
@@ -456,7 +488,8 @@
   "business/workreport/workreport_write.html": {
     "refer": [
       "business/workreport/workreport_form.html"
-    ]
+    ],
+    "resources": []
   },
   "business/workreport/workreport_form.html": {
     "resources": [
@@ -471,7 +504,8 @@
       "css/mui.min.css",
       "css/style.css",
       "fonts/iconfont.ttf"
-    ]
+    ],
+    "refer": []
   },
   "business/workreport/workreport_detail.html": {
     "resources": [
@@ -479,7 +513,8 @@
       "js/mui.min.js",
       "fonts/mui.ttf",
       "css/mui.min.css"
-    ]
+    ],
+    "refer": []
   },
   "report/sign_rate/sign-rate-exception.html": {
     "resources": [
@@ -487,7 +522,8 @@
       "js/mui.poppicker.js",
       "css/mui.poppicker.css",
       "css/mui.picker.min.css"
-    ]
+    ],
+    "refer": []
   },
   "report/sign_rate/sign-rate-report.html": {
     "resources": [
@@ -500,6 +536,204 @@
       "fonts/mui.ttf",
       "css/mui.min.css",
       "js/app.js"
+    ],
+    "refer": []
+  },
+  "business/leavebill/leavebill-input.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "js/mui.poppicker.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/mui.enterfocus.js"
+    ],
+    "refer": []
+  },
+  "business/leavebill/leavebill-list-main.html": {
+    "resources": [
+      "business/leavebill/leavebill-list-sub.html"
+    ],
+    "refer": [
+      "business/leavebill/leavebill-list-sub.html",
+      "business/leavebill/leavebill-input.html"
+    ]
+  },
+  "business/leavebill/leavebill-modify.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.picker.min.js",
+      "js/mui.min.js",
+      "js/mui.poppicker.js",
+      "css/mui.min.css",
+      "css/mui.picker.min.css",
+      "js/mui.enterfocus.js",
+      "fonts/mui.ttf"
+    ],
+    "refer": []
+  },
+  "business/leavebill/leavebill-list-sub.html": {
+    "refer": [
+      "business/leavebill/leavebill-modify.html"
+    ],
+    "resources": []
+  },
+  "business/vehicle/vehicle_main.html": {
+    "resources": [
+      "business/vehicle/vehicle_sub.html",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "business/vehicle/vehicle_sub.html",
+      "business/vehicle/vehicle_reg.html"
+    ]
+  },
+  "business/vehicle/vehicle_sub.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "business/card/card-input.html": {
+    "resources": [
+      "js/common.js",
+      "js/mui.picker.min.js",
+      "css/common.css",
+      "js/mui.poppicker.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "img/scan.png"
+    ],
+    "refer": []
+  },
+  "business/card/card-list-main.html": {
+    "resources": [
+      "business/card/card-list-sub.html"
+    ],
+    "refer": [
+      "business/card/card-input.html",
+      "business/card/card-list-sub.html"
+    ]
+  },
+  "business/card/card-list-sub.html": {
+    "refer": [
+      "business/card/card-modify.html"
+    ],
+    "resources": []
+  },
+  "business/card/card-modify.html": {
+    "resources": [
+      "js/app.js",
+      "js/common.js",
+      "js/mui.picker.min.js",
+      "js/mui.min.js",
+      "css/common.css",
+      "js/mui.poppicker.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/mui.enterfocus.js",
+      "img/scan.png"
+    ],
+    "refer": []
+  },
+  "report/sign_rate/sign-rate-group-detail.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "report/business/complaints_analysis.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "js/mui.poppicker.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/echarts.common.min.js",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "css/mui.picker.all.css",
+      "js/mui.picker.all.js"
+    ],
+    "refer": []
+  },
+  "business/handlerecord/handlerecord_main.html": {
+    "resources": [
+      "business/handlerecord/handlerecord_sub.html",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "business/handlerecord/handlerecord_sub.html",
+      "business/handlerecord/handlerecord_input.html"
+    ]
+  },
+  "business/handlerecord/handlerecord_sub.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "css/mui.min.css",
+      "fonts/mui.ttf"
+    ]
+  },
+  "business/handlerecord/handlerecord_input.html": {
+    "resources": [
+      "img/scan.png",
+      "js/common.js",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "barcode_scan.html"
+    ]
+  },
+  "business/vehicle/vehicle_reg.html": {
+    "resources": [
+      "js/common.js",
+      "css/common.css",
+      "js/mui.enterfocus.js",
+      "img/scan.png"
+    ],
+    "refer": [
+      "barcode_scan.html"
+    ]
+  },
+  "barcode_scan.html": {
+    "resources": [
+      "css/common.css",
+      "js/common.js"
+    ]
+  },
+  "report/sign_rate/sign_rate_denges.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "js/mui.poppicker.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/echarts.common.min.js",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
     ]
   }
 }

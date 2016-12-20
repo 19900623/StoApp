@@ -94,14 +94,14 @@
 //					var state = app.getSate();
 					//正式库
 					//var httpUrl = 'http://58.57.35.3:8066';
-					var httpUrl = 'http://oaapp.lyzysoft.com:8066'
+					var httpUrl = 'http://oaapp.lyzysoft.com:8066';
 					//测试库
-					//var httpUrl = 'http://192.168.6.164:8080/LeaRun.MobileApp';
+//					var httpUrl = 'http://192.168.6.164:8080/LeaRun.MobileApp';
 //					var httpUrl = 'http://192.168.6.166/LeaRun.MobileApp';
 					var url = httpUrl + '/MobileAppService.asmx/';
 					app.setUrl(url);
 					app.setHttpUrl(httpUrl);
-					//检查App升级版本并升级			
+					//检查App升级版本并升级
 					var url = app.getUrl() + 'GetVersionInfo';
 					if (plus.networkinfo.getCurrentType() != 1)
 						mui.ajax(url, {
@@ -168,11 +168,17 @@
 					var autoLoginButton = doc.getElementById("autoLogin");
 					//登录框赋值
 					if (settings.autoLogin && logininfo.userinfo) {
-						accountBox.value = logininfo.username;
-						passwordBox.value = logininfo.userpassword;
+						if(!!logininfo.username){
+							accountBox.value = logininfo.username;
+							passwordBox.value = logininfo.userpassword;
+						}
 					}
 					
 					loginButton.addEventListener('tap', function(event) {
+						if(!accountBox.value){
+							mui.toast('请输入账号')
+							return;
+						}
 						var loginInfo = {
 							account: accountBox.value,
 							password: passwordBox.value,

@@ -166,6 +166,21 @@
 								+ 	'<p class="mui-h6 mui-ellipsis">'
 								+ 		'未收：' + this.debit_nr.toFixed(2)
 								+ 	'</p>'
+								+ 	'<p class="mui-h6 mui-ellipsis">'
+								+ 		'未结款率：' + (this.debit_nr_rate * 100).toFixed(2) + '%'
+								+ 	'</p>'
+								+ '</div>'
+								+ '<div class="mui-table-cell mui-col-xs-5 mui-text-right">'
+								+ 	'<span class="mui-h5">&nbsp;</span>'
+								+ 	'<p class="mui-h6">'
+								+ 		'总应收：' + this.total_ar.toFixed(2)
+								+ 	'</p>'
+								+ 	'<p class="mui-h6">'
+								+		'总实收：' + this.total_pa.toFixed(2)
+								+ 	'</p>'
+								+ 	'<p class="mui-h6">'
+								+		'总未收：' + this.total_nr.toFixed(2)
+								+ 	'</p>'
 								+ '</div>'
 								+ '</div>'
 								+ '</a>';
@@ -173,7 +188,6 @@
 								htmlText += '<ul class="mui-table-view mui-table-view-chevron">';
 								mui.each(subData, function(index, item){
 									htmlText += '<li class="mui-table-view-cell">'
-									+ '<a class="mui-navigate-right" href="#">'
 									+ '	<div class="mui-table">'
 									+ '		<div class="mui-table-cell mui-col-xs-10">'
 									+ '			<h4 class="mui-ellipsis-2">'
@@ -198,7 +212,6 @@
 									+ '			</span>'
 									+ '		</div>'
 									+ '	</div>'
-									+ '</a>'
 									+ '</li>'
 								});
 								htmlText += '</ul>';								

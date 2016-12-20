@@ -3,26 +3,20 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title></title>
+		<title>投诉部数据分析</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<!--<link href="../../css/mui.picker.all.css" rel="stylesheet" />-->
 		<link href="../../css/mui.picker.min.css" rel="stylesheet" />
 		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
 		<style>
 			#topPopover {
-				height: 150px;
+				height: 110px;
 			}
 			.chart {
 				height: 250px;
 				margin: 0px;
 				padding: 0px;
-			}
-			h5 {
-				margin-top: 30px;
-				font-weight: bold;
-			}
-			h5:first-child {
-				margin-top: 15px;
 			}
 		</style>
 	</head>
@@ -31,12 +25,11 @@
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" href="#topPopover">查询</a>
 			<a class="mui-icon mui-icon-left-nav mui-pull-left" onclick="goBack()"></a>
-			<h1 class="mui-title">签收率日统计报表</h1>
+			<h1 id="title" class="mui-title">投诉部数据分析</h1>
 		</header>
 		<div class="mui-content">
 			<div class="mui-content-padded">
-				<!--<h5>签收率统计</h5>-->
-				<div class="chart" id="countsChart"></div>
+				<div class="chart" id="chart"></div>
 			</div>
 		</div>
 		<!--右上角弹出菜单-->
@@ -45,12 +38,8 @@
 			<div class="mui-scroll-wrapper">
 				<form class="mui-input-group" id="bill-form">
 					<div class="mui-input-row">
-						<label>开始时间</label>
-						<input type="text" id="StartTime" data-options='{"type":"date", "beginYear": "2015"}' class="mui-input" required="required" readonly="readonly">
-					</div>
-					<div class="mui-input-row">
-						<label>结束时间</label>
-						<input type="text" id="EndTime" data-options='{"type":"date", "beginYear": "2015"}' class="mui-input" required="required" readonly="readonly">
+						<label>年份</label>
+						<input type="text" id="StartTime" data-options='{"type":"year", "beginYear": "2015"}' class="mui-input" required="required" readonly="readonly">
 					</div>
 				</form>
 				<div class="mui-button-row" style="margin-top:10px;">
@@ -61,31 +50,23 @@
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/app.js"></script>
 		<script src="../../js/mui.picker.min.js"></script>
+		<!--<script src="../../js/mui.picker.all.js"></script>-->
 		<script src="../../js/mui.poppicker.js"></script>
 		<script src="../../js/echarts.common.min.js"></script>
 		<script type="text/javascript">
 			mui.init({
 				swipeBack: true //启用右滑关闭功能
 			});
+			
 			var StartTime = document.getElementById("StartTime");
-			var EndTime = document.getElementById("EndTime");
 			mui.plusReady(function() {
 				StartTime.addEventListener('tap', function() {
-					ShowPicker(this);
-				}, false);
-				EndTime.addEventListener('tap', function() {
 					ShowPicker(this);
 				}, false);
 
 				//仅支持横屏显示
 				plus.screen.lockOrientation("landscape-primary");
 			});
-			
-			//返回
-			function goBack(){
-				plus.screen.lockOrientation("portrait-primary");
-				mui.back();
-			}
 			
 			//显示选择器
 			function ShowPicker(element){
@@ -98,24 +79,26 @@
 					picker.dispose();
 				});
 			}
-
+			
+			//返回
+			function goBack(){
+				plus.screen.lockOrientation("portrait-primary");
+				mui.back();
+			}
+			
 			function btn_search(){
 				if(StartTime.value == '') {
-					mui.toast("请选择开始时间");
+					mui.toast("请选择年份");
 					return;
 				}
-				if(EndTime.value == '') {
-					mui.toast("请选择结束时间");
-					return;
-				}
+				
 				mui('#topPopover').popover('toggle'); //收起右上角弹出菜单
 				mui.toast("正在努力为您查询，请稍后...");
 				
-				var url = app.getUrl() + 'GetSignRadioStatisticsByDay';
+				var url = app.getUrl() + 'GetComplaintDataAnalysis';
 				mui.ajax(url, {
 					data: {
-						start: StartTime.value,
-						end: EndTime.value
+						year: StartTime.value
 					},
 					type: 'post',
 					dataType: 'json',
@@ -123,33 +106,42 @@
 						if(data.Success) {
 							var dataInfo = JSON.parse(data.codes);
 //							console.log(data.codes)
-							var xData = [];
-							var signradio = [];
-							var onesignradio = [];
-							var twosignradio = [];
-							mui.each(dataInfo, function(i, item){
-								xData.push(this.groupname);
-								signradio.push((this.notprosignradio * 100).toFixed(2));
-								onesignradio.push((this.onesignradio * 100).toFixed(2));
-								twosignradio.push((this.twosignradio * 100).toFixed(2));
-							});
+							var xData = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+							var counts1 = [];	//上一年数据
+							var counts2 = [];	//本年数据
+							var start = StartTime.value - 1;
+							var end = StartTime.value;
 							
-							var countsChart = document.getElementById('countsChart');
-							var countsLegend = ['签收率（含问题件）', '一派签收率', '二派签收率'];
-							var countsSeries = [{
-								name:'签收率（含问题件）',
+							for(var i=1; i <= xData.length; i++){
+								var count1 = 0;
+								var count2 = 0;
+								mui.each(dataInfo, function(index, item){
+									if(this.月份 == i){
+										if(this.年份 == start){
+											count1 = this.数量;
+										}
+										if(this.年份 == end){
+											count2 = this.数量;
+										}
+									}
+								});
+								counts1.push(count1);
+								counts2.push(count2);
+							}
+							
+							
+							var legend = [start + "年数量", end + "年数量"];
+							var series = [{
+								name:legend[0],
 					            type:'line',
-					            data: signradio
+					            data: counts1
 							},{
-								name:'一派签收率',
+								name:legend[1],
 					            type:'line',
-					            data: onesignradio
-							},{
-								name:'二派签收率',
-					            type:'line',
-					            data: twosignradio
+					            data: counts2
 							}];
-							LoadingChart(countsChart, countsLegend, xData, '百分比', countsSeries);
+							var chart = document.getElementById('chart');
+							LoadingChart(chart, legend, xData, '百分比', series);
 						}
 						else{
 							mui.toast(data.Message);
@@ -191,25 +183,20 @@
 				    },
 				    xAxis: {
 				        type: 'category',
-				        boundaryGap: false,
-				        data: xAxisData
+//				        boundaryGap: false,
+				        data: xAxisData,
+			            axisLabel: {
+							rotate: 0,
+							show: true,
+							interval: '0',
+							inside: false,
+							formatter: null,
+						},
 				    },
 				    yAxis: {
 				        type: 'value',
 				        name: yAxisName
 				    },
-			        dataZoom: [{
-		                type: 'slider',
-		                show: true,
-		                start: 0,
-		                end: 20,
-		                handleSize: 8,
-		                top:'90%'
-		          },{
-		                type: 'inside',
-		                start: 0,
-		                end: 20,
-		            }],
 				    series: seriesData
 				};
 				var lineChart = echarts.init(elem);

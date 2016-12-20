@@ -11,16 +11,9 @@
 		<style>			
 			#topPopover {
 				height: 120px;
-			}
-			
-			.mui-popover {
-				height: 70%;
-			}
-			/*.mui-content {
-				padding: 10px;
-			}*/
-			.mui-navigate-right {color: #000;}
-			.mui-badge{float: right; margin-right: 30px;}
+			}			
+			.mui-content{margin-top: -15px;}
+			.mui-loading{padding-top: 50px;}
 		</style>
 	</head>
 
@@ -30,10 +23,13 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 id="title" class="mui-title">大字错写业务量分组统计</h1>
 		</header>
-		<div class="mui-content" style="margin-top: -15px;">
-			<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed" id="list">
-
-			</ul>
+		<div class="mui-content" id="content">
+			<!--<div class="mui-loading">
+				<div class="mui-spinner">
+				</div>
+			</div>-->
+			<!--<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed" id="list">
+			</ul>-->
 		</div>
 		<!--右上角弹出菜单-->
 		<div id="topPopover" class="mui-popover">
@@ -82,11 +78,14 @@
 					mui.toast("请选择查询月份");
 					return;
 				}
-				var table = document.getElementById("list");
-				while(table.firstChild)
-					table.removeChild(table.firstChild);
-				var fragment = document.createDocumentFragment();
-				var url = app.getUrl() + 'GetBigErrorLeaveGroupMonth';
+				
+				mui.toast("正在加载数据，请稍后。。。");
+				var content = document.getElementById("content");
+				content.innerHTML = '<div class="mui-loading"><div class="mui-spinner"></div></div>';
+				
+				var ul = document.createElement("ul");
+				ul.className = 'mui-table-view mui-table-view-chevron';
+				var url = app.getUrl() + 'GetBigErrorLeaveGroup';
 				mui.ajax(url, {
 					data: {
 						month: StartTime.value
@@ -95,41 +94,69 @@
 					dataType: 'json',
 					success: function(data) {
 						if(data.Success) {
-							var dataInfo = JSON.parse(data.codes);
-//							console.log(data.codes)
-							for(var i = 0; i < dataInfo.length; i++){
+							var datainfo = JSON.parse(data.codes);
+							console.log(data.codes)
+							mui.each(datainfo, function(){
 								var li = document.createElement('li');
-								li.className = 'mui-table-view-cell';
-								var item = document.createElement('div');
-								item.className = "mui-slider-handle";
-								
-								item.innerHTML = '<div class="mui-table">'
+								li.className = 'mui-table-view-cell mui-collapse';
+								var htmlText = '<a class="mui-navigate-right" href="#"><div class="mui-table">'
 								+ '<div class="mui-table-cell mui-col-xs-10">'
 								+ 	'<h4 class="mui-ellipsis-2">'
-								+ 		dataInfo[i].分组
+								+ 		this.groupname
 								+ 	'</h4>'
 								+ 	'<p class="mui-h6 mui-ellipsis">'
-								+ 		'自检票数：' + dataInfo[i].自检票数
+								+ 		'自检票数：' + this.zjcounts
 								+ 	'</p>'
 								+ 	'<p class="mui-h6 mui-ellipsis">'
-								+		'自检金额：' + dataInfo[i].自检金额
+								+		'自检金额：' + this.zjamount.toFixed(2)
 								+ 	'</p>'
 								+ '</div>'
 								+ '<div class="mui-table-cell mui-col-xs-5 mui-text-right">'
 								+ 	'<span class="mui-h5">'
-								+ 		'票数：' + dataInfo[i].票数
-								+	'</span>'
+								+ 		'票数：' + this.counts
+								+ 	'</span>'
 								+ 	'<p class="mui-h6 mui-ellipsis">'
+								+ 		'金额：' + this.amount.toFixed(2)
 								+ 	'</p>'
-								+ 	'<p class="mui-h6 mui-ellipsis">'
-								+ 		'金额：' + dataInfo[i].金额.toFixed(2)
-								+ 	'</p>'
-								+ '</div>';
-								
-								li.appendChild(item);
-								fragment.appendChild(li);
-							}
-							table.appendChild(fragment);
+								+ '</div>'
+								+ '</div>'
+								+ '</a>';
+								var subData = this.children;
+								htmlText += '<ul class="mui-table-view mui-table-view-chevron">';
+								mui.each(subData, function(index, item){
+									htmlText += '<li class="mui-table-view-cell">'
+									+ '<a class="mui-navigate-right" href="#">'
+									+ '	<div class="mui-table">'
+									+ '		<div class="mui-table-cell mui-col-xs-10">'
+									+ '			<h4 class="mui-ellipsis-2">'
+									+ 				item.takeuser
+									+ '			</h4>'
+									+ '			<p class="mui-h6 mui-ellipsis">'
+									+ 				'自检票数：' + this.zjcounts
+									+ '			</p>'
+									+ '			<p class="mui-h6 mui-ellipsis">'
+									+ 				'自检金额：' + this.zjamount.toFixed(2)
+									+ '			</p>'
+									+ '		</div>'
+									+ '		<div class="mui-table-cell mui-col-xs-5 mui-text-right">'
+									+ 			'<span class="mui-h5">'
+									+ 				'票数：' + this.counts
+									+ 			'</span>'
+									+ 			'<p class="mui-h6 mui-ellipsis">'
+									+ 				'金额：' + this.amount.toFixed(2)
+									+ 			'</p>'
+									+ 		'</div>'
+									+ '	</div>'
+									+ '</a>'
+									+ '</li>'
+								});
+								htmlText += '</ul>';
+								li.innerHTML = htmlText;
+								ul.appendChild(li);
+							});
+							while(content.firstChild)
+								content.removeChild(content.firstChild);
+							content.appendChild(ul);
 						}
 						else{
 							mui.toast(data.Message);

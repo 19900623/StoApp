@@ -8,9 +8,7 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<title>车辆使用登记</title>
 		<link rel="stylesheet" href="../../css/mui.min.css">
-		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
 		<link rel="stylesheet" href="../../css/common.css" type="text/css" charset="utf-8" />
-		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
 		<style>
 			.mui-btn {margin: 0 10px;}
 		</style>
@@ -50,7 +48,6 @@
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/app.js"></script>
 		<script src="../../js/mui.enterfocus.js"></script>
-		<script src="../../js/mui.picker.min.js"></script>
 		<script>
 			mui.init({});
 			mui.plusReady(function() {
@@ -76,7 +73,7 @@
 			
 			//提交
 			//参数：type（0-借车，1-还车）
-			function btn_submit(type) {				
+			function btn_submit(type) {
 				var CarRegID = document.getElementById("CarID");
 				var CarNumber = document.getElementById("CarNumber");
 				var CarMileage = document.getElementById("CarMileage");
