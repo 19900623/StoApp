@@ -294,7 +294,8 @@
 					"img/car.png",
 					"img/cash_register.png",
 					"img/google_voice.png",
-					"img/server_property.png"
+					"img/server_property.png",
+					"img/robot.png"
 				],
 				"refer": [
 					"addresslist.html",
@@ -325,7 +326,8 @@
 					"business/gunrecords/pullrefresh_main.html",
 					"business/boxcheck/boxcheck-grid.html",
 					"business/card/card-list-main.html",
-					"business/handlerecord/handlerecord_main.html"
+					"business/handlerecord/handlerecord_main.html",
+					"business/HIK/hik_form.html"
 				],
 				"priority": 0
 			},
@@ -1821,7 +1823,10 @@
 			},
 			"business/leavebill/leavebill-list-sub.html": {
 				"resources": [
-					"js/app.js"
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
 				],
 				"refer": [
 					"business/leavebill/leavebill-modify.html"
@@ -2873,6 +2878,19 @@
 					"css/mui.min.css"
 				],
 				"refer": [],
+				"priority": 0
+			},
+			"business/HIK/hik_form.html": {
+				"resources": [
+					"fonts/mui.ttf",
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"js/common.js"
+				],
+				"refer": [
+					"barcode_scan.html"
+				],
 				"priority": 0
 			}
 		},

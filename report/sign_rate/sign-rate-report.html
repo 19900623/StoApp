@@ -142,11 +142,13 @@
 					            data: signradio
 							},{
 								name:'一派签收率',
-					            type:'line',
+					            type:'bar',
+					            barWidth: 10,
 					            data: onesignradio
 							},{
 								name:'二派签收率',
-					            type:'line',
+					            type:'bar',
+					            barWidth: 10,
 					            data: twosignradio
 							}];
 							LoadingChart(countsChart, countsLegend, xData, '百分比', countsSeries);
@@ -196,7 +198,13 @@
 				    },
 				    yAxis: {
 				        type: 'value',
-				        name: yAxisName
+				        name: yAxisName,
+				        min: 80,
+			            max: 100,
+			            interval: 5,
+			            axisLabel: {
+			                formatter: '{value} %'
+			            }
 				    },
 			        dataZoom: [{
 		                type: 'slider',

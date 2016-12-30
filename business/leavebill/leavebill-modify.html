@@ -56,6 +56,7 @@
 					<button type="button" class="mui-btn mui-btn-success" onclick="btn_commit()" id="buttoncommit">提交</button>&nbsp;&nbsp;
 					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
 					<button type="button" class="mui-btn mui-btn-danger" onclick="btn_delete()" id="buttondel">删除</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-yellow" onclick="btn_undo()" id="buttonundo">撤消</button>&nbsp;&nbsp;
 					<button type="button" class="mui-btn mui-btn-primary" onclick="mui.back()">取消</button>
 				</div>
 			</div>
@@ -138,6 +139,15 @@
 								document.getElementById("buttoncommit").style.display = "none";
 								document.getElementById("buttonok").style.display = "none";
 								document.getElementById("buttondel").style.display = "none";
+								if(FlowState.value == '完成'){
+									document.getElementById("buttonundo").style.display = "";
+								}
+								else{
+									document.getElementById("buttonundo").style.display = "none";
+								}
+							}
+							else{
+								document.getElementById("buttonundo").style.display = "none";
 							}
 						}
 					}
@@ -326,7 +336,45 @@
 					}
 				});
 			}
-			//提交按钮
+			
+			//撤消
+			function btn_undo(){
+				var btnArray = ['取消', '确定'];
+				mui.prompt('请输入撤消原因：', '撤消原因', '申通提醒', btnArray, function(e) {
+					if (e.index == 1) {
+						if(!!e.value){
+							var url = app.getUrl() + 'UndoLeaveBill';
+//							var userid = app.getLoginInfo().userid;
+//							console.log(e.value);
+							mui.ajax(url, {
+								data: {
+									id: plus.webview.currentWebview().name,
+									reason: e.value
+								},
+								type: 'post', //HTTP请求类型
+								success: function(data) {
+									console.log(JSON.stringify(data))
+									if (data.Success) {
+										mui.toast(data.Message);
+										var page = plus.webview.getWebviewById('leavebill-list-sub');
+										//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+										mui.fire(page, 'refresh');
+										mui.back();
+									} else {
+										mui.toast(data.Message);
+									}
+								}
+							});
+						}
+						else{
+							mui.toast("请输入撤消原因");
+							btn_undo();
+						}
+					}
+				});
+			}
+			
+			//删除按钮
 			function btn_delete() {
 				var btnArray = ['是', '否'];
 				mui.confirm('是否删除该条数据？', '申通提醒', btnArray, function(e) {
