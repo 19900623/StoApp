@@ -1,0 +1,173 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link href="../../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+		<style>
+			.sto-btn{ border: none; background: none; outline: none;}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" onclick="btn_commit()">保存</a>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">小货扫描错分登记</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded" style="margin:0;">
+				<!--<div class="mui-input-row">
+					<textarea id="WaybillNo" rows="8" placeholder="单号列表" class="mui-input-clear mui-input"></textarea>
+				</div>-->
+				<form class="mui-input-group" id="bill-form" style="margin: 10px 0;">
+					<div class="mui-input-row">
+						<label>错分类型</label>
+						<input type="hidden" id="WaybillNo" />
+						<input type="text" id="ScanType" class="mui-input-clear mui-input" placeholder="请选择错分类型" required="required" readonly="readonly">
+						<img src="../../img/scan.png" style="position: absolute; right: 0px;top: 1.5px ;width: 2em; height: 2em;" onclick="clicked('../../barcode_scan.html',true,true)" />
+					</div>
+				</form>
+				<ul class="mui-table-view" id="waybillnolist">
+					<li class="mui-table-view-cell">
+						单号列表
+					</li>
+				</ul>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/common.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script type="text/javascript">
+			var ScanDate = document.getElementById("ScanDate");
+			var ScanType = document.getElementById("ScanType");
+			var WaybillNo = document.getElementById("WaybillNo");
+			mui.init({});
+			mui.plusReady(function() {
+				clicked('../../barcode_scan.html',true,true);
+				
+				//加载默认值				
+				var TypePicker = new mui.PopPicker();
+				var pickerData = [];
+				mui.post(app.getUrl() + 'GetDataDictionaryDetailList', {Code: "ScanWrongType"}, function(data){
+					if(data.Success){
+						var dataInfo = JSON.parse(data.codes);
+						mui.each(dataInfo, function(i, item){
+							if(i == 0){
+								ScanType.value = this.FullName;
+							}
+							var obj = {
+								value: this.Code,
+								text: this.FullName
+							};
+							pickerData.push(obj);
+						});
+						TypePicker.setData(pickerData);
+						ScanType.addEventListener('tap', function(event) {
+							TypePicker.show(function(items) {
+								ScanType.value = items[0].text;
+								//返回 false 可以阻止选择框的关闭
+								//return false;
+								TypePicker.dispose();
+							});
+						}, false);
+					}
+				}, "json");
+			});
+			
+			//  ========== 
+			//  = 返回扫码结果 = 
+			//  ========== 
+			function scaned(r) {
+				var arr = WaybillNo.value.split(',');
+				for(var i=0; i<arr.length; i++){
+					if(arr[i] == r){
+						app.openPage('../../barcode_scan.html','barcode_scan');
+						return;
+					}
+				}
+				
+				WaybillNo.value += r + ',';
+				var li = document.createElement('li');
+				li.className = "mui-table-view-cell";
+				li.innerHTML = r
+				+ '<button type="button" class="mui-btn sto-btn" onclick="btn_delete(this)">删除</button>'
+				mui("#waybillnolist")[0].appendChild(li);
+						
+				app.openPage('../../barcode_scan.html','barcode_scan');
+			}
+			
+			//删除单号
+			function btn_delete(ele){
+				var txt = ele.parentNode.innerText;
+				var billno = txt.substr(0, txt.indexOf('删除'));
+				var btnArray = ['取消', '确定'];
+				mui.confirm('您确定删除：'+ billno +' ？', '', btnArray, function(e) {
+					if (e.index == 1) {
+						var ul = ele.parentNode.parentNode.removeChild(ele.parentNode);
+						WaybillNo.value = WaybillNo.value.replace(billno + ',', '');
+					}
+				});
+			}
+			
+			function btn_commit(){
+				//验证
+				if(WaybillNo.value == ""){
+					mui.toast("您还没有扫描单号，无需保存");
+					return;
+				}
+				if(ScanType.value == ""){
+					mui.toast("请选择错分类型");
+					return;
+				}
+				//显示等待框
+				var nwaiting = plus.nativeUI.showWaiting();
+				
+				var UserInfo = JSON.parse(app.getLoginInfo().userinfo);
+				var url = app.getUrl() + "ScanWrongSubmit";
+				mui.ajax(url, {
+					data: {
+						waybillno: WaybillNo.value,
+						scantype: ScanType.value,
+						userid: UserInfo.userid,
+						username: UserInfo.realname
+					},
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+//						console.log(JSON.stringify(data))
+						if(data.Success){
+							mui.toast(data.Message);
+							nwaiting.close();
+							
+							var page = plus.webview.getWebviewById('scanwrong_sub');
+							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+							mui.fire(page, 'refresh');
+							mui.back();
+						}
+						else{
+							mui.toast(data.Message);
+							nwaiting.close();
+							
+							var page = plus.webview.getWebviewById('scanwrong_sub');
+							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+							mui.fire(page, 'refresh');
+							mui.back();
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						//异常处理；
+						console.log(xhr + type + errorThrown);
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

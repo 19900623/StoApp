@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "3.25",/*应用版本名称*/
+		"name": "3.26",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -327,7 +327,10 @@
 					"business/boxcheck/boxcheck-grid.html",
 					"business/card/card-list-main.html",
 					"business/handlerecord/handlerecord_main.html",
-					"business/HIK/hik_form.html"
+					"business/HIK/hik_form.html",
+					"business/scanwrong/form_input.html",
+					"business/scanwrong/pullrefresh_main.html",
+					"business/scanwrong/scanwrong_main.html"
 				],
 				"priority": 0
 			},
@@ -2887,6 +2890,61 @@
 					"js/mui.min.js",
 					"css/mui.min.css",
 					"js/common.js"
+				],
+				"refer": [
+					"barcode_scan.html"
+				],
+				"priority": 0
+			},
+			"business/scanwrong/form_input.html": {
+				"resources": [
+					"js/common.js",
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"barcode_scan.html"
+				],
+				"priority": 0
+			},
+			"business/scanwrong/pullrefresh_main.html": {
+				"resources": [
+					"business/scanwrong/pullrefresh_sub.html"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/scanwrong/scanwrong_main.html": {
+				"resources": [
+					"business/scanwrong/scanwrong_sub.html",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"business/scanwrong/scanwrong_input.html"
+				],
+				"priority": 0
+			},
+			"business/scanwrong/scanwrong_input.html": {
+				"resources": [
+					"js/common.js",
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"img/scan.png"
 				],
 				"refer": [
 					"barcode_scan.html"
