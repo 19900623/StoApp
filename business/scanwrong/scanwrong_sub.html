@@ -68,15 +68,15 @@
 									+ '<p class="mui-h6 mui-ellipsis">'
 									+ 	'类型：' + this.ScanType
 									+ '</p>'
+//									+ '<p class="mui-h6 mui-ellipsis">'
+//									+ 	'扫描人：' + this.ScanUserName
+//									+ '</p>'
 									+ '<p class="mui-h6 mui-ellipsis">'
-									+ 	'扫描：' + this.ScanUserName
-									+ '</p>'
-									+ '<p class="mui-h6 mui-ellipsis">'
-									+ 	'扫描时间：' + this.ScanDate.replace('T',' ')
+									+ 	'制单时间：' + this.CreateDate.replace('T',' ')
 									+ '</p>'
 									+ '</div>' 
 									+ '</div>';
-									li.innerHTML = htmlText;									
+									li.innerHTML = htmlText;
 									fragment.appendChild(li);
 								});
 								var table = document.body.querySelector('.mui-table-view');
@@ -137,11 +137,11 @@
 									+ '<p class="mui-h6 mui-ellipsis">'
 									+ 	'类型：' + this.ScanType
 									+ '</p>'
+//									+ '<p class="mui-h6 mui-ellipsis">'
+//									+ 	'扫描人：' + this.ScanUserName
+//									+ '</p>'
 									+ '<p class="mui-h6 mui-ellipsis">'
-									+ 	'扫描：' + this.ScanUserName
-									+ '</p>'
-									+ '<p class="mui-h6 mui-ellipsis">'
-									+ 	'扫描时间：' + this.ScanDate.replace('T',' ')
+									+ 	'制单时间：' + this.CreateDate.replace('T',' ')
 									+ '</p>'
 									+ '</div>' 
 									+ '</div>';
@@ -166,7 +166,7 @@
 				mui.plusReady(function() {
 					setTimeout(function() {
 						mui('#pullrefresh').pullRefresh().pullupLoading();
-					}, 1000);
+					}, 100);
 
 				});
 			} else {

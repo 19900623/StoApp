@@ -85,6 +85,17 @@
 			//  = 返回扫码结果 = 
 			//  ========== 
 			function scaned(r) {
+				//判断单号格式
+				if(isNaN(r)){
+					app.openPage('../../barcode_scan.html','barcode_scan');
+					return;
+				}
+				if(r.length != 12 && r.length != 13){
+					app.openPage('../../barcode_scan.html','barcode_scan');
+					return;
+				}
+				
+				//单号去重复
 				var arr = WaybillNo.value.split(',');
 				for(var i=0; i<arr.length; i++){
 					if(arr[i] == r){
@@ -93,14 +104,23 @@
 					}
 				}
 				
-				WaybillNo.value += r + ',';
-				var li = document.createElement('li');
-				li.className = "mui-table-view-cell";
-				li.innerHTML = r
-				+ '<button type="button" class="mui-btn sto-btn" onclick="btn_delete(this)">删除</button>'
-				mui("#waybillnolist")[0].appendChild(li);
+				//是否已录入
+				mui.post(app.getUrl() + "IsExistByWaybillCode", { waybillcode:r }, function(data){
+					if(data.Code > 0){
+						mui.toast("此单号已经录入。");
+						app.openPage('../../barcode_scan.html','barcode_scan');
+					}
+					else{
+						WaybillNo.value += r + ',';
+						var li = document.createElement('li');
+						li.className = "mui-table-view-cell";
+						li.innerHTML = r
+						+ '<button type="button" class="mui-btn sto-btn" onclick="btn_delete(this)">删除</button>'
+						mui("#waybillnolist")[0].appendChild(li);
 						
-				app.openPage('../../barcode_scan.html','barcode_scan');
+						app.openPage('../../barcode_scan.html','barcode_scan');
+					}
+				}, "json");
 			}
 			
 			//删除单号
@@ -127,7 +147,7 @@
 					return;
 				}
 				//显示等待框
-				var nwaiting = plus.nativeUI.showWaiting();
+				var nwaiting = plus.nativeUI.showWaiting("正在保存...", {modal:true});
 				
 				var UserInfo = JSON.parse(app.getLoginInfo().userinfo);
 				var url = app.getUrl() + "ScanWrongSubmit";
@@ -143,16 +163,19 @@
 					success: function(data) {
 //						console.log(JSON.stringify(data))
 						if(data.Success){
-							mui.toast(data.Message);
+							var message = data.Message;
+							if(!!data.codes){
+								message += "其中运单号：" + data.codes.substr(0, data.codes.lastIndexOf(',')) + "系统已存在！";
+							}
+							mui.toast(message);
 							nwaiting.close();
-							
 							var page = plus.webview.getWebviewById('scanwrong_sub');
 							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
 							mui.fire(page, 'refresh');
 							mui.back();
 						}
 						else{
-							mui.toast(data.Message);
+							mui.alert(data.Message);
 							nwaiting.close();
 							
 							var page = plus.webview.getWebviewById('scanwrong_sub');
