@@ -7,10 +7,6 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<link rel="stylesheet" href="../../css/mui.min.css">
-		<style>
-			.mui-table-cell-bg{background: rgba(0,255,0,.2);}
-			.mui-table-cell-redbg{background: rgba(255,0,0,.2);}
-		</style>
 	</head>
 
 	<body>
@@ -57,7 +53,7 @@
 						type: 'post',
 						dataType: 'json',
 						success: function(data) {
-//							console.log(data)
+							console.log(data)
 							if (data.Code > 0) {
 								var jsonData = JSON.parse(data.codes);
 								for (var i = 0; i < jsonData.length; i++) {
@@ -76,11 +72,11 @@
 									htmlText += '车牌号：' + jsonData[i].Vehicle_Code 
 									+ '</h4>'
 									+ '<p class="mui-h6 mui-ellipsis">' 
-									+ 	'借车日期：' + new Date(jsonData[i].Vehicle_Reg_StartTime.replace('T',' ')).format("yyyy-MM-dd hh:mm:ss")
+									+ 	'借车日期：' + jsonData[i].Vehicle_Reg_StartTime.replace('T',' ')
 									+ '</p>';
 									if(jsonData[i].Vehicle_Reg_EndTime){
 										htmlText += '<p class="mui-h6 mui-ellipsis">' 
-										+ 	'还车日期：' + new Date(jsonData[i].Vehicle_Reg_EndTime.replace('T',' ')).format("yyyy-MM-dd hh:mm:ss")
+										+ 	'还车日期：' + jsonData[i].Vehicle_Reg_EndTime.replace('T',' ')
 										+ '</p>';
 									}
 									htmlText += '</div>' 
@@ -128,13 +124,12 @@
 						pageSize: 10
 					};
 					var url = app.getUrl() + 'GetVehicleList';
-//							console.log(url)
 					mui.ajax(url, {
 						data: messageInfo,
 						type: 'post',
 						dataType: 'json',
 						success: function(data) {
-//							console.log(data)
+//							console.log(JSON.stringify(data))
 							if (data.Code > 0) {
 								var jsonData = JSON.parse(data.codes);
 								for (var i = 0; i < jsonData.length; i++) {
@@ -153,11 +148,11 @@
 									htmlText += '车牌号：' + jsonData[i].Vehicle_Code 
 									+ '</h4>'
 									+ '<p class="mui-h6 mui-ellipsis">' 
-									+ 	'借车日期：' + new Date(jsonData[i].Vehicle_Reg_StartTime.replace('T',' ')).format("yyyy-MM-dd hh:mm:ss")
+									+ 	'借车日期：' + jsonData[i].Vehicle_Reg_StartTime.replace('T',' ')
 									+ '</p>';
 									if(jsonData[i].Vehicle_Reg_EndTime){
 										htmlText += '<p class="mui-h6 mui-ellipsis">' 
-										+ 	'还车日期：' + new Date(jsonData[i].Vehicle_Reg_EndTime.replace('T',' ')).format("yyyy-MM-dd hh:mm:ss")
+										+ 	'还车日期：' + jsonData[i].Vehicle_Reg_EndTime.replace('T',' ')
 										+ '</p>';
 									}
 									htmlText += '</div>' 

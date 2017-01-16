@@ -92,7 +92,7 @@
 		<script src="../../js/mui.poppicker.js"></script>
 		<script type="text/javascript">
 			var modelID;	//模板ID
-			var arrJson;	//审阅人
+			var arrJson = [];	//审阅人
 			mui.init();
 			mui.plusReady(function(){
 				//修改时隐藏人员选择
@@ -102,9 +102,22 @@
 				InitForm(modelID);	//初始化表单
 				document.getElementById("btnsubmit").setAttribute("disabled", "disabled");	//提交按钮失效
 				//默认加载汇报人，如果没有，加载上次汇报人
-				
-//				document.getElementById("btnsubmit").classList.remove("mui-disabled");
-//				document.getElementById("btnsubmit").removeAttribute("disabled");
+				mui.post(app.getUrl() + 'GetReportReplier', {userid: app.getLoginInfo().userid},
+					function(data){
+						if(data.Success){
+//							console.log(data.codes)
+							var dataInfo = JSON.parse(data.codes);
+							mui.each(dataInfo, function(){
+								var user = {
+									id: this.replyuserid,
+									name: this.replyusername
+								}
+								arrJson.push(user);
+							});
+							AddTaster();
+						}
+					},'json'
+				);
 			});
 			
 			//初始化表单
@@ -200,12 +213,17 @@
 					},'json'
 				);
 			}
-			//添加审阅人
+			//选择审阅人
 			function selected(result){
 				//先清空
 				var profile = document.getElementById('profile');
 				profile.innerHTML = '';
 				arrJson = JSON.parse(result);
+				AddTaster();
+				CheckDataValid();
+			}
+			//添加审阅人
+			function AddTaster(){
 				if(!!arrJson){
 					for(var i=0; i < arrJson.length; i++){
 //						console.log(JSON.stringify(arrJson[i]));
@@ -225,7 +243,6 @@
 							profile.removeChild(this);
 						}, false);
 						profile.appendChild(div);
-						CheckDataValid();
 					}
 				}
 			}

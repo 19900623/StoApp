@@ -52,15 +52,15 @@
 						<label>身份证号</label>
 						<input type="text" id="Card" class="mui-input-clear mui-input" required="required">
 					</div>
-					<div class="mui-input-row">
+					<div class="mui-input-row" style="display: none;">
 						<label>省</label>
 						<input type="text" id="Province" class="mui-input" required="required" readonly="readonly">
 					</div>
-					<div class="mui-input-row">
+					<div class="mui-input-row" style="display: none;">
 						<label>市</label>
 						<input type="text" id="City" class="mui-input" required="required" readonly="readonly">
 					</div>
-					<div class="mui-input-row">
+					<div class="mui-input-row" style="display: none;">
 						<label>区</label>
 						<input type="text" id="Area" class="mui-input" required="required" readonly="readonly">
 					</div>
@@ -97,7 +97,7 @@
 					db.transaction(function(context) {
 						context.executeSql("SELECT * FROM Province", [], function(context, results) {
 							var len = results.rows.length;
-							console.log(len);
+//							console.log(len);
 							if(len > 0) {
 								city = results.rows.item(0).city;
 								plus.nativeUI.closeWaiting();
@@ -167,10 +167,10 @@
 					plus.nativeUI.toast("请上传照片");
 					return;
 				}
-				if(City == "") {
-					plus.nativeUI.toast("请选择省市区");
-					return;
-				}
+//				if(City == "") {
+//					plus.nativeUI.toast("请选择省市区");
+//					return;
+//				}
 				newImage = images.children[0].src
 
 				var d = new Date().format('yyyy-MM-dd hh:mm');

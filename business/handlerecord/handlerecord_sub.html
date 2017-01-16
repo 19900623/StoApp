@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>操作登记</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<style>
+			.sto-tag{position: absolute; display: block; margin-top:20px; right: 0px; padding: 3px; transform:rotate(-25deg); -webkit-transform:rotate(-25deg);}
+			.sto-tag-green{color: green; border: 1px solid green;}
+			.sto-tag-red{color: red; border: 1px solid red;}
+		</style>
+	</head>
+
+	<body>
+		<!--下拉刷新容器-->
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<!--数据列表-->
+				<ul class="mui-table-view mui-table-view-chevron">
+					
+				</ul>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script>
+			mui.init({
+				pullRefresh: {
+					container: '#pullrefresh',
+					down: {
+						callback: pulldownRefresh
+					},
+					up: {
+						contentrefresh: '正在加载...',
+						callback: pullupRefresh
+					}
+				}
+			});
+			/**
+			 * 下拉刷新具体业务实现
+			 */
+			function pulldownRefresh() {
+				setTimeout(function() {
+					var fragment = document.createDocumentFragment();
+					count = 1;
+					var loginfo = app.getLoginInfo();
+					var messageInfo = {
+						UserID: loginfo.userid,
+						pageNumber: 1,
+						pageSize: 10
+					};
+					var url = app.getUrl() + 'GetHandleRecordsList';
+					mui.ajax(url, {
+						data: messageInfo,
+						type: 'post',
+						dataType: 'json',
+						success: function(data) {
+							if (data.Code > 0) {
+								var dataList = JSON.parse(data.codes);
+//								console.log(JSON.stringify(dataList))
+								mui.each(dataList, function(i, item){
+									var li = document.createElement('li');
+									li.className = 'mui-table-view-cell';
+//									li.id = data[i].id;
+									var htmlText = '<div class="mui-table">' 
+									+ '<div class="mui-table-cell mui-col-xs-6">' 
+									+ '<h4 class="mui-ellipsis">';
+									if(!!this.EndTime){
+										htmlText += '<span class="sto-tag sto-tag-green">完成</span>';
+									}
+									else if(this.Status == 1){
+										htmlText += '<span class="sto-tag sto-tag-red">作废</span>';
+									}
+									else{
+										htmlText += '<span style="float: right; color:green;">正在操作</span>';
+									}
+									htmlText += this.WorkCategory+ "-" + this.WorkType.substr(0, 2)
+									+ '</h4>'
+									+ '<p class="mui-h6 mui-ellipsis">' 
+									+ 	'区域：' + this.WorkArea
+									+ '</p>'
+									+ '<p class="mui-h6 mui-ellipsis">' 
+									+ 	'工位：' + this.WorkJob
+									+ '</p>'
+									+ '<p class="mui-h6 mui-ellipsis">' 
+									+ 	'操作时间：' + this.StartTime.replace('T',' ')
+									+ '</p>';
+									if(!!this.EndTime){
+										htmlText += '<p class="mui-h6 mui-ellipsis">' 
+										+ 	'完成时间：' + this.EndTime.replace('T',' ')
+										+ '</p>';
+									}
+									htmlText += '</div>' 
+									+ '</div>';
+									li.innerHTML = htmlText;									
+									fragment.appendChild(li);
+								});
+								var table = document.body.querySelector('.mui-table-view');
+								while (table.firstChild)
+									table.removeChild(table.firstChild);
+								table.appendChild(fragment);
+								if (dataList.length < 10) {
+									//参数为true代表没有更多数据了。
+									mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+								} else {
+									//当没有更多数据后要刷新状态，否则不能下拉
+									mui('#pullrefresh').pullRefresh().refresh(true);
+								}
+							} else {
+								var table = document.body.querySelector('.mui-table-view');
+								while (table.firstChild)
+									table.removeChild(table.firstChild);
+								//参数为true代表没有更多数据了。
+								mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+							}
+						},
+					});
+					mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+				}, 150);
+			}
+			var count = 0;
+			/**
+			 * 上拉加载具体业务实现
+			 */
+			function pullupRefresh() {
+				setTimeout(function() {
+					var table = document.body.querySelector('.mui-table-view');
+					count = count + 1;
+					var fragment = document.createDocumentFragment();
+					var loginfo = app.getLoginInfo();
+					var messageInfo = {
+						UserID: loginfo.userid,
+						pageNumber: count,
+						pageSize: 10
+					};
+					var url = app.getUrl() + 'GetHandleRecordsList';
+					mui.ajax(url, {
+						data: messageInfo,
+						type: 'post',
+						dataType: 'json',
+						success: function(data) {
+							if (data.Code > 0) {
+								var dataList = JSON.parse(data.codes);
+//								console.log(JSON.stringify(dataList))
+								mui.each(dataList, function(i, item){
+									var li = document.createElement('li');
+									li.className = 'mui-table-view-cell';
+//									li.id = data[i].id;
+									var htmlText = '<div class="mui-table">' 
+									+ '<div class="mui-table-cell mui-col-xs-6">' 
+									+ '<h4 class="mui-ellipsis">';
+									if(!!this.EndTime){
+										htmlText += '<span class="sto-tag  sto-tag-green">完成</span>';
+									}
+									else if(this.Status == 1){
+										htmlText += '<span class="sto-tag sto-tag-red">作废</span>';
+									}
+									else{
+										htmlText += '<span style="float: right; color:green;">正在操作</span>';
+									}
+									htmlText += this.WorkCategory+ "-" + this.WorkType.substr(0, 2)
+									+ '</h4>'
+									+ '<p class="mui-h6 mui-ellipsis">' 
+									+ 	'区域：' + this.WorkArea
+									+ '</p>'
+									+ '<p class="mui-h6 mui-ellipsis">' 
+									+ 	'工位：' + this.WorkJob
+									+ '</p>'
+									+ '<p class="mui-h6 mui-ellipsis">' 
+									+ 	'操作时间：' + this.StartTime.replace('T',' ')
+									+ '</p>';
+									if(!!this.EndTime){
+										htmlText += '<p class="mui-h6 mui-ellipsis">' 
+										+ 	'完成时间：' + this.EndTime.replace('T',' ')
+										+ '</p>';
+									}
+									htmlText += '</div>' 
+									+ '</div>';
+									li.innerHTML = htmlText;
+									fragment.appendChild(li);
+								});
+								table.appendChild(fragment);
+								if (dataList.length < 10) {
+									mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+								} //参数为true代表没有更多数据了。
+								else {
+									mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
+								}
+							} else {
+								mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+							}
+						},
+					});
+				}, 150);
+			}
+			if (mui.os.plus) {
+				mui.plusReady(function() {
+					setTimeout(function() {
+						mui('#pullrefresh').pullRefresh().pullupLoading();
+					}, 100);
+
+				});
+			} else {
+				mui.ready(function() {
+					mui('#pullrefresh').pullRefresh().pullupLoading();
+				});
+			}
+			window.addEventListener('refresh', function(event) {
+				pulldownRefresh();
+			});
+		</script>
+	</body>
+
+</html>

@@ -228,7 +228,7 @@
 										'		<span class="sto-field">' +
 										this.attrname + ':' +
 										'		</span>' +
-										this.attrval +
+										this.attrval.replace(/\\n/g, '<br />') +
 										' </p>';
 								}
 							});

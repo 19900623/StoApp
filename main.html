@@ -195,6 +195,39 @@
 					defaultTab.classList.add('mui-active');
 				}
 			});
+			
+			//监听屏幕旋转事件
+			if(window.DeviceOrientationEvent){
+//			    window.addEventListener('deviceorientation',DeviceOrientationHandler,false);
+			}else{
+	            console.log("当前浏览器不支持DeviceOrientation");
+			}
+			function DeviceOrientationHandler(event){
+		        var alpha = event.alpha,
+		            beta = event.beta,
+		            gamma = event.gamma;
+		
+		        if(alpha != null || beta != null || gamma != null){
+		            //console.log("alpha:" + alpha + "<br />beta:" + beta + "<br />gamma:" + gamma);
+		            //判断屏幕方向
+		            if( Math.abs(gamma) < 30 && Math.abs(beta) > 35){
+		            	//竖向显示
+						plus.screen.lockOrientation("portrait-primary");
+		            }
+		
+		            if( Math.abs(beta) < 35 && Math.abs(gamma) > 30 ){
+			            if( gamma > 0 ){
+			                //横向左倾显示
+							plus.screen.lockOrientation("landscape-secondary");
+			            }else{
+			                //横向右倾显示
+							plus.screen.lockOrientation("landscape-primary");
+			            }
+		            }
+		        }else{
+		            console.log("当前浏览器不支持DeviceOrientation");
+		        }
+			}
 		</script>
 	</body>
 

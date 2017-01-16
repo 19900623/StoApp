@@ -14,7 +14,9 @@
 				background-color: #efeff4; 
 			}
 			/*跨webview需要手动指定位置*/
-			.span-count{float: right; display: block;width: 150px; text-align: left;}
+			/*.span-count{float: right; display: block;width: 150px; text-align: left;}*/
+			.mui-content{margin-top: -15px;}
+			.mui-loading{padding-top: 50px;}
 		</style>
 	</head>
 
@@ -24,49 +26,90 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 id="title" class="mui-title">部门客户流失报表</h1>
 		</header>
-		<div style="margin-top: 45px;">
-			<ul class="mui-table-view mui-table-view-chevron" id="list">
-			</ul>
+		<div class="mui-content" id="content">
+			<div class="mui-loading">
+				<div class="mui-spinner">
+				</div>
+			</div>
+			<!--<ul class="mui-table-view mui-table-view-chevron" id="list">
+			</ul>-->
 		</div>
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/app.js"></script>
 		<script>
-			mui.init({});
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
 			mui.plusReady(function() {
 				LodingData();
 				mui.toast("正在加载数据，请稍后。。。");
 			});
 			//加载数据
 			function LodingData() {
-				var table = document.getElementById("list");
-				while(table.firstChild)
-					table.removeChild(table.firstChild);
-				var fragment = document.createDocumentFragment();
+//				var table = document.getElementById("list");
+//				while(table.firstChild)
+//					table.removeChild(table.firstChild);
+//				var fragment = document.createDocumentFragment();
 				var url = app.getUrl() + 'GetCustomGroup';
 				mui.ajax(url, {
 //					data: {},
 					type: 'post',
 					dataType: 'json',
 					success: function(data) {
-						if(data) {
+						if(data.Success) {
 //							console.log(JSON.stringify(data))
-							for(var i = 0; i < data.length; i++) {
-								li = document.createElement('li');
+							var content = document.getElementById("content");
+							var ul = document.createElement("ul");
+							ul.className = 'mui-table-view mui-table-view-chevron';
+							var datainfo = JSON.parse(data.codes);
+							mui.each(datainfo, function(){
+								var li = document.createElement('li');
 								li.className = 'mui-table-view-cell mui-collapse';
-								var htmlText = '';
-//								htmlText += '<div class="mui-slider-handle">';
-								htmlText += '<input type="hidden" value="' + data[i].depart + '" />';
-								htmlText += '<span class="span-count">流失量：' + data[i].counts + '</span>' + data[i].depart;
-//								htmlText += '<a class="mui-navigate-right" href="#">' + data[i].depart + '&nbsp;&nbsp;流失数量：' + data[i].counts + '</a>'
-//								htmlText += '<ul class="mui-table-view">';
-//								htmlText += '<li class="mui-table-view-cell"><a href="#">' + data[i].scan_name; + '</a>';
-//								htmlText += '</li></ul>';
-//								htmlText += '</div>';
-//								htmlText += '</div>';
+								var htmlText = '<a class="mui-navigate-right" href="#"><div class="mui-table">'
+								+ '<div class="mui-table-cell mui-col-xs-10">'
+								+ 	'<h4 class="mui-ellipsis-2">'
+								+ 		this.dept
+								+ 	'</h4>'
+								+ 	'<p class="mui-h6 mui-ellipsis">'
+								+ 		'流失量：' + this.counts
+								+ 	'</p>'
+								+ '</div>'
+								+ '<div class="mui-table-cell mui-col-xs-5 mui-text-right">'
+								+ 	'<span class="mui-h5">'
+								+ 		'流失量：' + this.counts
+								+ 	'</span>'
+								+ '</div>'
+								+ '</div>'
+								+ '</a>';
+								var subData = this.children;
+								htmlText += '<ul class="mui-table-view mui-table-view-chevron">';
+								mui.each(subData, function(index, item){
+									htmlText += '<li class="mui-table-view-cell">'
+									+ '	<div class="mui-table">'
+									+ '		<div class="mui-table-cell mui-col-xs-10">'
+									+ '			<h4 class="mui-ellipsis-2">'
+									+ 				item.客户名称
+									+ '			</h4>'
+									+ '			<p class="mui-h6 mui-ellipsis">'
+									+ '				客户编号：' + item.客户编号
+									+ '			</p>'
+									+ '			<p class="mui-h6 mui-ellipsis">'
+									+ '				合作月份：' + item.合作月份
+									+ '			</p>'
+									+ '		</div>'
+									+ '	</div>'
+									+ '</li>'
+								});
+								htmlText += '</ul>';
 								li.innerHTML = htmlText;
-								fragment.appendChild(li);
-							}
-							table.appendChild(fragment);
+								ul.appendChild(li);
+							});
+							while(content.firstChild)
+								content.removeChild(content.firstChild);
+							content.appendChild(ul);
+						}
+						else{
+							mui.toast(data.Message);
 						}
 					},
 				});

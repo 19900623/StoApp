@@ -1,0 +1,229 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link href="../../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+		<style>
+			#topPopover {
+				height: 150px;
+			}
+			.chart {
+				height: 250px;
+				margin: 0px;
+				padding: 0px;
+			}
+			h5 {
+				margin-top: 30px;
+				font-weight: bold;
+			}
+			h5:first-child {
+				margin-top: 15px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" href="#topPopover">查询</a>
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" onclick="goBack()"></a>
+			<h1 class="mui-title">签收率日统计报表</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+				<!--<h5>签收率统计</h5>-->
+				<div class="chart" id="countsChart"></div>
+			</div>
+		</div>
+		<!--右上角弹出菜单-->
+		<div id="topPopover" class="mui-popover">
+			<div class="mui-popover-arrow"></div>
+			<div class="mui-scroll-wrapper">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>开始时间</label>
+						<input type="text" id="StartTime" data-options='{"type":"date", "beginYear": "2015"}' class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>结束时间</label>
+						<input type="text" id="EndTime" data-options='{"type":"date", "beginYear": "2015"}' class="mui-input" required="required" readonly="readonly">
+					</div>
+				</form>
+				<div class="mui-button-row" style="margin-top:10px;">
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_search()" id="buttonok">搜索</button>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script src="../../js/echarts.common.min.js"></script>
+		<script type="text/javascript">
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+			var StartTime = document.getElementById("StartTime");
+			var EndTime = document.getElementById("EndTime");
+			mui.plusReady(function() {
+				StartTime.addEventListener('tap', function() {
+					ShowPicker(this);
+				}, false);
+				EndTime.addEventListener('tap', function() {
+					ShowPicker(this);
+				}, false);
+
+				//仅支持横屏显示
+				plus.screen.lockOrientation("landscape-primary");
+			});
+			
+			//返回
+			function goBack(){
+				plus.screen.lockOrientation("portrait-primary");
+				mui.back();
+			}
+			
+			//显示选择器
+			function ShowPicker(element){
+				var optionsJson = element.getAttribute('data-options') || '{}';
+				var options = JSON.parse(optionsJson);
+				options["endYear"] = new Date().getFullYear();
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+					element.value = rs.text;
+					picker.dispose();
+				});
+			}
+
+			function btn_search(){
+				if(StartTime.value == '') {
+					mui.toast("请选择开始时间");
+					return;
+				}
+				if(EndTime.value == '') {
+					mui.toast("请选择结束时间");
+					return;
+				}
+				mui('#topPopover').popover('toggle'); //收起右上角弹出菜单
+				mui.toast("正在努力为您查询，请稍后...");
+				
+				var url = app.getUrl() + 'GetSignRadioStatisticsByDay';
+				mui.ajax(url, {
+					data: {
+						start: StartTime.value,
+						end: EndTime.value
+					},
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+						if(data.Success) {
+							var dataInfo = JSON.parse(data.codes);
+//							console.log(data.codes)
+							var xData = [];
+							var signradio = [];
+							var onesignradio = [];
+							var twosignradio = [];
+							mui.each(dataInfo, function(i, item){
+								xData.push(this.groupname);
+								signradio.push((this.notprosignradio * 100).toFixed(2));
+								onesignradio.push((this.onesignradio * 100).toFixed(2));
+								twosignradio.push((this.twosignradio * 100).toFixed(2));
+							});
+							
+							var countsChart = document.getElementById('countsChart');
+							var countsLegend = ['签收率（含问题件）', '一派签收率', '二派签收率'];
+							var countsSeries = [{
+								name:'签收率（含问题件）',
+					            type:'line',
+					            data: signradio
+							},{
+								name:'一派签收率',
+					            type:'bar',
+					            barWidth: 10,
+					            data: onesignradio
+							},{
+								name:'二派签收率',
+					            type:'bar',
+					            barWidth: 10,
+					            data: twosignradio
+							}];
+							LoadingChart(countsChart, countsLegend, xData, '百分比', countsSeries);
+						}
+						else{
+							mui.toast(data.Message);
+						}
+					},
+					error: function(XMLHttpRequest, textStatus, errorThrown) {
+						console.log(JSON.stringify(XMLHttpRequest));
+					}
+				});
+			}
+			
+			/**
+			 * 加载图表
+			 * @method LoadingChart
+			 * @param {element} elem 加载图表的元素对象，非ID
+			 * @param {jsonArr} legendData 图表的图例数组
+			 * @param {jsonArr} xAxisData 图表X轴数据
+			 * @param {string} yAxisName 图表Y轴名称
+			 * @param {jsonArr} seriesData 图表曲线数据
+			 */
+			function LoadingChart(elem, legendData, xAxisData, yAxisName, seriesData){
+				var chartOption = {
+				    tooltip: {
+				        trigger: 'axis'
+				    },
+				    legend: {
+				        data: legendData
+				    },
+				    grid: {
+				        left: '3%',
+				        right: '3%',
+				        bottom: '12%',
+				        containLabel: true
+				    },
+				    toolbox: {
+				        feature: {
+				            saveAsImage: {}
+				        }
+				    },
+				    xAxis: {
+				        type: 'category',
+				        boundaryGap: false,
+				        data: xAxisData
+				    },
+				    yAxis: {
+				        type: 'value',
+				        name: yAxisName,
+				        min: 80,
+			            max: 100,
+			            interval: 5,
+			            axisLabel: {
+			                formatter: '{value} %'
+			            }
+				    },
+			        dataZoom: [{
+		                type: 'slider',
+		                show: true,
+		                start: 0,
+		                end: 20,
+		                handleSize: 8,
+		                top:'90%'
+		          },{
+		                type: 'inside',
+		                start: 0,
+		                end: 20,
+		            }],
+				    series: seriesData
+				};
+				var lineChart = echarts.init(elem);
+				lineChart.setOption(chartOption);
+			}
+		</script>
+	</body>
+
+</html>

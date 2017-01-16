@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>车辆使用登记</title>
+		<title></title>
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -11,30 +11,31 @@
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav">
-			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" onclick="app.openPage('vehicle_reg.html','vehicle_reg')">扫一扫</a>
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">车辆使用登记</h1>
+		<header class="mui-bar mui-bar-nav" id="header">
+			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" onclick="app.openPage('scanwrong_input.html','scanwrong_input')">扫一扫</a>
+			<a id="back" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">小货扫描错分</h1>
 		</header>
 		<div class="mui-content"></div>
 	</body>
-	<script src="../../js/app.js"></script>
 	<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
 	<script type="text/javascript">
 		//启用双击监听
 		mui.init({
 			gestureConfig:{
 				doubletap:true
 			},
-			subpages:[{ 
-				url:'vehicle_sub.html',
-				id:'vehicle_sub',
+			subpages:[{
+				url:'scanwrong_sub.html',
+				id:'scanwrong_sub',
 				styles:{
 					top: '45px',
 					bottom: '0px', 
 				}
-			}] 
+			}]
 		});
+	
 		var contentWebview = null;
 		document.querySelector('header').addEventListener('doubletap',function () {
 			if(contentWebview==null){

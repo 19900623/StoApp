@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<style>
+			.mui-btn {margin: 0 10px;}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<!--<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" onclick="clicked('../../barcode_scan.html',true,true)">扫一扫</a>-->
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">机器人称重</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded" style="margin: 5px;">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>当前工位</label>
+						<input type="hidden" id="StationID" />
+						<input type="text" id="StationName" class="mui-input-clear mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>开始时间</label>
+						<input type="text" id="BeginDate" class="mui-input-clear mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>巴枪号</label>
+						<input type="text" id="EmpCode" class="mui-input" required="required" readonly="readonly">
+					</div>
+				</form>
+				<div id="btns" class="mui-button-row" style="margin: 15px 0px 0px;">
+					<button type="button" class="mui-btn mui-btn-success" onclick="clicked('../../barcode_scan.html',true,true)" id="btnStart">开始操作</button>
+					<button type="button" class="mui-btn mui-btn-primary" onclick="clicked('../../barcode_scan.html',true,true)" id="btnEnd">结束操作</button>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/common.js"></script>
+		<script src="../../js/app.js"></script>
+		<script type="text/javascript">
+			var StationID = document.getElementById("StationID");
+			var StationName = document.getElementById("StationName");
+			var BeginDate = document.getElementById("BeginDate");
+			var EmpCode = document.getElementById("EmpCode");
+			var btnStart = document.getElementById("btnStart");
+			var btnEnd = document.getElementById("btnEnd");
+			
+			mui.init();
+			mui.plusReady(function() {
+				btnStart.style.display = "none";
+				btnEnd.style.display = "none";
+				var userinfo = JSON.parse(app.getLoginInfo().userinfo);
+				var url = app.getUrl() + 'HIK_GetState';
+				mui.ajax(url, {
+					data: {
+						UserName: userinfo.realname
+					},
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+//						console.log(JSON.stringify(data))
+						StationID.value = data.StationID;
+						StationName.value = data.StationName;
+						BeginDate.value = data.BeginDate;
+						EmpCode.value = data.EmpCode;
+						if(!!!data.EmpCode){
+							mui.alert("您尚未开通巴枪帐号！");
+							return;
+						}
+						if(!!data.StationName){
+							btnStart.style.display = "none";
+							btnEnd.style.display = "";
+						}
+						else{
+							btnStart.style.display = "";
+							btnEnd.style.display = "none";
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						//异常处理；
+						console.log(xhr + type + errorThrown);
+					}
+				});
+			});
+			
+			//  ========== 
+			//  = 返回扫码结果 = 
+			//  ========== 
+			function scaned(r) {
+				var nwaiting = plus.nativeUI.showWaiting();
+				if(StationID.value != r && !!StationID.value){
+					nwaiting.close();
+					mui.alert("结束工位与当前工位不符！");
+					return;
+				}
+				var url = app.getUrl() + 'HIK_StartWork';
+				var userinfo = JSON.parse(app.getLoginInfo().userinfo);
+				var postData = {
+					StationID: r,
+					UserName: userinfo.realname,
+					EmpCode: EmpCode.value
+				};
+				if(!!StationID.value){
+					postData["Type"] = "E";
+				}
+				else{
+					postData["Type"] = "S";
+				}
+				mui.ajax(url, {
+					data: postData,
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+						nwaiting.close();
+						StationID.value = data.StationID;
+						StationName.value = data.StationName;
+						BeginDate.value = data.BeginDate;
+						EmpCode.value = data.EmpCode;
+						if(!!data.StationName){
+							btnStart.style.display = "none";
+							btnEnd.style.display = "";
+						}
+						else{
+							btnStart.style.display = "";
+							btnEnd.style.display = "none";
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						//异常处理；
+						console.log(JSON.stringify(xhr));
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

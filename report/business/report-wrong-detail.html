@@ -3,12 +3,12 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>进港违规明细</title>
+		<title>虚假签收明细</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<link href="../../css/mui.min.css" rel="stylesheet" />
-		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
+		<link href="../../css/mui.picker.min.css" rel="stylesheet" />
 		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
 		<style>
 			html,
@@ -22,7 +22,7 @@
 			}*/
 			
 			#topPopover {
-				height: 190px;
+				height: 230px;
 			}
 			
 			.mui-table h4,
@@ -54,7 +54,7 @@
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" href="#topPopover">查询</a>
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">进港违规明细</h1>
+			<h1 id="title" class="mui-title">虚假签收明细</h1>
 		</header>
 		<div style="margin-top: 45px;">
 			<ul class="mui-table-view mui-table-view-striped mui-table-view-condensed" id="list">
@@ -79,6 +79,10 @@
 						<input type="hidden" id="Code">
 						<input type="text" id="Depart" class="mui-input" required="required" readonly="readonly">
 					</div>
+					<div class="mui-input-row">
+						<label>业务员</label>
+						<input type="text" id="UserName" class="mui-input-clear">
+					</div>
 				</form>
 				<div class="mui-button-row" style="margin-top:10px;">
 					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_search()" id="buttonok">搜索</button>&nbsp;&nbsp;
@@ -93,7 +97,13 @@
 		mui.init({
 			swipeBack: true //启用右滑关闭功能
 		});
-		mui.plusReady(function() {	
+		mui.plusReady(function() {			
+			var UserName = document.getElementById("UserName");
+			//业务员默认当前用户
+			var logininfo = app.getLoginInfo();
+			var userinfo = JSON.parse(logininfo.userinfo);
+			UserName.value = userinfo.realname;
+				
 			//选择开始时间事件			
 			document.getElementById("StartTime").addEventListener('tap', function() {
 				var options = {
@@ -161,34 +171,34 @@
 				plus.nativeUI.toast("请选择结束时间");
 				return;
 			}
-			if(document.getElementById("Code").value == '') {
-				plus.nativeUI.toast("请选择部门");
-				return;
-			}
+			
 			var code = document.getElementById("Code").value;
+			var name = document.getElementById("UserName").value;
 			var start = document.getElementById("StartTime").value;
 			var end = document.getElementById("EndTime").value;
-			LodingData(code, start, end);
+			LodingData(code, name, start, end);
 			mui('#topPopover').popover('toggle');	//收起右上角弹出菜单
 		}
 		
 		//加载数据
-		function LodingData(code, start, end) {
+		function LodingData(code, name, start, end) {
 			var table = document.getElementById("list");
 			while(table.firstChild)
 				table.removeChild(table.firstChild);
 			var fragment = document.createDocumentFragment();
 			var url = app.getUrl() + 'GetWrongDetail';
+			console.log(code)
 			mui.ajax(url, {
 				data: {
 					departCode: code,
+					username: name,
 					start: start,
 					end: end
 				},
 				type: 'post',
 				dataType: 'json',
 				success: function(data) {
-					console.log(JSON.stringify(data))
+//					console.log(JSON.stringify(data))
 					if(data.Success) {
 						var jsonData = JSON.parse(data.codes);	//转JSON对象
 						for(var i = 0; i < jsonData.length; i++) {
