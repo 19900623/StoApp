@@ -93,11 +93,11 @@
 //					console.log(JSON.stringify(logininfo))
 //					var state = app.getSate();
 					//正式库
-//					var httpUrl = 'http://58.57.35.3:8066';
-					var httpUrl = 'http://oaapp.lyzysoft.com:8066';
+					var httpUrl = 'http://58.57.35.3:8066';
+//					var httpUrl = 'http://oaapp.lyzysoft.com:8066';
 					//测试库
 //					var httpUrl = 'http://192.168.6.166:80/LeaRun.MobileApp';
-					//var httpUrl = 'http://oa.tunnel.qydev.com/LeaRun.MobileApp';
+//					var httpUrl = 'http://oa.tunnel.qydev.com/LeaRun.MobileApp';
 					var url = httpUrl + '/MobileAppService.asmx/';
 					app.setUrl(url);
 					app.setHttpUrl(httpUrl);
@@ -189,10 +189,13 @@
 							return;
 						}
 						var url = app.getUrl() + 'CheckLogin';
+						console.log(JSON.stringify(loginInfo))
+//						console.log(url)
 						mui.ajax(url, {
 							data: loginInfo,
 							dataType: 'json', //服务器返回json格式数据
 							type: 'post', //HTTP请求类型
+//							headers:{'Content-Type':'application/json'},
 							success: function(data) {
 								if (data.State != '3')
 									plus.nativeUI.toast(data.Message);
@@ -214,8 +217,9 @@
 								return;
 							},
 							error: function(xhr, type, errorThrown) {
-								//异常处理；
-								console.log(type + errorThrown);
+								//异常处理
+								console.log(xhr + type + errorThrown);
+								console.log(JSON.stringify(xhr));
 							}
 						});
 					});
@@ -243,6 +247,7 @@
 //						});
 //					} else 
 					if (settings.autoLogin && logininfo.userid) {
+//						toMain();
 						$.trigger(loginButton, 'tap');
 					} else {
 						app.setLoginInfo(null);

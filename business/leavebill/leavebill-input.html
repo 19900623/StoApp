@@ -295,13 +295,15 @@
 				};
 				var url = app.getUrl() + 'AddLeaveBill';
 				var nwaiting = plus.nativeUI.showWaiting();
-				console.log(JSON.stringify(billInfo));
+//				console.log(JSON.stringify(billInfo));
 				mui.ajax(url, {
 					data: {
 						Data: JSON.stringify(billInfo)
 					},
+//					dataType: 'text', //服务器返回json格式数据
 					type: 'post', //HTTP请求类型
 					success: function(data) {
+//						console.log(data)
 						nwaiting.close();
 						if (data == "") {
 							plus.nativeUI.toast('添加成功');

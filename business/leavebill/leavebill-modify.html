@@ -345,7 +345,8 @@
 						if(!!e.value){
 							var url = app.getUrl() + 'UndoLeaveBill';
 //							var userid = app.getLoginInfo().userid;
-//							console.log(e.value);
+							console.log(e.value);
+							console.log(plus.webview.currentWebview().name)
 							mui.ajax(url, {
 								data: {
 									id: plus.webview.currentWebview().name,
