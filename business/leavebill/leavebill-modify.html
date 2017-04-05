@@ -47,6 +47,10 @@
 						<label>状态</label>
 						<input type="text" id="FlowState" class="mui-input" required="required" readonly="readonly">
 					</div>
+					<div class="mui-input-row">
+						<label>当前审批人</label>
+						<input type="text" id="ExcuteName" class="mui-input" required="required" readonly="readonly">
+					</div>
 				</form>
 				<div class="mui-input-row" style="margin: 5px 0px;">
 					<textarea id="LeaveReason" rows="4" placeholder="请假原因" class="mui-input-clear mui-input"></textarea>
@@ -135,11 +139,12 @@
 							LeaveEndTime.value = data[0].leaveendtime.substr(0, 10);
 							LeaveReason.value = data[0].leavereason;
 							FlowState.value = data[0].flowstate;
+							ExcuteName.value = data[0].excuteobjectname;
 							if (FlowState.value != '未提交' && FlowState.value != '驳回') {
 								document.getElementById("buttoncommit").style.display = "none";
 								document.getElementById("buttonok").style.display = "none";
 								document.getElementById("buttondel").style.display = "none";
-								if(FlowState.value == '完成'){
+								if(FlowState.value == '完成' || FlowState.value == '撤消驳回'){
 									document.getElementById("buttonundo").style.display = "";
 								}
 								else{
@@ -345,8 +350,7 @@
 						if(!!e.value){
 							var url = app.getUrl() + 'UndoLeaveBill';
 //							var userid = app.getLoginInfo().userid;
-							console.log(e.value);
-							console.log(plus.webview.currentWebview().name)
+//							console.log(plus.webview.currentWebview().name)
 							mui.ajax(url, {
 								data: {
 									id: plus.webview.currentWebview().name,
