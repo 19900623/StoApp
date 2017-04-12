@@ -58,6 +58,7 @@
 
 				<div class="mui-button-row">
 					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-success" onclick="btn_submit()" id="buttonok">确认并提交</button>&nbsp;&nbsp;
 					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
 				</div>
 			</div>
@@ -201,7 +202,7 @@
 				});
 			});
 
-			function btn_ok() {			
+			function btn_ok() {
 				var leaveDays, leaveHour, startTime, endTime;
 				var LeaveMold = document.getElementById("LeaveMold");
 				var LeaveType = document.getElementById("LeaveType");
@@ -294,6 +295,128 @@
 					LeaveReason: LeaveReason.value
 				};
 				var url = app.getUrl() + 'AddLeaveBill';
+				var nwaiting = plus.nativeUI.showWaiting();
+//				console.log(JSON.stringify(billInfo));
+				mui.ajax(url, {
+					data: {
+						Data: JSON.stringify(billInfo)
+					},
+//					dataType: 'text', //服务器返回json格式数据
+					type: 'post', //HTTP请求类型
+					success: function(data) {
+//						console.log(data)
+						nwaiting.close();
+						if (data == "") {
+							plus.nativeUI.toast('添加成功');
+							var page = plus.webview.getWebviewById('leavebill-list-sub');
+							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+							mui.fire(page, 'refresh');
+							mui.back();
+						} else {
+							plus.nativeUI.toast(data);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						//异常处理；
+						console.log(JSON.stringify(errorThrown));
+						plus.nativeUI.toast('添加失败');
+					}
+				});
+			}
+			//保存并提交
+			function btn_submit(){
+				var leaveDays, leaveHour, startTime, endTime;
+				var LeaveMold = document.getElementById("LeaveMold");
+				var LeaveType = document.getElementById("LeaveType");
+				var LeaveStartTime = document.getElementById("LeaveStartTime");
+				var LeaveEndTime = document.getElementById("LeaveEndTime");
+				var LeaveReason = document.getElementById("LeaveReason");
+				var Days = document.getElementById("Days");
+				//验证
+				if (LeaveMold.value == "") {
+					plus.nativeUI.toast("时间段不能为空");
+					LeaveMold.focus();
+					return;
+				}
+				if (LeaveType.value == "") {
+					plus.nativeUI.toast("请假类型不能为空");
+					LeaveType.focus();
+					return;
+				}
+				if (LeaveStartTime.value == "") {
+					plus.nativeUI.toast("开始时间不能为空");
+					LeaveStartTime.focus();
+					return;
+				}
+				if (LeaveEndTime.value == "") {
+					plus.nativeUI.toast("结束时间不能为空");
+					LeaveEndTime.focus();
+					return;
+				}
+				if (LeaveStartTime.value > LeaveEndTime.value) {
+					plus.nativeUI.toast("开始时间不能大于结束时间");
+					LeaveEndTime.focus();
+					return;
+				}
+				if (LeaveType.value == '小时假') {
+					if (LeaveMold.value != '早间操作' && LeaveMold.value != '晚间操作') {
+						plus.nativeUI.toast("该时间段不能为小时假");
+						LeaveMold.focus();
+						return;
+					}
+				}
+				//请假原因
+				if (LeaveReason.value == "") {
+					plus.nativeUI.toast("请假原因不能为空");
+					LeaveReason.focus();
+					return;
+				}
+				//根据时间段更改日期
+				switch (LeaveMold.value) {
+					case '全天':
+						startTime = LeaveStartTime.value + ' 00:00:00';
+						endTime = LeaveEndTime.value + ' 23:59:59';
+						leaveDays = document.getElementById("Days").value;
+						leaveHour = 0;
+						break;
+					case '上午':
+						startTime = LeaveStartTime.value + ' 00:00:00';
+						endTime = LeaveEndTime.value + ' 13:00:00';
+						leaveDays = 0.5;
+						leaveHour = 0;
+						break;
+					case '下午':
+						startTime = LeaveStartTime.value + ' 13:00:00';
+						endTime = LeaveEndTime.value + ' 23:59:59';
+						leaveDays = 0.5;
+						leaveHour = 0;
+						break;
+					case '早间操作':
+						startTime = LeaveStartTime.value + ' 4:00:00';
+						endTime = LeaveEndTime.value + ' 8:00:00';
+						leaveDays = 0;
+						leaveHour = 4;
+						break;
+					case '晚间操作':
+						startTime = LeaveStartTime.value + ' 17:00:00';
+						endTime = LeaveEndTime.value + ' 23:59:59';
+						leaveDays = 0;
+						leaveHour = 0;
+						break;
+				}
+				var userid = app.getLoginInfo().userid;
+				//调用方法
+				var billInfo = {
+					UserID: userid,
+					LeaveTitle: LeaveMold.value,
+					LeaveType: LeaveType.value,
+					LeaveStartTime: startTime,
+					LeaveEndTime: endTime,
+					LeaveDays: leaveDays,
+					LeaveHour: leaveHour,
+					LeaveReason: LeaveReason.value
+				};
+				var url = app.getUrl() + 'SubmitLeaveBill';
 				var nwaiting = plus.nativeUI.showWaiting();
 //				console.log(JSON.stringify(billInfo));
 				mui.ajax(url, {
