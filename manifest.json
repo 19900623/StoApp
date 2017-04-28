@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "3.30",/*应用版本名称*/
+		"name": "3.32",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -295,7 +295,8 @@
 					"img/cash_register.png",
 					"img/google_voice.png",
 					"img/server_property.png",
-					"img/robot.png"
+					"img/robot.png",
+					"img/text_signature.png"
 				],
 				"refer": [
 					"addresslist.html",
@@ -330,7 +331,11 @@
 					"business/HIK/hik_form.html",
 					"business/scanwrong/form_input.html",
 					"business/scanwrong/pullrefresh_main.html",
-					"business/scanwrong/scanwrong_main.html"
+					"business/scanwrong/scanwrong_main.html",
+					"business/vehicle_loading/vehicle_loading_main.html",
+					"business/waybill/waybill-grid.html",
+					"business/vehicle_loading/vehicle_innage_main.html",
+					"tab-work-input.html"
 				],
 				"priority": 0
 			},
@@ -2960,6 +2965,200 @@
 					"js/app.js",
 					"js/mui.min.js",
 					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/vehicle_loading/vehicle_loading_main.html": {
+				"resources": [
+					"business/vehicle_loading/vehicle_loading_sub.html",
+					"css/mui.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf"
+				],
+				"refer": [
+					"business/vehicle_loading/vehicle_loading_form.html"
+				],
+				"priority": 0
+			},
+			"business/vehicle_loading/vehicle_loading_form.html": {
+				"resources": [
+					"css/mui.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"img/scan.png",
+					"css/common.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"css/iconfont.css",
+					"css/style.css",
+					"fonts/iconfont.ttf",
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/waybill/waybill-grid.html": {
+				"resources": [
+					"img/script_edit.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"img/advanced_data_grid.png",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"business/waybill/waybill-list-main.html"
+				],
+				"priority": 0
+			},
+			"business/waybill/waybill-input.html": {
+				"resources": [
+					"js/common.js",
+					"js/mui.picker.min.js",
+					"css/common.css",
+					"css/mui.min.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/mui.enterfocus.js",
+					"img/scan.png"
+				],
+				"refer": [
+					"camera_image.html"
+				],
+				"priority": 0
+			},
+			"business/waybill/waybill-list-main.html": {
+				"resources": [
+					"business/waybill/waybill-list-sub.html"
+				],
+				"refer": [
+					"business/waybill/waybill-input.html"
+				],
+				"priority": 0
+			},
+			"business/vehicle_loading/vehicle_loading_sub.html": {
+				"resources": [
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/waybill/waybill-list-sub.html": {
+				"resources": [],
+				"refer": [
+					"business/waybill/waybill-modify.html"
+				],
+				"priority": 0
+			},
+			"business/waybill/waybill-modify.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"js/mui.min.js",
+					"css/common.css",
+					"js/mui.poppicker.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/mui.picker.min.css",
+					"js/mui.enterfocus.js"
+				],
+				"refer": [
+					"camera_image.html"
+				],
+				"priority": 0
+			},
+			"business/vehicle_loading/vehicle_innage_main.html": {
+				"resources": [
+					"js/app.js",
+					"business/vehicle_loading/vehicle_innage_sub.html",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"business/vehicle_loading/vehicle_innage_form.html"
+				],
+				"priority": 0
+			},
+			"business/vehicle_loading/vehicle_innage_form.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"js/mui.min.js",
+					"css/common.css",
+					"js/mui.poppicker.js",
+					"fonts/mui.ttf",
+					"css/iconfont.css",
+					"css/mui.min.css",
+					"css/style.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/vehicle_loading/vehicle_innage_sub.html": {
+				"resources": [
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"tab-work-input.html": {
+				"resources": [
+					"img/lorry_box.png",
+					"img/box_down.png",
+					"img/server_property.png",
+					"css/mui.min.css",
+					"img/cash_register.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"img/box.png"
+				],
+				"refer": [
+					"business/bulkycargo/bulkycargo_main.html"
+				],
+				"priority": 0
+			},
+			"business/bulkycargo/bulkycargo_main.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"business/bulkycargo/bulkycargo_sub.html"
+				],
+				"refer": [
+					"business/bulkycargo/bulkycargo_form.html"
+				],
+				"priority": 0
+			},
+			"business/bulkycargo/bulkycargo_form.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"css/common.css",
+					"js/mui.poppicker.js",
+					"css/iconfont.css",
+					"css/style.css",
+					"fonts/iconfont.ttf",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"css/mui.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/bulkycargo/bulkycargo_sub.html": {
+				"resources": [
 					"css/mui.min.css"
 				],
 				"refer": [],

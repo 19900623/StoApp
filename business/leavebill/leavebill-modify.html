@@ -57,10 +57,10 @@
 				</div>
 
 				<div class="mui-button-row">
-					<button type="button" class="mui-btn mui-btn-success" onclick="btn_commit()" id="buttoncommit">提交</button>&nbsp;&nbsp;
-					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
-					<button type="button" class="mui-btn mui-btn-danger" onclick="btn_delete()" id="buttondel">删除</button>&nbsp;&nbsp;
-					<button type="button" class="mui-btn mui-btn-yellow" onclick="btn_undo()" id="buttonundo">撤消</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-success" style="display: none;" onclick="btn_commit()" id="buttoncommit">提交</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-primary" style="display: none;" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-danger" style="display: none;" onclick="btn_delete()" id="buttondel">删除</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-yellow" style="display: none;" onclick="btn_undo()" id="buttonundo">撤消</button>&nbsp;&nbsp;
 					<button type="button" class="mui-btn mui-btn-primary" onclick="mui.back()">取消</button>
 				</div>
 			</div>
@@ -81,6 +81,11 @@
 			mui.init({});
 			var userPicker, leavePicker;
 			mui.plusReady(function() {
+				//点亮按钮
+				document.getElementById("buttoncommit").style.display = "";
+				document.getElementById("buttonok").style.display = "";
+				document.getElementById("buttondel").style.display = "";
+				
 				var id = plus.webview.currentWebview().name;
 				userPicker = new mui.PopPicker();
 				userPicker.setData([{
@@ -329,6 +334,7 @@
 					},
 					type: 'post', //HTTP请求类型
 					success: function(data) {
+						console.log(data)
 						if (data == "") {
 							plus.nativeUI.toast('提交成功');
 							var page = plus.webview.getWebviewById('leavebill-list-sub');
@@ -338,6 +344,11 @@
 						} else {
 							plus.nativeUI.toast(data);
 						}
+					},
+					error:function(xhr,type,errorThrown){
+						//异常处理；
+						console.log(JSON.stringify(xhr));
+						console.log(type);
 					}
 				});
 			}
