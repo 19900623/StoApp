@@ -19,7 +19,7 @@
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">车辆装载登记</h1>
+			<h1 id="title" class="mui-title">车辆体积装载率登记</h1>
 		</header>
 		<div class="mui-content">
 			<div class="mui-content-padded" style="margin: 0; margin-top: 10px;">
@@ -34,8 +34,8 @@
 						<input type="text" id="Vehicle_Code" class="mui-input" placeholder="请选择车辆" readonly="readonly" required="required">
 					</div>
 					<div class="mui-input-row">
-						<label>装载率</label>
-						<input type="tel" id="LoadingRate" class="mui-input-clear mui-input" placeholder="请输入票数" onKeypress="return (/^\d*$/.test(String.fromCharCode(event.keyCode)))" required="required">
+						<label>体积装载率</label>
+						<input type="tel" id="LoadingRate" class="mui-input-clear mui-input" placeholder="请输入0-100装载率" onKeypress="return (/^\d*$/.test(String.fromCharCode(event.keyCode)))" required="required">
 					</div>
 					<div class="mui-input-row" style="height: auto;">
 						<label>图片</label>

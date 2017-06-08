@@ -377,7 +377,8 @@
       "business/workreport/workreport_index.html",
       "business/notice/notice_list_main.html",
       "business/leavebill/leavebill-list-main.html",
-      "business/leavebill/leavebill-list-view-main.html"
+      "business/leavebill/leavebill-list-view-main.html",
+      "business/lighthouse/lighthouse-list-main.html"
     ]
   },
   "business/workreport/workreport_read_main.html": {
@@ -900,7 +901,8 @@
       "js/mui.min.js",
       "fonts/mui.ttf",
       "css/mui.min.css"
-    ]
+    ],
+    "refer": []
   },
   "business/vehicle_loading/vehicle_loading_main.html": {
     "resources": [
@@ -930,7 +932,8 @@
       "fonts/iconfont.ttf",
       "js/mui.picker.min.js",
       "js/mui.poppicker.js"
-    ]
+    ],
+    "refer": []
   },
   "business/waybill/waybill-grid.html": {
     "resources": [
@@ -973,17 +976,20 @@
     "resources": [
       "js/common.js",
       "css/common.css"
-    ]
+    ],
+    "refer": []
   },
   "business/vehicle_loading/vehicle_loading_sub.html": {
     "resources": [
       "css/mui.min.css"
-    ]
+    ],
+    "refer": []
   },
   "business/gunrecords/pullrefresh_sub.html": {
     "resources": [
       "css/mui.min.css"
-    ]
+    ],
+    "refer": []
   },
   "business/gunrecords/pullrefresh_main.html": {
     "resources": [
@@ -1008,12 +1014,14 @@
       "js/app.js",
       "js/mui.min.js",
       "fonts/mui.ttf"
-    ]
+    ],
+    "refer": []
   },
   "business/waybill/waybill-list-sub.html": {
     "refer": [
       "business/waybill/waybill-modify.html"
-    ]
+    ],
+    "resources": []
   },
   "business/waybill/waybill-modify.html": {
     "resources": [
@@ -1057,12 +1065,14 @@
       "css/style.css",
       "css/mui.poppicker.css",
       "css/mui.picker.min.css"
-    ]
+    ],
+    "refer": []
   },
   "business/vehicle_loading/vehicle_innage_sub.html": {
     "resources": [
       "css/mui.min.css"
-    ]
+    ],
+    "refer": []
   },
   "tab-work-input.html": {
     "resources": [
@@ -1106,12 +1116,50 @@
       "css/mui.min.css",
       "js/app.js",
       "js/mui.min.js",
-      "fonts/mui.ttf"
+      "fonts/mui.ttf",
+      "img/scan.png",
+      "js/common.js"
+    ],
+    "refer": [
+      "barcode_scan.html"
     ]
   },
   "business/bulkycargo/bulkycargo_sub.html": {
     "resources": [
       "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "business/lighthouse/lighthouse-input.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "css/common.css",
+      "js/mui.poppicker.js",
+      "css/mui.min.css",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css"
+    ],
+    "refer": []
+  },
+  "business/lighthouse/lighthouse-list-main.html": {
+    "resources": [
+      "business/lighthouse/lighthouse-list-sub.html",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "business/lighthouse/lighthouse-list-sub.html",
+      "business/lighthouse/lighthouse-input.html"
+    ]
+  },
+  "business/lighthouse/lighthouse-list-sub.html": {
+    "resources": [
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "business/workflow/workflow-sub.html": {
+    "refer": [
+      "business/workflow/leavebill-workflow.html"
     ]
   }
 }

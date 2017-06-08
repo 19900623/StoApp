@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "3.32",/*应用版本名称*/
+		"name": "3.35",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -1528,7 +1528,8 @@
 				"refer": [
 					"business/workflow/vehicle-workflow.html",
 					"business/workflow/paymentbill-workflow.html",
-					"business/workflow/expensebill-workflow.html"
+					"business/workflow/expensebill-workflow.html",
+					"business/workflow/leavebill-workflow.html"
 				],
 				"priority": 0
 			},
@@ -1808,7 +1809,8 @@
 					"business/notice/notice_list_main.html",
 					"business/knowledgelib/knowledgelib_list.html",
 					"business/addresslist/addresslist.html",
-					"business/workreport/workreport_index.html"
+					"business/workreport/workreport_index.html",
+					"business/lighthouse/lighthouse-list-main.html"
 				],
 				"priority": 0
 			},
@@ -3152,12 +3154,45 @@
 					"css/mui.min.css",
 					"js/app.js",
 					"js/mui.min.js",
-					"fonts/mui.ttf"
+					"fonts/mui.ttf",
+					"img/scan.png",
+					"js/common.js"
+				],
+				"refer": [
+					"barcode_scan.html"
+				],
+				"priority": 0
+			},
+			"business/bulkycargo/bulkycargo_sub.html": {
+				"resources": [
+					"css/mui.min.css"
 				],
 				"refer": [],
 				"priority": 0
 			},
-			"business/bulkycargo/bulkycargo_sub.html": {
+			"business/lighthouse/lighthouse-input.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"css/common.css",
+					"js/mui.poppicker.js",
+					"css/mui.min.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/lighthouse/lighthouse-list-main.html": {
+				"resources": [
+					"business/lighthouse/lighthouse-list-sub.html",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"business/lighthouse/lighthouse-input.html"
+				],
+				"priority": 0
+			},
+			"business/lighthouse/lighthouse-list-sub.html": {
 				"resources": [
 					"css/mui.min.css"
 				],

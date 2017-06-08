@@ -28,20 +28,28 @@
 			<div class="mui-content-padded" style="margin: 5px;">
 				<form class="mui-input-group" id="bill-form">
 					<div class="mui-input-row">
-						<label>时间段</label>
-						<input type="text" id="LeaveMold" class="mui-input-clear mui-input" required="required">
+						<label>请假类型</label>
+						<input type="text" id="LeaveType" class="mui-input-clear mui-input" required="required" readonly="readonly" placeholder="请选择请假类型">
 					</div>
 					<div class="mui-input-row">
-						<label>请假类型</label>
-						<input type="text" id="LeaveType" class="mui-input-clear mui-input" required="required">
+						<label>时间段</label>
+						<input type="text" id="LeaveMold" class="mui-input-clear mui-input" required="required" readonly="readonly" placeholder="请选择请假时间段">
 					</div>
 					<div class="mui-input-row">
 						<label>开始日期</label>
-						<input type="text" id="LeaveStartTime" class="mui-input" required="required" readonly="readonly">
+						<input type="text" id="LeaveStartTime" class="mui-input" required="required" readonly="readonly" placeholder="请选择开始日期">
 					</div>
 					<div class="mui-input-row">
 						<label>结束日期</label>
-						<input type="text" id="LeaveEndTime" class="mui-input" required="required" readonly="readonly">
+						<input type="text" id="LeaveEndTime" class="mui-input" required="required" readonly="readonly" placeholder="请选择开始日期">
+					</div>
+					<div class="mui-input-row">
+						<label>请假天数</label>
+						<input type="text" id="LeaveDays" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>请假时间</label>
+						<input type="text" id="LeaveHour" class="mui-input" required="required" readonly="readonly">
 					</div>
 					<div class="mui-input-row">
 						<label>状态</label>
@@ -71,15 +79,17 @@
 		<script src="../../js/mui.picker.min.js"></script>
 		<script src="../../js/mui.poppicker.js"></script>
 		<script>
-			var leaveDays, leaveHour, startTime, endTime;
 			var LeaveMold = document.getElementById("LeaveMold");
 			var LeaveType = document.getElementById("LeaveType");
 			var LeaveStartTime = document.getElementById("LeaveStartTime");
 			var LeaveEndTime = document.getElementById("LeaveEndTime");
 			var LeaveReason = document.getElementById("LeaveReason");
 			var FlowState = document.getElementById("FlowState");
+			var LeaveDays = document.getElementById("LeaveDays");
+			var LeaveHour = document.getElementById("LeaveHour");
+			
 			mui.init({});
-			var userPicker, leavePicker;
+			var typePicker, leavePicker;
 			mui.plusReady(function() {
 				//点亮按钮
 				document.getElementById("buttoncommit").style.display = "";
@@ -87,48 +97,6 @@
 				document.getElementById("buttondel").style.display = "";
 				
 				var id = plus.webview.currentWebview().name;
-				userPicker = new mui.PopPicker();
-				userPicker.setData([{
-					value: '事假',
-					text: '事假'
-				}, {
-					value: '病假',
-					text: '病假'
-				}, {
-					value: '婚假',
-					text: '婚假'
-				}, {
-					value: '丧假',
-					text: '丧假'
-				}, {
-					value: '产假',
-					text: '产假'
-				}, {
-					value: '小时假',
-					text: '小时假'
-				}]);
-				var buttonok = document.getElementById('buttonok');
-				mui.enterfocus('#bill-form input', function() {
-					mui.trigger(buttonok, 'tap');
-				});
-
-				leavePicker = new mui.PopPicker();
-				leavePicker.setData([{
-					value: '全天',
-					text: '全天'
-				}, {
-					value: '上午',
-					text: '上午'
-				}, {
-					value: '下午',
-					text: '下午'
-				}, {
-					value: '早间操作',
-					text: '早间操作'
-				}, {
-					value: '晚间操作',
-					text: '晚间操作'
-				}]);
 				var url = app.getUrl() + 'GetLeaveBillByID';
 				mui.ajax(url, {
 					data: {
@@ -140,8 +108,10 @@
 						if (data) {
 							LeaveMold.value = data[0].leavetitle;
 							LeaveType.value = data[0].leavetype;
-							LeaveStartTime.value = data[0].leavestarttime.substr(0, 10);
-							LeaveEndTime.value = data[0].leaveendtime.substr(0, 10);
+							LeaveDays.value = data[0].leavedays;
+							LeaveHour.value = data[0].leavehour;
+							LeaveStartTime.value = data[0].leavestarttime;
+							LeaveEndTime.value = data[0].leaveendtime;
 							LeaveReason.value = data[0].leavereason;
 							FlowState.value = data[0].flowstate;
 							ExcuteName.value = data[0].excuteobjectname;
@@ -162,52 +132,216 @@
 						}
 					}
 				});
-			});
-			//选择请假类型事件		
-			document.getElementById("LeaveType").addEventListener('tap', function() {
-				userPicker.show(function(items) {
-					document.getElementById("LeaveType").value = items[0].value;
-					if (items[0].value == '早间操作' || items[0].value == '晚间操作') {
-						document.getElementById("LeaveType").value = '小时假';
+				
+				var logininfo = app.getLoginInfo();
+				var userinfo = JSON.parse(logininfo.userinfo);
+				
+				typePicker = new mui.PopPicker();
+				leavePicker = new mui.PopPicker();
+				//获取请假类型
+				var url = app.getUrl() + 'GetLeaveType';
+				mui.ajax(url, {
+					data: {
+						departid: userinfo.departmentid
+					},
+					dataType: 'json', //服务器返回json格式数据
+					type: 'post', //HTTP请求类型
+					success: function(data) {
+//						console.log(JSON.stringify(data))
+						if (data.Success) {
+							var dataJson = JSON.parse(data.codes);
+							var arrType = [];
+							for(var i=0; i< dataJson.length; i++){
+								var obj = {
+									value: dataJson[i].LeaveTypeName,
+									text: dataJson[i].LeaveTypeName
+								}
+								arrType.push(obj);
+							}
+							typePicker.setData(arrType);
+						} else {
+							plus.nativeUI.toast(data.Message);
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						//异常处理；
+						console.log(JSON.stringify(errorThrown));
 					}
 				});
 			});
 			//选择请假类型事件		
-			document.getElementById("LeaveMold").addEventListener('tap', function() {
+			LeaveType.addEventListener('tap', function() {
+				typePicker.show(function(items) {
+					LeaveType.value = items[0].value;
+					var arrTitle = [];
+					if (items[0].value == '1小时假') {
+						arrTitle.push({
+							value: '1小时',
+							text: '1小时'
+						});
+	                }
+	                else if (items[0].value == '操作假') {
+						arrTitle.push({
+							value: '早间',
+							text: '早间'
+						},{
+							value: '晚间',
+							text: '晚间'
+						});
+	                }
+	                else {
+						arrTitle.push({
+							value: '全天',
+							text: '全天'
+						},{
+							value: '上午',
+							text: '上午'
+						},{
+							value: '下午',
+							text: '下午'
+						});
+	                }
+	                leavePicker.setData(arrTitle);
+	                LeaveMold.value = '';
+				});
+			});
+			
+			var events, evente;
+			//选择请假时间段事件		
+			LeaveMold.addEventListener('tap', function() {
+				if(!!!LeaveType.value){
+					mui.toast('请先选择请假类型')
+					return
+				}
 				leavePicker.show(function(items) {
-					document.getElementById("LeaveMold").value = items[0].value;
-					if (items[0].value == '早间操作' || items[0].value == '晚间操作') {
-						document.getElementById("LeaveMold").value = items[0].value;
-						document.getElementById("LeaveType").value = '小时假';
-					} else {
-						document.getElementById("LeaveType").value = '';
-					}
-					if (items[0].value != '全天')
-						document.getElementById("LeaveEndTime").value = document.getElementById("LeaveStartTime").value;
-				});
-			});
-			//选择开始时间事件			
-			document.getElementById("LeaveStartTime").addEventListener('tap', function() {
-				var options = JSON.parse('{"type":"date"}');
-				var picker = new mui.DtPicker(options);
-				picker.show(function(rs) {
-					if (document.getElementById("LeaveMold").value != '全天') {
-						document.getElementById("LeaveEndTime").value = rs.text;
-					}
-					document.getElementById("LeaveStartTime").value = rs.text;
-					picker.dispose();
-				});
-			});
-			//选择开始时间事件			
-			document.getElementById("LeaveEndTime").addEventListener('tap', function() {
-				var options = JSON.parse('{"type":"date"}');
-				var picker = new mui.DtPicker(options);
-				picker.show(function(rs) {
-					if (document.getElementById("LeaveMold").value != '全天') {
-						document.getElementById("LeaveStartTime").value = rs.text;
-					}
-					document.getElementById("LeaveEndTime").value = rs.text;
-					picker.dispose();
+					LeaveMold.value = items[0].value;
+					//日期赋空值
+					LeaveStartTime.value = '';
+					LeaveEndTime.value = '';
+					//移除选择日期事件
+                	LeaveStartTime.removeEventListener('tap', events);
+                	LeaveEndTime.removeEventListener('tap', evente);
+					switch (items[0].value) {
+	                    case '全天':
+	                        LeaveDays.value = '';
+	                        LeaveHour.value = '0';
+	                        //选择开始时间事件
+	                        events = function() {
+								var options = JSON.parse('{"type":"date"}');
+								var picker = new mui.DtPicker(options);
+								picker.show(function(rs) {
+									if(!!LeaveEndTime.value){
+										var dateBegin = new Date(rs.text);
+										var dateEnd = new Date(LeaveEndTime.value);
+										var dateDif = dateEnd - dateBegin;
+										if(dateDif < 0){
+											mui.toast('开始日期不能大于结束日期')
+											return;
+										}
+										LeaveDays.value = Math.floor(dateDif / (1000 * 60 * 60 * 24)) + 1;
+									}
+									LeaveStartTime.value = rs.text + ' 00:00:00';
+									picker.dispose();
+								});
+							}
+							LeaveStartTime.addEventListener('tap', events);
+							
+							//选择开始时间事件	
+							evente = function() {
+								var options = JSON.parse('{"type":"date"}');
+								var picker = new mui.DtPicker(options);
+								picker.show(function(rs) {
+									if(!!LeaveStartTime.value){
+										var dateBegin = new Date(LeaveStartTime.value);
+										var dateEnd = new Date(rs.text);
+										var dateDif = dateEnd - dateBegin;
+										if(dateDif < 0){
+											mui.toast('开始日期不能小于结束日期')
+											return;
+										}
+										LeaveDays.value = Math.floor(dateDif / (1000 * 60 * 60 * 24)) + 1;
+									}
+									LeaveEndTime.value = rs.text + ' 23:59:59';
+									picker.dispose();
+								});
+							}
+							LeaveEndTime.addEventListener('tap', evente);
+	                        break;
+	                    case '上午':
+	                    	events = function() {
+								var options = JSON.parse('{"type":"date"}');
+								var picker = new mui.DtPicker(options);
+								picker.show(function(rs) {
+									LeaveStartTime.value = rs.text + ' 00:00:00';
+									LeaveEndTime.value = rs.text + ' 13:00:00';
+									picker.dispose();
+								});
+							}
+							LeaveStartTime.addEventListener('tap', events);
+
+	                        LeaveDays.value = '0.5';
+	                        LeaveHour.value = '0';
+	                        break;
+	                    case '下午':
+	                    	events = function() {
+								var options = JSON.parse('{"type":"date"}');
+								var picker = new mui.DtPicker(options);
+								picker.show(function(rs) {
+									LeaveStartTime.value = rs.text + ' 13:00:00';
+									LeaveEndTime.value = rs.text + ' 23:59:59';
+									picker.dispose();
+								});
+							}
+							LeaveStartTime.addEventListener('tap', events);
+	                        LeaveDays.value = '0.5';
+	                        LeaveHour.value = '0';
+	                        break;
+	                    case '早间':
+		                    events = function() {
+								var options = JSON.parse('{"type":"date"}');
+								var picker = new mui.DtPicker(options);
+								picker.show(function(rs) {
+									LeaveStartTime.value = rs.text + ' 04:00:00';
+									LeaveEndTime.value = rs.text + ' 08:00:00';
+									picker.dispose();
+								});
+							}
+	                    	LeaveStartTime.addEventListener('tap', events);
+	                        LeaveDays.value = '0';
+	                        LeaveHour.value = '4';
+	                        break;
+	                    case '晚间':
+		                    events = function() {
+								var options = JSON.parse('{"type":"date"}');
+								var picker = new mui.DtPicker(options);
+								picker.show(function(rs) {
+									LeaveStartTime.value = rs.text + ' 17:00:00';
+									LeaveEndTime.value = rs.text + ' 23:59:59';
+									picker.dispose();
+								});
+							}
+	                    	LeaveStartTime.addEventListener('tap', events);
+	                        LeaveDays.value = '0';
+	                        LeaveHour.value = '0';
+	                        break;
+	                    case '1小时':
+		                    events = function() {
+								var options = JSON.parse('{"type":"datetime"}');
+								var picker = new mui.DtPicker(options);
+								picker.show(function(rs) {
+									var d = rs.text + ':00';
+									var dt = new Date(d);
+									dt.setHours(dt.getHours() + 1)
+									LeaveStartTime.value = d;
+									LeaveEndTime.value = dt.format('yyyy-MM-dd hh:mm:ss');
+									picker.dispose();
+								});
+							}
+	                        LeaveStartTime.addEventListener('tap', events);
+	                        LeaveDays.value = '0';
+	                        LeaveHour.value = '1';
+	                        break;
+	               }
 				});
 			});
 
@@ -238,58 +372,11 @@
 					LeaveEndTime.focus();
 					return;
 				}
-				if (LeaveType.value == '小时假') {
-					if (LeaveMold.value != '早间操作' && LeaveMold.value != '晚间操作') {
-						plus.nativeUI.toast("该时间段不能为小时假");
-						LeaveMold.focus();
-						return;
-					}
-				}
 				//请假原因
 				if (LeaveReason.value == "") {
 					plus.nativeUI.toast("请假原因不能为空");
 					LeaveReason.focus();
 					return;
-				}
-				//根据时间段更改日期
-				switch (LeaveMold.value) {
-					case '全天':
-						startTime = LeaveStartTime.value + ' 00:00:00';
-						endTime = LeaveEndTime.value + ' 23:59:59';
-						var dateBegin = new Date(LeaveStartTime.value);
-						var dateEnd = new Date(LeaveEndTime.value);
-						var dateDif = dateEnd.getTime() - dateBegin.getTime();
-						leaveDays = Math.floor(dateDif / (1000 * 60 * 60 * 24));
-						if (leaveDays > 0)
-							leaveDays = leaveDays + 1
-						else
-							leaveDays = 1
-						leaveHour = 0;
-						break;
-					case '上午':
-						startTime = LeaveStartTime.value + ' 00:00:00';
-						endTime = LeaveEndTime.value + ' 13:00:00';
-						leaveDays = 0.5;
-						leaveHour = 0;
-						break;
-					case '下午':
-						startTime = LeaveStartTime.value + ' 13:00:00';
-						endTime = LeaveEndTime.value + ' 23:59:59';
-						leaveDays = 0.5;
-						leaveHour = 0;
-						break;
-					case '早间操作':
-						startTime = LeaveStartTime.value + ' 4:00:00';
-						endTime = LeaveEndTime.value + ' 8:00:00';
-						leaveDays = 0;
-						leaveHour = 4;
-						break;
-					case '晚间操作':
-						startTime = LeaveStartTime.value + ' 17:00:00';
-						endTime = LeaveEndTime.value + ' 22:00:00';
-						leaveDays = 0;
-						leaveHour = 5;
-						break;
 				}
 				var userid = app.getLoginInfo().userid;
 				//调用方法
@@ -297,10 +384,10 @@
 					LeaveID: plus.webview.currentWebview().name,
 					LeaveTitle: LeaveMold.value,
 					LeaveType: LeaveType.value,
-					LeaveStartTime: startTime,
-					LeaveEndTime: endTime,
-					LeaveDays: leaveDays,
-					LeaveHour: leaveHour,
+					LeaveStartTime: LeaveStartTime.value,
+					LeaveEndTime: LeaveEndTime.value,
+					LeaveDays: LeaveDays.value,
+					LeaveHour: LeaveHour.value,
 					LeaveReason: LeaveReason.value
 				};
 				var url = app.getUrl() + 'ModifyLeaveBill';
@@ -324,6 +411,7 @@
 			}
 			//提交按钮
 			function btn_commit() {
+				plus.nativeUI.showWaiting("正在提交...");
 				var url = app.getUrl() + 'StartFlow';
 				var userid = app.getLoginInfo().userid;
 				mui.ajax(url, {
@@ -334,6 +422,7 @@
 					},
 					type: 'post', //HTTP请求类型
 					success: function(data) {
+						plus.nativeUI.closeWaiting();
 						console.log(data)
 						if (data == "") {
 							plus.nativeUI.toast('提交成功');
@@ -359,6 +448,7 @@
 				mui.prompt('请输入撤消原因：', '撤消原因', '申通提醒', btnArray, function(e) {
 					if (e.index == 1) {
 						if(!!e.value){
+							plus.nativeUI.showWaiting("正在撤消...");
 							var url = app.getUrl() + 'UndoLeaveBill';
 //							var userid = app.getLoginInfo().userid;
 //							console.log(plus.webview.currentWebview().name)
@@ -369,6 +459,7 @@
 								},
 								type: 'post', //HTTP请求类型
 								success: function(data) {
+									plus.nativeUI.closeWaiting();
 									console.log(JSON.stringify(data))
 									if (data.Success) {
 										mui.toast(data.Message);
