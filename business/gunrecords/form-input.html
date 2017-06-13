@@ -80,33 +80,32 @@
 					AddDtPicker(this);
 				}, false);
 				
-				var TypePicker = new mui.PopPicker();
-				TypePicker.setData([{
-					value: '收件',
-					text: '收件'
-				}, {
-					value: '派件',
-					text: '派件'
-				}, {
-					value: '签收',
-					text: '签收'
-				}, {
-					value: '发件',
-					text: '发件'
-				}, {
-					value: '到件',
-					text: '到件'
-				}, {
-					value: '疑难件',
-					text: '疑难件'
-				}, {
-					value: '装袋',
-					text: '装袋'
-				}, {
-					value: '其他',
-					text: '其他'
-				}]);
-				Type.addEventListener('tap', function(event) {
+				Type.addEventListener('tap', function(event) {var TypePicker = new mui.PopPicker();
+					TypePicker.setData([{
+						value: '收件',
+						text: '收件'
+					}, {
+						value: '派件',
+						text: '派件'
+					}, {
+						value: '签收',
+						text: '签收'
+					}, {
+						value: '发件',
+						text: '发件'
+					}, {
+						value: '到件',
+						text: '到件'
+					}, {
+						value: '疑难件',
+						text: '疑难件'
+					}, {
+						value: '装袋',
+						text: '装袋'
+					}, {
+						value: '其他',
+						text: '其他'
+					}]);
 					TypePicker.show(function(items) {
 						Type.value = items[0].text;
 						//返回 false 可以阻止选择框的关闭
@@ -115,18 +114,18 @@
 					});
 				}, false);
 				
-				var ReasonPicker = new mui.PopPicker();
-				ReasonPicker.setData([{
-					value: '巴枪原因',
-					text: '巴枪原因'
-				}, {
-					value: '总公司原因',
-					text: '总公司原因'
-				}, {
-					value: '其他原因',
-					text: '其他原因'
-				}]);
 				Reason.addEventListener('tap', function(event) {
+					var ReasonPicker = new mui.PopPicker();
+					ReasonPicker.setData([{
+						value: '巴枪原因',
+						text: '巴枪原因'
+					}, {
+						value: '总公司原因',
+						text: '总公司原因'
+					}, {
+						value: '其他原因',
+						text: '其他原因'
+					}]);
 					ReasonPicker.show(function(items) {
 						Reason.value = items[0].text;
 						//返回 false 可以阻止选择框的关闭

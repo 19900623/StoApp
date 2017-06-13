@@ -1,0 +1,183 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
+		<link rel="stylesheet" href="../../css/common.css" />
+		<link rel="stylesheet" href="../../css/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../css/style.css" />
+		<style>
+			#images{float: right; width: 65%; min-height:40px; line-height: 40px; margin-bottom: 0;padding: 5px;}
+			.mui-btn {margin: 0 5px;}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">车辆装载登记</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded" style="margin: 0; margin-top: 10px;">
+				<form class="mui-input-group" id="mui-form" style="margin-bottom: 10px;">
+					<div class="mui-input-row">
+						<label>运单号</label>
+						<input type="text" id="WaybillCode" class="mui-input" placeholder="请输入运单号" required="required">
+						<img src="../../img/scan.png" style="position: absolute; right: 0px;top: 1.5px ;width: 2em; height: 2em;" onclick="clicked('../../barcode_scan.html',true,true)" />
+					</div>
+					<div class="mui-input-row">
+						<label>长度</label>
+						<input type="tel" id="CargoLength" class="mui-input-clear mui-input" placeholder="请输入长度" onKeypress="return (/^\d*$/.test(String.fromCharCode(event.keyCode)))" required="required">
+					</div>
+					<div class="mui-input-row">
+						<label>宽度</label>
+						<input type="tel" id="CargoWidth" class="mui-input-clear mui-input" placeholder="请输入宽度" onKeypress="return (/^\d*$/.test(String.fromCharCode(event.keyCode)))" required="required">
+					</div>
+					<div class="mui-input-row">
+						<label>高度</label>
+						<input type="tel" id="CargoHeight" class="mui-input-clear mui-input" placeholder="请输入高度" onKeypress="return (/^\d*$/.test(String.fromCharCode(event.keyCode)))" required="required">
+					</div>
+					<div class="mui-input-row">
+						<label>重量</label>
+						<input type="tel" id="CargoWeight" class="mui-input-clear mui-input" readonly="readonly" placeholder="自动计算" required="required">
+					</div>
+					<div class="mui-input-row" style="height: auto;">
+						<label>图片</label>
+						<div id="images" onclick="app.getImage(document.getElementById('images'));">
+							<i class="mui-icon iconfont icon-camera" style="float: right; color: #c8c7cc; font-size: 30px;"></i>
+						</div>
+					</div>
+				</form>
+				<div class="mui-button-row">
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">保存并上传</button>
+					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/common.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script type="text/javascript">
+			var WaybillCode = document.getElementById("WaybillCode");
+			var CargoLength = document.getElementById("CargoLength");
+			var CargoWidth = document.getElementById("CargoWidth");
+			var CargoHeight = document.getElementById("CargoHeight");
+			var CargoWeight = document.getElementById("CargoWeight");
+			mui.init({});
+			mui.plusReady(function() {
+				CargoLength.addEventListener("input",function(e){
+					if(this.value){
+						CalcWeight();
+					};
+				},false);
+				CargoWidth.addEventListener("input",function(e){
+					if(this.value){
+						CalcWeight();
+					};
+				},false);
+				CargoHeight.addEventListener("input",function(e){
+					if(this.value){
+						CalcWeight();
+					};
+				},false);
+			});
+			
+			//计算重量
+			//公式：体积/10000
+			function CalcWeight(){
+				var volume = CargoLength.value * CargoWidth.value * CargoHeight.value;
+				if(volume){
+					CargoWeight.value = (volume / 10000).toFixed(2);
+				}
+				else{
+					CargoWeight.value = 0;
+				}
+			}
+			
+			function scaned(r) {
+				WaybillCode.value = r;
+			}
+			
+			function btn_ok() {
+				//验证
+				var controls = mui('#mui-form')[0].querySelectorAll('input,select,textarea');
+				for(var i=0; i<controls.length; i++){
+					if(controls[i].required && controls[i].value == ''){
+						plus.nativeUI.toast(controls[i].placeholder);
+						return;
+					}
+				}
+				var images = document.getElementById("images").querySelectorAll('img');
+				if (images.length < 2) {
+					plus.nativeUI.toast("请上传至少2张照片");
+					return;
+				}
+				
+				var btnArray = ['是', '否'];
+				mui.confirm('是否上传到服务器？', '申通提醒', btnArray, function(e) {
+					if (e.index == 0) {
+						//检查网路设置
+						if (plus.networkinfo.getCurrentType() == 1) {
+							plus.nativeUI.toast('请检查网路连接!');
+							return;
+						}
+						plus.nativeUI.showWaiting("正在上传文件...");
+						var images = document.getElementById("images").querySelectorAll('img');
+						var ImagePaths = '';
+						for (var i = 0; i < images.length; i++) {
+							ImagePaths += images[i].src + ',';
+						}
+						var userid = app.getLoginInfo().userid;
+						var username = JSON.parse(app.getLoginInfo().userinfo).realname;
+						var dataInfo = {
+							WaybillCode: WaybillCode.value,
+							CargoLength: CargoLength.value,
+							CargoWidth: CargoWidth.value,
+							CargoHeight: CargoHeight.value,
+							CargoWeight: CargoWeight.value,
+							CreateUserId: userid,
+							CreateUserName: username,
+							CargoPic: ImagePaths
+						}
+//						console.log(JSON.stringify(dataInfo))
+						
+						var url = app.getUrl() + 'UpdateImage';
+						task = plus.uploader.createUpload(url, {
+							method: "POST"
+						}, function(t, status) {
+							// 上传完成
+							if (status == 200) {
+								if (JSON.parse(t.responseText).type == 0) {
+									plus.nativeUI.toast('上传成功');
+									var page = plus.webview.getWebviewById('bulkycargo_sub');
+									mui.fire(page, 'refresh');
+									mui.back();
+								} else
+									alert(JSON.parse(t.responseText).Message);
+							} else {
+								plus.nativeUI.toast("Upload failed: " + status);
+							}
+							plus.nativeUI.closeWaiting();
+						});
+						var images = document.getElementById("images").querySelectorAll('img');
+						for (var i = 0; i < images.length; i++) {
+							task.addFile(images[i].src, {
+								key: app.NewGuid()
+							});
+						}
+						task.addData("Info", JSON.stringify(dataInfo));
+						task.addData("type", 'BulkyCargoWeight');
+						task.start();
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

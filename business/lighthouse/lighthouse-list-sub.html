@@ -89,7 +89,7 @@
 									li.className = 'mui-table-view-cell';
 									li.id = data[i].id;
 									
-									var htmlText = '<div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '类型：' + data[i].type + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '时间:' + data[i].requestdate +'&nbsp;&nbsp;状态:' + data[i].state  + '</p>' + '</div>' + '</div>';
+									var htmlText = '<div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '类型：' + data[i].type + (!!data[i].subtype ? '-' + data[i].subtype : '') + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '时间:' + data[i].requestdate +'&nbsp;&nbsp;状态:' + data[i].state  + '</p>' + '</div>' + '</div>';
 									li.innerHTML = htmlText;
 									li.addEventListener('tap', function(event) {
 									
@@ -164,7 +164,7 @@
 									li.className = 'mui-table-view-cell';
 									li.id = data[i].id;
 									
-									var htmlText = '<div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '类型：' + data[i].type + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '时间:' + data[i].requestdate +'&nbsp;&nbsp;状态:' + data[i].state  + '</p>' + '</div>' + '</div>';
+									var htmlText = '<div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '类型：' + data[i].type + (!!data[i].subtype ? '-' + data[i].subtype : '') + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '时间:' + data[i].requestdate +'&nbsp;&nbsp;状态:' + data[i].state  + '</p>' + '</div>' + '</div>';
 									li.innerHTML = htmlText;
 									li.addEventListener('tap', function(event) {
 										//处理切换时，数据未从数据库更新完毕

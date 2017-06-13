@@ -43,6 +43,7 @@
 								document.getElementById("detail-title").innerHTML = data.Title;
 								document.getElementById("detail-content").innerHTML = data.Describe;
 								//如果未读，修改已读状态
+								console.log(userid)
 								if(!!userid){
 									mui.ajax(app.getUrl() + 'UpdateNoticeState', {
 										data: {

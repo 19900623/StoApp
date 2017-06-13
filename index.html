@@ -93,11 +93,11 @@
 //					console.log(JSON.stringify(logininfo))
 //					var state = app.getSate();
 					//正式库
-					//var httpUrl = 'http://58.57.35.3:8066';
-					var httpUrl = 'http://oaapp.lyzysoft.com:8066';
+					var httpUrl = 'http://58.57.35.3:8066';
+//					var httpUrl = 'http://oaapp.lyzysoft.com:8066';
 					//测试库
-//					var httpUrl = 'http://192.168.6.164:8080/LeaRun.MobileApp';
-//					var httpUrl = 'http://oa.tunnel.qydev.com/LeaRun.MobileApp';
+//					var httpUrl = 'http://192.168.6.166:80/LeaRun.MobileApp';
+//					var httpUrl = 'http://stoa.tunnel.qydev.com';
 					var url = httpUrl + '/MobileAppService.asmx/';
 					app.setUrl(url);
 					app.setHttpUrl(httpUrl);
@@ -188,12 +188,18 @@
 							plus.nativeUI.toast('请检查网路连接!');
 							return;
 						}
+						plus.nativeUI.showWaiting("正在登录...");
 						var url = app.getUrl() + 'CheckLogin';
+//						console.log(JSON.stringify(loginInfo))
+						console.log(url)
 						mui.ajax(url, {
 							data: loginInfo,
 							dataType: 'json', //服务器返回json格式数据
 							type: 'post', //HTTP请求类型
+							timeout:10000,//超时时间设置为10秒；
+							crossDomain:true,
 							success: function(data) {
+								plus.nativeUI.closeWaiting();
 								if (data.State != '3')
 									plus.nativeUI.toast(data.Message);
 								else {
@@ -206,7 +212,7 @@
 										userinfo: data.UserInfo,
 										userreport: data.UserReport
 									};
-//									console.log(JSON.stringify(loginInfo))
+									console.log(JSON.stringify(loginInfo))
 									app.setSettings(settings);
 									app.setLoginInfo(loginInfo);
 									toMain();
@@ -214,8 +220,11 @@
 								return;
 							},
 							error: function(xhr, type, errorThrown) {
-								//异常处理；
-								console.log(type + errorThrown);
+								plus.nativeUI.closeWaiting();
+								plus.nativeUI.toast("登录失败");
+								//异常处理
+								console.log(xhr + type + errorThrown);
+//								console.log(JSON.stringify(xhr));
 							}
 						});
 					});
@@ -243,6 +252,7 @@
 //						});
 //					} else 
 					if (settings.autoLogin && logininfo.userid) {
+//						toMain();
 						$.trigger(loginButton, 'tap');
 					} else {
 						app.setLoginInfo(null);

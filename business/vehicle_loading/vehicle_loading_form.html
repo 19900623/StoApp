@@ -1,0 +1,216 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
+		<link rel="stylesheet" href="../../css/common.css" />
+		<link rel="stylesheet" href="../../css/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../css/style.css" />
+		<style>
+			#images{float: right; width: 65%; min-height:40px; line-height: 40px; margin-bottom: 0;padding: 5px;}
+			.mui-btn {margin: 0 5px;}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">车辆体积装载率登记</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded" style="margin: 0; margin-top: 10px;">
+				<form class="mui-input-group" id="bill-form" style="margin-bottom: 10px;">
+					<div class="mui-input-row">
+						<label>区域</label>
+						<input type="text" id="Area" class="mui-input" placeholder="请选择区域" readonly="readonly" required="required">
+					</div>
+					<div class="mui-input-row">
+						<label>车牌号</label>
+						<input type="hidden" id="Vehicle_dp_ID" />
+						<input type="text" id="Vehicle_Code" class="mui-input" placeholder="请选择车辆" readonly="readonly" required="required">
+					</div>
+					<div class="mui-input-row">
+						<label>体积装载率</label>
+						<input type="tel" id="LoadingRate" class="mui-input-clear mui-input" placeholder="请输入0-100装载率" onKeypress="return (/^\d*$/.test(String.fromCharCode(event.keyCode)))" required="required">
+					</div>
+					<div class="mui-input-row" style="height: auto;">
+						<label>图片</label>
+						<div id="images" onclick="app.getImage(document.getElementById('images'));">
+							<i class="mui-icon iconfont icon-camera" style="float: right; color: #c8c7cc; font-size: 30px;"></i>
+						</div>
+					</div>
+				</form>
+				<div class="mui-button-row">
+					<!--<button type="button" class="mui-btn mui-btn-success" id="buttonok">拍照</button>-->
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">保存并上传</button>
+					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script type="text/javascript">
+			var Area = document.getElementById("Area");
+			var Vehicle_dp_ID = document.getElementById("Vehicle_dp_ID");
+			var Vehicle_Code = document.getElementById("Vehicle_Code");
+			var LoadingRate = document.getElementById("LoadingRate");
+			mui.init({});
+			mui.plusReady(function() {
+				var url = app.getUrl() + 'GetDataDictionaryDetailList';
+				mui.ajax(url, {
+					data: {
+						Code: 'pq'
+					},
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+						if(data.Success) {
+							var areaList = JSON.parse(data.codes);
+							var pickerData = [];
+							mui.each(areaList, function(i, item){
+								pickerData.push({
+									value: item.FullName,
+									text: item.FullName
+								});
+							});
+							Area.addEventListener('tap', function(event) {
+								var AreaPicker = new mui.PopPicker();
+								AreaPicker.setData(pickerData);
+								AreaPicker.show(function(items) {
+									Area.value = items[0].text;
+									mui.ajax(app.getUrl() + 'GetVehicleCodeByArea', {
+										data: {
+											area: Area.value
+										},
+										type: 'post',
+										dataType: 'json',
+										success: function(data) {
+											if(data.Success) {
+												var codeList = JSON.parse(data.codes);
+												var codeData = [];
+												mui.each(codeList, function(i, item){
+													codeData.push({
+														value: item.Vehicle_dp_ID,
+														text: item.Vehicle_Code
+													});
+												});
+												Vehicle_Code.addEventListener('tap', function(event) {
+													var CodePicker = new mui.PopPicker();
+													CodePicker.setData(codeData);
+													CodePicker.show(function(items) {
+														Vehicle_dp_ID.value = items[0].value;
+														Vehicle_Code.value = items[0].text;
+														//返回 false 可以阻止选择框的关闭
+														//return false;
+														CodePicker.dispose();
+													});
+												}, false);
+											} else {
+												plus.nativeUI.toast(data.Message);
+											}
+										}
+									});
+									//返回 false 可以阻止选择框的关闭
+									//return false;
+									AreaPicker.dispose();
+								});
+							}, false);
+						} else {
+							plus.nativeUI.toast(data.Message);
+						}
+					}
+				});
+			});
+			
+			function btn_ok() {
+				//验证
+				if (Area.value == "") {
+					plus.nativeUI.toast("区域不能为空");
+					return;
+				}
+				if (Vehicle_Code.value == "") {
+					plus.nativeUI.toast("车牌号不能为空");
+					return;
+				}
+				if (LoadingRate.value == "") {
+					plus.nativeUI.toast("装载率不能为空");
+					LoadingRate.focus();
+					return;
+				}
+				if (LoadingRate.value > 100) {
+					plus.nativeUI.toast("装载率不能大于100");
+					LoadingRate.focus();
+					return;
+				}
+				var images = document.getElementById("images").querySelectorAll('img');
+				if (images.length == 0) {
+					plus.nativeUI.toast("请上传照片");
+					return;
+				}
+				
+				var btnArray = ['是', '否'];
+				mui.confirm('是否上传到服务器？', '申通提醒', btnArray, function(e) {
+					if (e.index == 0) {
+						//检查网路设置
+						if (plus.networkinfo.getCurrentType() == 1) {
+							plus.nativeUI.toast('请检查网路连接!');
+							return;
+						}
+						plus.nativeUI.showWaiting("正在上传文件...");
+						var images = document.getElementById("images").querySelectorAll('img');
+						var ImagePaths = '';
+						for (var i = 0; i < images.length; i++) {
+							ImagePaths += images[i].src + ',';
+						}
+						var userid = app.getLoginInfo().userid;
+						var username = JSON.parse(app.getLoginInfo().userinfo).realname;
+						var dataInfo = {
+							Vehicle_dp_ID: Vehicle_dp_ID.value,
+							Vehicle_Code: Vehicle_Code.value,
+							CreateUserId: userid,
+							CreateUserName: username,
+							LoadingRate: LoadingRate.value,
+							LoadingPic: ImagePaths
+						}
+//						console.log(JSON.stringify(dataInfo))
+						
+						var url = app.getUrl() + 'UpdateImage';
+						task = plus.uploader.createUpload(url, {
+							method: "POST"
+						}, function(t, status) {
+							// 上传完成
+							if (status == 200) {
+								if (JSON.parse(t.responseText).type == 0) {
+									plus.nativeUI.toast('上传成功');
+									var page = plus.webview.getWebviewById('vehicle_loading_sub');
+									mui.fire(page, 'refresh');
+									mui.back();
+								} else
+									alert(JSON.parse(t.responseText).Message);
+							} else {
+								plus.nativeUI.toast("Upload failed: " + status);
+							}
+							plus.nativeUI.closeWaiting();
+						});
+						var images = document.getElementById("images").querySelectorAll('img');
+						for (var i = 0; i < images.length; i++) {
+							task.addFile(images[i].src, {
+								key: app.NewGuid()
+							});
+						}
+						task.addData("Info", JSON.stringify(dataInfo));
+						task.addData("type", 'Vehicle_LoadingRate');
+						task.start();
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

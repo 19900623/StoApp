@@ -61,7 +61,11 @@
 								for (var i = 0; i < data.length; i++) {									
 									li = document.createElement('li');
 									li.className = 'mui-table-view-cell';
-									li.id = data[i].id;
+									var lid = { name: data[i].id }
+									if(data[i].readstatus == '1'){
+										lid["userid"] = logininfo.userid
+									}
+									li.id = JSON.stringify(lid);
 									li.innerHTML = '<div class="mui-slider-handle"><div class="mui-table">'
 									+ '<div class="mui-table-cell mui-col-xs-10">'
 									+ 	'<h4 class="mui-ellipsis-2">'
@@ -76,11 +80,9 @@
 									+ 		(data[i].readstatus == '1' ? '<span style="color:#f00">未读</span>' : '已读')
 									+ 	'</span>'
 									+ '</div></div>';
-									var info = { name: this.id }
-									if(data[i].readstatus == '1'){
-										info["userid"] = logininfo.userid
-									}
 									li.addEventListener('tap', function(event) {
+										var info = JSON.parse(this.id);
+										console.log(JSON.stringify(info))
 										//处理切换时，数据未从数据库更新完毕
 										var nwaiting = plus.nativeUI.showWaiting();
 										var webviewShow = plus.webview.create(
@@ -147,7 +149,11 @@
 								for (var i = 0; i < data.length; i++) {
 									li = document.createElement('li');
 									li.className = 'mui-table-view-cell';
-									li.id = data[i].id;
+									var lid = { name: data[i].id }
+									if(data[i].readstatus == '1'){
+										lid["userid"] = logininfo.userid
+									}
+									li.id = JSON.stringify(lid);
 									li.innerHTML = '<div class="mui-slider-handle"><div class="mui-table">'
 									+ '<div class="mui-table-cell mui-col-xs-10">'
 									+ 	'<h4 class="mui-ellipsis-2">'
@@ -162,13 +168,9 @@
 									+ 		(data[i].readstatus == '1' ? '<span style="color:#f00">未读</span>' : '已读')
 									+ 	'</span>'
 									+ '</div></div>';
-									var info = { name: data[i].id };
-									if(data[i].readstatus == '1'){
-										info["userid"] = logininfo.userid;
-									}
-//									console.log(JSON.stringify(data[i]))
-//									console.log(JSON.stringify(info))
 									li.addEventListener('tap', function(event) {
+										var info = JSON.parse(this.id);
+										console.log(JSON.stringify(info))
 										//处理切换时，数据未从数据库更新完毕
 										var nwaiting = plus.nativeUI.showWaiting();
 										var webviewShow = plus.webview.create(

@@ -124,7 +124,7 @@
 			function InitForm(modelid){
 				var url = app.getUrl() + 'GetModelAttrList';
 				var content = mui('.mui-content')[0];	//表单容器
-				content.innerHTML = "";
+				content.innerHTML = '<div style="font-size:14px;color: #999; padding:10px 10px 0 15px;">带<span style="color:red;">*</span>号为必填项，输入完必填项，才能点击提交按钮</div>';
 				mui.post(url, {ModelID: modelid},
 					function(data){
 						if(data.Success){
@@ -132,7 +132,7 @@
 							mui.each(list, function(i, item){
 								var div = document.createElement("div");	//字段容器
 								div.className = 'mui-input-row';
-								var html = '<label>' + this.AttrName +'</label>';	//字段名
+								var html = '<label>' + this.AttrName + (this.AllowNull == 0?'<span style="color:red;">*</span>':'') +'</label>';	//字段名
 								div.innerHTML = html;
 								switch (this.CtrlType) {	//控件类型
 									case 'input':
@@ -253,12 +253,10 @@
 				var controls = mui('#mui-form')[0].querySelectorAll('input,select,textarea');
 				for(var i=0; i<controls.length; i++){
 					if(controls[i].required && controls[i].value == ''){
-						mui.toast(controls[i].placeholder);
 						return controls[i].placeholder;
 					}
 				}
 				if(!!!arrJson){	//发给谁不能为空
-					mui.toast('请先指定发送给谁');
 					return '请先指定发送给谁';
 				}
 				//显示发布按钮
