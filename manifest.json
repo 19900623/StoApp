@@ -1903,9 +1903,15 @@
 					"js/app.js",
 					"js/mui.min.js",
 					"fonts/mui.ttf",
-					"css/mui.min.css"
+					"css/mui.min.css",
+					"fonts/iconfont.ttf",
+					"css/common.css",
+					"css/iconfont.css",
+					"css/style.css"
 				],
-				"refer": [],
+				"refer": [
+					"camera_image.html"
+				],
 				"priority": 0
 			},
 			"business/notice/notice_list_main.html": {
@@ -3124,7 +3130,9 @@
 					"img/box.png"
 				],
 				"refer": [
-					"business/bulkycargo/bulkycargo_main.html"
+					"business/bulkycargo/bulkycargo_main.html",
+					"business/vehicle_loading/vehicle_loading_main.html",
+					"business/gunrecords/pullrefresh_main.html"
 				],
 				"priority": 0
 			},

@@ -6,6 +6,8 @@
 		<title>把枪审批</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/common.css" />
+		<link rel="stylesheet" href="../../css/style.css" />
 		<style>
 			.mui-btn {margin: 0 10px;}
 		</style>
@@ -37,6 +39,11 @@
 					<div class="mui-input-row">
 						<label>票数</label>
 						<input type="tel" id="Count" class="mui-input" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row" style="height: auto;">
+						<label>图片</label>
+						<div id="images">
+						</div>
 					</div>
 				</form>
 				<br>
@@ -99,6 +106,16 @@
 								Reason.value = jsonData.Reason;
 								Count.value = jsonData.Count;
 								Remark.value = jsonData.Mark;
+								
+								var arrPic = jsonData.UploadPic.split(',');
+								for(var i=1; i<arrPic.length; i++){
+									var srcurl = "http://58.57.35.3:8066/" + arrPic[i].substr(2);
+									var img = document.createElement('img');
+									img.className = "ditem";
+									img.src = srcurl;
+									img.setAttribute("onclick", "app.displayFile(this, '../../');");
+									document.getElementById("images").appendChild(img);
+								}
 							}
 							else{
 								mui.alert(data.Message);
