@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "3.35",/*应用版本名称*/
+		"name": "3.37",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -1760,7 +1760,9 @@
 					"fonts/mui.ttf",
 					"css/mui.min.css"
 				],
-				"refer": [],
+				"refer": [
+					"business/questionbill/questionbill-input.html"
+				],
 				"priority": 0
 			},
 			"business/questionbill/questionbill-grid.html": {
@@ -3132,7 +3134,10 @@
 				"refer": [
 					"business/bulkycargo/bulkycargo_main.html",
 					"business/vehicle_loading/vehicle_loading_main.html",
-					"business/gunrecords/pullrefresh_main.html"
+					"business/gunrecords/pullrefresh_main.html",
+					"business/handlerecord/handlerecord_main.html",
+					"business/HandleRegister/HandleRegister_main.html",
+					"business/vehicle_loading/vehicle_innage_main.html"
 				],
 				"priority": 0
 			},
@@ -3205,6 +3210,49 @@
 					"css/mui.min.css"
 				],
 				"refer": [],
+				"priority": 0
+			},
+			"business/HandleRegister/HandleRegister_main.html": {
+				"resources": [
+					"business/HandleRegister/HandleRegister_sub.html",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"business/HandleRegister/HandleRegister_input.html"
+				],
+				"priority": 0
+			},
+			"business/HandleRegister/HandleRegister_input.html": {
+				"resources": [
+					"js/common.js",
+					"img/scan.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"barcode_scan.html"
+				],
+				"priority": 0
+			},
+			"business/HandleRegister/HandleRegister_sub.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/questionbill/questionbill-input.html": {
+				"resources": [],
+				"refer": [
+					"camera_image.html"
+				],
 				"priority": 0
 			}
 		},

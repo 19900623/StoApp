@@ -299,14 +299,14 @@
 
 			function btn_ok() {
 				//验证
-				if (LeaveMold.value == "") {
-					plus.nativeUI.toast("时间段不能为空");
-					LeaveMold.focus();
-					return;
-				}
 				if (LeaveType.value == "") {
 					plus.nativeUI.toast("请假类型不能为空");
 					LeaveType.focus();
+					return;
+				}
+				if (LeaveMold.value == "") {
+					plus.nativeUI.toast("时间段不能为空");
+					LeaveMold.focus();
 					return;
 				}
 				if (LeaveStartTime.value == "") {
