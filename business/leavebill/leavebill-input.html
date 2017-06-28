@@ -182,8 +182,8 @@
 								var picker = new mui.DtPicker(options);
 								picker.show(function(rs) {
 									if(!!LeaveEndTime.value){
-										var dateBegin = new Date(rs.text);
-										var dateEnd = new Date(LeaveEndTime.value);
+										var dateBegin = new Date(rs.text.replace(/\-/g, "/"));
+										var dateEnd = new Date(LeaveEndTime.value.replace(/\-/g, "/"));
 										var dateDif = dateEnd - dateBegin;
 										if(dateDif < 0){
 											mui.toast('开始日期不能大于结束日期')
@@ -203,8 +203,8 @@
 								var picker = new mui.DtPicker(options);
 								picker.show(function(rs) {
 									if(!!LeaveStartTime.value){
-										var dateBegin = new Date(LeaveStartTime.value);
-										var dateEnd = new Date(rs.text);
+										var dateBegin = new Date(LeaveStartTime.value.replace(/\-/g, "/"));
+										var dateEnd = new Date(rs.text.replace(/\-/g, "/"));
 										var dateDif = dateEnd - dateBegin;
 										if(dateDif < 0){
 											mui.toast('开始日期不能小于结束日期')
@@ -281,7 +281,7 @@
 								var picker = new mui.DtPicker(options);
 								picker.show(function(rs) {
 									var d = rs.text + ':00';
-									var dt = new Date(d);
+									var dt = new Date(d.replace(/\-/g, "/"));
 									dt.setHours(dt.getHours() + 1)
 									LeaveStartTime.value = d;
 									LeaveEndTime.value = dt.format('yyyy-MM-dd hh:mm:ss');

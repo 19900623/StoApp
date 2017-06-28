@@ -143,6 +143,8 @@
 						       }						       
 						    }
 						    htmlText+= '</li>'
+						    htmlText+= '<li class="mui-table-view-cell">迟到扣款时间：<div class="amount" >'+data[0].morningmin+'<div></li>';	
+						    htmlText+= '<li class="mui-table-view-cell">迟到总时间：<div class="amount" >'+data[0].morningsummin+'<div></li>';	
 							table.innerHTML=htmlText;
 						}
 					},

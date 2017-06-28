@@ -45,7 +45,8 @@
       "business/gunrecords/pullrefresh_main.html",
       "business/vehicle_loading/vehicle_innage_main.html",
       "tab-work-input.html",
-      "business/questionbill/questionbill-grid.html"
+      "business/questionbill/questionbill-grid.html",
+      "business/salary/salary-grid.html"
     ]
   },
   "main.html": {
@@ -71,7 +72,8 @@
       "css/mui.min.css",
       "css/style.css",
       "js/mui.enterfocus.js",
-      "fonts/mui.ttf"
+      "fonts/mui.ttf",
+      "js/mui.js"
     ],
     "refer": [
       "main.html"
@@ -1237,5 +1239,21 @@
       "camera_image.html"
     ],
     "resources": []
+  },
+  "business/salary/salary-grid.html": {
+    "resources": [
+      "img/date.png",
+      "img/coins.png"
+    ],
+    "refer": [
+      "business/salary/month-date.html"
+    ]
+  },
+  "business/salary/month-date.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css"
+    ]
   }
 }

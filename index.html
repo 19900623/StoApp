@@ -97,61 +97,85 @@
 //					var httpUrl = 'http://oaapp.lyzysoft.com:8066';
 					//测试库
 //					var httpUrl = 'http://192.168.6.166:80/LeaRun.MobileApp';
-//					var httpUrl = 'http://stoa.tunnel.qydev.com';
-					var url = httpUrl + '/MobileAppService.asmx/';
-					app.setUrl(url);
-					app.setHttpUrl(httpUrl);
 					//检查App升级版本并升级
-					var url = app.getUrl() + 'GetVersionInfo';
-					if (plus.networkinfo.getCurrentType() != 1)
-						mui.ajax(url, {
-							dataType: 'json', //服务器返回json格式数据
-							type: 'post', //HTTP请求类型
-							success: function(data) {
-								var versionNew = data.apkVersion;
-								var oldVersion;
-								plus.runtime.getProperty(plus.runtime.appid, function(info) {
-									//version属性
-									oldVersion = info.version;
-									//plus.nativeUI.prompt()
-									if (oldVersion < versionNew) {
-										//有新版本，必需更新完才能登录
-										var btnArray = ['是', '否'];
-										mui.confirm('检测到当前最新版本' + versionNew + '，是否更新？', '版本更新', btnArray, function(e) {
-											if (e.index == 0) {
-												var DownUrl = httpUrl + '/App/Sto' + versionNew + '.wgt'; // 下载文件地址
-												var dtask = plus.downloader.createDownload(DownUrl, {}, function(d, status) {
-													if (status == 200) { // 下载成功
-														var path = d.filename;
-														plus.nativeUI.showWaiting("安装更新文件...");
-														plus.runtime.install(path, {}, function() {
-															plus.nativeUI.closeWaiting();
-															plus.nativeUI.alert("应用资源更新完成！", function() {
-																plus.runtime.restart();
-																loginFun();//开放登录
+					if (plus.networkinfo.getCurrentType() != 1){
+						if(plus.networkinfo.getCurrentType() == 3){
+							//测试外网连接是否成功
+							mui.ajax(httpUrl + '/MobileAppService.asmx/GetVersionInfo', {
+								dataType: 'json', //服务器返回json格式数据
+								type: 'get', //HTTP请求类型
+								timeout: 1000,
+								success: function(data){
+					                //连接正常
+					            },
+								error: function(xhr,type,errorThrown){
+					                //连接失败，切换内网
+					                httpUrl = 'http://192.168.1.162:8066';
+					            }
+							});
+						}
+						setTimeout(function() {
+							var baseurl = httpUrl + '/MobileAppService.asmx/';
+							app.setUrl(baseurl);
+							app.setHttpUrl(httpUrl);
+//							console.log(baseurl)
+							var url = app.getUrl() + 'GetVersionInfo';
+							mui.ajax(url, {
+								dataType: 'json', //服务器返回json格式数据
+								type: 'post', //HTTP请求类型
+								success: function(data) {
+									var versionNew = data.apkVersion;
+									var oldVersion;
+									plus.runtime.getProperty(plus.runtime.appid, function(info) {
+										//version属性
+										oldVersion = info.version;
+										//plus.nativeUI.prompt()
+										if (oldVersion < versionNew) {
+											//有新版本，必需更新完才能登录
+											var btnArray = ['是', '否'];
+											mui.confirm('检测到当前最新版本' + versionNew + '，是否更新？', '版本更新', btnArray, function(e) {
+												if (e.index == 0) {
+													var DownUrl = httpUrl + '/App/Sto' + versionNew + '.wgt'; // 下载文件地址
+													var dtask = plus.downloader.createDownload(DownUrl, {}, function(d, status) {
+														if (status == 200) { // 下载成功
+															var path = d.filename;
+															plus.nativeUI.showWaiting("安装更新文件...");
+															plus.runtime.install(path, {}, function() {
+																plus.nativeUI.closeWaiting();
+																plus.nativeUI.alert("应用资源更新完成！", function() {
+																	plus.runtime.restart();
+																	loginFun();//开放登录
+																});
+															}, function(e) {
+																plus.nativeUI.closeWaiting();
+																plus.nativeUI.alert("安装更新文件失败[" + e.code + "]：" + e.message);
 															});
-														}, function(e) {
-															plus.nativeUI.closeWaiting();
-															plus.nativeUI.alert("安装更新文件失败[" + e.code + "]：" + e.message);
-														});
-													} else { //下载失败
-														alert("Download failed: " + status);
-													}
-												});
-												dtask.start();
-											} else {
-												alert("未更新不能登录，请重新打开程序更新。");
-												return;
-											}
-										})
-									}
-									else{
-										//无新版本，可登录
-										loginFun();
-									}
-								});
-							}
-						});
+														} else { //下载失败
+															alert("Download failed: " + status);
+														}
+													});
+													dtask.start();
+												} else {
+													alert("未更新不能登录，请重新打开程序更新。");
+													return;
+												}
+											})
+										}
+										else{
+											//无新版本，可登录
+											loginFun();
+										}
+									});
+								},
+								error: function(xhr,type,errorThrown){
+					                mui.toast("无法访问服务器");
+					            }
+							});
+						}, 1000);
+					}
+					else{
+						mui.toast("无网络连接");
+					}
 					var toMain = function() {
 						var nwaiting = plus.nativeUI.showWaiting();
 						var webviewShow = plus.webview.create(
