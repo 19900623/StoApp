@@ -272,8 +272,17 @@
 								var options = JSON.parse('{"type":"date"}');
 								var picker = new mui.DtPicker(options);
 								picker.show(function(rs) {
-									LeaveStartTime.value = rs.text + ' 00:00:00';
-									LeaveEndTime.value = rs.text + ' 13:00:00';
+									var dept= app.getLoginInfo().department;
+									if(dept.indexOf('操作')>=0)
+									{
+									    LeaveStartTime.value = rs.text + ' 13:00:00';
+									    LeaveEndTime.value = rs.text + ' 17:00:00';
+									}
+									else
+									{
+										LeaveStartTime.value = rs.text + ' 00:00:00';
+										LeaveEndTime.value = rs.text + ' 13:00:00';
+									}
 									picker.dispose();
 								});
 							}
@@ -287,8 +296,18 @@
 								var options = JSON.parse('{"type":"date"}');
 								var picker = new mui.DtPicker(options);
 								picker.show(function(rs) {
-									LeaveStartTime.value = rs.text + ' 13:00:00';
-									LeaveEndTime.value = rs.text + ' 23:59:59';
+									var dept= app.getLoginInfo().department;
+									
+									if(dept.indexOf('操作')>=0)
+									{
+									    LeaveStartTime.value = rs.text + ' 17:00:00';
+									    LeaveEndTime.value = rs.text + ' 23:59:59';
+									}
+									else
+									{
+									    LeaveStartTime.value = rs.text + ' 13:00:00';
+									    LeaveEndTime.value = rs.text + ' 23:59:59';
+									}
 									picker.dispose();
 								});
 							}
@@ -409,35 +428,40 @@
 					}
 				});
 			}
-			//提交按钮
+			//提交按钮，存在如果快速多次提交，showWaiting尚未弹出，已经开始了多条流程，解决方案：让按钮失效
 			function btn_commit() {
-				plus.nativeUI.showWaiting("正在提交...");
-				var url = app.getUrl() + 'StartFlow';
-				var userid = app.getLoginInfo().userid;
-				mui.ajax(url, {
-					data: {
-						taskid: plus.webview.currentWebview().name,
-						nodeid: '87ca8039-62de-4159-b6e5-ea6236f23be3',
-						userid: userid
-					},
-					type: 'post', //HTTP请求类型
-					success: function(data) {
-						plus.nativeUI.closeWaiting();
-						console.log(data)
-						if (data == "") {
-							plus.nativeUI.toast('提交成功');
-							var page = plus.webview.getWebviewById('leavebill-list-sub');
-							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
-							mui.fire(page, 'refresh');
-							mui.back();
-						} else {
-							plus.nativeUI.toast(data);
-						}
-					},
-					error:function(xhr,type,errorThrown){
-						//异常处理；
-						console.log(JSON.stringify(xhr));
-						console.log(type);
+				var btnArray = ['确认', '取消'];
+				mui.confirm('确认提交？', '申通提醒', btnArray, function(e) {
+					if (e.index == 0) {
+						plus.nativeUI.showWaiting("正在提交...");
+						var url = app.getUrl() + 'StartFlow';
+						var userid = app.getLoginInfo().userid;
+						mui.ajax(url, {
+							data: {
+								taskid: plus.webview.currentWebview().name,
+								nodeid: '87ca8039-62de-4159-b6e5-ea6236f23be3',
+								userid: userid
+							},
+							type: 'post', //HTTP请求类型
+							success: function(data) {
+								plus.nativeUI.closeWaiting();
+//								console.log(data)
+								if (!!!data || data == "null") {
+									plus.nativeUI.toast('提交成功');
+									var page = plus.webview.getWebviewById('leavebill-list-sub');
+									//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+									mui.fire(page, 'refresh');
+									mui.back();
+								} else {
+									plus.nativeUI.toast(data);
+								}
+							},
+							error:function(xhr,type,errorThrown){
+								//异常处理；
+								console.log(JSON.stringify(xhr));
+								console.log(type);
+							}
+						});
 					}
 				});
 			}
