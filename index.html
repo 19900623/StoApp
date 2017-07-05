@@ -171,7 +171,7 @@
 					                mui.toast("无法访问服务器");
 					            }
 							});
-						}, 1000);
+						}, 2000);
 					}
 					else{
 						mui.toast("无网络连接");
@@ -243,7 +243,7 @@
 											userinfo: data.UserInfo,
 											userreport: data.UserReport
 										};
-										console.log(JSON.stringify(loginInfo))
+//										console.log(JSON.stringify(loginInfo))
 										app.setSettings(settings);
 										app.setLoginInfo(loginInfo);
 										toMain();

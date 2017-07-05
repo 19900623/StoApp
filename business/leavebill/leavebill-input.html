@@ -223,8 +223,17 @@
 								var options = JSON.parse('{"type":"date"}');
 								var picker = new mui.DtPicker(options);
 								picker.show(function(rs) {
-									LeaveStartTime.value = rs.text + ' 00:00:00';
-									LeaveEndTime.value = rs.text + ' 13:00:00';
+									var dept= app.getLoginInfo().department;
+									if(dept.indexOf('操作')>=0)
+									{
+									    LeaveStartTime.value = rs.text + ' 13:00:00';
+									    LeaveEndTime.value = rs.text + ' 17:00:00';
+									}
+									else
+									{
+										LeaveStartTime.value = rs.text + ' 00:00:00';
+										LeaveEndTime.value = rs.text + ' 13:00:00';
+									}
 									picker.dispose();
 								});
 							}
@@ -238,8 +247,18 @@
 								var options = JSON.parse('{"type":"date"}');
 								var picker = new mui.DtPicker(options);
 								picker.show(function(rs) {
-									LeaveStartTime.value = rs.text + ' 13:00:00';
-									LeaveEndTime.value = rs.text + ' 23:59:59';
+									var dept= app.getLoginInfo().department;
+									
+									if(dept.indexOf('操作')>=0)
+									{
+									    LeaveStartTime.value = rs.text + ' 17:00:00';
+									    LeaveEndTime.value = rs.text + ' 23:59:59';
+									}
+									else
+									{
+									    LeaveStartTime.value = rs.text + ' 13:00:00';
+									    LeaveEndTime.value = rs.text + ' 23:59:59';
+									}
 									picker.dispose();
 								});
 							}
