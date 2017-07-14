@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "3.39",/*应用版本名称*/
+		"name": "3.41",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -2140,7 +2140,8 @@
 					"img/blackberry.png",
 					"img/table_chart.png",
 					"img/chart_line.png",
-					null
+					null,
+					"img/package.png"
 				],
 				"refer": [
 					"report/business/report-waybillpickup.html",
@@ -2160,7 +2161,10 @@
 					"report/business/complaints_report.html",
 					"report/business/complaints315_report.html",
 					"report/business/big_error_group.html",
-					"report/business/complaints_analysis.html"
+					"report/business/complaints_analysis.html",
+					"report/business/scanwrong_report.html",
+					"report/business/scanwrong_province_report.html",
+					"report/business/scanwrong_group.html"
 				],
 				"priority": 0
 			},
@@ -3139,7 +3143,8 @@
 					"business/gunrecords/pullrefresh_main.html",
 					"business/handlerecord/handlerecord_main.html",
 					"business/HandleRegister/HandleRegister_main.html",
-					"business/vehicle_loading/vehicle_innage_main.html"
+					"business/vehicle_loading/vehicle_innage_main.html",
+					"business/scanwrong/scanwrong_main.html"
 				],
 				"priority": 0
 			},
@@ -3272,6 +3277,32 @@
 					"js/mui.picker.min.js",
 					"css/mui.poppicker.css",
 					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/business/scanwrong_report.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/echarts.common.min.js",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"report/business/scanwrong_province_report.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/echarts.common.min.js"
 				],
 				"refer": [],
 				"priority": 0

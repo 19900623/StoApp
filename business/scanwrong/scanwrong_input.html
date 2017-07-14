@@ -31,6 +31,10 @@
 						<input type="text" id="ScanType" class="mui-input-clear mui-input" placeholder="请选择错分类型" required="required" readonly="readonly">
 						<img src="../../img/scan.png" style="position: absolute; right: 0px;top: 1.5px ;width: 2em; height: 2em;" onclick="clicked('../../barcode_scan.html',true,true)" />
 					</div>
+					<div class="mui-input-row">
+						<label>分拣圈</label>
+						<input type="text" id="WorkJob" class="mui-input" placeholder="请选择分拣圈" required="required" readonly="readonly">
+					</div>
 				</form>
 				<ul class="mui-table-view" id="waybillnolist">
 					<li class="mui-table-view-cell">
@@ -48,6 +52,7 @@
 			var ScanDate = document.getElementById("ScanDate");
 			var ScanType = document.getElementById("ScanType");
 			var WaybillNo = document.getElementById("WaybillNo");
+			var WorkJob = document.getElementById("WorkJob");
 			mui.init({});
 			mui.plusReady(function() {
 				clicked('../../barcode_scan.html',true,true);
@@ -79,6 +84,53 @@
 						}, false);
 					}
 				}, "json");
+				
+				WorkJob.addEventListener('tap', function(event) {
+					var WorkJobPicker = new mui.PopPicker();
+					WorkJobPicker.setData([{
+						value: '浙江圈',
+						text: '浙江圈'
+					}, {
+						value: '杭州圈',
+						text: '杭州圈'
+					}, {
+						value: '山东圈',
+						text: '山东圈'
+					}, {
+						value: '江苏圈',
+						text: '江苏圈'
+					}, {
+						value: '安徽圈',
+						text: '安徽圈'
+					}, {
+						value: '上海圈',
+						text: '上海圈'
+					}, {
+						value: '广东圈',
+						text: '广东圈'
+					}, {
+						value: '四川圈',
+						text: '四川圈'
+					}, {
+						value: '福建圈',
+						text: '福建圈'
+					}, {
+						value: '北京圈',
+						text: '北京圈'
+					}, {
+						value: '东三省圈',
+						text: '东三省圈'
+					}, {
+						value: '新疆圈',
+						text: '新疆圈'
+					}]);
+					WorkJobPicker.show(function(items) {
+						WorkJob.value = items[0].text;
+						//返回 false 可以阻止选择框的关闭
+						//return false;
+						WorkJobPicker.dispose();
+					});
+				}, false);
 			});
 			
 			//  ========== 
@@ -149,14 +201,16 @@
 				//显示等待框
 				var nwaiting = plus.nativeUI.showWaiting("正在保存...", {modal:true});
 				
-				var UserInfo = JSON.parse(app.getLoginInfo().userinfo);
+				var logininfo = app.getLoginInfo();
 				var url = app.getUrl() + "ScanWrongSubmit";
 				mui.ajax(url, {
 					data: {
 						waybillno: WaybillNo.value,
 						scantype: ScanType.value,
-						userid: UserInfo.userid,
-						username: UserInfo.realname
+						userid: logininfo.userid,
+						username: logininfo.username,
+						depart: logininfo.department,
+						workjob: WorkJob.value
 					},
 					type: 'post',
 					dataType: 'json',
