@@ -3268,7 +3268,8 @@
 					"img/coins.png"
 				],
 				"refer": [
-					"business/salary/month-date.html"
+					"business/salary/month-date.html",
+					"business/salary/salary.html"
 				],
 				"priority": 0
 			},
@@ -3303,6 +3304,15 @@
 					"css/mui.poppicker.css",
 					"css/mui.picker.min.css",
 					"js/echarts.common.min.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/salary/salary.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
 				],
 				"refer": [],
 				"priority": 0
