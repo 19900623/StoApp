@@ -3,7 +3,8 @@
     "resources": [
       "img/erweima.png",
       "img/me_logo.png",
-      "js/mui.view.js"
+      "js/mui.view.js",
+      "fonts/mui.ttf"
     ],
     "refer": []
   },
@@ -71,7 +72,8 @@
       "fonts/mui.ttf"
     ],
     "refer": [
-      "main.html"
+      "main.html",
+      "home.html"
     ]
   },
   "tab-shedule-main.html": {
@@ -1160,6 +1162,23 @@
   "business/workflow/workflow-sub.html": {
     "refer": [
       "business/workflow/leavebill-workflow.html"
+    ],
+    "resources": []
+  },
+  "home.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "css/iconfont.css",
+      "css/mui.min.css",
+      "css/style.css",
+      "fonts/iconfont.ttf",
+      "tab-shedule-main.html"
+    ],
+    "refer": [
+      "tab-setting.html",
+      "tab-applications.html",
+      "report/tab-echarts.html"
     ]
   }
 }
