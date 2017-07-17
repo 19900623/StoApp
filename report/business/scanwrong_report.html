@@ -1,0 +1,186 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>投诉部数据分析</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<!--<link href="../../css/mui.picker.all.css" rel="stylesheet" />-->
+		<link href="../../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+		<style>
+			#topPopover {
+				height: 110px;
+			}
+			.chart {
+				height: 250px;
+				margin: 0px;
+				padding: 0px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" href="#topPopover">查询</a>
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" onclick="goBack()"></a>
+			<h1 id="title" class="mui-title">扫描错分操作圈统计</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+				<div class="chart" id="chart"></div>
+			</div>
+		</div>
+		<!--右上角弹出菜单-->
+		<div id="topPopover" class="mui-popover">
+			<div class="mui-popover-arrow"></div>
+			<div class="mui-scroll-wrapper">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>日期</label>
+						<input type="text" id="StartTime" data-options='{"type":"date", "beginYear": "2015"}' class="mui-input" required="required" readonly="readonly">
+					</div>
+				</form>
+				<div class="mui-button-row" style="margin-top:10px;">
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_search()" id="buttonok">搜索</button>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<!--<script src="../../js/mui.picker.all.js"></script>-->
+		<script src="../../js/mui.poppicker.js"></script>
+		<script src="../../js/echarts.common.min.js"></script>
+		<script type="text/javascript">
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+			
+			var StartTime = document.getElementById("StartTime");
+			mui.plusReady(function() {
+				StartTime.addEventListener('tap', function() {
+					ShowPicker(this);
+				}, false);
+
+				//仅支持横屏显示
+				plus.screen.lockOrientation("landscape-primary");
+			});
+			
+			//显示选择器
+			function ShowPicker(element){
+				var optionsJson = element.getAttribute('data-options') || '{}';
+				var options = JSON.parse(optionsJson);
+				options["endYear"] = new Date().getFullYear();
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+					element.value = rs.text;
+					picker.dispose();
+				});
+			}
+			
+			//返回
+			function goBack(){
+				plus.screen.lockOrientation("portrait-primary");
+				mui.back();
+			}
+			
+			function btn_search(){
+				if(StartTime.value == '') {
+					mui.toast("请选择日期");
+					return;
+				}
+				
+				mui('#topPopover').popover('toggle'); //收起右上角弹出菜单
+				mui.toast("正在努力为您查询，请稍后...");
+				
+				var url = app.getUrl() + 'GetScanWrongGroup';
+				mui.ajax(url, {
+					data: {
+						date: StartTime.value
+					},
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+						if(data.Success) {
+							var dataInfo = JSON.parse(data.codes);
+							var xData = [];
+							var counts = [];
+							mui.each(dataInfo, function(index, item){
+								xData.push(this.workjob);
+								counts.push(this.counts);
+							});							
+							
+							var legend = ["错分数量"];
+							var series = [{
+								name:legend[0],
+					            type:'line',
+					            data: counts
+							}];
+							var chart = document.getElementById('chart');
+							LoadingChart(chart, legend, xData, '数量', series);
+						}
+						else{
+							mui.toast(data.Message);
+						}
+					},
+					error: function(XMLHttpRequest, textStatus, errorThrown) {
+						console.log(JSON.stringify(XMLHttpRequest));
+					}
+				});
+			}
+			
+			/**
+			 * 加载图表
+			 * @method LoadingChart
+			 * @param {element} elem 加载图表的元素对象，非ID
+			 * @param {jsonArr} legendData 图表的图例数组
+			 * @param {jsonArr} xAxisData 图表X轴数据
+			 * @param {string} yAxisName 图表Y轴名称
+			 * @param {jsonArr} seriesData 图表曲线数据
+			 */
+			function LoadingChart(elem, legendData, xAxisData, yAxisName, seriesData){
+				var chartOption = {
+				    tooltip: {
+				        trigger: 'axis'
+				    },
+				    legend: {
+				        data: legendData
+				    },
+				    grid: {
+				        left: '3%',
+				        right: '3%',
+				        bottom: '12%',
+				        containLabel: true
+				    },
+				    toolbox: {
+				        feature: {
+				            saveAsImage: {}
+				        }
+				    },
+				    xAxis: {
+				        type: 'category',
+//				        boundaryGap: false,
+				        data: xAxisData,
+			            axisLabel: {
+							rotate: 0,
+							show: true,
+							interval: '0',
+							inside: false,
+							formatter: null,
+						},
+				    },
+				    yAxis: {
+				        type: 'value',
+				        name: yAxisName
+				    },
+				    series: seriesData
+				};
+				var lineChart = echarts.init(elem);
+				lineChart.setOption(chartOption);
+			}
+		</script>
+	</body>
+
+</html>

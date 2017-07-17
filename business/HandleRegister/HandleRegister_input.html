@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>操作部登记</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<style>
+			.mui-btn {margin: 0 10px;}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">操作部登记</h1>
+		</header>
+		<div class="mui-content">
+			<!--数据列表-->
+			<ul class="mui-table-view mui-table-view-chevron">
+				
+			</ul>
+			<!--<div class="mui-content-padded">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row">
+						<label>分类</label>
+						<input type="hidden" id="HandleID" />
+						<input type="text" id="WorkCategory" class="mui-input-clear mui-input" readonly="readonly" required="required">
+						<img src="../../img/scan.png" style="position: absolute; right: 0px;top: 1.5px ;width: 2em; height: 2em;" onclick="clicked('../../barcode_scan.html',true,true)" />
+					</div>
+					<div class="mui-input-row">
+						<label>区域</label>
+						<input type="text" id="WorkArea" class="mui-input-clear mui-input" readonly="readonly" required="required">
+					</div>
+					<div class="mui-input-row">
+						<label>工位</label>
+						<input type="text" id="WorkJob" class="mui-input-clear mui-input" readonly="readonly" required="required">
+					</div>
+				</form>
+				<div id="btns" class="mui-button-row" style="margin: 15px 0px 0px;">
+					<button type="button" class="mui-btn mui-btn-success" onclick="btn_submit('分拣')" id="btnFenJian">装车</button>
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_submit('扫描')" id="btnScan">扫描</button>
+				</div>
+			</div>-->
+		</div>
+		<script src="../../js/common.js"></script>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script type="text/javascript">
+			mui.init({});
+			mui.plusReady(function() {
+				mui.ajax(app.getUrl() + 'GetUnVehicleInfo', {
+					data: {},
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+						if(data.Success) {
+							var dataList = JSON.parse(data.codes);
+							var fragment = document.createDocumentFragment();
+							mui.each(dataList, function(i, item){
+									var li = document.createElement('li');
+									li.className = 'mui-table-view-cell';
+									li.id = this.vehicle_code;
+									var htmlText = '<div class="mui-table">' 
+									+ '<div class="mui-table-cell mui-col-xs-6">' 
+									+ '<h4 class="mui-ellipsis">'
+//									+ '<span style="float: right;">'+ this.termini_to + '</span>'
+									+ this.vehicle_code
+									+ '</h4>'
+									+ '<p class="mui-h6 mui-ellipsis">' 
+									+ 	'区域：' + this.area
+									+ '</p>'
+									+ '<p class="mui-h6 mui-ellipsis">' 
+									+ 	'目的地：' + this.termini_to
+									+ '</p>'
+									+ '</div>' 
+									+ '</div>';
+									li.innerHTML = htmlText;
+									//添加点击事件
+									li.addEventListener('tap', function(event) {
+										var code = li.id;
+										var btnArray = ['取消', '扫描','装车'];
+										mui.confirm('确认对该车辆进行操作？', '车牌号：' + code , btnArray, function(e) {
+											if(e.index == 0){
+												return;
+											}
+											var UserInfo = JSON.parse(app.getLoginInfo().userinfo);
+											var paramData = {
+												VehicleCode: code,
+												HandleUserID: UserInfo.userid,
+												HandleUserName: UserInfo.realname,
+												CreateUserId: UserInfo.userid,
+												CreateUserName: UserInfo.realname
+											};
+											
+											if (e.index == 1) {//扫描
+												paramData['HandleType'] = '扫描'
+											} else if(e.index == 2){//装车
+												paramData['HandleType'] = '装车'
+											}
+											var url = app.getUrl() + 'SubmitHandleRegister';
+											mui.ajax(url, {
+												data: {
+													info: JSON.stringify(paramData)
+												},
+												type: 'post',
+												dataType: 'json',
+												success: function(data) {
+							//						console.log(JSON.stringify(data))
+													if(data.Success){
+														mui.toast(data.Message);
+														var page = plus.webview.getWebviewById('HandleRegister_sub');
+														//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+														mui.fire(page, 'refresh');
+														mui.back();
+													}
+													else{
+														mui.toast(data.Message);
+														mui.back();
+													}
+												},
+												error: function(xhr, type, errorThrown) {
+													//异常处理；
+													console.log(xhr + type + errorThrown);
+												}
+											});
+										})
+									});
+									fragment.appendChild(li);
+								});
+								var table = document.body.querySelector('.mui-table-view');
+								while (table.firstChild)
+									table.removeChild(table.firstChild);
+								table.appendChild(fragment);
+						} else {
+							plus.nativeUI.toast(data.Message);
+						}
+					}
+				});
+			});
+		</script>
+	</body>
+
+</html>

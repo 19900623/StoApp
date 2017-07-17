@@ -97,54 +97,85 @@
 //					var httpUrl = 'http://oaapp.lyzysoft.com:8066';
 					//测试库
 //					var httpUrl = 'http://192.168.6.166:80/LeaRun.MobileApp';
-//					var httpUrl = 'http://stoa.tunnel.qydev.com';
-					var url = httpUrl + '/MobileAppService.asmx/';
-					app.setUrl(url);
-					app.setHttpUrl(httpUrl);
 					//检查App升级版本并升级
-					var url = app.getUrl() + 'GetVersionInfo';
-					if (plus.networkinfo.getCurrentType() != 1)
-						mui.ajax(url, {
-							dataType: 'json', //服务器返回json格式数据
-							type: 'post', //HTTP请求类型
-							success: function(data) {
-								var versionNew = data.apkVersion;
-								var oldVersion;
-								plus.runtime.getProperty(plus.runtime.appid, function(info) {
-									//version属性
-									oldVersion = info.version;
-									//plus.nativeUI.prompt()
-									if (oldVersion < versionNew) {
-										var btnArray = ['是', '否'];
-										mui.confirm('检测到当前最新版本' + versionNew + '，是否更新？', '版本更新', btnArray, function(e) {
-											if (e.index == 0) {
-												var DownUrl = httpUrl + '/App/Sto' + versionNew + '.wgt'; // 下载文件地址
-												var dtask = plus.downloader.createDownload(DownUrl, {}, function(d, status) {
-													if (status == 200) { // 下载成功
-														var path = d.filename;
-														plus.nativeUI.showWaiting("安装更新文件...");
-														plus.runtime.install(path, {}, function() {
-															plus.nativeUI.closeWaiting();
-															plus.nativeUI.alert("应用资源更新完成！", function() {
-																plus.runtime.restart();
+					if (plus.networkinfo.getCurrentType() != 1){
+						if(plus.networkinfo.getCurrentType() == 3){
+							//测试外网连接是否成功
+							mui.ajax(httpUrl + '/MobileAppService.asmx/GetVersionInfo', {
+								dataType: 'json', //服务器返回json格式数据
+								type: 'get', //HTTP请求类型
+								timeout: 1000,
+								success: function(data){
+					                //连接正常
+					            },
+								error: function(xhr,type,errorThrown){
+					                //连接失败，切换内网
+					                httpUrl = 'http://192.168.1.162:8066';
+					            }
+							});
+						}
+						setTimeout(function() {
+							var baseurl = httpUrl + '/MobileAppService.asmx/';
+							app.setUrl(baseurl);
+							app.setHttpUrl(httpUrl);
+//							console.log(baseurl)
+							var url = app.getUrl() + 'GetVersionInfo';
+							mui.ajax(url, {
+								dataType: 'json', //服务器返回json格式数据
+								type: 'post', //HTTP请求类型
+								success: function(data) {
+									var versionNew = data.apkVersion;
+									var oldVersion;
+									plus.runtime.getProperty(plus.runtime.appid, function(info) {
+										//version属性
+										oldVersion = info.version;
+										//plus.nativeUI.prompt()
+										if (oldVersion < versionNew) {
+											//有新版本，必需更新完才能登录
+											var btnArray = ['是', '否'];
+											mui.confirm('检测到当前最新版本' + versionNew + '，是否更新？', '版本更新', btnArray, function(e) {
+												if (e.index == 0) {
+													var DownUrl = httpUrl + '/App/Sto' + versionNew + '.wgt'; // 下载文件地址
+													var dtask = plus.downloader.createDownload(DownUrl, {}, function(d, status) {
+														if (status == 200) { // 下载成功
+															var path = d.filename;
+															plus.nativeUI.showWaiting("安装更新文件...");
+															plus.runtime.install(path, {}, function() {
+																plus.nativeUI.closeWaiting();
+																plus.nativeUI.alert("应用资源更新完成！", function() {
+																	plus.runtime.restart();
+																	loginFun();//开放登录
+																});
+															}, function(e) {
+																plus.nativeUI.closeWaiting();
+																plus.nativeUI.alert("安装更新文件失败[" + e.code + "]：" + e.message);
 															});
-														}, function(e) {
-															plus.nativeUI.closeWaiting();
-															plus.nativeUI.alert("安装更新文件失败[" + e.code + "]：" + e.message);
-														});
-													} else { //下载失败
-														alert("Download failed: " + status);
-													}
-												});
-												dtask.start();
-											} else {
-												return;
-											}
-										})
-									}
-								});
-							}
-						});
+														} else { //下载失败
+															alert("Download failed: " + status);
+														}
+													});
+													dtask.start();
+												} else {
+													alert("未更新不能登录，请重新打开程序更新。");
+													return;
+												}
+											})
+										}
+										else{
+											//无新版本，可登录
+											loginFun();
+										}
+									});
+								},
+								error: function(xhr,type,errorThrown){
+					                mui.toast("无法访问服务器");
+					            }
+							});
+						}, 2000);
+					}
+					else{
+						mui.toast("无网络连接");
+					}
 					var toMain = function() {
 						var nwaiting = plus.nativeUI.showWaiting();
 						var webviewShow = plus.webview.create(
@@ -161,108 +192,110 @@
 						}, false);
 					};
 					
-					
-					var loginButton = doc.getElementById('login');
-					var accountBox = doc.getElementById('account');
-					var passwordBox = doc.getElementById('password');
-					var autoLoginButton = doc.getElementById("autoLogin");
-					//登录框赋值
-					if (settings.autoLogin && logininfo.userinfo) {
-						if(!!logininfo.username){
-							accountBox.value = logininfo.username;
-							passwordBox.value = logininfo.userpassword;
-						}
-					}
-					
-					loginButton.addEventListener('tap', function(event) {
-						if(!accountBox.value){
-							mui.toast('请输入账号')
-							return;
-						}
-						var loginInfo = {
-							account: accountBox.value,
-							password: passwordBox.value,
-							clientid: plus.push.getClientInfo().clientid
-						};
-						if (plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
-							plus.nativeUI.toast('请检查网路连接!');
-							return;
-						}
-						plus.nativeUI.showWaiting("正在登录...");
-						var url = app.getUrl() + 'CheckLogin';
-//						console.log(JSON.stringify(loginInfo))
-						console.log(url)
-						mui.ajax(url, {
-							data: loginInfo,
-							dataType: 'json', //服务器返回json格式数据
-							type: 'post', //HTTP请求类型
-							timeout:10000,//超时时间设置为10秒；
-							crossDomain:true,
-							success: function(data) {
-								plus.nativeUI.closeWaiting();
-								if (data.State != '3')
-									plus.nativeUI.toast(data.Message);
-								else {
-									var loginInfo = {
-										userid: data.UserID,
-										username: accountBox.value,
-										userpassword: passwordBox.value,
-										company: data.Company,
-										department: data.Department,
-										userinfo: data.UserInfo,
-										userreport: data.UserReport
-									};
-									console.log(JSON.stringify(loginInfo))
-									app.setSettings(settings);
-									app.setLoginInfo(loginInfo);
-									toMain();
-								}
-								return;
-							},
-							error: function(xhr, type, errorThrown) {
-								plus.nativeUI.closeWaiting();
-								plus.nativeUI.toast("登录失败");
-								//异常处理
-								console.log(xhr + type + errorThrown);
-//								console.log(JSON.stringify(xhr));
+					var loginFun = function(){
+						var loginButton = doc.getElementById('login');
+						var accountBox = doc.getElementById('account');
+						var passwordBox = doc.getElementById('password');
+						var autoLoginButton = doc.getElementById("autoLogin");
+						//登录框赋值
+						if (settings.autoLogin && logininfo.userinfo) {
+							if(!!logininfo.username){
+								accountBox.value = logininfo.username;
+								passwordBox.value = logininfo.userpassword;
 							}
+						}
+						
+						loginButton.addEventListener('tap', function(event) {
+							if(!accountBox.value){
+								mui.toast('请输入账号')
+								return;
+							}
+							var loginInfo = {
+								account: accountBox.value,
+								password: passwordBox.value,
+								clientid: plus.push.getClientInfo().clientid
+							};
+							if (plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
+								plus.nativeUI.toast('请检查网路连接!');
+								return;
+							}
+							plus.nativeUI.showWaiting("正在登录...");
+							var url = app.getUrl() + 'CheckLogin';
+	//						console.log(JSON.stringify(loginInfo))
+							console.log(url)
+							mui.ajax(url, {
+								data: loginInfo,
+								dataType: 'json', //服务器返回json格式数据
+								type: 'post', //HTTP请求类型
+								timeout:10000,//超时时间设置为10秒；
+								crossDomain:true,
+								success: function(data) {
+									plus.nativeUI.closeWaiting();
+									if (data.State != '3')
+										plus.nativeUI.toast(data.Message);
+									else {
+										var loginInfo = {
+											userid: data.UserID,
+											username: accountBox.value,
+											userpassword: passwordBox.value,
+											company: data.Company,
+											department: data.Department,
+											userinfo: data.UserInfo,
+											userreport: data.UserReport
+										};
+//										console.log(JSON.stringify(loginInfo))
+										app.setSettings(settings);
+										app.setLoginInfo(loginInfo);
+										toMain();
+									}
+									return;
+								},
+								error: function(xhr, type, errorThrown) {
+									plus.nativeUI.closeWaiting();
+									plus.nativeUI.toast("登录失败");
+									//异常处理
+									console.log(xhr + type + errorThrown);
+	//								console.log(JSON.stringify(xhr));
+								}
+							});
 						});
-					});
-					autoLoginButton.classList[settings.autoLogin ? 'add' : 'remove']('mui-active')
-					autoLoginButton.addEventListener('toggle', function(event) {
-						var isActive = event.detail.isActive;
-						settings.autoLogin = isActive;
-					}, false);
-					
-					$.enterfocus('#login-form input', function() {
-						$.trigger(loginButton, 'tap');
-					});
-					
-					//检查 "登录状态/锁屏状态" 开始
-//					if (settings.autoLogin && logininfo.userid && settings.gestures) {
-//						$.openWindow({
-//							url: 'unlock.html',settings
-//							id: 'unlock',
-//							show: {
-//								aniShow: 'pop-in'
-//							},
-//							waiting: {
-//								autoShow: false
-//							}
-//						});
-//					} else 
-					if (settings.autoLogin && logininfo.userid) {
-//						toMain();
-						$.trigger(loginButton, 'tap');
-					} else {
-						app.setLoginInfo(null);
+						autoLoginButton.classList[settings.autoLogin ? 'add' : 'remove']('mui-active')
+						autoLoginButton.addEventListener('toggle', function(event) {
+							var isActive = event.detail.isActive;
+							settings.autoLogin = isActive;
+						}, false);
+						
+						$.enterfocus('#login-form input', function() {
+							$.trigger(loginButton, 'tap');
+						});
+						
+						//检查 "登录状态/锁屏状态" 开始
+	//					if (settings.autoLogin && logininfo.userid && settings.gestures) {
+	//						$.openWindow({
+	//							url: 'unlock.html',
+	//							id: 'unlock',
+	//							show: {
+	//								aniShow: 'pop-in'
+	//							},
+	//							waiting: {
+	//								autoShow: false
+	//							}
+	//						});
+	//					} else 
+						if (settings.autoLogin && logininfo.userid) {
+	//						toMain();
+							$.trigger(loginButton, 'tap');
+						} else {
+							app.setLoginInfo(null);
+						}
+						// close splash
+						setTimeout(function() {
+							//关闭 splash
+							plus.navigator.closeSplashscreen();
+						}, 600);
+						//检查 "登录状态/锁屏状态" 结束
 					}
-					// close splash
-					setTimeout(function() {
-						//关闭 splash
-						plus.navigator.closeSplashscreen();
-					}, 600);
-					//检查 "登录状态/锁屏状态" 结束
+					
 					
 					var backButtonPress = 0;
 					$.back = function(event) {

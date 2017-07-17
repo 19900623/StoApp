@@ -21,7 +21,7 @@
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" href="#topPopover">查询</a>
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">扫描错分票数统计</h1>
+			<h1 id="title" class="mui-title">扫描错分操作圈统计</h1>
 		</header>
 		<div class="mui-content" id="content">
 			<!--<div class="mui-loading">
@@ -38,7 +38,7 @@
 				<form class="mui-input-group" id="bill-form">
 					<div class="mui-input-row">
 						<label>查询月份</label>
-						<input type="text" id="StartTime" data-options='{"type":"date", "beginYear": "2015", "endYear": "2030"}' class="mui-input" required="required" readonly="readonly">
+						<input type="text" id="StartTime" data-options='{"type":"date", "beginYear": "2015"}' class="mui-input" required="required" readonly="readonly">
 					</div>
 				</form>
 				<div class="mui-button-row" style="margin-top:10px;">
@@ -85,10 +85,10 @@
 				
 				var ul = document.createElement("ul");
 				ul.className = 'mui-table-view mui-table-view-chevron';
-				var url = app.getUrl() + 'GetBigErrorLeaveGroup';
+				var url = app.getUrl() + 'GetScanWrongProvince';
 				mui.ajax(url, {
 					data: {
-						month: StartTime.value
+						date: StartTime.value
 					},
 					type: 'post',
 					dataType: 'json',
@@ -102,22 +102,13 @@
 								var htmlText = '<a class="mui-navigate-right" href="#"><div class="mui-table">'
 								+ '<div class="mui-table-cell mui-col-xs-10">'
 								+ 	'<h4 class="mui-ellipsis-2">'
-								+ 		this.groupname
+								+ 		this.WorkJob
 								+ 	'</h4>'
-								+ 	'<p class="mui-h6 mui-ellipsis">'
-								+ 		'自检票数：' + this.zjcounts
-								+ 	'</p>'
-								+ 	'<p class="mui-h6 mui-ellipsis">'
-								+		'自检金额：' + this.zjamount.toFixed(2)
-								+ 	'</p>'
 								+ '</div>'
 								+ '<div class="mui-table-cell mui-col-xs-5 mui-text-right">'
 								+ 	'<span class="mui-h5">'
 								+ 		'票数：' + this.counts
 								+ 	'</span>'
-								+ 	'<p class="mui-h6 mui-ellipsis">'
-								+ 		'金额：' + this.amount.toFixed(2)
-								+ 	'</p>'
 								+ '</div>'
 								+ '</div>'
 								+ '</a>';
@@ -129,22 +120,13 @@
 									+ '	<div class="mui-table">'
 									+ '		<div class="mui-table-cell mui-col-xs-10">'
 									+ '			<h4 class="mui-ellipsis-2">'
-									+ 				item.takeuser
+									+ 				item.province
 									+ '			</h4>'
-									+ '			<p class="mui-h6 mui-ellipsis">'
-									+ 				'自检票数：' + this.zjcounts
-									+ '			</p>'
-									+ '			<p class="mui-h6 mui-ellipsis">'
-									+ 				'自检金额：' + this.zjamount.toFixed(2)
-									+ '			</p>'
 									+ '		</div>'
 									+ '		<div class="mui-table-cell mui-col-xs-5 mui-text-right">'
 									+ 			'<span class="mui-h5">'
 									+ 				'票数：' + this.counts
 									+ 			'</span>'
-									+ 			'<p class="mui-h6 mui-ellipsis">'
-									+ 				'金额：' + this.amount.toFixed(2)
-									+ 			'</p>'
 									+ 		'</div>'
 									+ '	</div>'
 									+ '</a>'

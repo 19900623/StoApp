@@ -3,11 +3,16 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>Hello MUI</title>
+		<title>操作登记</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<link rel="stylesheet" href="../../css/mui.min.css">
+		<style>
+			.sto-tag{position: absolute; display: block; margin-top:20px; right: 0px; padding: 3px; transform:rotate(-25deg); -webkit-transform:rotate(-25deg);}
+			.sto-tag-green{color: green; border: 1px solid green;}
+			.sto-tag-red{color: red; border: 1px solid red;}
+		</style>
 	</head>
 
 	<body>
@@ -19,7 +24,7 @@
 					
 				</ul>
 			</div>
-		</div> 
+		</div>
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/app.js"></script>
 		<script>
@@ -44,11 +49,11 @@
 					count = 1;
 					var loginfo = app.getLoginInfo();
 					var messageInfo = {
-						userid: loginfo.userid,
-						page: 1,
-						rows: 10
+						UserID: loginfo.userid,
+						pageNumber: 1,
+						pageSize: 10
 					};
-					var url = app.getUrl() + 'GetScanWrongList';
+					var url = app.getUrl() + 'GetHandleRegisterList';
 					mui.ajax(url, {
 						data: messageInfo,
 						type: 'post',
@@ -56,27 +61,27 @@
 						success: function(data) {
 							if (data.Code > 0) {
 								var dataList = JSON.parse(data.codes);
-//								console.log(JSON.stringify(dataList))
 								mui.each(dataList, function(i, item){
 									var li = document.createElement('li');
 									li.className = 'mui-table-view-cell';
-									var htmlText = '<div class="mui-table">' 
-									+ '<div class="mui-table-cell mui-col-xs-6">' 
-									+ '<h4 class="mui-ellipsis">'
-									+ this.WaybillNo
-									+ '</h4>'
-									+ '<p class="mui-h6 mui-ellipsis">'
-									+ 	'类型：' + this.ScanType
+//									li.id = data[i].id;
+									var htmlText = '<div class="mui-slider-handle"><div class="mui-table">'
+									+ '<div class="mui-table-cell mui-col-xs-10">'
+									+ 	'<h4 class="mui-ellipsis-2">'
+									+ 		this.VehicleCode
+									+ 	'</h4>'
+									+ '<p class="mui-h6 mui-ellipsis">' 
+									+ 	'操作时间：' + this.HandleDate
 									+ '</p>'
-									+ '<p class="mui-h6 mui-ellipsis">'
-									+ 	'操作圈：' + this.WorkJob
-									+ '</p>'
-									+ '<p class="mui-h6 mui-ellipsis">'
-									+ 	'制单时间：' + this.CreateDate.replace('T',' ')
-									+ '</p>'
-									+ '</div>' 
+									+ '</div>'
+									+ '<div class="mui-table-cell mui-col-xs-5 mui-text-right">'
+									+ 	'<span class="mui-h5">'
+									+ 		this.HandleType
+									+	'</span>'
+									+ '</div>'
+									+ '</div>'
 									+ '</div>';
-									li.innerHTML = htmlText;
+									li.innerHTML = htmlText;									
 									fragment.appendChild(li);
 								});
 								var table = document.body.querySelector('.mui-table-view');
@@ -113,11 +118,11 @@
 					var fragment = document.createDocumentFragment();
 					var loginfo = app.getLoginInfo();
 					var messageInfo = {
-						userid: loginfo.userid,
-						page: count,
-						rows: 10
+						UserID: loginfo.userid,
+						pageNumber: count,
+						pageSize: 10
 					};
-					var url = app.getUrl() + 'GetScanWrongList';
+					var url = app.getUrl() + 'GetHandleRegisterList';
 					mui.ajax(url, {
 						data: messageInfo,
 						type: 'post',
@@ -129,23 +134,24 @@
 								mui.each(dataList, function(i, item){
 									var li = document.createElement('li');
 									li.className = 'mui-table-view-cell';
-									var htmlText = '<div class="mui-table">' 
-									+ '<div class="mui-table-cell mui-col-xs-6">' 
-									+ '<h4 class="mui-ellipsis">'
-									+ this.WaybillNo
-									+ '</h4>'
-									+ '<p class="mui-h6 mui-ellipsis">'
-									+ 	'类型：' + this.ScanType
+//									li.id = data[i].id;
+									var htmlText = '<div class="mui-slider-handle"><div class="mui-table">'
+									+ '<div class="mui-table-cell mui-col-xs-10">'
+									+ 	'<h4 class="mui-ellipsis-2">'
+									+ 		this.VehicleCode
+									+ 	'</h4>'
+									+ '<p class="mui-h6 mui-ellipsis">' 
+									+ 	'操作时间：' + this.HandleDate
 									+ '</p>'
-									+ '<p class="mui-h6 mui-ellipsis">'
-									+ 	'操作圈：' + this.WorkJob
-									+ '</p>'
-									+ '<p class="mui-h6 mui-ellipsis">'
-									+ 	'制单时间：' + this.CreateDate.replace('T',' ')
-									+ '</p>'
-									+ '</div>' 
+									+ '</div>'
+									+ '<div class="mui-table-cell mui-col-xs-5 mui-text-right">'
+									+ 	'<span class="mui-h5">'
+									+ 		this.HandleType
+									+	'</span>'
+									+ '</div>'
+									+ '</div>'
 									+ '</div>';
-									li.innerHTML = htmlText;									
+									li.innerHTML = htmlText;
 									fragment.appendChild(li);
 								});
 								table.appendChild(fragment);

@@ -4,6 +4,10 @@
       "img/erweima.png",
       "img/me_logo.png",
       "js/mui.view.js",
+<<<<<<< HEAD
+=======
+      "js/app.js",
+>>>>>>> origin/master
       "fonts/mui.ttf"
     ],
     "refer": []
@@ -43,7 +47,9 @@
       "business/waybill/waybill-grid.html",
       "business/gunrecords/pullrefresh_main.html",
       "business/vehicle_loading/vehicle_innage_main.html",
-      "tab-work-input.html"
+      "tab-work-input.html",
+      "business/questionbill/questionbill-grid.html",
+      "business/salary/salary-grid.html"
     ]
   },
   "main.html": {
@@ -69,7 +75,8 @@
       "css/mui.min.css",
       "css/style.css",
       "js/mui.enterfocus.js",
-      "fonts/mui.ttf"
+      "fonts/mui.ttf",
+      "js/mui.js"
     ],
     "refer": [
       "main.html",
@@ -108,7 +115,8 @@
     "refer": [
       "report/business/business-grid.html",
       "report/report_debit_info.html",
-      "report/report-waybillpickup-day.html"
+      "report/report-waybillpickup-day.html",
+      "report/report-delivery-day.html"
     ]
   },
   "tab-shedule.html": {
@@ -153,7 +161,8 @@
       "js/mui.min.js",
       "css/mui.min.css",
       "img/table_chart.png",
-      "img/chart_line.png"
+      "img/chart_line.png",
+      "img/package.png"
     ],
     "refer": [
       "report/business/tel_bill_report.html",
@@ -172,7 +181,10 @@
       "report/business/complaints_report.html",
       "report/business/complaints315_report.html",
       "report/business/big_error_group.html",
-      "report/business/complaints_analysis.html"
+      "report/business/complaints_analysis.html",
+      "report/business/scanwrong_report.html",
+      "report/business/scanwrong_province_report.html",
+      "report/business/scanwrong_group.html"
     ]
   },
   "report/report_debit_info.html": {
@@ -805,7 +817,8 @@
   },
   "business/expensebill/expensebill-list-main.html": {
     "resources": [
-      "business/expensebill/expensebill-list-sub.html"
+      "business/expensebill/expensebill-list-sub.html",
+      "fonts/mui.ttf"
     ],
     "refer": [
       "business/expensebill/expensebill-list-sub.html"
@@ -991,7 +1004,9 @@
     "resources": [
       "css/mui.min.css"
     ],
-    "refer": []
+    "refer": [
+      "business/gunrecords/form-input.html"
+    ]
   },
   "business/gunrecords/pullrefresh_main.html": {
     "resources": [
@@ -1015,9 +1030,15 @@
       "css/mui.picker.min.css",
       "js/app.js",
       "js/mui.min.js",
-      "fonts/mui.ttf"
+      "fonts/mui.ttf",
+      "fonts/iconfont.ttf",
+      "css/common.css",
+      "css/iconfont.css",
+      "css/style.css"
     ],
-    "refer": []
+    "refer": [
+      "camera_image.html"
+    ]
   },
   "business/waybill/waybill-list-sub.html": {
     "refer": [
@@ -1089,7 +1110,13 @@
       "img/box.png"
     ],
     "refer": [
-      "business/bulkycargo/bulkycargo_main.html"
+      "business/bulkycargo/bulkycargo_main.html",
+      "business/vehicle_loading/vehicle_loading_main.html",
+      "business/gunrecords/pullrefresh_main.html",
+      "business/handlerecord/handlerecord_main.html",
+      "business/HandleRegister/HandleRegister_main.html",
+      "business/vehicle_loading/vehicle_innage_main.html",
+      "business/scanwrong/scanwrong_main.html"
     ]
   },
   "business/bulkycargo/bulkycargo_main.html": {
@@ -1165,6 +1192,7 @@
     ],
     "resources": []
   },
+<<<<<<< HEAD
   "home.html": {
     "resources": [
       "js/app.js",
@@ -1179,6 +1207,102 @@
       "tab-setting.html",
       "tab-applications.html",
       "report/tab-echarts.html"
+=======
+  "business/HandleRegister/HandleRegister_main.html": {
+    "resources": [
+      "business/HandleRegister/HandleRegister_sub.html",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "business/HandleRegister/HandleRegister_sub.html",
+      "business/HandleRegister/HandleRegister_input.html"
+    ]
+  },
+  "business/HandleRegister/HandleRegister_input.html": {
+    "resources": [
+      "js/common.js",
+      "img/scan.png",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": [
+      "barcode_scan.html"
+    ]
+  },
+  "business/HandleRegister/HandleRegister_sub.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "business/questionbill/questionbill-list-main.html": {
+    "resources": [
+      "business/questionbill/questionbill-list-sub.html"
+    ],
+    "refer": [
+      "business/questionbill/questionbill-input.html",
+      "business/questionbill/questionbill-list-sub.html"
+    ]
+  },
+  "business/questionbill/questionbill-grid.html": {
+    "resources": [
+      "img/script_edit.png",
+      "img/script_error.png"
+    ],
+    "refer": [
+      "business/questionbill/questionbill-list-main.html"
+    ]
+  },
+  "business/questionbill/questionbill-input.html": {
+    "refer": [
+      "camera_image.html"
+    ],
+    "resources": []
+  },
+  "business/salary/salary-grid.html": {
+    "resources": [
+      "img/date.png",
+      "img/coins.png"
+    ],
+    "refer": [
+      "business/salary/month-date.html"
+    ]
+  },
+  "business/salary/month-date.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css"
+    ]
+  },
+  "report/business/scanwrong_report.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "js/mui.poppicker.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/echarts.common.min.js",
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ]
+  },
+  "report/business/scanwrong_province_report.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "js/mui.poppicker.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css",
+      "js/echarts.common.min.js"
+>>>>>>> origin/master
     ]
   }
 }
