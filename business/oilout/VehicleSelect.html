@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>选择车辆</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<style>
+			.mui-btn {margin: 0 10px;}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">选择车辆</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded" style="margin: 5px; margin-bottom: 0;">
+				<h5>搜索：</h5>
+				<div class="mui-input-row mui-search">
+					<input id="search" type="search" class="mui-input-clear" placeholder="输入关键字">
+				</div>
+			</div>
+			<!--数据列表-->
+			<ul class="mui-table-view">
+				
+			</ul>
+		</div>
+		<script src="../../js/common.js"></script>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script type="text/javascript">
+			var search = document.getElementById("search");
+			mui.init({});
+			mui.plusReady(function() {
+				var name = plus.webview.currentWebview().name;
+				Loading(name, '');
+				search.addEventListener("input",function(e){
+					if(!!this.value){
+						Loading(name, this.value);
+					};
+				},false);
+				
+			});
+			
+			function Loading(name, code){
+				mui.ajax(app.getUrl() + 'GetVehicleCode', {
+					data: {
+						OilTy: name,
+						vehicle_code: code
+					},
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+						if(data.Success) {
+							var dataList = JSON.parse(data.codes);
+							var fragment = document.createDocumentFragment();
+							mui.each(dataList, function(i, item){
+								var li = document.createElement('li');
+								li.className = 'mui-table-view-cell';
+								li.id = this.vehicle_code + '|' + this.vehicle_num;
+								var htmlText = '<div class="mui-table">' 
+								+ '<div class="mui-table-cell mui-col-xs-6">' 
+								+ '<h4 class="mui-ellipsis">'
+//									+ '<span style="float: right;">'+ this.termini_to + '</span>'
+								+ this.vehicle_code
+								+ '</h4>'
+								+ '<p class="mui-h6 mui-ellipsis">' 
+								+ 	'上次里程：' + this.vehicle_num
+								+ '</p>'
+								+ '</div>' 
+								+ '<div class="mui-table-cell mui-col-xs-5 mui-text-right">'
+								+ 	'<span class="mui-h5">'
+								+ 		this.vehicle_oilty
+								+	'</span>'
+								+ '</div>'
+								+ '</div>';
+								li.innerHTML = htmlText;
+								//添加点击事件
+								li.addEventListener('tap', function(event) {
+									var code = li.id;
+									var ws = null,
+										wo = null;
+									if (ws || !window.plus) {
+										return;
+									}
+									// 获取窗口对象
+									ws = plus.webview.currentWebview();
+									wo = ws.opener();
+				//					console.log(JSON.stringify(result));
+									wo.evalJS("selected('" + code + "');");
+									mui.back();
+								});
+								fragment.appendChild(li);
+							});
+							var table = document.body.querySelector('.mui-table-view');
+							while (table.firstChild)
+								table.removeChild(table.firstChild);
+							table.appendChild(fragment);
+						} else {
+							plus.nativeUI.toast(data.Message);
+						}
+					},
+					error:function(xhr,type,errorThrown){
+						//异常处理；
+						console.log(JSON.stringify(xhr));
+						console.log(errorThrown);
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>
