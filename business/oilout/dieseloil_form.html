@@ -5,11 +5,11 @@
 		<meta charset="UTF-8">
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<link href="../../../css/mui.min.css" rel="stylesheet" />
-		<link href="../../../css/mui.picker.min.css" rel="stylesheet" />
-		<link href="../../../css/mui.poppicker.css" rel="stylesheet" />
-		<link href="../../../css/common.css" rel="stylesheet" />
-		<link href="../../../css/style.css" rel="stylesheet" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link href="../../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+		<link href="../../css/common.css" rel="stylesheet" />
+		<link href="../../css/style.css" rel="stylesheet" />
 		<style>
 			#images{float: right; width: 65%; min-height:40px; line-height: 40px; margin-bottom: 0;padding: 5px;}
 			.mui-btn {margin: 0 5px;}
@@ -19,7 +19,7 @@
 	<body>
 		<header class="mui-bar mui-bar-nav" id="header">
 			<a id="back" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">柴油采集</h1>
+			<h1 id="title" class="mui-title">柴油登记</h1>
 		</header>
 		<div class="mui-content">
 			<div class="mui-content-padded">
@@ -37,10 +37,6 @@
 						<input type="text" id="Oil_out_Depart" class="mui-input" required="required" readonly="readonly">
 					</div>
 					<div class="mui-input-row">
-						<label>片区</label>
-						<input type="text" id="Area" class="mui-input" placeholder="请选择片区" required="required" readonly="readonly">
-					</div>
-					<div class="mui-input-row">
 						<label>车牌号</label>
 						<input type="text" id="Vehicle_Code" class="mui-input" placeholder="请选择车牌号" required="required" readonly="readonly">
 					</div>
@@ -50,15 +46,15 @@
 					</div>
 					<div class="mui-input-row">
 						<label>单价</label>
-						<input type="tel" id="Oil_out_Price" class="mui-input" placeholder="根据油品类型自动显示" onKeypress="return (/^\d+\.?\d*$/.test(this.value + String.fromCharCode(event.keyCode)))" required="required" readonly="readonly">
-					</div>
-					<div class="mui-input-row">
-						<label>加油量</label>
-						<input type="tel" id="Oil_out_Volume" class="mui-input" placeholder="请输入加油量" required="required" onKeypress="return (/^\d+\.?\d*$/.test(this.value + String.fromCharCode(event.keyCode)))" >
+						<input type="tel" id="Oil_out_Price" class="mui-input" placeholder="根据油品类型自动显示" onKeypress="return (/^\d+\.?\d*$/.test(this.value + String.fromCharCode(event.keyCode)))" required="required">
 					</div>
 					<div class="mui-input-row">
 						<label>总额</label>
-						<input type="tel" id="Oil_Amount" class="mui-input" placeholder="自动计算" readonly="readonly" required="required">
+						<input type="tel" id="Oil_Amount" class="mui-input" placeholder="请输入总额" onKeypress="return (/^\d+\.?\d*$/.test(this.value + String.fromCharCode(event.keyCode)))" required="required">
+					</div>
+					<div class="mui-input-row">
+						<label>加油量</label>
+						<input type="tel" id="Oil_out_Volume" class="mui-input" placeholder="自动计算" required="required" readonly="readonly">
 					</div>
 					<div class="mui-input-row">
 						<label>当前里程</label>
@@ -67,6 +63,13 @@
 					<div class="mui-input-row">
 						<label>上次里程</label>
 						<input type="tel" id="Vehicle_OldNum" class="mui-input" placeholder="自动显示" required="required" readonly="readonly">
+					</div>
+					<div class="mui-input-row">
+						<label>是否收费</label>
+						<div class="mui-switch mui-switch-mini">
+							<div class="mui-switch-handle"></div>
+						</div>
+						<input type="hidden" id="Oil_IsMoney" value="0" />
 					</div>
 				</form>
 				<div class="mui-input-row" style="margin: 5px 0px 0px;" id="divRemark">
@@ -78,15 +81,14 @@
 				</div>
 			</div>
 		</div>
-		<script src="../../../js/mui.min.js"></script>
-		<script src="../../../js/app.js"></script>
-		<script src="../../../js/mui.picker.min.js"></script>
-		<script src="../../../js/mui.poppicker.js"></script>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
 		<script type="text/javascript">
 			var Oil_out_Date = document.getElementById("Oil_out_Date");
 			var Oil_out_Driver = document.getElementById("Oil_out_Driver");
 			var Oil_out_Depart = document.getElementById("Oil_out_Depart");
-			var Area = document.getElementById("Area");
 			var Vehicle_Code = document.getElementById("Vehicle_Code");
 			var Oil_TyName = document.getElementById("Oil_TyName");
 			var Oil_out_Price = document.getElementById("Oil_out_Price");
@@ -95,6 +97,7 @@
 			var Vehicle_Num = document.getElementById("Vehicle_Num");
 			var Vehicle_OldNum = document.getElementById("Vehicle_OldNum");
 			var Oil_out_Remark = document.getElementById("Oil_out_Remark");
+			var Oil_IsMoney = document.getElementById("Oil_IsMoney");
 			
 			var loginfo = app.getLoginInfo();
 			var userinfo = JSON.parse(loginfo.userinfo);	//登录用户信息
@@ -110,7 +113,7 @@
 				//油品类型
 				var url = app.getUrl() + 'GetOilTyName';
 				mui.ajax(url, {
-//					data: {},
+					data: {OilTy: '柴油'},
 					dataType: 'json', //服务器返回json格式数据
 					type: 'post', //HTTP请求类型
 					success: function(data) {
@@ -150,92 +153,47 @@
 					}
 				});
 				
-				var arrArea = [];//片区
-				var codeData = [];//车牌号
-				
-				//片区
-				var url = app.getUrl() + 'GetDataDictionaryDetailList';
-				mui.ajax(url, {
-					data: {
-						Code: 'Vehicle_Group'
-					},
-					dataType: 'json', //服务器返回json格式数据
-					type: 'post', //HTTP请求类型
-					success: function(data) {
-						if (data.Success) {
-							var dataJson = JSON.parse(data.codes);
-							for(var i=0; i< dataJson.length; i++){
-								var obj = {
-									value: dataJson[i].Code,
-									text: dataJson[i].FullName
-								}
-								arrArea.push(obj);
-							}
-						} else {
-							plus.nativeUI.toast(data.Message);
-						}
-					},
-					error: function(xhr, type, errorThrown) {
-						//异常处理；
-						console.log(JSON.stringify(errorThrown));
-					}
-				});
-				Area.addEventListener('tap', function(event) {
-					if(arrArea.length > 0){
-						var areaPicker = new mui.PopPicker();
-						areaPicker.setData(arrArea);
-						areaPicker.show(function(items) {
-							Area.value = items[0].text;
-							mui.ajax(app.getUrl() + 'GetVehicleCode', {
-								data: {
-									area: Area.value,
-									oilty: '柴油'
-								},
-								type: 'post',
-								dataType: 'json',
-								success: function(data) {
-	//								console.log(data.codes)
-									if(data.Success) {
-										var codeList = JSON.parse(data.codes);
-										mui.each(codeList, function(i, item){
-											codeData.push({
-												value: item.vehicle_num,
-												text: item.vehicle_code
-											});
-										});
-										
-									} else {
-										plus.nativeUI.toast(data.Message);
-									}
-								}
-							});
-							//返回 false 可以阻止选择框的关闭
-							//return false;
-							areaPicker.dispose();
-						});
-					}
-				}, false);
 				//车牌号
 				Vehicle_Code.addEventListener('tap', function(event) {
-					if(codeData.length > 0){
-						var CodePicker = new mui.PopPicker();
-						CodePicker.setData(codeData);
-						CodePicker.show(function(items) {
-							Vehicle_Code.value = items[0].text;
-							Vehicle_OldNum.value = items[0].value;
-							//返回 false 可以阻止选择框的关闭
-							//return false;
-							CodePicker.dispose();
-						});
-					}
+					var nwaiting = plus.nativeUI.showWaiting();
+					var webviewShow = plus.webview.create(
+						'VehicleSelect.html',
+						'VehicleSelect',
+						'', {name: '柴油'}
+					); //后台创建webview并打开show.html
+					webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
+						setTimeout(function() {
+							nwaiting.close();
+							//新webview的载入完毕后关闭等待框
+							webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+						}, 300);
+					}, false);
+//					app.openPage('VehicleSelect.html','VehicleSelect')
 				}, false);
 				
-				//自动计算总金额
-				Oil_out_Volume.addEventListener("input",function(e){
-					if(!!this.value && !!Oil_out_Price.value){
-						Oil_Amount.value = (this.value * Oil_out_Price.value).toFixed(2);
+				//自动计算加油量
+				Oil_out_Price.addEventListener("input",function(e){
+					if(!!this.value && !!Oil_Amount.value){
+						Oil_out_Volume.value = (Oil_Amount.value / Oil_out_Price.value).toFixed(2);
 					};
 				},false);
+				Oil_Amount.addEventListener("input",function(e){
+					if(!!this.value && !!Oil_out_Price.value){
+						Oil_out_Volume.value = (Oil_Amount.value / Oil_out_Price.value).toFixed(2);
+					};
+				},false);
+				
+				//是否收费
+				mui('.mui-content .mui-switch').each(function() { //循环所有toggle
+					//toggle.classList.contains('mui-active') 可识别该toggle的开关状态
+					/**
+					 * toggle 事件监听
+					 */
+					this.addEventListener('toggle', function(event) {
+						//event.detail.isActive 可直接获取当前状态
+						Oil_IsMoney.value = event.detail.isActive ? '1' : '0';
+					});
+				});
 			});
 			//添加DtPicker
 			function AddDtPicker(el){
@@ -247,9 +205,15 @@
 					picker.dispose();
 				});
 			}
+			function selected(result){
+				var arrCode = result.split('|');
+				Vehicle_Code.value = arrCode[0];
+				Vehicle_OldNum.value = arrCode[1];
+			}
 			
 			//确认
 			function btn_ok(){
+//				console.log(loginfo.userid)
 				//必填项输入完成后，激活提交
 				var controls = mui('#bill-form')[0].querySelectorAll('input,select,textarea');
 				var formData = {};
@@ -261,14 +225,14 @@
 		        	formData[controls[i].id] = controls[i].value;
 				}
 				//当前里程不能小于上次里程
-//				if((Vehicle_OldNum.value - Vehicle_Num.value) > 0){
-//					mui.toast('当前里程不能小于上次里程');
-//					return;
-//				}
+				if((Vehicle_OldNum.value - Vehicle_Num.value) > 0){
+					mui.toast('当前里程不能小于上次里程');
+					return;
+				}
 				formData['Oil_out_User'] = userinfo.code;
 				formData['UserName'] = userinfo.realname;
 				formData['Oil_out_Remark'] = Oil_out_Remark.value;
-				console.log(JSON.stringify(formData))
+//				console.log(JSON.stringify(formData))
 //				return
 				var btnArray = ['确认', '取消'];
 				mui.confirm('确认提交？', '申通提醒', btnArray, function(e) {

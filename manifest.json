@@ -220,8 +220,7 @@
 					"css/mui.min.css",
 					"css/style.css",
 					"js/mui.enterfocus.js",
-					"css/iconfont.css",
-					"js/mui.js"
+					"css/iconfont.css"
 				],
 				"refer": [
 					"main.html",
@@ -230,7 +229,8 @@
 					"vehicle-workflow.html",
 					"leavebill-workflow.html",
 					"expensebill-workflow.html",
-					"collectionmoney-workflow.html"
+					"collectionmoney-workflow.html",
+					"home.html"
 				],
 				"priority": 0
 			},
@@ -297,7 +297,8 @@
 					"img/google_voice.png",
 					"img/server_property.png",
 					"img/robot.png",
-					"img/text_signature.png"
+					"img/text_signature.png",
+					"img/lorry.png"
 				],
 				"refer": [
 					"addresslist.html",
@@ -333,11 +334,8 @@
 					"business/scanwrong/form_input.html",
 					"business/scanwrong/pullrefresh_main.html",
 					"business/scanwrong/scanwrong_main.html",
-					"business/vehicle_loading/vehicle_loading_main.html",
-					"business/waybill/waybill-grid.html",
-					"business/vehicle_loading/vehicle_innage_main.html",
-					"tab-work-input.html",
-					"business/salary/salary-grid.html"
+					"business/vehicle_arrive/vehicle_arrive.html",
+					"tab-work-input.html"
 				],
 				"priority": 0
 			},
@@ -1530,8 +1528,7 @@
 				"refer": [
 					"business/workflow/vehicle-workflow.html",
 					"business/workflow/paymentbill-workflow.html",
-					"business/workflow/expensebill-workflow.html",
-					"business/workflow/leavebill-workflow.html"
+					"business/workflow/expensebill-workflow.html"
 				],
 				"priority": 0
 			},
@@ -1762,9 +1759,7 @@
 					"fonts/mui.ttf",
 					"css/mui.min.css"
 				],
-				"refer": [
-					"business/questionbill/questionbill-input.html"
-				],
+				"refer": [],
 				"priority": 0
 			},
 			"business/questionbill/questionbill-grid.html": {
@@ -1813,8 +1808,7 @@
 					"business/notice/notice_list_main.html",
 					"business/knowledgelib/knowledgelib_list.html",
 					"business/addresslist/addresslist.html",
-					"business/workreport/workreport_index.html",
-					"business/lighthouse/lighthouse-list-main.html"
+					"business/workreport/workreport_index.html"
 				],
 				"priority": 0
 			},
@@ -1863,11 +1857,7 @@
 				"resources": [
 					"js/mui.picker.min.js",
 					"css/mui.poppicker.css",
-					"css/mui.picker.min.css",
-					"js/app.js",
-					"js/mui.min.js",
-					"fonts/mui.ttf",
-					"css/mui.min.css"
+					"css/mui.picker.min.css"
 				],
 				"refer": [],
 				"priority": 0
@@ -1907,15 +1897,9 @@
 					"js/app.js",
 					"js/mui.min.js",
 					"fonts/mui.ttf",
-					"css/mui.min.css",
-					"fonts/iconfont.ttf",
-					"css/common.css",
-					"css/iconfont.css",
-					"css/style.css"
+					"css/mui.min.css"
 				],
-				"refer": [
-					"camera_image.html"
-				],
+				"refer": [],
 				"priority": 0
 			},
 			"business/notice/notice_list_main.html": {
@@ -2161,10 +2145,7 @@
 					"report/business/complaints_report.html",
 					"report/business/complaints315_report.html",
 					"report/business/big_error_group.html",
-					"report/business/complaints_analysis.html",
-					"report/business/scanwrong_report.html",
-					"report/business/scanwrong_province_report.html",
-					"report/business/scanwrong_group.html"
+					"report/business/complaints_analysis.html"
 				],
 				"priority": 0
 			},
@@ -2986,141 +2967,15 @@
 				"refer": [],
 				"priority": 0
 			},
-			"business/vehicle_loading/vehicle_loading_main.html": {
+			"business/vehicle_arrive/vehicle_arrive.html": {
 				"resources": [
-					"business/vehicle_loading/vehicle_loading_sub.html",
-					"css/mui.min.css",
-					"js/app.js",
-					"js/mui.min.js",
-					"fonts/mui.ttf"
-				],
-				"refer": [
-					"business/vehicle_loading/vehicle_loading_form.html"
-				],
-				"priority": 0
-			},
-			"business/vehicle_loading/vehicle_loading_form.html": {
-				"resources": [
-					"css/mui.min.css",
-					"js/app.js",
-					"js/mui.min.js",
-					"fonts/mui.ttf",
 					"img/scan.png",
-					"css/common.css",
-					"css/mui.poppicker.css",
-					"css/mui.picker.min.css",
-					"css/iconfont.css",
-					"css/style.css",
-					"fonts/iconfont.ttf",
-					"js/mui.picker.min.js",
-					"js/mui.poppicker.js"
-				],
-				"refer": [],
-				"priority": 0
-			},
-			"business/waybill/waybill-grid.html": {
-				"resources": [
-					"img/script_edit.png",
 					"js/app.js",
 					"js/mui.min.js",
-					"img/advanced_data_grid.png",
-					"fonts/mui.ttf",
-					"css/mui.min.css"
-				],
-				"refer": [
-					"business/waybill/waybill-list-main.html"
-				],
-				"priority": 0
-			},
-			"business/waybill/waybill-input.html": {
-				"resources": [
-					"js/common.js",
-					"js/mui.picker.min.js",
-					"css/common.css",
-					"css/mui.min.css",
-					"css/mui.poppicker.css",
-					"css/mui.picker.min.css",
-					"js/mui.enterfocus.js",
-					"img/scan.png"
-				],
-				"refer": [
-					"camera_image.html"
-				],
-				"priority": 0
-			},
-			"business/waybill/waybill-list-main.html": {
-				"resources": [
-					"business/waybill/waybill-list-sub.html"
-				],
-				"refer": [
-					"business/waybill/waybill-input.html"
-				],
-				"priority": 0
-			},
-			"business/vehicle_loading/vehicle_loading_sub.html": {
-				"resources": [
-					"css/mui.min.css"
-				],
-				"refer": [],
-				"priority": 0
-			},
-			"business/waybill/waybill-list-sub.html": {
-				"resources": [],
-				"refer": [
-					"business/waybill/waybill-modify.html"
-				],
-				"priority": 0
-			},
-			"business/waybill/waybill-modify.html": {
-				"resources": [
-					"js/app.js",
-					"js/mui.picker.min.js",
-					"js/mui.min.js",
-					"css/common.css",
-					"js/mui.poppicker.js",
-					"fonts/mui.ttf",
-					"css/mui.min.css",
-					"css/mui.picker.min.css",
-					"js/mui.enterfocus.js"
-				],
-				"refer": [
-					"camera_image.html"
-				],
-				"priority": 0
-			},
-			"business/vehicle_loading/vehicle_innage_main.html": {
-				"resources": [
-					"js/app.js",
-					"business/vehicle_loading/vehicle_innage_sub.html",
-					"js/mui.min.js",
-					"fonts/mui.ttf",
-					"css/mui.min.css"
-				],
-				"refer": [
-					"business/vehicle_loading/vehicle_innage_form.html"
-				],
-				"priority": 0
-			},
-			"business/vehicle_loading/vehicle_innage_form.html": {
-				"resources": [
-					"js/app.js",
-					"js/mui.picker.min.js",
-					"js/mui.min.js",
-					"css/common.css",
-					"js/mui.poppicker.js",
-					"fonts/mui.ttf",
 					"css/iconfont.css",
 					"css/mui.min.css",
 					"css/style.css",
-					"css/mui.poppicker.css",
-					"css/mui.picker.min.css"
-				],
-				"refer": [],
-				"priority": 0
-			},
-			"business/vehicle_loading/vehicle_innage_sub.html": {
-				"resources": [
-					"css/mui.min.css"
+					"fonts/mui.ttf"
 				],
 				"refer": [],
 				"priority": 0
@@ -3129,190 +2984,59 @@
 				"resources": [
 					"img/lorry_box.png",
 					"img/box_down.png",
+					"img/box.png",
 					"img/server_property.png",
-					"css/mui.min.css",
 					"img/cash_register.png",
-					"js/app.js",
-					"js/mui.min.js",
-					"fonts/mui.ttf",
-					"img/box.png"
+					"img/oil.png"
 				],
 				"refer": [
-					"business/bulkycargo/bulkycargo_main.html",
-					"business/vehicle_loading/vehicle_loading_main.html",
-					"business/gunrecords/pullrefresh_main.html",
-					"business/handlerecord/handlerecord_main.html",
-					"business/HandleRegister/HandleRegister_main.html",
-					"business/vehicle_loading/vehicle_innage_main.html",
-					"business/scanwrong/scanwrong_main.html"
+					"business/oilout/dieseloil_main.html",
+					"business/oilout/oilout_grid.html"
 				],
 				"priority": 0
 			},
-			"business/bulkycargo/bulkycargo_main.html": {
+			"business/oilout/dieseloil_main.html": {
 				"resources": [
-					"js/app.js",
-					"js/mui.min.js",
-					"fonts/mui.ttf",
-					"css/mui.min.css",
-					"business/bulkycargo/bulkycargo_sub.html"
+					"business/oilout/dieseloil_sub.html"
 				],
 				"refer": [
-					"business/bulkycargo/bulkycargo_form.html"
+					"business/oilout/dieseloil_form.html"
 				],
 				"priority": 0
 			},
-			"business/bulkycargo/bulkycargo_form.html": {
+			"business/oilout/dieseloil_form.html": {
 				"resources": [
 					"js/mui.picker.min.js",
 					"css/common.css",
 					"js/mui.poppicker.js",
-					"css/iconfont.css",
-					"css/style.css",
-					"fonts/iconfont.ttf",
 					"css/mui.poppicker.css",
 					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/iconfont.css",
 					"css/mui.min.css",
-					"js/app.js",
-					"js/mui.min.js",
-					"fonts/mui.ttf",
-					"img/scan.png",
-					"js/common.js"
+					"css/style.css"
 				],
 				"refer": [
-					"barcode_scan.html"
+					"business/oilout/VehicleSelect.html"
 				],
 				"priority": 0
 			},
-			"business/bulkycargo/bulkycargo_sub.html": {
-				"resources": [
-					"css/mui.min.css"
-				],
-				"refer": [],
-				"priority": 0
-			},
-			"business/lighthouse/lighthouse-input.html": {
-				"resources": [
-					"js/mui.picker.min.js",
-					"css/common.css",
-					"js/mui.poppicker.js",
-					"css/mui.min.css",
-					"css/mui.poppicker.css",
-					"css/mui.picker.min.css"
-				],
-				"refer": [],
-				"priority": 0
-			},
-			"business/lighthouse/lighthouse-list-main.html": {
-				"resources": [
-					"business/lighthouse/lighthouse-list-sub.html",
-					"css/mui.min.css"
-				],
-				"refer": [
-					"business/lighthouse/lighthouse-input.html"
-				],
-				"priority": 0
-			},
-			"business/lighthouse/lighthouse-list-sub.html": {
-				"resources": [
-					"css/mui.min.css"
-				],
-				"refer": [],
-				"priority": 0
-			},
-			"business/HandleRegister/HandleRegister_main.html": {
-				"resources": [
-					"business/HandleRegister/HandleRegister_sub.html",
-					"js/app.js",
-					"js/mui.min.js",
-					"fonts/mui.ttf",
-					"css/mui.min.css"
-				],
-				"refer": [
-					"business/HandleRegister/HandleRegister_input.html"
-				],
-				"priority": 0
-			},
-			"business/HandleRegister/HandleRegister_input.html": {
-				"resources": [
-					"js/common.js",
-					"img/scan.png",
-					"js/app.js",
-					"js/mui.min.js",
-					"fonts/mui.ttf",
-					"css/mui.min.css"
-				],
-				"refer": [
-					"barcode_scan.html"
-				],
-				"priority": 0
-			},
-			"business/HandleRegister/HandleRegister_sub.html": {
-				"resources": [
-					"js/app.js",
-					"js/mui.min.js",
-					"css/mui.min.css"
-				],
-				"refer": [],
-				"priority": 0
-			},
-			"business/questionbill/questionbill-input.html": {
+			"business/oilout/oilout_grid.html": {
 				"resources": [],
 				"refer": [
-					"camera_image.html"
+					"business/oilout/dieseloil_main.html"
 				],
 				"priority": 0
 			},
-			"business/salary/salary-grid.html": {
+			"business/oilout/VehicleSelect.html": {
 				"resources": [
-					"img/date.png",
-					"img/coins.png"
-				],
-				"refer": [
-					"business/salary/month-date.html",
-					"business/salary/salary.html"
-				],
-				"priority": 0
-			},
-			"business/salary/month-date.html": {
-				"resources": [
-					"js/mui.picker.min.js",
-					"css/mui.poppicker.css",
-					"css/mui.picker.min.css"
-				],
-				"refer": [],
-				"priority": 0
-			},
-			"report/business/scanwrong_report.html": {
-				"resources": [
-					"js/mui.picker.min.js",
-					"js/mui.poppicker.js",
-					"css/mui.poppicker.css",
-					"css/mui.picker.min.css",
-					"js/echarts.common.min.js",
+					"js/common.js",
 					"js/app.js",
 					"js/mui.min.js",
 					"fonts/mui.ttf",
 					"css/mui.min.css"
-				],
-				"refer": [],
-				"priority": 0
-			},
-			"report/business/scanwrong_province_report.html": {
-				"resources": [
-					"js/mui.picker.min.js",
-					"js/mui.poppicker.js",
-					"css/mui.poppicker.css",
-					"css/mui.picker.min.css",
-					"js/echarts.common.min.js"
-				],
-				"refer": [],
-				"priority": 0
-			},
-			"business/salary/salary.html": {
-				"resources": [
-					"js/mui.picker.min.js",
-					"css/mui.poppicker.css",
-					"css/mui.picker.min.css"
 				],
 				"refer": [],
 				"priority": 0
