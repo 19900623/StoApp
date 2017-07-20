@@ -8,7 +8,6 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-
 		<!--标准mui.css-->
 		<link rel="stylesheet" href="css/mui.min.css">
 
@@ -20,27 +19,27 @@
 			<h1 id="title" class="mui-title">工作辅助</h1>
 		</header>
 		<div style="margin-top: 45px;">
-			<ul class="mui-table-view mui-grid-view mui-grid-9">		
+			<ul class="mui-table-view mui-grid-view mui-grid-9">
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
 					<a onclick="app.openPage('business/leavebill/leavebill-list-main.html','leavebill-list-main')">
 						<img src="img/allow_users_edit_ranges.png">
 						<div class="mui-media-body">请假条</div>
 					</a>
-				</li>		
+				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
 					<a onclick="app.openPage('business/leavebill/leavebill-list-view-main.html','leavebill-list-view-main')">
 						<img src="img/client_account_template.png">
 						<div class="mui-media-body">请假记录</div>
 					</a>
 				</li>
-			
+
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
 					<a onclick="app.openPage('business/workreport/workreport_index.html','workreport_index')">
 						<img src="img/report_edit.png">
 						<div class="mui-media-body">工作汇报</div>
 					</a>
 				</li>
-								
+
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
 					<a onclick="app.openPage('business/addresslist/addresslist.html','addresslist')">
 						<img src="img/blackberry.png">
@@ -52,7 +51,7 @@
 						<img src="img/subdomains.png">
 						<div class="mui-media-body">百事通</div>
 					</a>
-				</li>		
+				</li>
 				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
 					<a onclick="app.openPage('business/knowledgelib/knowledgelib_list.html','errosend-grid')">
 						<img src="img/books.png">
@@ -65,18 +64,20 @@
 						<div class="mui-media-body">公告通知</div>
 					</a>
 				</li>
-				
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+					<a onclick="app.openPage('business/expensebill/expensebill-list-main.html','expensebill-list-main')">
+						<img src="img/account_balances.png">
+						<div class="mui-media-body">报销单</div>
+					</a>
+				</li>
 			</ul>
 		</div>
 	</body>
 	<script src="js/mui.min.js"></script>
 	<script src="js/app.js"></script>
 	<script>
-		mui.init({
-		});
-		mui.plusReady(function() {
-		});
-
+		mui.init({});
+		mui.plusReady(function() {});
 	</script>
 
 </html>

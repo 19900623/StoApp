@@ -14,7 +14,7 @@
 	"icons": {
 		"72": "icon.png"
 	},
-	"launch_path": "home.html",/*应用的入口页面，默认为根目录下的index.html；支持网络地址，必须以http://或https://开头*/
+	"launch_path": "index.html",/*应用的入口页面，默认为根目录下的index.html；支持网络地址，必须以http://或https://开头*/
 	"developer": {
 		"name": "",/*开发者名称*/
 		"email": "",/*开发者邮箱地址*/
@@ -297,7 +297,8 @@
 					"img/google_voice.png",
 					"img/server_property.png",
 					"img/robot.png",
-					"img/text_signature.png"
+					"img/text_signature.png",
+					"img/lorry.png"
 				],
 				"refer": [
 					"addresslist.html",
@@ -332,7 +333,10 @@
 					"business/HIK/hik_form.html",
 					"business/scanwrong/form_input.html",
 					"business/scanwrong/pullrefresh_main.html",
-					"business/scanwrong/scanwrong_main.html"
+					"business/scanwrong/scanwrong_main.html",
+					"business/vehicle_arrive/vehicle_arrive.html",
+					"business/vehiclearrive/vehicle-arrive-main.html",
+					"tab-vehicle-loc.html"
 				],
 				"priority": 0
 			},
@@ -2954,6 +2958,77 @@
 				"priority": 0
 			},
 			"business/scanwrong/scanwrong_sub.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/vehicle_arrive/vehicle_arrive.html": {
+				"resources": [
+					"img/scan.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"css/iconfont.css",
+					"css/mui.min.css",
+					"css/style.css",
+					"fonts/mui.ttf"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/vehiclearrive/vehicle-arrive-main.html": {
+				"resources": [
+					"business/vehiclearrive/vehicle-arrive-sub.html"
+				],
+				"refer": [
+					"business/vehiclearrive/vehicle-arrive.html"
+				],
+				"priority": 0
+			},
+			"business/vehiclearrive/vehicle-arrive.html": {
+				"resources": [
+					"js/common.js",
+					"js/mui.picker.min.js",
+					"css/mui.picker.min.css",
+					"img/arrow_refresh_small.png",
+					"img/scan.png"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"tab-vehicle-loc.html": {
+				"resources": [
+					"img/cash_register.png"
+				],
+				"refer": [
+					"business/vehiclearrive/vehicle-arrive-main.html",
+					"business/vehicleoil/vehicle-oil-main.html"
+				],
+				"priority": 0
+			},
+			"business/vehicleoil/vehicle-oil-main.html": {
+				"resources": [
+					"business/vehicleoil/vehicle-oil-sub.html"
+				],
+				"refer": [
+					"business/vehicleoil/vehicle-oil.html"
+				],
+				"priority": 0
+			},
+			"business/vehicleoil/vehicle-oil.html": {
+				"resources": [
+					"js/common.js",
+					"img/arrow_refresh_small.png",
+					"img/scan.png"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/vehiclearrive/vehicle-arrive-sub.html": {
 				"resources": [
 					"js/app.js",
 					"js/mui.min.js",
