@@ -335,8 +335,7 @@
 					"business/scanwrong/pullrefresh_main.html",
 					"business/scanwrong/scanwrong_main.html",
 					"business/vehicle_arrive/vehicle_arrive.html",
-					"business/vehiclearrive/vehicle-arrive-main.html",
-					"tab-vehicle-loc.html"
+					"tab-work-input.html"
 				],
 				"priority": 0
 			},
@@ -2125,7 +2124,8 @@
 					"img/blackberry.png",
 					"img/table_chart.png",
 					"img/chart_line.png",
-					null
+					null,
+					"img/package.png"
 				],
 				"refer": [
 					"report/business/report-waybillpickup.html",
@@ -2980,56 +2980,59 @@
 				"refer": [],
 				"priority": 0
 			},
-			"business/vehiclearrive/vehicle-arrive-main.html": {
+			"tab-work-input.html": {
 				"resources": [
-					"business/vehiclearrive/vehicle-arrive-sub.html"
+					"img/lorry_box.png",
+					"img/box_down.png",
+					"img/box.png",
+					"img/server_property.png",
+					"img/cash_register.png",
+					"img/oil.png"
 				],
 				"refer": [
-					"business/vehiclearrive/vehicle-arrive.html"
+					"business/oilout/dieseloil_main.html",
+					"business/oilout/oilout_grid.html"
 				],
 				"priority": 0
 			},
-			"business/vehiclearrive/vehicle-arrive.html": {
+			"business/oilout/dieseloil_main.html": {
 				"resources": [
-					"js/common.js",
+					"business/oilout/dieseloil_sub.html"
+				],
+				"refer": [
+					"business/oilout/dieseloil_form.html"
+				],
+				"priority": 0
+			},
+			"business/oilout/dieseloil_form.html": {
+				"resources": [
 					"js/mui.picker.min.js",
+					"css/common.css",
+					"js/mui.poppicker.js",
+					"css/mui.poppicker.css",
 					"css/mui.picker.min.css",
-					"img/arrow_refresh_small.png",
-					"img/scan.png"
-				],
-				"refer": [],
-				"priority": 0
-			},
-			"tab-vehicle-loc.html": {
-				"resources": [
-					"img/cash_register.png"
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/iconfont.css",
+					"css/mui.min.css",
+					"css/style.css"
 				],
 				"refer": [
-					"business/vehiclearrive/vehicle-arrive-main.html",
-					"business/vehicleoil/vehicle-oil-main.html"
+					"business/oilout/VehicleSelect.html"
 				],
 				"priority": 0
 			},
-			"business/vehicleoil/vehicle-oil-main.html": {
-				"resources": [
-					"business/vehicleoil/vehicle-oil-sub.html"
-				],
+			"business/oilout/oilout_grid.html": {
+				"resources": [],
 				"refer": [
-					"business/vehicleoil/vehicle-oil.html"
+					"business/oilout/dieseloil_main.html"
 				],
 				"priority": 0
 			},
-			"business/vehicleoil/vehicle-oil.html": {
+			"business/oilout/VehicleSelect.html": {
 				"resources": [
 					"js/common.js",
-					"img/arrow_refresh_small.png",
-					"img/scan.png"
-				],
-				"refer": [],
-				"priority": 0
-			},
-			"business/vehiclearrive/vehicle-arrive-sub.html": {
-				"resources": [
 					"js/app.js",
 					"js/mui.min.js",
 					"fonts/mui.ttf",
