@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link href="../../css/style.css" rel="stylesheet" />
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Q0O9mkEqXfiLRRfVLUl7sHDZ"></script>
+
+	</head>
+	<style>
+		.area {
+			margin: 20px auto 0px auto;
+		}
+		
+		.mui-input-group {
+			margin-top: 10px;
+		}
+		
+		.mui-input-group:first-child {
+			margin-top: 10px;
+		}
+		
+		.mui-input-group label {
+			width: 30%;
+		}
+		
+		.mui-scan {
+			padding-right: 2em !important;
+		}
+		
+		.mui-input-row label~input,
+		.mui-input-row label~select,
+		.mui-input-row label~textarea {
+			width: 70%;
+		}
+		
+		.mui-checkbox input[type=checkbox],
+		.mui-radio input[type=radio] {
+			top: 6px;
+		}
+		
+		.mui-content-padded {
+			margin-top: 25px;
+		}
+		
+		.mui-btn {
+			padding: 10px;
+		}
+		
+		.button {
+			text-align: center;
+			border: 1px solid #ECB100;
+			padding: 0em 0em;
+			/*	margin: .0em 4.7em;*/
+		}
+	</style>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">加油记录</h1>
+		</header>
+		<div class="mui-content">
+			<form id='form' class="mui-input-group">
+				<div class="mui-input-row" style="position:relative;">
+					<label>车牌号</label>
+					<input type="text" id="vehicle_code" class="mui-input mui-scan" required="required" placeholder="车牌号">
+					<img src="../../img/scan.png" style="position: absolute; right: 0px;top: 1.5px ;width: 2em; height: 2em;" onclick="clicked('../../barcode_scan.html',true,true)" />
+				</div>
+				<div class="mui-input-row">
+					<label>发车时间</label>
+					<input id='startdate' type="text" class="mui-input-clear mui-input" placeholder="发车时间" required="required" readonly="readonly">
+					<img src="../../img/arrow_refresh_small.png" style="position: absolute; right: 0px;top: 1.5px ;width: 2em; height: 2em;" onclick="RefreshTime()" />
+				</div>
+				<div class="mui-input-row">
+					<label>当前时间</label>
+					<input id='enddate' type="text" class="mui-input-clear mui-input" placeholder="当前时间" required="required" readonly="readonly">
+				</div>
+				<div class="mui-input-row">
+					<label>当前位置</label>
+					<input id='nowlocation' type="text" class="mui-input-clear mui-input" placeholder="当前位置" required="required" readonly="readonly">
+				</div>
+				<div class="mui-input-row">
+					<label>里程数</label>
+					<input id='termini_distance' type="text" class="mui-input-clear mui-input" placeholder="里程数" required="required">
+				</div>
+				<div class="mui-input-row">
+					<label>单价</label>
+					<input id='price' type="text" class="mui-input-clear mui-input" placeholder="单价" required="required" onblur="ComputedValue()">
+				</div>
+				<div class="mui-input-row">
+					<label>数量(升)</label>
+					<input id='volume' type="text" class="mui-input-clear mui-input" placeholder="数量(升)" required="required" onblur="ComputedValue()">
+				</div>
+				<div class="mui-input-row">
+					<label>总金额</label>
+					<input id='totalMoney' type="text" class="mui-input-clear mui-input" placeholder="总金额" required="required" readonly="readonly">
+				</div>
+
+			</form>
+
+			<div class="mui-button-row" style="margin: 10px">
+				<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
+				<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
+			</div>
+
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.enterfocus.js"></script>
+		<script src="../../js/common.js"></script>
+		<script>
+			mui.init({
+
+			});
+			var pos;
+			mui.plusReady(function() {
+				GetLoaction()
+
+				mui.enterfocus('#bill-form input', function() {
+					mui.trigger(buttonok, 'tap');
+				});
+			});
+
+			document.getElementById("nowlocation").addEventListener('tap', function() {
+				if(plus.networkinfo.getCurrentType() == 1) {
+					plus.nativeUI.toast('请检查网路连接!');
+					return;
+				}
+				var btnArray = ['是', '否'];
+				mui.confirm('是否刷新当前位置？', '申通提醒', btnArray, function(e) {
+					if(e.index == 0) {
+						GetLoaction();
+					}
+				});
+			})
+
+			function GetLoaction() {
+				plus.geolocation.getCurrentPosition(function(position) {
+					var codns = position.coords;
+					pos = codns.longitude + ',' + codns.latitude;
+					//安卓手机不需要处理
+					if(plus.os.name != 'Android') {
+						var x = codns.longitude;
+						var y = codns.latitude;
+						var convertor = new BMap.Convertor();
+						var ggPoint = new BMap.Point(x, y);
+						var pointArr = [];
+						pointArr.push(ggPoint);
+						convertor.translate(pointArr, 1, 5, function(data) {
+							if(data.status == 0) {
+								pos = data.points[0].lng + ',' + data.points[0].lat;
+								var pt = new BMap.Point(data.points[0].lng, data.points[0].lat);
+								var geoc = new BMap.Geocoder();
+								geoc.getLocation(pt, function(rs) {
+									document.getElementById("nowlocation").value = rs.address || '';
+								});
+							}
+						});
+					} else {
+						document.getElementById("nowlocation").value = position.addresses || '';
+					}
+				}, function(e) {
+					plus.nativeUI.toast("获取定位位置信息失败：" + e.message);
+				}, {
+					provider: 'baidu'
+				});
+			}
+
+			function btn_ok() {
+				var vehicle_code = document.getElementById("vehicle_code");
+				var startdate = document.getElementById("startdate");
+				var enddate = document.getElementById("enddate");
+				var nowlocation = document.getElementById("nowlocation");
+				var termini_distance = document.getElementById("termini_distance");
+				var price = document.getElementById("price");
+				var volume = document.getElementById("volume");
+
+				//验证
+				if(vehicle_code.value == "") {
+					plus.nativeUI.toast("车牌号不能为空");
+					vehicle_code.focus();
+					return;
+				}
+				if(vehicle_code.value == "") {
+					plus.nativeUI.toast("发车时间不能为空");
+					vehicle_code.focus();
+					return;
+				}
+
+				if(nowlocation.value == "") {
+					plus.nativeUI.toast("当前位置不能为空");
+					nowlocation.focus();
+					return;
+				}
+
+				if(termini_distance.value == "") {
+					plus.nativeUI.toast("里程数不能为空");
+					termini_distance.focus();
+					return;
+				} else {
+					if(isNaN(termini_distance.value)) {
+						plus.nativeUI.toast("里程数必须为数字");
+						termini_distance.value = "";
+						termini_distance.focus();
+						return;
+					}
+				}
+
+				if(price.value == "") {
+					plus.nativeUI.toast("单价不能为空");
+					price.focus();
+					return;
+				} else {
+					if(isNaN(price.value)) {
+						plus.nativeUI.toast("单价必须为数字");
+						price.value = "";
+						price.focus();
+						return;
+					}
+				}
+
+				if(volume.value == "") {
+					plus.nativeUI.toast("里程数不能为空");
+					volume.focus();
+					return;
+				} else {
+					if(isNaN(termini_distance.value)) {
+						plus.nativeUI.toast("里程数必须为数字");
+						volume.value = "";
+						volume.focus();
+						return;
+					}
+				}
+
+				var userid = app.getLoginInfo().userid;
+				var username = JSON.parse(app.getLoginInfo().userinfo).realname;
+				//调用方法
+				
+				var billInfo = {
+					Vehicle_Code: vehicle_code.value,
+					StartDate: startdate.value,
+					Addresses: nowlocation.value,
+					Pos: pos,
+					Termini_Distance: termini_distance.value,
+					Price: price.value,
+					Volume: volume.value,
+					TotalMoney:document.getElementById("totalMoney").value,
+					CreateUserId: userid,
+					CreateUserName: username				
+				};
+				
+				console.log(JSON.stringify(billInfo));
+
+				var btnArray = ['是', '否'];
+				mui.confirm('是否保存加油记录？', '申通提醒', btnArray, function(e) {
+					if(e.index == 0) {
+						plus.nativeUI.showWaiting();
+						var url = app.getUrl() + 'AddVehicleArrivalOil';
+						mui.ajax(url, {
+							data: {
+								info: JSON.stringify(billInfo)
+							},
+							type: 'post', //HTTP请求类型
+							success: function(data) {
+								if(data == "") {
+									plus.nativeUI.toast('添加成功');
+									var page = plus.webview.getWebviewById('vehicle-oil-sub');
+									//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+									mui.fire(page, 'refresh');
+									mui.back();
+								} else {
+									plus.nativeUI.toast(data);
+								}
+								plus.nativeUI.closeWaiting();
+							}
+						});
+					}
+				});
+
+			}
+
+			//扫描程序调用完毕
+			function scaned(r) {
+				document.getElementById("vehicle_code").value = r;
+				RefreshTime();
+			}
+			
+			function ComputedValue()
+			{
+			   var price = document.getElementById("price");
+			   var volume = document.getElementById("volume");
+			   if(price.value!=''&&volume.value!='')
+			   if(!isNaN(price.value)&&!isNaN(volume.value))
+			   {
+                   document.getElementById("totalMoney").value=(price.value*volume.value).toFixed(2);
+			   }
+			}
+
+			//更新发车时间
+			function RefreshTime() {
+				var Vehicle_Code = document.getElementById("vehicle_code").value;
+				if(Vehicle_Code == '') {
+					plus.nativeUI.toast("车牌号不能为空");
+					vehicle_code.focus();
+					return;
+				}
+				plus.nativeUI.showWaiting();
+
+				var url = app.getUrl() + 'GetVehicleArrivalOil';
+				//获取该车牌号的最后发车时间和途径地
+				mui.ajax(url, {
+					data: {
+						Vehicle_Code: Vehicle_Code
+					},
+					type: 'post', //HTTP请求类型
+					success: function(data) {
+
+						var res = JSON.parse(data);
+						if(res.success = false) {
+							plus.nativeUI.toast(res.message);
+						} else {
+							document.getElementById("startdate").value = res.dptime;
+							document.getElementById("enddate").value = new Date().format('yyyy-MM-dd hh:mm:ss');
+						}
+						plus.nativeUI.closeWaiting();
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

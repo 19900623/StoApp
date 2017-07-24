@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
 	"tab-setting.html": {
 		"resources": [
@@ -386,4 +387,398 @@
 			"css/mui.picker.min.css"
 		]
 	}
+=======
+{
+<<<<<<< HEAD
+  "index.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "css/iconfont.css",
+      "css/mui.min.css",
+      "css/style.css",
+      "js/mui.enterfocus.js",
+      "fonts/mui.ttf"
+    ],
+    "refer": [
+      "main.html"
+    ]
+  },
+  "tab-setting.html": {
+    "resources": [
+      "img/erweima.png",
+      "img/me_logo.png",
+      "js/mui.view.js"
+    ],
+    "refer": []
+  },
+  "tab-applications.html": {
+    "resources": [
+      "img/basket_full.png",
+      "img/robot.png",
+      "img/google_voice.png",
+      "img/car.png",
+      "img/name_manager.png",
+      "img/vcard.png",
+      "img/cell_delete.png",
+      "img/lorry.png",
+      "img/text_signature.png",
+      "img/client_account_template.png",
+      "img/visa_2.png",
+      "img/brick_error.png",
+      "css/app.css"
+    ],
+    "refer": [
+      "business/vehicle_arrive/vehicle_arrive.html",
+      "business/vehiclearrive/vehicle-arrive-main.html",
+      "tab-vehicle-loc.html",
+      "tab-work-help.html"
+    ]
+  },
+  "main.html": {
+    "resources": [
+      "tab-shedule-main.html",
+      "fonts/mui.ttf"
+    ],
+    "refer": [
+      "tab-setting.html",
+      "tab-applications.html",
+      "tab-shedule-main.html",
+      "report/tab-echarts.html"
+    ]
+  },
+  "business/vehicle_arrive/vehicle_arrive.html": {
+    "resources": [
+      "img/scan.png",
+      "js/app.js",
+      "js/mui.min.js",
+      "css/iconfont.css",
+      "css/mui.min.css",
+      "css/style.css",
+      "fonts/mui.ttf"
+    ],
+    "refer": []
+  },
+  "tab-shedule-main.html": {
+    "resources": [
+      "tab-shedule.html"
+    ],
+    "refer": [
+      "tab-shedule.html"
+    ]
+  },
+  "report/tab-echarts.html": {
+    "resources": [
+      "img/card_money.png",
+      "img/coins_add.png",
+      "img/company_generosity.png",
+      "img/statistics.png",
+      "css/app.css",
+      "img/combined_chart.png",
+      "img/calendar_link.png",
+      "js/page.js",
+      "img/coins_delete.png",
+      "img/save_money.png",
+      "img/small_business.png",
+      "img/chart_bar.png",
+      "img/account_balances.png"
+    ],
+    "refer": []
+  },
+  "tab-shedule.html": {
+    "resources": [
+      "img/newspaper.png",
+      "img/report_edit.png",
+      "img/desktop_network.png"
+    ],
+    "refer": []
+  },
+  "business/vehiclearrive/vehicle-arrive-main.html": {
+    "resources": [
+      "business/vehiclearrive/vehicle-arrive-sub.html"
+    ],
+    "refer": [
+      "business/vehiclearrive/vehicle-arrive-sub.html",
+      "business/vehiclearrive/vehicle-arrive.html"
+    ]
+  },
+  "business/vehiclearrive/vehicle-arrive.html": {
+    "resources": [
+      "js/common.js",
+      "js/mui.picker.min.js",
+      "css/mui.picker.min.css",
+      "img/arrow_refresh_small.png",
+      "img/scan.png"
+    ],
+    "refer": []
+  },
+  "tab-vehicle-loc.html": {
+    "resources": [
+      "img/cash_register.png"
+    ],
+    "refer": [
+      "business/vehiclearrive/vehicle-arrive-main.html",
+      "business/vehicleoil/vehicle-oil-main.html"
+    ]
+  },
+  "business/vehicleoil/vehicle-oil-main.html": {
+    "resources": [
+      "business/vehicleoil/vehicle-oil-sub.html"
+    ],
+    "refer": [
+      "business/vehicleoil/vehicle-oil.html",
+      "business/vehicleoil/vehicle-oil-sub.html"
+    ]
+  },
+  "business/vehicleoil/vehicle-oil.html": {
+    "resources": [
+      "js/common.js",
+      "img/arrow_refresh_small.png",
+      "img/scan.png"
+    ],
+    "refer": []
+  },
+  "tab-work-help.html": {
+    "resources": [
+      "img/allow_users_edit_ranges.png",
+      "img/subdomains.png",
+      "img/books.png",
+      "img/blackberry.png"
+    ],
+    "refer": [
+      "business/leavebill/leavebill-list-view-main.html",
+      "business/leavebill/leavebill-list-main.html"
+    ]
+  },
+  "business/vehiclearrive/vehicle-arrive-sub.html": {
+    "resources": [
+      "js/app.js",
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "business/leavebill/leavebill-list-view-main.html": {
+    "resources": [
+      "js/mui.picker.min.js",
+      "css/mui.poppicker.css",
+      "css/mui.picker.min.css"
+    ]
+  },
+  "business/leavebill/leavebill-list-main.html": {
+    "resources": [
+      "business/leavebill/leavebill-list-sub.html"
+    ],
+    "refer": [
+      "business/leavebill/leavebill-list-sub.html"
+    ]
+  }
+=======
+	"tab-setting.html": {
+		"resources": [
+			"img/erweima.png",
+			"img/me_logo.png",
+			"js/mui.view.js"
+		]
+	},
+	"tab-applications.html": {
+		"resources": [
+			"img/basket_full.png",
+			"img/robot.png",
+			"img/google_voice.png",
+			"img/car.png",
+			"img/name_manager.png",
+			"img/vcard.png",
+			"img/cell_delete.png",
+			"img/text_signature.png",
+			"img/client_account_template.png",
+			"img/visa_2.png",
+			"img/brick_error.png"
+		],
+		"refer": [
+			"tab-work-input.html",
+			"tab-work-help.html"
+		]
+	},
+	"main.html": {
+		"resources": [
+			"tab-shedule-main.html",
+			"fonts/mui.ttf"
+		],
+		"refer": [
+			"tab-setting.html",
+			"tab-applications.html",
+			"tab-shedule-main.html",
+			"report/tab-echarts.html"
+		]
+	},
+	"index.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/style.css",
+			"js/mui.enterfocus.js"
+		],
+		"refer": [
+			"main.html"
+		]
+	},
+	"tab-shedule-main.html": {
+		"resources": [
+			"tab-shedule.html"
+		],
+		"refer": [
+			"tab-shedule.html"
+		]
+	},
+	"report/tab-echarts.html": {
+		"resources": [
+			"img/card_money.png",
+			"img/coins_add.png",
+			"img/company_generosity.png",
+			"img/statistics.png",
+			"css/app.css",
+			"img/combined_chart.png",
+			"img/calendar_link.png",
+			"js/page.js",
+			"img/coins_delete.png",
+			"img/save_money.png",
+			"img/small_business.png",
+			"img/chart_bar.png",
+			"img/account_balances.png"
+		],
+		"refer": [
+			"report/business/business-grid.html"
+		]
+	},
+	"tab-work-input.html": {
+		"resources": [
+			"img/lorry_box.png",
+			"img/box_down.png",
+			"img/box.png",
+			"img/server_property.png",
+			"img/cash_register.png",
+			"img/oil.png"
+		],
+		"refer": [
+			"business/oilout/dieseloil_main.html",
+			"business/oilout/oilout_grid.html"
+		]
+	},
+	"tab-shedule.html": {
+		"resources": [
+			"img/newspaper.png",
+			"img/report_edit.png",
+			"img/desktop_network.png"
+		]
+	},
+	"report/business/business-grid.html": {
+		"resources": [
+			"img/outlook_ignore_email.png",
+			"img/session_idle_time.png",
+			"img/telephone.png",
+			"img/package.png",
+			"img/table_torn.png",
+			"img/table_chart.png",
+			"img/blackberry.png",
+			"img/chart_line.png"
+		]
+	},
+	"business/workreport/workreport_index.html": {
+		"resources": [
+			"business/workreport/workreport_write.html",
+			"fonts/iconfont.ttf"
+		],
+		"refer": [
+			"business/workreport/workreport_write.html",
+			"business/workreport/workreport_read_main.html"
+		]
+	},
+	"tab-work-help.html": {
+		"resources": [
+			"img/allow_users_edit_ranges.png",
+			"img/subdomains.png",
+			"img/books.png"
+		],
+		"refer": [
+			"business/workreport/workreport_index.html"
+		]
+	},
+	"business/workreport/workreport_write.html": {
+		"refer": [
+			"business/workreport/workreport_form.html"
+		]
+	},
+	"business/workreport/workreport_read_main.html": {
+		"resources": [
+			"business/workreport/workreport_read_sub.html"
+		],
+		"refer": [
+			"business/workreport/workreport_read_sub.html"
+		]
+	},
+	"business/workreport/workreport_form.html": {
+		"resources": [
+			"js/mui.picker.min.js",
+			"js/mui.poppicker.js",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css"
+		],
+		"refer": [
+			"employee_select.html"
+		]
+	},
+	"employee_select.html": {
+		"resources": [
+			"js/pinyin.js",
+			"css/mui.indexedlist.css",
+			"js/mui.indexedlist.js"
+		]
+	},
+	"business/oilout/dieseloil_main.html": {
+		"refer": [
+			"business/oilout/dieseloil_sub.html",
+			"business/oilout/dieseloil_form.html"
+		],
+		"resources": [
+			"business/oilout/dieseloil_sub.html"
+		]
+	},
+	"business/oilout/dieseloil_form.html": {
+		"resources": [
+			"js/mui.picker.min.js",
+			"css/common.css",
+			"js/mui.poppicker.js",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css",
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"css/style.css"
+		],
+		"refer": [
+			"business/oilout/VehicleSelect.html"
+		]
+	},
+	"business/oilout/oilout_grid.html": {
+		"refer": [
+			"business/oilout/dieseloil_main.html"
+		]
+	},
+	"business/oilout/VehicleSelect.html": {
+		"resources": [
+			"js/common.js",
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
+		]
+	}
+>>>>>>> origin/master
+>>>>>>> 516b27573a5b1cf5872fe091ad8d70f95ecae6da
 }
