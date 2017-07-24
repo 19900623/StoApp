@@ -3,8 +3,11 @@
 		"resources": [
 			"img/erweima.png",
 			"img/me_logo.png",
-			"js/mui.view.js"
-		]
+			"js/mui.view.js",
+			"fonts/mui.ttf",
+			"js/app.js"
+		],
+		"refer": []
 	},
 	"tab-applications.html": {
 		"resources": [
@@ -18,17 +21,25 @@
 			"img/text_signature.png",
 			"img/client_account_template.png",
 			"img/visa_2.png",
-			"img/brick_error.png"
+			"img/brick_error.png",
+			"js/app.js"
 		],
 		"refer": [
 			"tab-work-input.html",
-			"tab-work-help.html"
+			"tab-work-help.html",
+			"business/waybill/waybill-grid.html",
+			"business/salary/salary-grid.html",
+			"business/HIK/hik_form.html",
+			"business/vehicle/vehicle_main.html"
 		]
 	},
 	"main.html": {
 		"resources": [
 			"tab-shedule-main.html",
-			"fonts/mui.ttf"
+			"fonts/mui.ttf",
+			"js/app.js",
+			"js/mui.min.js",
+			"css/mui.min.css"
 		],
 		"refer": [
 			"tab-setting.html",
@@ -44,7 +55,8 @@
 			"css/iconfont.css",
 			"css/mui.min.css",
 			"css/style.css",
-			"js/mui.enterfocus.js"
+			"js/mui.enterfocus.js",
+			"fonts/mui.ttf"
 		],
 		"refer": [
 			"main.html"
@@ -52,7 +64,9 @@
 	},
 	"tab-shedule-main.html": {
 		"resources": [
-			"tab-shedule.html"
+			"tab-shedule.html",
+			"css/mui.min.css",
+			"js/mui.min.js"
 		],
 		"refer": [
 			"tab-shedule.html"
@@ -72,7 +86,8 @@
 			"img/save_money.png",
 			"img/small_business.png",
 			"img/chart_bar.png",
-			"img/account_balances.png"
+			"img/account_balances.png",
+			"js/app.js"
 		],
 		"refer": [
 			"report/business/business-grid.html"
@@ -85,7 +100,11 @@
 			"img/box.png",
 			"img/server_property.png",
 			"img/cash_register.png",
-			"img/oil.png"
+			"img/oil.png",
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
 		],
 		"refer": [
 			"business/oilout/dieseloil_main.html",
@@ -96,8 +115,13 @@
 		"resources": [
 			"img/newspaper.png",
 			"img/report_edit.png",
-			"img/desktop_network.png"
-		]
+			"img/desktop_network.png",
+			"js/app.js",
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"img/client_account_template.png"
+		],
+		"refer": []
 	},
 	"report/business/business-grid.html": {
 		"resources": [
@@ -108,7 +132,17 @@
 			"img/table_torn.png",
 			"img/table_chart.png",
 			"img/blackberry.png",
-			"img/chart_line.png"
+			"img/chart_line.png",
+			"js/app.js",
+			"fonts/mui.ttf",
+			"img/client_account_template.png",
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"img/cell_delete.png",
+			"img/text_signature.png"
+		],
+		"refer": [
+			"report/sign_rate/sign-rate-grid.html"
 		]
 	},
 	"business/workreport/workreport_index.html": {
@@ -125,7 +159,16 @@
 		"resources": [
 			"img/allow_users_edit_ranges.png",
 			"img/subdomains.png",
-			"img/books.png"
+			"img/books.png",
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"img/blackberry.png",
+			"css/mui.min.css",
+			"img/newspaper.png",
+			"img/report_edit.png",
+			"img/client_account_template.png",
+			"img/account_balances.png"
 		],
 		"refer": [
 			"business/workreport/workreport_index.html"
@@ -134,7 +177,8 @@
 	"business/workreport/workreport_write.html": {
 		"refer": [
 			"business/workreport/workreport_form.html"
-		]
+		],
+		"resources": []
 	},
 	"business/workreport/workreport_read_main.html": {
 		"resources": [
@@ -160,7 +204,8 @@
 			"js/pinyin.js",
 			"css/mui.indexedlist.css",
 			"js/mui.indexedlist.js"
-		]
+		],
+		"refer": []
 	},
 	"business/oilout/dieseloil_main.html": {
 		"refer": [
@@ -168,7 +213,11 @@
 			"business/oilout/dieseloil_form.html"
 		],
 		"resources": [
-			"business/oilout/dieseloil_sub.html"
+			"business/oilout/dieseloil_sub.html",
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
 		]
 	},
 	"business/oilout/dieseloil_form.html": {
@@ -192,6 +241,13 @@
 	"business/oilout/oilout_grid.html": {
 		"refer": [
 			"business/oilout/dieseloil_main.html"
+		],
+		"resources": [
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"img/oil.png"
 		]
 	},
 	"business/oilout/VehicleSelect.html": {
@@ -201,6 +257,133 @@
 			"js/mui.min.js",
 			"fonts/mui.ttf",
 			"css/mui.min.css"
+		],
+		"refer": []
+	},
+	"business/waybill/waybill-grid.html": {
+		"resources": [
+			"img/script_edit.png",
+			"js/app.js",
+			"js/mui.min.js",
+			"img/advanced_data_grid.png",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
+		],
+		"refer": []
+	},
+	"business/salary/salary-grid.html": {
+		"resources": [
+			"img/date.png",
+			"img/coins.png",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/mui.min.js",
+			"js/app.js"
+		],
+		"refer": [
+			"business/salary/salary.html",
+			"business/salary/salary_kou.html",
+			"business/salary/salary_bu.html"
+		]
+	},
+	"business/oilout/dieseloil_sub.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.min.js",
+			"css/mui.min.css"
+		],
+		"refer": []
+	},
+	"business/vehicle/vehicle_sub.html": {
+		"resources": [
+			"js/app.js",
+			"css/mui.min.css"
+		],
+		"refer": []
+	},
+	"business/HIK/hik_form.html": {
+		"resources": [
+			"js/app.js",
+			"js/common.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
+		],
+		"refer": []
+	},
+	"business/vehicle/vehicle_main.html": {
+		"resources": [
+			"business/vehicle/vehicle_sub.html",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
+		],
+		"refer": [
+			"business/vehicle/vehicle_sub.html"
+		]
+	},
+	"business/salary/salary.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.picker.min.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css"
+		],
+		"refer": [
+			"business/salary/salary_kou.html",
+			"business/salary/salary_bu.html"
+		]
+	},
+	"report/sign_rate/sign-rate-group.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.picker.min.js",
+			"js/mui.min.js",
+			"js/mui.poppicker.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css"
+		],
+		"refer": []
+	},
+	"report/sign_rate/sign-rate-grid.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.min.js",
+			"img/combined_chart.png",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"img/text_signature.png",
+			"img/chart_line.png"
+		],
+		"refer": [
+			"report/sign_rate/sign-rate-group.html"
+		]
+	},
+	"business/salary/salary_kou.html": {
+		"resources": [
+			"js/mui.picker.min.js",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css",
+			"js/app.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
+		]
+	},
+	"business/salary/salary_bu.html": {
+		"resources": [
+			"js/app.js",
+			"js/mui.picker.min.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css"
 		]
 	}
 }

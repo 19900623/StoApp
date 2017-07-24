@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link href="../../css/mui.picker.min.css" rel="stylesheet" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			/*跨webview需要手动指定位置*/		
+			.mui-popover {
+				height: 120px;
+			}
+			#sumAmount{text-align: right;}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" href="#topPopover">查询</a>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">月结扣工资</h1>
+		</header>
+		<div style="margin-top: 45px;">
+			<div id="sum" class="mui-input-row">
+				<label>合计金额：</label>
+				<input id="sumAmount" type="text" readonly="readonly" value="0" />
+			</div>
+			<ul class="mui-table-view" id="list">
+
+			</ul>
+		</div>
+		<!--右上角弹出菜单-->
+		<div id="topPopover" class="mui-popover">
+			<div class="mui-popover-arrow"></div>
+			<div class="mui-scroll-wrapper">
+				<form class="mui-input-group" id="bill-form">
+					<div class="mui-input-row" >
+						<label>月份</label>
+						<input type="text" id="StartTime" class="mui-input" required="required" readonly="readonly">
+					</div>
+				</form>
+				<div class="mui-button-row" style="margin-top:10px;">
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_search()" id="buttonok">搜索</button>&nbsp;&nbsp;
+				</div>
+			</div>
+
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script type="text/javascript">
+			var StartTime = document.getElementById("StartTime");
+			mui.init()
+			mui.plusReady(function() {
+				StartTime.addEventListener('tap', function() {
+					var options = {
+						type: "month",
+						beginYear: "2015",
+						endYear: "2030"
+					}
+					var picker = new mui.DtPicker(options);
+					picker.show(function(rs) {
+						StartTime.value = rs.text//.replace(new RegExp('-', "gm"), '/');
+						picker.dispose();
+					});
+				});
+				btn_search();
+			})
+			
+			function btn_search() {
+				var Date = plus.webview.currentWebview().Date.replace('/','-');
+				if (StartTime.value == '' && !!!Date) {
+					plus.nativeUI.toast("请选择月份");
+					return;
+				}
+				if(!!StartTime.value){
+					Date = StartTime.value;
+				}
+		
+				//加载数据
+				var fragment = document.createDocumentFragment();
+				var UserInfo = JSON.parse(app.getLoginInfo().userinfo|| "{}");
+				count = 1;
+				var messageInfo = {
+					username: UserInfo.realname,
+					date: Date
+				};
+				
+				var url = app.getUrl() + 'GetKouSalaryByMonth';
+				mui.ajax(url, {
+					data: messageInfo,
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+						console.log(JSON.stringify(data))
+						if(data.Success) {
+							var jsonData = JSON.parse(data.codes);	//转JSON对象
+							var amount = 0;
+							for(var i = 0; i < jsonData.length; i++) {
+								var li = document.createElement('li');
+								li.className = 'mui-table-view-cell';
+								amount += jsonData[i].billamount_pa;//合计金额
+								var divBox = document.createElement('div');
+								divBox.className = "mui-slider-handle";
+								divBox.innerHTML = '<div class="mui-table">'
+								+ '<div class="mui-table-cell mui-col-xs-10">'
+								+ 	'<h4 class="mui-ellipsis-2">'
+								+ 		jsonData[i].custom_name
+								+ 	'</h4>'
+//								+ 	'<p class="mui-h6 mui-ellipsis">'
+//								+ 		'金额：' + jsonData[i].billamount_pa
+//								+ 	'</p>'
+								+ 	'<p class="mui-h6 mui-ellipsis">'
+								+ 		'月结月份：' + jsonData[i].deductmonth.substr(0,7)
+								+ 	'</p>'
+								+ '</div>'
+								+ '<div class="mui-table-cell mui-col-xs-8 mui-text-right">'
+								+ 	'<span class="mui-h5">'
+								+ 		jsonData[i].billamount_pa
+								+ 	'</span>'
+								+ '</div>'
+								+ '</div>';
+								li.appendChild(divBox);
+								fragment.appendChild(li);
+							}
+							document.getElementById('sumAmount').value = amount.toFixed(2);
+							var table = document.body.querySelector('.mui-table-view');
+							while (table.firstChild)
+								table.removeChild(table.firstChild);
+							table.appendChild(fragment);
+						} else {
+							mui.toast(data.Message);
+						}
+					},
+				});
+				if(!!StartTime.value){
+	                //关闭弹出框
+					mui('#topPopover').popover('toggle');
+				}
+			}
+		</script>
+	</body>
+
+</html>
