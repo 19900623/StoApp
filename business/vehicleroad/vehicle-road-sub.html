@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
- 
+
 	<head>
 		<meta charset="utf-8">
 		<title>Hello MUI</title>
@@ -75,7 +75,7 @@
 						PageNumber: 1,
 						PageSize: 10
 					};
-					var url = app.getUrl() + 'GetVehicleArrivalOilList';
+					var url = app.getUrl() + 'GetVehicleArrivalRoadList';
 					mui.ajax(url, {
 						data: messageInfo,
 						type: 'post',
@@ -86,7 +86,8 @@
 									li = document.createElement('li');
 									li.className = 'mui-table-view-cell';
 									li.id = data[i].id;
-									var htmlText = '<div>' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '车牌号：' + data[i].vehicle_code + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '加油时间:' + data[i].createdate + '<br/>里程数:' + data[i].termini_distance + '&nbsp;&nbsp;&nbsp;&nbsp;金额:'+data[i].totalmoney+ '&nbsp;&nbsp;&nbsp;&nbsp;方式:'+data[i].paytype+'</p>' + '</div>' + '</div>';
+									var htmlText = '<div>' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '车牌号：' + data[i].vehicle_code + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '加油时间:' + data[i].createdate + 
+									'<br/>里程数:' + data[i].termini_distance + '&nbsp;&nbsp;&nbsp;&nbsp;金额:'+data[i].totalmoney+ '&nbsp;&nbsp;&nbsp;&nbsp;方式:'+data[i].paytype+'</p>' + '</div>' + '</div>';
 									li.innerHTML = htmlText;								
 									fragment.appendChild(li);
 								}
@@ -128,7 +129,7 @@
 						PageNumber: count,
 						PageSize: 10
 					};
-					var url = app.getUrl() + 'GetVehicleArrivalOilList';
+					var url = app.getUrl() + 'GetVehicleArrivalRoadList';
 					mui.ajax(url, {
 						data: messageInfo,
 						type: 'post',
@@ -139,7 +140,8 @@
 									li = document.createElement('li');
 									li.className = 'mui-table-view-cell';
 									li.id = data[i].id;
-									var htmlText = '<div>' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '车牌号：' + data[i].vehicle_code + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '加油时间:' + data[i].createdate + '<br/>里程数:' + data[i].termini_distance + '&nbsp;&nbsp;&nbsp;&nbsp;金额:'+data[i].totalmoney+ '&nbsp;&nbsp;&nbsp;&nbsp;方式:'+data[i].paytype+'</p>' + '</div>' + '</div>';
+									var htmlText = '<div>' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '车牌号：' + data[i].vehicle_code + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '加油时间:' + data[i].createdate 
+									+ '<br/>里程数:' + data[i].termini_distance + '&nbsp;&nbsp;&nbsp;&nbsp;金额:'+data[i].totalmoney+ '&nbsp;&nbsp;&nbsp;&nbsp;方式:'+data[i].paytype+'</p>' + '</div>' + '</div>';
 									li.innerHTML = htmlText;									
 									fragment.appendChild(li);
 								}

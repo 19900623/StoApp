@@ -336,6 +336,7 @@
 					"business/scanwrong/scanwrong_main.html",
 					"business/vehicle_arrive/vehicle_arrive.html",
 					"tab-work-input.html",
+					"tab-vehicle-loc.html",
 					"business/waybill/waybill-grid.html",
 					"business/salary/salary-grid.html"
 				],
@@ -3058,7 +3059,48 @@
 				"refer": [],
 				"priority": 0
 			},
-			"business/waybill/waybill-grid.html": {
+			"business/vehicleroad/vehicle-road-main.html": {
+				"resources": [
+					"business/vehicleroad/vehicle-road-sub.html"
+				],
+				"refer": [
+					"business/vehicleroad/vehicle-road.html"
+				],
+				"priority": 0
+			},
+			"tab-vehicle-loc.html": {
+				"resources": [
+					"img/road_sign.png",
+					"img/cash_register.png"
+				],
+				"refer": [
+					"business/vehicleroad/vehicle-road-main.html",
+					"business/vehicleoil/vehicle-oil-main.html"
+				],
+				"priority": 0
+			},
+			"business/vehicleoil/vehicle-oil-main.html": {
+				"resources": [
+					"business/vehicleoil/vehicle-oil-sub.html"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/vehicleroad/vehicle-road.html": {
+				"resources": [
+					"js/common.js",
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.picker.min.css",
+					"img/arrow_refresh_small.png",
+					"img/scan.png"
+				],
+				"refer": [
+					"barcode_scan.html"
+				],
+				"priority": 0
+			},
+						"business/waybill/waybill-grid.html": {
 				"resources": [
 					"img/script_edit.png",
 					"js/app.js",

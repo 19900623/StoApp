@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-
+ 
 	<head>
 		<meta charset="utf-8">
 		<title>Hello MUI</title>
@@ -86,7 +86,8 @@
 									li = document.createElement('li');
 									li.className = 'mui-table-view-cell';
 									li.id = data[i].id;
-									var htmlText = '<div>' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '车牌号：' + data[i].vehicle_code + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '到车:' + data[i].enddate + '<br/>里程数:' + data[i].termini_distance + '&nbsp;&nbsp;&nbsp;&nbsp;到达地:'+data[i].termini+'</p>' + '</div>' + '</div>';
+									var htmlText = '<div>' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '车牌号：' + data[i].vehicle_code + '</h4>' 
+									+ '<p class="mui-h6 mui-ellipsis">' + '到达地:'+data[i].termini+'&nbsp;&nbsp;&nbsp;&nbsp;时间:' + data[i].enddate + '<br/>里程:' + data[i].termini_distance + '&nbsp;&nbsp;&nbsp;&nbsp;行驶:'+data[i].termini_num+'</p>' + '</div>' + '</div>';
 									li.innerHTML = htmlText;								
 									fragment.appendChild(li);
 								}
@@ -139,7 +140,8 @@
 									li = document.createElement('li');
 									li.className = 'mui-table-view-cell';
 									li.id = data[i].id;
-									var htmlText = '<div>' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '车牌号：' + data[i].vehicle_code + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '到车:' + data[i].enddate + '<br/>里程数:' + data[i].termini_distance + '&nbsp;&nbsp;&nbsp;&nbsp;到达地:'+data[i].termini+'</p>' + '</div>' + '</div>';
+									var htmlText = '<div>' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '车牌号：' + data[i].vehicle_code + '</h4>' 
+									+ '<p class="mui-h6 mui-ellipsis">' + '到达地:'+data[i].termini+'&nbsp;&nbsp;&nbsp;&nbsp;时间:' + data[i].enddate + '<br/>里程:' + data[i].termini_distance + '&nbsp;&nbsp;&nbsp;&nbsp;行驶:'+data[i].termini_num+'</p>' + '</div>' + '</div>';
 									li.innerHTML = htmlText;									
 									fragment.appendChild(li);
 								}

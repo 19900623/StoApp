@@ -72,25 +72,39 @@
 				</div>
 				<div class="mui-input-row">
 					<label>发车时间</label>
-					<input id='startdate' type="text" class="mui-input-clear mui-input" placeholder="发车时间" required="required" readonly="readonly">
+					<input id='startdate' type="text" class="mui-input" placeholder="发车时间" required="required" readonly="readonly">
 					<img src="../../img/arrow_refresh_small.png" style="position: absolute; right: 0px;top: 1.5px ;width: 2em; height: 2em;" onclick="RefreshTime()" />
 				</div>
 				<div class="mui-input-row">
 					<label>到达时间</label>
-					<input id='enddate' type="text" class="mui-input-clear mui-input" placeholder="到达时间" required="required" readonly="readonly">
+					<input id='enddate' type="text" class="mui-input" placeholder="到达时间" required="required" readonly="readonly">
 				</div>
 				<div class="mui-input-row">
 					<label>当前位置</label>
-					<input id='nowlocation' type="text" class="mui-input-clear mui-input" placeholder="当前位置" required="required" readonly="readonly">
+					<input id='nowlocation' type="text" class="mui-input" placeholder="当前位置-点击刷新" required="required" readonly="readonly">
 				</div>
 				<div class="mui-input-row">
 					<label>到达地</label>
-					<input id='termini' type="text" class="mui-input-clear mui-input" placeholder="到达地" required="required" readonly="readonly">
+					<input id='termini' type="text" class="mui-input" placeholder="到达地" required="required" readonly="readonly">
 				</div>
 				<div class="mui-input-row">
 					<label>里程数</label>
-					<input id='termini_distance' type="text" class="mui-input-clear mui-input" placeholder="里程数" required="required">
+					<input id='termini_distance' type="text" class="mui-input-clear mui-input" placeholder="当前里程数" required="required" onblur="NumTernimi()">
+				</div>				
+				<div class="mui-input-row">
+					<label>发车里程</label>
+					<input id='first_termini_distance' type="text" class="mui-input" placeholder="发车里程数" required="required" readonly="readonly">
+				</div>				
+				<div class="mui-input-row">
+					<label>前里程</label>
+					<input id='pre_termini_distance' type="text" class="mui-input" placeholder="上次记录里程数" required="required" readonly="readonly">
 				</div>
+		
+				<div class="mui-input-row">
+					<label>已行驶</label>
+					<input id='termini_num' type="text" class="mui-input" placeholder="发车后行驶里程数" required="required" readonly="readonly">
+				</div>
+				
 
 			</form>
 
@@ -126,7 +140,7 @@
 					}
 				});
 
-				mui.enterfocus('#bill-form input', function() {
+				mui.enterfocus('#form input', function() {
 					mui.trigger(buttonok, 'tap');
 				});
 			});
@@ -175,6 +189,23 @@
 					provider: 'baidu'
 				});
 			}
+			
+			function NumTernimi()
+			{
+				var termini_distance = document.getElementById("termini_distance");
+				if(termini_distance.value != "") {
+					if(isNaN(termini_distance.value)) {
+						plus.nativeUI.toast("里程数必须为数字");
+						termini_distance.value = "";
+						termini_distance.focus();
+						return;
+					}
+					else
+					{
+					   document.getElementById("termini_num").value=(termini_distance.value-document.getElementById("first_termini_distance").value).toFixed(2);
+					}
+				} 
+			}
 
 			function btn_ok() {
 				var vehicle_code = document.getElementById("vehicle_code");
@@ -183,6 +214,7 @@
 				var nowlocation = document.getElementById("nowlocation");
 				var termini_distance = document.getElementById("termini_distance");
 				var termini = document.getElementById("termini");
+				var pre_termini_distance = document.getElementById("pre_termini_distance");
 
 				//验证
 				if(vehicle_code.value == "") {
@@ -190,9 +222,9 @@
 					vehicle_code.focus();
 					return;
 				}
-				if(vehicle_code.value == "") {
+				if(startdate.value == "") {
 					plus.nativeUI.toast("发车时间不能为空");
-					vehicle_code.focus();
+					startdate.focus();
 					return;
 				}
 				
@@ -220,7 +252,15 @@
 						return;
 					}
 				}
-
+				
+				if(termini_distance.value<pre_termini_distance.value)
+				{
+					plus.nativeUI.toast("当前里程数不能小于前里程");
+					termini_distance.value = "";
+					termini_distance.focus();
+					return;
+				}
+								
 				var userid = app.getLoginInfo().userid;
 				var username = JSON.parse(app.getLoginInfo().userinfo).realname;
 				//调用方法
@@ -233,7 +273,8 @@
 					CreateUserId: userid,
 					CreateUserName: username,
 					Termini_Distance: termini_distance.value,
-					Termini: termini.value
+					Termini: termini.value,
+					Termini_num:termini_num.value
 				};
 				console.log(JSON.stringify(billInfo));
 
@@ -262,7 +303,6 @@
 						});
 					}
 				});
-
 			}
 
 			//扫描程序调用完毕
@@ -295,7 +335,10 @@
 							plus.nativeUI.toast(res.message);
 						} else {
 							document.getElementById("startdate").value = res.dptime;
-							document.getElementById("enddate").value = new Date().format('yyyy-MM-dd hh:mm:ss');
+							document.getElementById("enddate").value = new Date().format('yyyy-MM-dd hh:mm:ss');						
+							document.getElementById("pre_termini_distance").value=res.predistance;
+							document.getElementById("first_termini_distance").value=res.firstdistance;
+													
 							var arrType = [];
 							for(var i = 0; i < res.listTer.length; i++) {
 								var obj = {
@@ -314,5 +357,5 @@
 			}
 		</script>
 	</body>
-
+ 
 </html>
