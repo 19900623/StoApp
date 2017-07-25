@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "3.43",/*应用版本名称*/
+		"name": "3.44",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -336,7 +336,9 @@
 					"business/scanwrong/scanwrong_main.html",
 					"business/vehicle_arrive/vehicle_arrive.html",
 					"tab-work-input.html",
-					"tab-vehicle-loc.html"
+					"tab-vehicle-loc.html",
+					"business/waybill/waybill-grid.html",
+					"business/salary/salary-grid.html"
 				],
 				"priority": 0
 			},
@@ -1800,7 +1802,8 @@
 					"img/newspaper.png",
 					"img/report_edit.png",
 					"img/client_account_template.png",
-					"fonts/mui.ttf"
+					"fonts/mui.ttf",
+					"img/account_balances.png"
 				],
 				"refer": [
 					"business/leavebill/leavebill-list-main.html",
@@ -2988,7 +2991,11 @@
 					"img/box.png",
 					"img/server_property.png",
 					"img/cash_register.png",
-					"img/oil.png"
+					"img/oil.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
 				],
 				"refer": [
 					"business/oilout/dieseloil_main.html",
@@ -2998,7 +3005,11 @@
 			},
 			"business/oilout/dieseloil_main.html": {
 				"resources": [
-					"business/oilout/dieseloil_sub.html"
+					"business/oilout/dieseloil_sub.html",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
 				],
 				"refer": [
 					"business/oilout/dieseloil_form.html"
@@ -3025,7 +3036,13 @@
 				"priority": 0
 			},
 			"business/oilout/oilout_grid.html": {
-				"resources": [],
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"img/oil.png"
+				],
 				"refer": [
 					"business/oilout/dieseloil_main.html"
 				],
@@ -3081,6 +3098,85 @@
 				"refer": [
 					"barcode_scan.html"
 				],
+				"priority": 0
+			},
+						"business/waybill/waybill-grid.html": {
+				"resources": [
+					"img/script_edit.png",
+					"js/app.js",
+					"js/mui.min.js",
+					"img/advanced_data_grid.png",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/salary/salary-grid.html": {
+				"resources": [
+					"img/date.png",
+					"img/coins.png",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/mui.min.js",
+					"js/app.js"
+				],
+				"refer": [
+					"business/salary/salary.html",
+					"business/salary/salary_kou.html",
+					"business/salary/salary_bu.html"
+				],
+				"priority": 0
+			},
+			"business/oilout/dieseloil_sub.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/salary/salary.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [
+					"business/salary/salary_kou.html",
+					"business/salary/salary_bu.html"
+				],
+				"priority": 0
+			},
+			"business/salary/salary_kou.html": {
+				"resources": [
+					"js/mui.picker.min.js",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css",
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/salary/salary_bu.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.picker.min.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"css/mui.poppicker.css",
+					"css/mui.picker.min.css"
+				],
+				"refer": [],
 				"priority": 0
 			}
 		},
