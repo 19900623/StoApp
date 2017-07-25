@@ -61,7 +61,7 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav">
-			<h1 class="mui-title">加油记录</h1>
+			<h1 class="mui-title">添加过路费</h1>
 		</header>
 		<div class="mui-content">
 			<form id='form' class="mui-input-group">
@@ -88,16 +88,8 @@
 					<input id='termini_distance' type="text" class="mui-input-clear mui-input" placeholder="里程数" required="required">
 				</div>
 				<div class="mui-input-row">
-					<label>单价</label>
-					<input id='price' type="text" class="mui-input-clear mui-input" placeholder="单价" required="required" onblur="ComputedValue()">
-				</div>
-				<div class="mui-input-row">
-					<label>数量(升)</label>
-					<input id='volume' type="text" class="mui-input-clear mui-input" placeholder="数量(升)" required="required" onblur="ComputedValue()">
-				</div>
-				<div class="mui-input-row">
-					<label>总金额</label>
-					<input id='totalMoney' type="text" class="mui-input" placeholder="总金额" required="required" readonly="readonly">
+					<label>金额</label>
+					<input id='totalMoney' type="text" class="mui-input" placeholder="金额" required="required" >
 				</div>
 				<div class="mui-input-row">
 					<label>付款方式</label>
@@ -118,7 +110,7 @@
 		<script src="../../js/mui.enterfocus.js"></script>
 		<script src="../../js/common.js"></script>
 		<script src="../../js/mui.poppicker.js"></script>
-				<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
 				
 		<script>
 			mui.init({
@@ -139,8 +131,8 @@
 					value: '现金',
 					text: '现金'
 				},{
-					value: '油卡',
-					text: '油卡'
+					value: 'ETC',
+					text: 'ETC'
 				});				
 				typePicker.setData(arrTitle);
 			});
@@ -202,8 +194,7 @@
 				var enddate = document.getElementById("enddate");
 				var nowlocation = document.getElementById("nowlocation");
 				var termini_distance = document.getElementById("termini_distance");
-				var price = document.getElementById("price");
-				var volume = document.getElementById("volume");
+				var totalMoney = document.getElementById("totalMoney");
 				var paytype = document.getElementById("paytype");
 
 				//验证
@@ -237,31 +228,19 @@
 					}
 				}
 
-				if(price.value == "") {
-					plus.nativeUI.toast("单价不能为空");
-					price.focus();
+				if(totalMoney.value == "") {
+					plus.nativeUI.toast("金额不能为空");
+					totalMoney.focus();
 					return;
 				} else {
-					if(isNaN(price.value)) {
-						plus.nativeUI.toast("单价必须为数字");
-						price.value = "";
-						price.focus();
+					if(isNaN(totalMoney.value)) {
+						plus.nativeUI.toast("金额必须为数字");
+						totalMoney.value = "";
+						totalMoney.focus();
 						return;
 					}
 				}
 
-				if(volume.value == "") {
-					plus.nativeUI.toast("数量不能为空");
-					volume.focus();
-					return;
-				} else {
-					if(isNaN(termini_distance.value)) {
-						plus.nativeUI.toast("数量必须为数字");
-						volume.value = "";
-						volume.focus();
-						return;
-					}
-				}
 							
 				if(paytype.value == "") {
 					plus.nativeUI.toast("付款方式不能为空");
@@ -279,9 +258,7 @@
 					Addresses: nowlocation.value,
 					Pos: pos,
 					Termini_Distance: termini_distance.value,
-					Price: price.value,
-					Volume: volume.value,
-					TotalMoney:document.getElementById("totalMoney").value,
+					TotalMoney:totalMoney.value,
 					CreateUserId: userid,
 					CreateUserName: username,
 					PayType: paytype.value
@@ -290,10 +267,10 @@
 				console.log(JSON.stringify(billInfo));
 
 				var btnArray = ['是', '否'];
-				mui.confirm('是否保存加油记录？', '申通提醒', btnArray, function(e) {
+				mui.confirm('是否保存过路费？', '申通提醒', btnArray, function(e) {
 					if(e.index == 0) {
 						plus.nativeUI.showWaiting();
-						var url = app.getUrl() + 'AddVehicleArrivalOil';
+						var url = app.getUrl() + 'AddVehicleArrivalRoad';
 						mui.ajax(url, {
 							data: {
 								info: JSON.stringify(billInfo)
@@ -302,7 +279,7 @@
 							success: function(data) {
 								if(data == "") {
 									plus.nativeUI.toast('添加成功');
-									var page = plus.webview.getWebviewById('vehicle-oil-sub');
+									var page = plus.webview.getWebviewById('vehicle-road-sub');
 									//触发列表界面的自定义事件（refresh）,从而进行数据刷新
 									mui.fire(page, 'refresh');
 									mui.back();
@@ -323,16 +300,6 @@
 				RefreshTime();
 			}
 			
-			function ComputedValue()
-			{
-			   var price = document.getElementById("price");
-			   var volume = document.getElementById("volume");
-			   if(price.value!=''&&volume.value!='')
-			   if(!isNaN(price.value)&&!isNaN(volume.value))
-			   {
-                   document.getElementById("totalMoney").value=(price.value*volume.value).toFixed(2);
-			   }
-			}
 
 			//更新发车时间
 			function RefreshTime() {

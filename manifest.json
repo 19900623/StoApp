@@ -7,7 +7,7 @@
 	"id": "H55AAB202",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "申通OA",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "3.41",/*应用版本名称*/
+		"name": "3.43",/*应用版本名称*/
 		"code": ""
 	},
 	"description": "",/*应用描述信息*/
@@ -335,7 +335,8 @@
 					"business/scanwrong/pullrefresh_main.html",
 					"business/scanwrong/scanwrong_main.html",
 					"business/vehicle_arrive/vehicle_arrive.html",
-					"tab-work-input.html"
+					"tab-work-input.html",
+					"tab-vehicle-loc.html"
 				],
 				"priority": 0
 			},
@@ -3039,6 +3040,47 @@
 					"css/mui.min.css"
 				],
 				"refer": [],
+				"priority": 0
+			},
+			"business/vehicleroad/vehicle-road-main.html": {
+				"resources": [
+					"business/vehicleroad/vehicle-road-sub.html"
+				],
+				"refer": [
+					"business/vehicleroad/vehicle-road.html"
+				],
+				"priority": 0
+			},
+			"tab-vehicle-loc.html": {
+				"resources": [
+					"img/road_sign.png",
+					"img/cash_register.png"
+				],
+				"refer": [
+					"business/vehicleroad/vehicle-road-main.html",
+					"business/vehicleoil/vehicle-oil-main.html"
+				],
+				"priority": 0
+			},
+			"business/vehicleoil/vehicle-oil-main.html": {
+				"resources": [
+					"business/vehicleoil/vehicle-oil-sub.html"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/vehicleroad/vehicle-road.html": {
+				"resources": [
+					"js/common.js",
+					"js/mui.picker.min.js",
+					"js/mui.poppicker.js",
+					"css/mui.picker.min.css",
+					"img/arrow_refresh_small.png",
+					"img/scan.png"
+				],
+				"refer": [
+					"barcode_scan.html"
+				],
 				"priority": 0
 			}
 		},

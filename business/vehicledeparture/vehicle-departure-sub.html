@@ -75,7 +75,8 @@
 						PageNumber: 1,
 						PageSize: 10
 					};
-					var url = app.getUrl() + 'GetVehicleArrivalOilList';
+					var url = app.getUrl() + 'GetVehicleArrivalDepartureList';
+					console.log(messageInfo);
 					mui.ajax(url, {
 						data: messageInfo,
 						type: 'post',
@@ -86,7 +87,8 @@
 									li = document.createElement('li');
 									li.className = 'mui-table-view-cell';
 									li.id = data[i].id;
-									var htmlText = '<div>' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '车牌号：' + data[i].vehicle_code + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '加油时间:' + data[i].createdate + '<br/>里程数:' + data[i].termini_distance + '&nbsp;&nbsp;&nbsp;&nbsp;金额:'+data[i].totalmoney+ '&nbsp;&nbsp;&nbsp;&nbsp;方式:'+data[i].paytype+'</p>' + '</div>' + '</div>';
+									var htmlText = '<div>' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '车牌号：' + data[i].vehicle_code + '</h4>' 
+									+ '<p class="mui-h6 mui-ellipsis">' + '发车时间:'+data[i].startdate + '<br/>里程:' + data[i].termini_distance + '&nbsp;&nbsp;&nbsp;&nbsp;驾驶员:'+data[i].driver_main+' '+data[i].driver_sub+ '</p>' + '</div>' + '</div>';
 									li.innerHTML = htmlText;								
 									fragment.appendChild(li);
 								}
@@ -128,7 +130,7 @@
 						PageNumber: count,
 						PageSize: 10
 					};
-					var url = app.getUrl() + 'GetVehicleArrivalOilList';
+					var url = app.getUrl() + 'GetVehicleArrivalDepartureList';
 					mui.ajax(url, {
 						data: messageInfo,
 						type: 'post',
@@ -139,7 +141,8 @@
 									li = document.createElement('li');
 									li.className = 'mui-table-view-cell';
 									li.id = data[i].id;
-									var htmlText = '<div>' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '车牌号：' + data[i].vehicle_code + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '加油时间:' + data[i].createdate + '<br/>里程数:' + data[i].termini_distance + '&nbsp;&nbsp;&nbsp;&nbsp;金额:'+data[i].totalmoney+ '&nbsp;&nbsp;&nbsp;&nbsp;方式:'+data[i].paytype+'</p>' + '</div>' + '</div>';
+									var htmlText = '<div>' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '车牌号：' + data[i].vehicle_code + '</h4>' 
+									+ '<p class="mui-h6 mui-ellipsis">' + '到达地:'+data[i].termini+'&nbsp;&nbsp;&nbsp;&nbsp;时间:' + data[i].enddate + '<br/>里程:' + data[i].termini_distance + '&nbsp;&nbsp;&nbsp;&nbsp;行驶:'+data[i].termini_num+'</p>' + '</div>' + '</div>';
 									li.innerHTML = htmlText;									
 									fragment.appendChild(li);
 								}
@@ -174,6 +177,7 @@
 			window.addEventListener('refresh', function(event) {
 				pulldownRefresh();
 			});
+			
 		</script>
 	</body>
 
