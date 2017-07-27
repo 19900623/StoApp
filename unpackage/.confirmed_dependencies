@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
 	"main.html": {
 		"resources": [
 			"tab-shedule-main.html",
@@ -11,10 +12,16 @@
 			"report/tab-echarts.html"
 		]
 	},
+=======
+>>>>>>> origin/master
 	"index.html": {
 		"resources": [
 			"js/app.js",
 			"js/mui.min.js",
+<<<<<<< HEAD
+=======
+			"fonts/mui.ttf",
+>>>>>>> origin/master
 			"css/iconfont.css",
 			"css/mui.min.css",
 			"css/style.css",
@@ -35,7 +42,10 @@
 		"resources": [
 			"img/basket_full.png",
 			"img/robot.png",
+<<<<<<< HEAD
 			"css/app.css",
+=======
+>>>>>>> origin/master
 			"img/google_voice.png",
 			"img/car.png",
 			"img/name_manager.png",
@@ -48,7 +58,22 @@
 			"img/brick_error.png"
 		],
 		"refer": [
+<<<<<<< HEAD
 			"tab-vehicle-loc.html"
+=======
+			"business/salary/salary-grid.html"
+		]
+	},
+	"main.html": {
+		"resources": [
+			"tab-shedule-main.html"
+		],
+		"refer": [
+			"tab-setting.html",
+			"tab-applications.html",
+			"tab-shedule-main.html",
+			"report/tab-echarts.html"
+>>>>>>> origin/master
 		]
 	},
 	"tab-shedule-main.html": {
@@ -62,6 +87,7 @@
 	"report/tab-echarts.html": {
 		"resources": [
 			"img/card_money.png",
+<<<<<<< HEAD
 			"img/statistics.png",
 			"img/calendar_link.png",
 			"img/combined_chart.png",
@@ -85,6 +111,20 @@
 		"refer": [
 			"business/vehiclearrive/vehicle-arrive-main.html",
 			"business/vehicledeparture/vehicle-departure-main.html"
+=======
+			"img/coins_add.png",
+			"img/company_generosity.png",
+			"img/statistics.png",
+			"css/app.css",
+			"img/combined_chart.png",
+			"img/calendar_link.png",
+			"js/page.js",
+			"img/coins_delete.png",
+			"img/save_money.png",
+			"img/small_business.png",
+			"img/chart_bar.png",
+			"img/account_balances.png"
+>>>>>>> origin/master
 		]
 	},
 	"tab-shedule.html": {
@@ -92,6 +132,7 @@
 			"img/newspaper.png",
 			"img/report_edit.png",
 			"img/desktop_network.png"
+<<<<<<< HEAD
 		],
 		"refer": [
 			"business/notice/notice_list_main.html"
@@ -107,12 +148,33 @@
 	},
 	"business/vehiclearrive/vehicle-arrive-sub.html": {
 		"resources": [
+=======
+		]
+	},
+	"business/salary/salary-grid.html": {
+		"resources": [
+			"img/date.png",
+			"img/coins.png"
+		],
+		"refer": [
+			"business/salary/salary_kou.html",
+			"business/salary/salary.html",
+			"business/salary/salary_bu.html"
+		]
+	},
+	"business/salary/salary_kou.html": {
+		"resources": [
+			"js/mui.picker.min.js",
+			"css/mui.poppicker.css",
+			"css/mui.picker.min.css",
+>>>>>>> origin/master
 			"js/app.js",
 			"js/mui.min.js",
 			"fonts/mui.ttf",
 			"css/mui.min.css"
 		]
 	},
+<<<<<<< HEAD
 	"business/notice/notice_list_main.html": {
 		"resources": [
 			"business/notice/notice_list_sub.html"
@@ -127,6 +189,11 @@
 		],
 		"refer": [
 			"business/vehicledeparture/vehicle-departure-sub.html"
+=======
+	"business/salary/salary.html": {
+		"refer": [
+			"business/salary/salary_kou.html"
+>>>>>>> origin/master
 		]
 	}
 }

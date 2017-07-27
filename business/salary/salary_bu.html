@@ -42,7 +42,7 @@
 			<div class="mui-scroll-wrapper">
 				<form class="mui-input-group" id="bill-form">
 					<div class="mui-input-row" >
-						<label>月份</label>
+						<label>工资月份</label>
 						<input type="text" id="StartTime" class="mui-input" required="required" readonly="readonly">
 					</div>
 				</form>
@@ -71,17 +71,21 @@
 						picker.dispose();
 					});
 				});
-				
-				btn_search();
+				var Date = plus.webview.currentWebview().Date;
+				if(!!Date){
+					btn_search(Date);
+				}
 			})
 			
-			function btn_search() {
-				var Date = plus.webview.currentWebview().Date.replace('/','-');
+			function btn_search(Date) {
 				if (StartTime.value == '' && !!!Date) {
 					plus.nativeUI.toast("请选择月份");
 					return;
 				}
-				if(!!StartTime.value){
+				if(!!Date){
+					Date = Date.replace('/','-');
+				}
+				else {
 					Date = StartTime.value;
 				}
 		
@@ -114,16 +118,16 @@
 								+ 	'<h4 class="mui-ellipsis-2">'
 								+ 		jsonData[i].customname
 								+ 	'</h4>'
-								+ 	'<p class="mui-h6 mui-ellipsis">'
-								+ 		'实收金额：' + jsonData[i].amount
-								+ 	'</p>'
 //								+ 	'<p class="mui-h6 mui-ellipsis">'
-//								+ 		'月结月份：' + jsonData[i].ny.substr(0,7)
+//								+ 		'实收金额：' + jsonData[i].amount
 //								+ 	'</p>'
+								+ 	'<p class="mui-h6 mui-ellipsis">'
+								+ 		'月结月份：' + jsonData[i].ny
+								+ 	'</p>'
 								+ '</div>'
 								+ '<div class="mui-table-cell mui-col-xs-8 mui-text-right">'
 								+ 	'<span class="mui-h5">'
-								+ 		jsonData[i].ny
+								+ 		jsonData[i].amount
 								+ 	'</span>'
 								+ '</div>'
 								+ '</div>';
