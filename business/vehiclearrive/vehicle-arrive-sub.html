@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
- 
+
 	<head>
 		<meta charset="utf-8">
 		<title>Hello MUI</title>
@@ -10,28 +10,7 @@
 
 		<link rel="stylesheet" href="../../css/mui.min.css">
 		<style>
-			.mui-table h4,
-			.mui-table h5,
-			.mui-table .mui-h5,
-			.mui-table .mui-h6,
-			.mui-table p {
-				margin-top: 0;
-			}
-			
-			.mui-table h4 {
-				line-height: 21px;
-				font-weight: 500;
-			}
-			
-			.mui-table .oa-icon {
-				position: absolute;
-				right: 0;
-				bottom: 0;
-			}
-			
-			.mui-table .oa-icon-star-filled {
-				color: #f14e41;
-			}
+
 		</style>
 	</head>
 
@@ -40,7 +19,7 @@
 		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
 			<div class="mui-scroll">
 				<!--数据列表-->
-				<ul class="mui-table-view mui-table-view-chevron">
+				<ul class="mui-table-view ">
 
 				</ul>
 			</div>
@@ -81,21 +60,59 @@
 						type: 'post',
 						dataType: 'json',
 						success: function(data) {
-							if (data) {
-								for (var i = 0; i < data.length; i++) {
+							if(data) {
+								for(var i = 0; i < data.length; i++) {
 									li = document.createElement('li');
 									li.className = 'mui-table-view-cell';
 									li.id = data[i].id;
-									var htmlText = '<div>' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '车牌号：' + data[i].vehicle_code + '</h4>' 
-									+ '<p class="mui-h6 mui-ellipsis">' + '到达地:'+data[i].termini+'&nbsp;&nbsp;&nbsp;&nbsp;时间:' + data[i].enddate + '<br/>里程:' + data[i].termini_distance + '&nbsp;&nbsp;&nbsp;&nbsp;行驶:'+data[i].termini_num+'</p>' + '</div>' + '</div>';
-									li.innerHTML = htmlText;								
+									var htmlText = '<div><div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-6">' + '<h4 class="mui-ellipsis-2">' + '车牌号：' + data[i].vehicle_code + '</h4>' +
+										'<p class="mui-h6 mui-ellipsis">' + data[i].termini + '&nbsp;&nbsp;里程:' + data[i].termini_distance + '&nbsp;&nbsp;行驶:' + data[i].termini_num +
+										'<br/>发车时间:' + data[i].enddate +
+										'<br/>卸货时间:' + (data[i].vehicle_dp_xhtime == undefined ? '' : data[i].vehicle_dp_xhtime) + '</p>' +
+										'</div>' +
+										'<div class="mui-table-cell mui-col-xs-2 mui-text-right">' +
+										'<span class="mui-h5">' +
+										(data[i].xhstate == '0' ? '<span style="color:#f00">未卸货</span>' : '已卸货') +
+										'</span></div></div>';
+									li.innerHTML = htmlText;
+									if(data[i].xhstate == '0') {
+										li.addEventListener('tap', function(event) {
+											var id=this.id
+											var btnArray = ['是', '否'];
+											mui.confirm('是否开始卸货？', '申通提醒', btnArray, function(e) {
+												if(e.index == 0) {
+													plus.nativeUI.showWaiting();
+													var billInfo = {
+														ID: id
+													};
+													var url = app.getUrl() + 'UpdateVehicleArrivalPos';												
+													mui.ajax(url, {
+														data: {
+															info: JSON.stringify(billInfo)
+														},
+														type: 'post', //HTTP请求类型
+														success: function(data) {
+															if(data == "") {
+																plus.nativeUI.toast('卸货时间更新成功');
+																pulldownRefresh();																
+															} else {
+																plus.nativeUI.toast(data);
+															}
+															plus.nativeUI.closeWaiting();
+														}
+													});
+												}
+											});
+										});
+									}
 									fragment.appendChild(li);
+
 								}
 								var table = document.body.querySelector('.mui-table-view');
-								while (table.firstChild)
+								while(table.firstChild)
 									table.removeChild(table.firstChild);
 								table.appendChild(fragment);
-								if (data.length < 10) {
+								if(data.length < 10) {
 									//参数为true代表没有更多数据了。
 									mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
 								} else {
@@ -104,7 +121,7 @@
 								}
 							} else {
 								var table = document.body.querySelector('.mui-table-view');
-								while (table.firstChild)
+								while(table.firstChild)
 									table.removeChild(table.firstChild);
 								//参数为true代表没有更多数据了。
 								mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
@@ -118,7 +135,7 @@
 			 * 上拉加载具体业务实现
 			 */
 			function pullupRefresh() {
-				setTimeout(function() {	
+				setTimeout(function() {
 					var table = document.body.querySelector('.mui-table-view');
 					count = count + 1;
 					var fragment = document.createDocumentFragment();
@@ -135,18 +152,55 @@
 						type: 'post',
 						dataType: 'json',
 						success: function(data) {
-							if (data) {
-								for (var i = 0; i < data.length; i++) {
+							if(data) {
+								for(var i = 0; i < data.length; i++) {
 									li = document.createElement('li');
 									li.className = 'mui-table-view-cell';
 									li.id = data[i].id;
-									var htmlText = '<div>' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '车牌号：' + data[i].vehicle_code + '</h4>' 
-									+ '<p class="mui-h6 mui-ellipsis">' + '到达地:'+data[i].termini+'&nbsp;&nbsp;&nbsp;&nbsp;时间:' + data[i].enddate + '<br/>里程:' + data[i].termini_distance + '&nbsp;&nbsp;&nbsp;&nbsp;行驶:'+data[i].termini_num+'</p>' + '</div>' + '</div>';
-									li.innerHTML = htmlText;									
+									var htmlText = '<div><div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-6">' + '<h4 class="mui-ellipsis-2">' + '车牌号：' + data[i].vehicle_code + '</h4>' +
+										'<p class="mui-h6 mui-ellipsis">' + data[i].termini + '&nbsp;&nbsp;里程:' + data[i].termini_distance + '&nbsp;&nbsp;行驶:' + data[i].termini_num +
+										'<br/>发车时间:' + data[i].enddate +
+										'<br/>卸货时间:' + (data[i].vehicle_dp_xhtime == undefined ? '' : data[i].vehicle_dp_xhtime) + '</p>' +
+										'</div>' +
+										'<div class="mui-table-cell mui-col-xs-2 mui-text-right">' +
+										'<span class="mui-h5">' +
+										(data[i].xhstate == '0' ? '<span style="color:#f00">未卸货</span>' : '已卸货') +
+										'</span></div></div>';
+									li.innerHTML = htmlText;
+									if(data[i].xhstate == '0') {
+										li.addEventListener('tap', function(event) {
+											var btnArray = ['是', '否'];
+											mui.confirm('是否开始卸货？', '申通提醒', btnArray, function(e) {
+												if(e.index == 0) {
+													plus.nativeUI.showWaiting();
+													var billInfo = {
+														ID: this.id			
+													};
+													var url = app.getUrl() + 'UpdateVehicleArrivalPos';
+													mui.ajax(url, {
+														data: {
+															info: JSON.stringify(billInfo)
+														},
+														type: 'post', //HTTP请求类型
+														success: function(data) {
+															if(data == "") {
+																plus.nativeUI.toast('卸货时间更新成功');
+																pulldownRefresh();
+																
+															} else {
+																plus.nativeUI.toast(data);
+															}
+															plus.nativeUI.closeWaiting();
+														}
+													});
+												}
+											});
+										});
+									}
 									fragment.appendChild(li);
 								}
 								table.appendChild(fragment);
-								if (data.length < 10) {
+								if(data.length < 10) {
 									mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
 								} //参数为true代表没有更多数据了。
 								else {
@@ -159,8 +213,8 @@
 					});
 				}, 150);
 			}
-			
-			if (mui.os.plus) {
+
+			if(mui.os.plus) {
 				mui.plusReady(function() {
 					setTimeout(function() {
 						mui('#pullrefresh').pullRefresh().pullupLoading();
@@ -172,7 +226,7 @@
 					mui('#pullrefresh').pullRefresh().pullupLoading();
 				});
 			}
-			
+
 			window.addEventListener('refresh', function(event) {
 				pulldownRefresh();
 			});

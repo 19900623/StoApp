@@ -80,6 +80,7 @@
 									+ 		(data[i].readstatus == '1' ? '<span style="color:#f00">未读</span>' : '已读')
 									+ 	'</span>'
 									+ '</div></div>';
+										console.log(li.innerHTML)
 									li.addEventListener('tap', function(event) {
 										var info = JSON.parse(this.id);
 										console.log(JSON.stringify(info))

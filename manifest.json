@@ -3071,11 +3071,14 @@
 			"tab-vehicle-loc.html": {
 				"resources": [
 					"img/road_sign.png",
-					"img/cash_register.png"
+					"img/cash_register.png",
+					"img/lorry_box.png"
 				],
 				"refer": [
 					"business/vehicleroad/vehicle-road-main.html",
-					"business/vehicleoil/vehicle-oil-main.html"
+					"business/vehicleoil/vehicle-oil-main.html",
+					"business/vehiclearrive/vehicle-arrive-main.html",
+					"business/vehicledeparture/vehicle-departure-main.html"
 				],
 				"priority": 0
 			},
@@ -3100,7 +3103,7 @@
 				],
 				"priority": 0
 			},
-						"business/waybill/waybill-grid.html": {
+			"business/waybill/waybill-grid.html": {
 				"resources": [
 					"img/script_edit.png",
 					"js/app.js",
@@ -3175,6 +3178,30 @@
 					"css/mui.min.css",
 					"css/mui.poppicker.css",
 					"css/mui.picker.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/vehiclearrive/vehicle-arrive-main.html": {
+				"resources": [
+					"business/vehiclearrive/vehicle-arrive-sub.html"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/vehiclearrive/vehicle-arrive-sub.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"business/vehicledeparture/vehicle-departure-main.html": {
+				"resources": [
+					"business/vehicledeparture/vehicle-departure-sub.html"
 				],
 				"refer": [],
 				"priority": 0
