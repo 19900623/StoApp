@@ -95,6 +95,7 @@
 			mui.init({});
 			var userPicker;
 			mui.plusReady(function() {
+				plus.nativeUI.showWaiting('正在加载');
 				var id = JSON.parse(plus.webview.currentWebview().name).taskid;
 				var url = app.getUrl() + 'GetLeaveBillByID';
 
@@ -112,8 +113,9 @@
 							LeaveEndTime.value = data[0].leaveendtime;
 							LeaveDays.value = data[0].leavedays;
 							LeaveHour.value = data[0].leavehour;
-							LeaveReason.value = data[0].leavereason;
+							LeaveReason.value = data[0].leavereason;								
 						}
+						plus.nativeUI.closeWaiting();
 					}
 				});
 			});

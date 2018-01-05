@@ -34,7 +34,11 @@
 
 					<div class="mui-input-row">
 						<label>类别</label>
-						<input type="text" id="Type" class="mui-input" required="required" readonly="readonly" value="进港建包错发">
+						<input type="text" id="Type" class="mui-input" required="required" readonly="readonly" >
+					</div>
+					<div class="mui-input-row">
+						<label>所属</label>
+						<input type="text" id="Dept" class="mui-input" required="required" readonly="readonly">
 					</div>
 
 				</form>
@@ -59,12 +63,56 @@
 		<script src="../../js/mui.picker.min.js"></script>
 		<script src="../../js/mui.poppicker.js"></script>
 		<script>
-			var KPIPicker;
+
 			mui.init({});
 			var WayBillNumber = document.getElementById("WayBillNumber");
 			var Remark = document.getElementById("Remark");
+			var Dept = document.getElementById("Dept");
+			
 			var id, name, task, image;
+			var SSPicker,TYPEPicker;
 			mui.plusReady(function() {
+				
+				SSPicker = new mui.PopPicker({
+					layer: 1
+				});
+				
+				TYPEPicker = new mui.PopPicker({
+					layer: 1
+				});
+				
+				SSPicker.setData([{
+					value: '临沂公司',
+					text: '临沂公司'
+				}, {
+					value: '中转部',
+					text: '中转部'
+				}]);
+				
+				TYPEPicker.setData([
+					{
+					value: '进港建包错发',
+					text: '进港建包错发'
+				}, {
+					value: '文件打入散件包',
+					text: '文件打入散件包'
+				}, {
+					value: '散件未建包',
+					text: '散件未建包'
+				}, {
+					value:'整包错发',
+					text: '整包错发'
+				},{
+					value:'(外包大字错误)整包错发',
+					text: '(外包大字错误)整包错发'
+				}, {
+					value:'(外包大字正确)整包错发',
+					text: '(外包大字正确)整包错发'
+				}, {
+					value: '打混包',
+					text: '打混包'
+				}]);
+				
 				id = plus.webview.currentWebview().name;
 				name = plus.webview.currentWebview().type;
 				document.getElementById("title").innerHTML = '编辑' + name;
@@ -72,7 +120,13 @@
 				db.transaction(function(context) {
 					context.executeSql("SELECT * FROM ErroSend where WayBillNumber=?", [id], function(context, results) {
 						WayBillNumber.value = id;
-						Remark.value = results.rows.item(0).Remark;
+						var remark = results.rows.item(0).Remark;
+						Dept.value='临沂公司'
+						if(remark.indexOf('中转部')>=0)
+						{
+							Dept.value="中转部";
+						}							
+				        Remark.value = remark.replace('中转部','').replace('临沂公司','');		
 						Type.value = results.rows.item(0).Type;
 						image = results.rows.item(0).Image || '';
 						if (image != '') {
@@ -101,7 +155,7 @@
 				}
 				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 				db.transaction(function(context) {
-					context.executeSql('update ErroSend set Remark=?,Image=?,Type=? where WayBillNumber=?', [Remark.value, ImagePaths, Type.value, id],
+					context.executeSql('update ErroSend set Remark=?,Image=?,Type=? where WayBillNumber=?', [Dept.value+Remark.value, ImagePaths, Type.value, id],
 						function(tx, result) {
 							plus.nativeUI.toast('保存成功');
 							var page = plus.webview.getWebviewById('waybill-list-sub');
@@ -142,6 +196,18 @@
 					}
 				});
 			}
+			
+			document.getElementById("Dept").addEventListener('tap', function() {
+				SSPicker.show(function(items) {
+					document.getElementById("Dept").value = items[0].value;
+				});
+			});
+			
+			document.getElementById("Type").addEventListener('tap', function() {
+				TYPEPicker.show(function(items) {
+					document.getElementById("Type").value = items[0].value;
+				});
+			});
 
 			function btn_update() {
 				var btnArray = ['是', '否'];
@@ -164,7 +230,7 @@
 						var usercode = JSON.parse(app.getLoginInfo().userinfo).code;
 						var WayBill = {
 							WayBill_Code: id,
-							Mark: Remark.value,
+							Mark: Dept.value+Remark.value,
 							Type: Type.value,
 							CreateUser: username,
 							Picture: ImagePaths

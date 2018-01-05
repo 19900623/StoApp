@@ -50,7 +50,11 @@
 					</div>
 					<div class="mui-input-row">
 						<label>类别</label>
-						<input type="text" id="Type" class="mui-input" required="required" readonly="readonly" value="进港建包错发"> 
+						<input type="text" id="Type" class="mui-input" required="required" readonly="readonly" > 
+					</div>
+					<div class="mui-input-row">
+						<label>所属</label>
+						<input type="text" id="Dept" class="mui-input" required="required" readonly="readonly">
 					</div>
 
 				</form>
@@ -75,14 +79,55 @@
 		<script type="text/javascript" src="../../js/common.js"></script>
 		<script>
 			mui.init({});
-			var name;
+			var name,SSPicker,TYPEPicker;
 			mui.plusReady(function() {
 				name = plus.webview.currentWebview().name;
 				document.getElementById("title").innerHTML = '新增' + name;
 				var buttonok = document.getElementById('buttonok');
 				mui.enterfocus('#bill-form input', function() {
 					mui.trigger(buttonok, 'tap');
-				});						
+				});	
+				
+				SSPicker = new mui.PopPicker({
+					layer: 1
+				});
+				
+				SSPicker.setData([{
+					value: '临沂公司',
+					text: '临沂公司'
+				}, {
+					value: '中转部',
+					text: '中转部'
+				}]);
+				
+				TYPEPicker=new mui.PopPicker({
+					layer: 1
+				});
+				
+				TYPEPicker.setData([
+					{
+					value: '进港建包错发',
+					text: '进港建包错发'
+				}, {
+					value: '文件打入散件包',
+					text: '文件打入散件包'
+				}, {
+					value: '散件未建包',
+					text: '散件未建包'
+				}, {
+					value:'整包错发',
+					text: '整包错发'
+				},
+				{
+					value:'(外包大字错误)整包错发',
+					text: '(外包大字错误)整包错发'
+				}, {
+					value:'(外包大字正确)整包错发',
+					text: '(外包大字正确)整包错发'
+				}, {
+					value: '打混包',
+					text: '打混包'
+				}]);
 			});
 
 
@@ -92,6 +137,8 @@
 				var WayBillNumber = document.getElementById("WayBillNumber");
 				var Remark = document.getElementById("Remark");
 				var Type = document.getElementById("Type");
+				var Dept = document.getElementById("Dept");
+				
 				//验证
 				if (WayBillNumber.value == "") {
 					plus.nativeUI.toast("运单编号不能为空");
@@ -108,6 +155,13 @@
 					plus.nativeUI.toast("请上传照片");
 					return;
 				}
+				if (Dept.value == "") {
+					plus.nativeUI.toast("所属不能为空");
+					Dept.focus();
+					return;
+				}
+				
+				
 				var ImagePaths = '';
 				for (var i = 0; i < images.children.length; i++) {
 					ImagePaths += images.children[i].src + ',';
@@ -125,7 +179,7 @@
 						} else {
 							db.transaction(function(context) {
 								var sql = "INSERT INTO ErroSend (WayBillNumber, Remark,Image,State,CreateDate,KPI,Type) VALUES (?,?,?,'未上传',?,?,?)";
-								context.executeSql(sql, [WayBillNumber.value, Remark.value, ImagePaths, d, name, Type.value],
+								context.executeSql(sql, [WayBillNumber.value, Dept.value+Remark.value, ImagePaths, d, name, Type.value],
 									function(tx, result) {
 										plus.nativeUI.toast('添加成功');
 										var page = plus.webview.getWebviewById('errosend-list-sub');
@@ -148,6 +202,20 @@
 				var WayBillNumber = document.getElementById("WayBillNumber");
 				WayBillNumber.value = r;
 			}
+			
+				        //选择所属类型	
+			document.getElementById("Dept").addEventListener('tap', function() {
+				SSPicker.show(function(items) {
+					document.getElementById("Dept").value = items[0].value;
+				});
+			});
+			
+			document.getElementById("Type").addEventListener('tap', function() {
+				TYPEPicker.show(function(items) {
+					document.getElementById("Type").value = items[0].value;
+				});
+			});
+			
 		</script>
 	</body>
 

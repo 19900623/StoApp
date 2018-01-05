@@ -129,7 +129,7 @@
 			function scaned(r) {
 				var url = app.getUrl() + 'DecodeByScanQR';
 				var logininfo = app.getLoginInfo();
-//				console.log(JSON.stringify(r));
+				console.log(JSON.stringify(r));
 //				console.log(JSON.stringify(logininfo.userid));
 				mui.ajax(url, {
 					data: {
@@ -139,6 +139,7 @@
 					type: 'post',
 					dataType: 'json',
 					success: function(data) {
+						console.log(JSON.stringify(data))
 						//删除按钮
 						btns.innerHTML = "";
 						if(data) {
@@ -236,5 +237,4 @@
 			}
 		</script>
 	</body>
-
 </html>

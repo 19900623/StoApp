@@ -105,6 +105,7 @@
 			}
 			var userPicker;
 			mui.plusReady(function() {
+				plus.nativeUI.showWaiting('正在加载');
 				id = JSON.parse(plus.webview.currentWebview().name).taskid;
 				var url = app.getUrl() + 'GetVehicleByID';
 				mui.ajax(url, {
@@ -121,6 +122,7 @@
 							Vehicle_Money.value = data[0].vehicle_money||'';
 							Money_Remark.value = data[0].money_remark||'';
 						}
+						plus.nativeUI.closeWaiting();
 					}
 				});
 				//详细页面

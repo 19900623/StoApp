@@ -103,13 +103,12 @@
 				<div class="mui-input-row">
 					<label>已行驶</label>
 					<input id='termini_num' type="text" class="mui-input" placeholder="发车后行驶里程数" required="required" readonly="readonly">
-				</div>
-				
-
+				</div>			
 			</form>
 
 			<div class="mui-button-row" style="margin: 10px">
-				<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
+				<button type="button" class="mui-btn mui-btn-success" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
+				<button type="button" class="mui-btn mui-btn-primary" onclick="btn_map()" id="buttonok">位置</button>&nbsp;&nbsp;
 				<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
 			</div>
 
@@ -124,7 +123,7 @@
 
 			});
 
-			var terminiPicker, pos;
+			var terminiPicker, pos='',mddpos='';
 			var show = false;
 
 			mui.plusReady(function() {
@@ -206,6 +205,37 @@
 					}
 				} 
 			}
+			
+			function btn_map()
+			{
+				if(pos=='')
+			    {
+					plus.nativeUI.toast("请刷新当前位置");
+					return;
+			    }
+				
+	           if(mddpos=='')
+			    {
+					plus.nativeUI.toast("该车牌号不存在目的地坐标");
+					return;
+			    }
+				var nwaiting = plus.nativeUI.showWaiting();
+			
+				var webviewShow = plus.webview.create(
+					'vehicle-arrive-map.html',
+					'vehicle-arrive-map',
+					'', {
+						name: pos+','+mddpos
+					}
+				); //后台创建webview并打开show.html
+				webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
+					setTimeout(function() {
+						nwaiting.close();
+						//新webview的载入完毕后关闭等待框
+						webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+					}, 200);
+				}, false);
+			}
 
 			function btn_ok() {
 				var vehicle_code = document.getElementById("vehicle_code");
@@ -253,7 +283,9 @@
 					}
 				}
 				
-				if(termini_distance.value<pre_termini_distance.value)
+				NumTernimi();
+				
+				if(Number(termini_distance.value)<Number(pre_termini_distance.value))
 				{
 					plus.nativeUI.toast("当前里程数不能小于前里程");
 					termini_distance.value = "";
@@ -338,7 +370,7 @@
 							document.getElementById("enddate").value = new Date().format('yyyy-MM-dd hh:mm:ss');						
 							document.getElementById("pre_termini_distance").value=res.predistance;
 							document.getElementById("first_termini_distance").value=res.firstdistance;
-													
+							mddpos=res.pos;												
 							var arrType = [];
 							for(var i = 0; i < res.listTer.length; i++) {
 								var obj = {
@@ -349,7 +381,6 @@
 							}
 							terminiPicker.setData(arrType);
 							show = true;
-
 						}
 						plus.nativeUI.closeWaiting();
 					}

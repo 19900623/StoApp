@@ -82,6 +82,7 @@
 				}
 			});
 			mui.plusReady(function() {
+				plus.nativeUI.showWaiting('正在加载');
 				var id = JSON.parse(plus.webview.currentWebview().name).taskid;
 				var url = app.getUrl() + 'GetExpenseBillByID';
 				mui.ajax(url, {
@@ -97,6 +98,7 @@
 							Reamrk.value = data[0].reamrk;
 							BXDate.value = data[0].bxdate;
 						}
+						plus.nativeUI.closeWaiting();
 					}
 				});
 				var buttonok = document.getElementById('buttonok');

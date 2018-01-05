@@ -122,6 +122,7 @@
 			}
 			var userPicker;
 			mui.plusReady(function() {
+				plus.nativeUI.showWaiting('正在加载');
 				id = JSON.parse(plus.webview.currentWebview().name).taskid;
 				var url = app.getUrl() + 'GetCollectionMoneyByID';
 				mui.ajax(url, {
@@ -141,6 +142,7 @@
 							Bank_Name_R.value = data[0].bank_name_r || '';
 							Bank_Account_R.value = data[0].bank_account_r || '';
 						}
+						plus.nativeUI.closeWaiting();
 					}
 				});
 				//详细页面

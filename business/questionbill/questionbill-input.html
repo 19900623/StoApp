@@ -52,6 +52,10 @@
 						<label>类别</label>
 						<input type="text" id="Type" class="mui-input" required="required" readonly="readonly">
 					</div>
+					<div class="mui-input-row">
+						<label>所属</label>
+						<input type="text" id="Dept" class="mui-input" required="required" readonly="readonly">
+					</div>
 
 				</form>
 				<div class="mui-input-row" style="margin: 5px 0px 0px;">
@@ -76,11 +80,15 @@
 		<script type="text/javascript" src="../../js/common.js"></script>
 		<script>
 			mui.init({});
-			var KPIPicker, name;
+			var KPIPicker, name,SSPicker;
 			mui.plusReady(function() {
 				KPIPicker = new mui.PopPicker({
 					layer: 1
 				});
+				SSPicker = new mui.PopPicker({
+					layer: 1
+				});
+				
 				name = plus.webview.currentWebview().name;
 				document.getElementById("title").innerHTML = '新增' + name;
 				if (name.indexOf('大字') > 0) {
@@ -103,6 +111,15 @@
 						text: '裸包装'
 					}]);
 				}
+				SSPicker.setData([{
+					value: '临沂公司',
+					text: '临沂公司'
+				}, {
+					value: '中转部',
+					text: '中转部'
+				}]);
+				
+				
 				var buttonok = document.getElementById('buttonok');
 				mui.enterfocus('#bill-form input', function() {
 					mui.trigger(buttonok, 'tap');
@@ -115,12 +132,22 @@
 				});
 			});
 
+	        //选择所属类型	
+			document.getElementById("Dept").addEventListener('tap', function() {
+				SSPicker.show(function(items) {
+					document.getElementById("Dept").value = items[0].value;
+				});
+			});
+			
 			function btn_ok() {
+				
 				var guid = app.NewGuid();
 				//保存数据
 				var WayBillNumber = document.getElementById("WayBillNumber");
 				var Type = document.getElementById("Type");
 				var Remark = document.getElementById("Remark");
+				var Dept = document.getElementById("Dept");
+				
 				//验证
 				if (WayBillNumber.value == "") {
 					plus.nativeUI.toast("运单编号不能为空");
@@ -132,6 +159,13 @@
 					Type.focus();
 					return;
 				}
+				if (Dept.value == "") {
+					plus.nativeUI.toast("所属不能为空");
+					Dept.focus();
+					return;
+				}
+				
+				
 				var images = document.getElementById("images");
 				
 				if (images.children.length == 0) {
@@ -154,7 +188,8 @@
 							return;
 						} else {
 							db.transaction(function(context) {
-								var sql = 'INSERT INTO QustionBill (WayBillNumber, KPI,Type,Remark,Image,State,CreateDate) VALUES ("' + WayBillNumber.value + '","' + name + '","' + Type.value + '","' + Remark.value + '","' + ImagePaths + '","未上传","' + d + '")';								
+								var sql = 'INSERT INTO QustionBill (WayBillNumber, KPI,Type,Remark,Image,State,CreateDate) VALUES ("' + WayBillNumber.value + '","' + name + '","' + Type.value + '","' + Dept.value+Remark.value+ '","' + ImagePaths + '","未上传","' + d + '")';		
+								console.log(sql)
 								context.executeSql(sql, [],
 									function(tx, result) {
 										plus.nativeUI.toast('添加成功');

@@ -36,6 +36,10 @@
 						<label>类别</label>
 						<input type="text" id="Type" class="mui-input" required="required" readonly="readonly">
 					</div>
+					<div class="mui-input-row">
+						<label>所属</label>
+						<input type="text" id="Dept" class="mui-input" required="required" readonly="readonly">
+					</div>
 					
 				</form>
 				<div class="mui-input-row" style="margin: 5px 0px 0px;">
@@ -59,10 +63,12 @@
 		<script src="../../js/mui.picker.min.js"></script>
 		<script src="../../js/mui.poppicker.js"></script>
 		<script>
-		    var KPIPicker;
+		    var KPIPicker,SSPicker;
 			mui.init({});
 			var WayBillNumber = document.getElementById("WayBillNumber");
 			var Remark = document.getElementById("Remark");
+			var Dept = document.getElementById("Dept");
+			
 			var id, name, task, image;
 			mui.plusReady(function() {
 				id = plus.webview.currentWebview().name;
@@ -72,7 +78,13 @@
 				db.transaction(function(context) {
 					context.executeSql("SELECT * FROM BoxCheck where WayBillNumber=?", [id], function(context, results) {
 						WayBillNumber.value = id;
-						Remark.value = results.rows.item(0).Remark;
+						var remark = results.rows.item(0).Remark;
+						Dept.value='临沂公司'
+						if(remark.indexOf('中转部')>=0)
+						{
+							Dept.value="中转部";
+						}							
+				        Remark.value = remark.replace('中转部','').replace('临沂公司','');	
 						Type.value = results.rows.item(0).Type;
 						image = results.rows.item(0).Image || '';
 						if (image != '') {
@@ -103,12 +115,30 @@
 					text: '开箱验视及品名'
 				}
 				]);
+				
+				SSPicker = new mui.PopPicker({
+					layer: 1
+				});
+				
+				SSPicker.setData([{
+					value: '临沂公司',
+					text: '临沂公司'
+				}, {
+					value: '中转部',
+					text: '中转部'
+				}]);
 			});
 			
 			//类别	
 			document.getElementById("Type").addEventListener('tap', function() {
 				KPIPicker.show(function(items) {
 					document.getElementById("Type").value = items[0].value;
+				});
+			});
+			
+			document.getElementById("Dept").addEventListener('tap', function() {
+				SSPicker.show(function(items) {
+					document.getElementById("Dept").value = items[0].value;
 				});
 			});
 			
@@ -122,7 +152,7 @@
 				}
 				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 				db.transaction(function(context) {
-					context.executeSql('update BoxCheck set Remark=?,Image=?,Type=? where WayBillNumber=?', [Remark.value, ImagePaths,Type.value, id],
+					context.executeSql('update BoxCheck set Remark=?,Image=?,Type=? where WayBillNumber=?', [Dept.value+Remark.value, ImagePaths,Type.value, id],
 						function(tx, result) {
 							plus.nativeUI.toast('保存成功');
 							var page = plus.webview.getWebviewById('boxcheck-list-sub');
@@ -186,7 +216,7 @@
 						var WayBill = {
 							WayBillNumber: id,
 							KPI: name,
-							Remark: Remark.value,
+							Remark: Dept.value+Remark.value,
 							Type: Type.value,
 							CreateUserId: userid,
 							CreateUserName: username,

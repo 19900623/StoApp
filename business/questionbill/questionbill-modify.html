@@ -35,6 +35,10 @@
 						<label>类别</label>
 						<input type="text" id="Type" class="mui-input" required="required" readonly="readonly">
 					</div>
+					<div class="mui-input-row">
+						<label>所属</label>
+						<input type="text" id="Dept" class="mui-input" required="required" readonly="readonly">
+					</div>
 
 				</form>
 				<div class="mui-input-row" style="margin: 5px 0px 0px;">
@@ -62,12 +66,16 @@
 			var WayBillNumber = document.getElementById("WayBillNumber");
 			var Type = document.getElementById("Type");
 			var Remark = document.getElementById("Remark");
-			var id, name, KPIPicker, task, image;
+			var Dept = document.getElementById("Dept");
+			var id, name, KPIPicker, task, image,SSPicker;
 			mui.plusReady(function() {
 				id = plus.webview.currentWebview().name;
 				name = plus.webview.currentWebview().type;
 				document.getElementById("title").innerHTML = '编辑' + name;
 				KPIPicker = new mui.PopPicker({
+					layer: 1
+				});
+				SSPicker = new mui.PopPicker({
 					layer: 1
 				});
 				if (name.indexOf('大字') > 0) {
@@ -90,12 +98,26 @@
 						text: '裸包装'
 					}]);
 				}
+				SSPicker.setData([{
+						value: '临沂公司',
+						text: '临沂公司'
+					}, {
+						value: '中转部',
+						text: '中转部'
+					}]);
+				
 				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 				db.transaction(function(context) {
 					context.executeSql("SELECT * FROM QustionBill where WayBillNumber=?", [id], function(context, results) {
 						WayBillNumber.value = id;
 						Type.value = results.rows.item(0).Type;
-						Remark.value = Remark.value;
+						var remark = results.rows.item(0).Remark;
+						Dept.value='临沂公司'
+						if(remark.indexOf('中转部')>=0)
+						{
+							Dept.value="中转部";
+						}							
+				        Remark.value = remark.replace('中转部','').replace('临沂公司','');				 																	
 						image = results.rows.item(0).Image || '';
 						if (image != '') {
 							var images = image.split(',');
@@ -142,14 +164,24 @@
 					
 				});
 			});
+			
 			//选择请假类型事件		
 			document.getElementById("Type").addEventListener('tap', function() {
 				KPIPicker.show(function(items) {
 					document.getElementById("Type").value = items[0].value;
 				});
 			});
+			
+			//选择所属类型	
+			document.getElementById("Dept").addEventListener('tap', function() {
+				SSPicker.show(function(items) {
+					document.getElementById("Dept").value = items[0].value;
+				});
+			});
+			
 			//确定按钮
 			function btn_ok() {
+							
 				var images = document.getElementById("images");
 				var ImagePaths = '';
 				for (var i = 0; i < images.children.length; i++) {
@@ -158,7 +190,7 @@
 				}
 				var db = openDatabase('StoApp', '1.0', 'StoApp', 10 * 1024 * 1024);
 				db.transaction(function(context) {
-					context.executeSql('update QustionBill set Type=?,Remark=?,Image=? where WayBillNumber=?', [Type.value, Remark.value, ImagePaths, id],
+					context.executeSql('update QustionBill set Type=?,Remark=?,Image=? where WayBillNumber=?', [Type.value, Dept.value+Remark.value, ImagePaths, id],
 						function(tx, result) {
 							plus.nativeUI.toast('保存成功');
 							var page = plus.webview.getWebviewById('questionbill-list-sub');
@@ -209,7 +241,6 @@
 							plus.nativeUI.toast('请检查网路连接!');
 							return;
 						}
-
 						plus.nativeUI.showWaiting("正在上传文件...");
 						var userid = app.getLoginInfo().userid;
 						var username = JSON.parse(app.getLoginInfo().userinfo).realname;
@@ -218,12 +249,13 @@
 							WayBillNumber: WayBillNumber.value,
 							KPI: name,
 							Type: Type.value,
-							Remark: Remark.value,
+							Remark: Dept.value+Remark.value,
 							CreateUserId: userid,
 							CreateUserName: username,
 							UserCode: usercode,
 							Image: image
 						}
+						console.log(JSON.stringify(QustionBill));
 						if (image != '') {
 							var images = image.split(',');
 							for (var j = 0; j < images.length - 1; j++) {

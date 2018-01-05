@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<style type="text/css">
+			#allmap {
+				width: 100%;
+				position: fixed;
+				top: 38px;
+				bottom: 0px;
+				line-height: 200px;
+				text-align: center;
+				background: #FFFFFF;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" id="header">
+			<a id="back" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">目的地坐标</h1>
+		</header>
+		<div id="allmap">地图加载中...</div>
+	</body>
+	<script src="../../js/mui.min.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Q0O9mkEqXfiLRRfVLUl7sHDZ"></script>
+	<script type="text/javascript">
+		//启用双击监听
+		mui.init({});
+			
+		mui.plusReady(function()
+		{
+		    var pos = plus.webview.currentWebview().name;//主键
+		    console.log(pos);
+	        var points, map, scale, marker;
+		    // 百度地图API功能  
+	        var zb = pos.split(",");
+	        console.log(zb);
+	        map = new plus.maps.Map("allmap");
+			map.centerAndZoom(new plus.maps.Point(zb[0],zb[1]), 14);
+			map.showUserLocation(true);
+			map.showZoomControls(true);
+			
+			marker = new plus.maps.Marker(new plus.maps.Point(zb[2],zb[3]));
+			marker.setLabel('目的地');
+			map.addOverlay(marker);
+			
+		});		
+	</script>
+
+</html>

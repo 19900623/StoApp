@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
+		<link href="../../css/mui.poppicker.css" rel="stylesheet" />
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 id="title" class="mui-title">新增申领定额发票</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded" style="margin: 5px;">
+				<form class="mui-input-group" id="bill-form">
+
+					<div class="mui-input-row">
+						<label>100元</label>
+						<div class="mui-numbox" data-numbox-min='0' data-numbox-max='300' style="width:50%;">
+							<button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
+							<input id='yibai' class="mui-numbox-input" type="number" value="0" onchange="changeSum()" />
+							<button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
+						</div>
+					</div>
+					<div class="mui-input-row">
+						<label>50元</label>
+						<div class="mui-numbox" data-numbox-min='0' data-numbox-max='350' style="width:50%;">
+							<button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
+							<input id='wushi' class="mui-numbox-input" type="number" value="0" onchange="changeSum()" />
+							<button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
+						</div>
+					</div>
+					<div class="mui-input-row">
+						<label>20元</label>
+						<div class="mui-numbox" data-numbox-min='0' data-numbox-max='350' style="width:50%;">
+							<button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
+							<input id='ershi' class="mui-numbox-input" type="number" value="0" onchange="changeSum()" />
+							<button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
+						</div>
+					</div>
+					<div class="mui-input-row">
+						<label>10元</label>
+						<div class="mui-numbox" data-numbox-min='0' data-numbox-max='350' style="width:50%;">
+							<button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
+							<input id='shi' class="mui-numbox-input" type="number" value="0" onchange="changeSum()" />
+							<button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
+						</div>
+					</div>
+					<div class="mui-input-row">
+						<label>5元</label>
+						<div class="mui-numbox" data-numbox-min='0' data-numbox-max='350' style="width:50%;">
+							<button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
+							<input id='wuyuan' class="mui-numbox-input" type="number" value="0" onchange="changeSum()" />
+							<button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
+						</div>
+					</div>
+					<div class="mui-input-row">
+							<label>合计:</label>
+							<input id="sumAmount" value="0" class="mui-numbox-input" type="text"/>
+					</div>
+							<div class="mui-input-row">
+							<label>张数:</label>
+							<input id="num" value="0" class="mui-numbox-input" type="text"/>
+
+					</div>
+				</form>
+
+				<div class="mui-button-row" style="margin-top: 10px;">
+					<button type="button" class="mui-btn mui-btn-primary" onclick="btn_ok()" id="buttonok">确认</button>&nbsp;&nbsp;
+					<button type="button" class="mui-btn mui-btn-danger" onclick="mui.back()">取消</button>
+				</div>
+
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/common.js"></script>
+		<script src="../../js/app.js"></script>
+		<script src="../../js/mui.enterfocus.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
+		<script>
+			mui.init({});
+			mui.plusReady(function() {});
+
+			function btn_ok() {
+				var userid = app.getLoginInfo().userid;
+				//面值总额小于500元
+				if((Number(yibai) * 100 + Number(wushi) * 50 + Number(ershi) * 20 + Number(shi) * 10 + Number(wuyuan) * 5) > 500) {
+					plus.nativeUI.toast("面值总额不能大于500元");
+					return;
+				}
+				//调用方法
+				var billInfo = {
+					UserID: userid,
+					yibai: document.getElementById('yibai').value,
+					wushi: document.getElementById('wushi').value,
+					ershi: document.getElementById('ershi').value,
+					shi: document.getElementById('shi').value,
+					wuyuan: document.getElementById('wuyuan').value,
+				};
+
+				var url = app.getUrl() + 'AddBomFpUse';
+				var nwaiting = plus.nativeUI.showWaiting();
+				mui.ajax(url, {
+					data: {
+						Data: JSON.stringify(billInfo)
+					},
+					type: 'post', //HTTP请求类型
+					success: function(data) {
+						nwaiting.close();
+						if(data == "") {
+							plus.nativeUI.toast('添加成功');
+							var page = plus.webview.getWebviewById('bomuse-list-sub');
+							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
+							mui.fire(page, 'refresh');
+							mui.back();
+						} else {
+							plus.nativeUI.toast(data);
+						}
+					}
+				});
+			}
+			//更新合计
+			function changeSum() {
+				var yibai = document.getElementById('yibai').value;
+				var wushi = document.getElementById('wushi').value;
+				var ershi = document.getElementById('ershi').value;
+				var shi = document.getElementById('shi').value;
+				var wuyuan = document.getElementById('wuyuan').value;
+				//面值总额
+				var sumAmount = Number(yibai) * 100 + Number(wushi) * 50 + Number(ershi) * 20 + Number(shi) * 10 + Number(wuyuan) * 5;
+				document.getElementById("sumAmount").value = sumAmount;
+				//发票数量
+				var num = Number(yibai) + Number(wushi) + Number(ershi) + Number(shi) + Number(wuyuan);
+				document.getElementById("num").value = num;
+				if(sumAmount>500)
+				{					
+					plus.nativeUI.toast("面值总额不能大于500元");
+				}
+
+			}
+		</script>
+	</body>
+
+</html>

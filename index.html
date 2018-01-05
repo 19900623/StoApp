@@ -84,8 +84,7 @@
 				$.init({
 					statusBarBackground: '#f7f7f7'
 				});
-								
-				
+												
 				$.plusReady(function() {
                     //陈琪测试
 					plus.screen.lockOrientation("portrait-primary");
@@ -98,7 +97,7 @@
 					var httpUrl = 'http://58.57.35.3:8066';
 //					var httpUrl = 'http://oaapp.lyzysoft.com:8066';
 					//测试库
-					//var httpUrl = 'http://192.168.6.164:8080/LeaRun.MobileApp';
+					//var httpUrl = 'http://192.168.1.147:8080/LeaRun.MobileApp';
 					//检查App升级版本并升级
 					if (plus.networkinfo.getCurrentType() != 1){
 						if(plus.networkinfo.getCurrentType() == 3){
@@ -106,7 +105,7 @@
 							mui.ajax(httpUrl + '/MobileAppService.asmx/GetVersionInfo', {
 								dataType: 'json', //服务器返回json格式数据
 								type: 'get', //HTTP请求类型
-								timeout: 3000,
+								timeout: 1800,
 								success: function(data){
 					                //连接正常
 					            },
@@ -223,7 +222,6 @@
 							}
 							plus.nativeUI.showWaiting("正在登录...");
 							var url = app.getUrl() + 'CheckLogin';
-	//						console.log(JSON.stringify(loginInfo))
 							console.log(url)
 							mui.ajax(url, {
 								data: loginInfo,
@@ -245,7 +243,6 @@
 											userinfo: data.UserInfo,
 											userreport: data.UserReport
 										};
-//										console.log(JSON.stringify(loginInfo))
 										app.setSettings(settings);
 										app.setLoginInfo(loginInfo);
 										toMain();
@@ -257,7 +254,6 @@
 									plus.nativeUI.toast("登录失败");
 									//异常处理
 									console.log(xhr + type + errorThrown);
-	//								console.log(JSON.stringify(xhr));
 								}
 							});
 						});

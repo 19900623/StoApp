@@ -109,6 +109,7 @@
 			mui.init({});
 			var userPicker;
 			mui.plusReady(function() {
+				plus.nativeUI.showWaiting('正在加载');
 				var id = JSON.parse(plus.webview.currentWebview().name).taskid;					
 				var url = app.getUrl() + 'GetPaymentBillByID';
 				
@@ -130,6 +131,7 @@
 							Debit_RAccount.value = data[0].debit_raccount||'';
 							Debit_Payee.value = data[0].debit_payee||'';
 						}
+						plus.nativeUI.closeWaiting();
 					}
 				});
 			});

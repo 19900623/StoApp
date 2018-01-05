@@ -69,12 +69,16 @@
 					<label>车牌号</label>
 					<input type="text" id="vehicle_code" class="mui-input mui-scan" required="required" placeholder="车牌号">
 					<img src="../../img/scan.png" style="position: absolute; right: 0px;top: 1.5px ;width: 2em; height: 2em;" onclick="clicked('../../barcode_scan.html',true,true)" />
-				</div>
+				</div>			
 				<div class="mui-input-row">
 					<label>发车时间</label>
 					<input id='startdate' type="text" class="mui-input" placeholder="发车时间" required="required" readonly="readonly">
 					<img src="../../img/arrow_refresh_small.png" style="position: absolute; right: 0px;top: 1.5px ;width: 2em; height: 2em;" onclick="RefreshTime()" />
 				</div>
+				<div class="mui-input-row">
+					<label>发车类型</label>
+					<input id='Driver_Type' type="text" class="mui-input" placeholder="发车类型" required="required">
+				</div>	
 				<div class="mui-input-row">
 					<label>发车里程</label>
 					<input id='Termini_Distance' type="text" class="mui-input" placeholder="发车里程" required="required">
@@ -107,11 +111,26 @@
 
 			});
 
-			var terminiPicker, pos;
+			var terminiPicker, pos,driverPicker;
 
 			mui.plusReady(function() {
                 document.getElementById("Driver_Main").value=JSON.parse(app.getLoginInfo().userinfo).realname;
 				terminiPicker = new mui.PopPicker();
+				driverPicker = new mui.PopPicker();
+				
+				driverPicker.setData([{
+					value: '正班',
+					text: '正班'
+				}, {
+					value: '对开',
+					text: '对开'
+				},{
+					value: '配货',
+					text: '配货'
+				}, {
+					value: '放空',
+					text: '放空'
+				}]);
 				
 				//加载驾驶员信息				
 				var url = app.getUrl() + 'GetDriver';
@@ -159,15 +178,22 @@
 					mui.trigger(buttonok, 'tap');
 				});
 			});
-
 			
-
+			        //选择所属类型	
+			document.getElementById("Driver_Type").addEventListener('tap', function() {
+				driverPicker.show(function(items) {
+					document.getElementById("Driver_Type").value = items[0].value;
+				});
+			});
+			
 			function btn_ok() {
+				
 				var vehicle_code = document.getElementById("vehicle_code");
 				var startdate = document.getElementById("startdate");
 				var Termini_Distance = document.getElementById("Termini_Distance");
 				var Driver_Main = document.getElementById("Driver_Main");
 				var Driver_Sub = document.getElementById("Driver_Sub");
+				var Driver_Type=document.getElementById("Driver_Type");
 
 				//验证
 				if(vehicle_code.value == "") {
@@ -180,7 +206,13 @@
 					startdate.focus();
 					return;
 				}
-
+				if(Driver_Type.value=="")
+				{
+					plus.nativeUI.toast("发车类型不能为空");
+					Driver_Type.focus();
+					return;
+				}
+				
 				if(Termini_Distance.value == "") {
 					plus.nativeUI.toast("里程数不能为空");
 					Termini_Distance.focus();
@@ -203,12 +235,11 @@
 					Termini_Distance: Termini_Distance.value,
 					Driver_Main: Driver_Main.value,
 					Driver_Sub: Driver_Sub.value,
+					Driver_Type:Driver_Type.value,
 					CreateUserId: userid,
 					CreateUserName: username,
 				};
 				
-				//console.log(JSON.stringify(billInfo));
-
 				var btnArray = ['是', '否'];
 				mui.confirm('是否保存发车登记？', '申通提醒', btnArray, function(e) {
 					if(e.index == 0) {
@@ -264,7 +295,13 @@
 						if(res.success = false) {
 							plus.nativeUI.toast(res.message);
 						} else {
-							document.getElementById("startdate").value = res.dptime;					
+							document.getElementById("startdate").value = res.dptime;	
+							document.getElementById("Termini_Distance").value =res.predistance;
+							if(res.predistance!=0)
+							{
+							   var btnArray = ['是', '否'];
+							   mui.confirm('发车里程已经填写，请检查发车日期是否正确？', '申通提醒', btnArray, null);
+							}
 						}
 						plus.nativeUI.closeWaiting();
 					}

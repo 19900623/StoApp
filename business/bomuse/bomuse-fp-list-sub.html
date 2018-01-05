@@ -73,22 +73,45 @@
 					var messageInfo = {
 						Userid: logininfo.userid,
 						PageNumber: 1,
-						PageSize: 10
+						PageSize: 10,
+						State:''
 					};
-					var url = app.getUrl() + 'GetVehicleArrivalRoadList';
+					var url = app.getUrl() + 'GetFpList';				
 					mui.ajax(url, {
 						data: messageInfo,
 						type: 'post',
 						dataType: 'json',
-						success: function(data) {
+						success: function(data) {							
 							if (data) {
+							alert("几条数据"+data.length);
 								for (var i = 0; i < data.length; i++) {
 									li = document.createElement('li');
 									li.className = 'mui-table-view-cell';
-									li.id = data[i].id;
-									var htmlText = '<div>' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '车牌号：' + data[i].vehicle_code + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '过路时间:' + data[i].createdate + 
-									'<br/>里程数:' + data[i].termini_distance + '&nbsp;&nbsp;&nbsp;&nbsp;金额:'+data[i].totalmoney+ '&nbsp;&nbsp;&nbsp;&nbsp;方式:'+data[i].paytype+'</p>' + '</div>' + '</div>';
-									li.innerHTML = htmlText;								
+									li.id = data[i].fpcode;
+									li.state=data[i].state;
+									var htmlText = '<div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '发票单号：' + data[i].fpcode + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '日期:' + data[i].ny +'&nbsp;&nbsp;状态:' + data[i].state  + '</p>' + '</div>' + '</div>';
+									li.innerHTML = htmlText;
+									li.addEventListener('tap', function(event) {
+									
+										//处理切换时，数据未从数据库更新完毕
+										var nwaiting = plus.nativeUI.showWaiting();
+										var webviewShow = plus.webview.create(
+											'bomuse-fp-modify.html',
+											'bomuse-fp-modify',
+											'', {
+												name: this.id,
+												state:this.state
+											}
+										); //后台创建webview并打开show.html
+										webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
+											setTimeout(function() {
+												nwaiting.close();
+												//新webview的载入完毕后关闭等待框
+												webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+											}, 300);
+										}, false);
+									});
+									
 									fragment.appendChild(li);
 								}
 								var table = document.body.querySelector('.mui-table-view');
@@ -118,7 +141,7 @@
 			 * 上拉加载具体业务实现
 			 */
 			function pullupRefresh() {
-				setTimeout(function() {	
+				setTimeout(function() {
 					var table = document.body.querySelector('.mui-table-view');
 					count = count + 1;
 					var fragment = document.createDocumentFragment();
@@ -127,9 +150,10 @@
 					var messageInfo = {
 						Userid: logininfo.userid,
 						PageNumber: count,
-						PageSize: 10
+						PageSize: 10,
+						State:''
 					};
-					var url = app.getUrl() + 'GetVehicleArrivalRoadList';
+					var url = app.getUrl() + 'GetFpList';
 					mui.ajax(url, {
 						data: messageInfo,
 						type: 'post',
@@ -139,10 +163,29 @@
 								for (var i = 0; i < data.length; i++) {
 									li = document.createElement('li');
 									li.className = 'mui-table-view-cell';
-									li.id = data[i].id;
-									var htmlText = '<div>' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '车牌号：' + data[i].vehicle_code + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '过路时间:' + data[i].createdate 
-									+ '<br/>里程数:' + data[i].termini_distance + '&nbsp;&nbsp;&nbsp;&nbsp;金额:'+data[i].totalmoney+ '&nbsp;&nbsp;&nbsp;&nbsp;方式:'+data[i].paytype+'</p>' + '</div>' + '</div>';
-									li.innerHTML = htmlText;									
+									li.id = data[i].fpcode;	
+									li.state=data[i].state;
+									var htmlText = '<div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-10">' + '<h4 class="mui-ellipsis">' + '发票单号：' + data[i].fpcode + '</h4>' + '<p class="mui-h6 mui-ellipsis">' + '日期:' + data[i].ny +'&nbsp;&nbsp;状态:' + data[i].state  + '</p>' + '</div>' + '</div>';
+									li.innerHTML = htmlText;
+									li.addEventListener('tap', function(event) {
+										//处理切换时，数据未从数据库更新完毕
+										var nwaiting = plus.nativeUI.showWaiting();
+										var webviewShow = plus.webview.create(
+											'bomuse-fp-modify.html',
+											'bomuse-fp-modify',
+											'', {
+												name: this.id,
+												state:this.state
+											}
+										); //后台创建webview并打开show.html
+										webviewShow.addEventListener("loaded", function() { //注册新webview的载入完成事件
+											setTimeout(function() {
+												nwaiting.close();
+												//新webview的载入完毕后关闭等待框
+												webviewShow.show("pop-in"); //把新webview窗体显示出来，显示动画效果为速度150毫秒的右侧移入动画
+											}, 800);
+										}, false);
+									});
 									fragment.appendChild(li);
 								}
 								table.appendChild(fragment);
@@ -159,7 +202,6 @@
 					});
 				}, 150);
 			}
-			
 			if (mui.os.plus) {
 				mui.plusReady(function() {
 					setTimeout(function() {
@@ -172,7 +214,6 @@
 					mui('#pullrefresh').pullRefresh().pullupLoading();
 				});
 			}
-			
 			window.addEventListener('refresh', function(event) {
 				pulldownRefresh();
 			});

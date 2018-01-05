@@ -85,6 +85,7 @@
 			var userinfo = JSON.parse(app.getLoginInfo().userinfo);	//登录用户信息
 			mui.init()
 			mui.plusReady(function() {
+				plus.nativeUI.showWaiting('正在加载');
 				//加载默认值
 				var id = JSON.parse(plus.webview.currentWebview().name).taskid;
 //				var id = plus.webview.currentWebview().name;	//编辑ID
@@ -120,6 +121,7 @@
 							else{
 								mui.alert(data.Message);
 							}
+							plus.nativeUI.closeWaiting();
 						}
 					});
 				}

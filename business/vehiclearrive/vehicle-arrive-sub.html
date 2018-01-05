@@ -9,9 +9,7 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<link rel="stylesheet" href="../../css/mui.min.css">
-		<style>
-
-		</style>
+		<style></style>
 	</head>
 
 	<body>
@@ -67,7 +65,8 @@
 									li.id = data[i].id;
 									var htmlText = '<div><div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-6">' + '<h4 class="mui-ellipsis-2">' + '车牌号：' + data[i].vehicle_code + '</h4>' +
 										'<p class="mui-h6 mui-ellipsis">' + data[i].termini + '&nbsp;&nbsp;里程:' + data[i].termini_distance + '&nbsp;&nbsp;行驶:' + data[i].termini_num +
-										'<br/>发车时间:' + data[i].enddate +
+										'<br/>发车时间:' + data[i].startdate +
+										'<br/>到达时间:' + data[i].enddate +
 										'<br/>卸货时间:' + (data[i].vehicle_dp_xhtime == undefined ? '' : data[i].vehicle_dp_xhtime) + '</p>' +
 										'</div>' +
 										'<div class="mui-table-cell mui-col-xs-2 mui-text-right">' +
@@ -77,15 +76,14 @@
 									li.innerHTML = htmlText;
 									if(data[i].xhstate == '0') {
 										li.addEventListener('tap', function(event) {
-											var id=this.id
 											var btnArray = ['是', '否'];
 											mui.confirm('是否开始卸货？', '申通提醒', btnArray, function(e) {
 												if(e.index == 0) {
 													plus.nativeUI.showWaiting();
 													var billInfo = {
-														ID: id
+														ID:this.id
 													};
-													var url = app.getUrl() + 'UpdateVehicleArrivalPos';												
+													var url = app.getUrl() + 'UpdateVehicleArrivalPos';
 													mui.ajax(url, {
 														data: {
 															info: JSON.stringify(billInfo)
@@ -94,7 +92,7 @@
 														success: function(data) {
 															if(data == "") {
 																plus.nativeUI.toast('卸货时间更新成功');
-																pulldownRefresh();																
+																pulldownRefresh();
 															} else {
 																plus.nativeUI.toast(data);
 															}
@@ -159,7 +157,8 @@
 									li.id = data[i].id;
 									var htmlText = '<div><div class="mui-table">' + '<div class="mui-table-cell mui-col-xs-6">' + '<h4 class="mui-ellipsis-2">' + '车牌号：' + data[i].vehicle_code + '</h4>' +
 										'<p class="mui-h6 mui-ellipsis">' + data[i].termini + '&nbsp;&nbsp;里程:' + data[i].termini_distance + '&nbsp;&nbsp;行驶:' + data[i].termini_num +
-										'<br/>发车时间:' + data[i].enddate +
+										'<br/>发车时间:' + data[i].startdate +
+										'<br/>到达时间:' + data[i].enddate +
 										'<br/>卸货时间:' + (data[i].vehicle_dp_xhtime == undefined ? '' : data[i].vehicle_dp_xhtime) + '</p>' +
 										'</div>' +
 										'<div class="mui-table-cell mui-col-xs-2 mui-text-right">' +
@@ -174,7 +173,7 @@
 												if(e.index == 0) {
 													plus.nativeUI.showWaiting();
 													var billInfo = {
-														ID: this.id			
+														ID: this.id
 													};
 													var url = app.getUrl() + 'UpdateVehicleArrivalPos';
 													mui.ajax(url, {
@@ -186,7 +185,7 @@
 															if(data == "") {
 																plus.nativeUI.toast('卸货时间更新成功');
 																pulldownRefresh();
-																
+
 															} else {
 																plus.nativeUI.toast(data);
 															}

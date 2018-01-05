@@ -7,8 +7,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-
+	    <link href="../../css/mui.poppicker.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/mui.min.css">
+		<link rel="stylesheet" href="../../css/mui.picker.min.css" />
 		<style>
 			html,
 			body {
@@ -42,8 +43,18 @@
 						<input type="text" id="EndDate" class="mui-input" required="required" readonly="readonly">
 					</div>
 				</form>
-				<div class="mui-input-row" style="margin: 5px 0px;">
-					<textarea id="Describe" rows="7" class="mui-input-clear mui-input"></textarea>
+				<div class="mui-input-row" style="margin-top: 5px; margin-bottom: -15px;">
+					<textarea id="Describe" rows="3" class="mui-input-clear mui-input"></textarea>
+				</div>
+				
+				<form class="mui-input-group" id="bill-form-new">
+					<div class="mui-input-row">
+						<label>完成进度</label>
+						<input type="text" id="FinishSchedule" class="mui-input" required="required" readonly="readonly">
+					</div>
+				</form>
+	            <div class="mui-input-row" style="margin-top: 5px;margin-bottom: -15px;">
+					<textarea id="FinishScheduleRemarks" rows="4" class="mui-input-clear mui-input" placeholder="处理备注"></textarea>
 				</div>
 
 				<div class="mui-button-row">
@@ -56,18 +67,31 @@
 		<script src="../../js/mui.min.js"></script>
 		<script src="../../js/app.js"></script>
 		<script src="../../js/mui.enterfocus.js"></script>
+		<script src="../../js/mui.picker.min.js"></script>
+		<script src="../../js/mui.poppicker.js"></script>
 		<script>
 			mui.init({});
-			var id;
+			var id,Picker;
 			mui.plusReady(function() {
-			
+		    	Picker = new mui.PopPicker({
+					layer: 1
+				});
+				
+				Picker.setData([{value: '10',text: '10%'},{value: '20',text: '20%'},{value: '30',text: '30%'},{value: '40',text: '40%'},
+				{value: '50',text: '50%'},{value: '60',text: '60%'},{value: '70',text: '70%'},{value: '80',text: '80%'},{value: '90',text: '90%'},
+				{value: '100',text: '100%'}]);
+				
 				id = plus.webview.currentWebview().name;
 				var Title = document.getElementById("Title");
 				var Type = document.getElementById("Type");
 				var BeginDate = document.getElementById("BeginDate");
 				var EndDate = document.getElementById("EndDate");
 				var Describe = document.getElementById("Describe");
+				var FinishSchedule = document.getElementById("FinishSchedule");
+				var FinishScheduleRemarks = document.getElementById("FinishScheduleRemarks");
 				var url = app.getUrl() + 'GetWorkTaskByID';
+				plus.nativeUI.showWaiting();
+	
 				mui.ajax(url, {
 					data: {
 						id: id
@@ -81,8 +105,10 @@
 							BeginDate.value = data[0].begindate;
 							EndDate.value = data[0].enddate;
 							Describe.value = data[0].describe;
-						}
-			
+							FinishSchedule.value=data[0].finishschedule;
+							FinishScheduleRemarks.value=data[0].finishscheduleremarks
+						}	
+						plus.nativeUI.closeWaiting();
 					}
 				});
 				var buttonok = document.getElementById('buttonok');
@@ -90,19 +116,28 @@
 					mui.trigger(buttonok, 'tap');
 				});
 			});
+			
+			document.getElementById("FinishSchedule").addEventListener('tap', function() {
+				Picker.show(function(items) {
+					document.getElementById("FinishSchedule").value = items[0].value;
+				});
+			});
+			
 			//确定按钮
 			function btn_ok() {
-				var url = app.getUrl() + 'ExcuteTask';
+				var url = app.getUrl() + 'FinishTask';
 				mui.ajax(url, {
 					data: {
-						UserID: app.getLoginInfo().userid,
-						MessageID: id
+						userid: app.getLoginInfo().userid,
+						taskid: id,
+						remark:document.getElementById("FinishScheduleRemarks").value,
+						finishschedule:document.getElementById("FinishSchedule").value
 					},
 					type: 'post', //HTTP请求类型
 					success: function(data) {
 						if (data == "") {
-							plus.nativeUI.toast('完成任务');
-							var page = plus.webview.getWebviewById('worktask-sub');
+							plus.nativeUI.toast('修改成功');
+							var page = plus.webview.getWebviewById('persontask-sub');
 							//触发列表界面的自定义事件（refresh）,从而进行数据刷新
 							mui.fire(page, 'refresh');
 							mui.back();

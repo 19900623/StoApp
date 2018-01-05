@@ -28,10 +28,10 @@
 		<div class="mui-content">
 			<div class="mui-content-padded" style="margin: 5px;">
 				<form class="mui-input-group" id="bill-form">
-					<!--<div class="mui-input-row">
+					<div class="mui-input-row">
 						<label>标题</label>
-						<input type="text" id="LeaveTitle" class="mui-input-clear mui-input" required="required">
-					</div>-->
+						<input type="text" id="Title" class="mui-input-clear mui-input" required="required">
+					</div>
 
 					<div class="mui-input-row">
 						<label>类型</label>
@@ -43,7 +43,7 @@
 					</div>
 				</form>
 				<div class="mui-input-row" style="margin: 5px 0px;">
-					<textarea id="Request" rows="3" placeholder="问题描述" class="mui-input-clear mui-input"></textarea>
+					<textarea id="Request" rows="7" placeholder="问题描述" class="mui-input-clear mui-input"></textarea>
 				</div>
 
 				<ul id="images" class="dlist">
@@ -105,10 +105,17 @@
 			});
 
 			function btn_ok() {
+				var Title = document.getElementById("Title");
 				var Type = document.getElementById("Type");
 				var RequestDate = document.getElementById("RequestDate");
 				var Request = document.getElementById("Request");
 				//验证
+				if (Title.value == "") {
+					plus.nativeUI.toast("标题不能为空");
+					Title.focus();
+					return;
+				}
+				
 				if (Type.value == "") {
 					plus.nativeUI.toast("类型不能为空");
 					LeaveMold.focus();
@@ -130,6 +137,7 @@
 					var userid = app.getLoginInfo().userid;
 					//调用方法
 					var billInfo = {
+						Title:Title.value,
 						CreateUserID: userid,
 						RequestDate: RequestDate.value,
 						Request: Request.value

@@ -350,7 +350,14 @@
 					LeaveReason.focus();
 					return;
 				}
-				
+                             
+			    if(LeaveEndTime.value.substr(5,2)!=LeaveStartTime.value.substr(5,2)) 
+			    {
+					plus.nativeUI.toast("请假日期不能跨月");
+					LeaveStartTime.focus();
+					return;
+			    }
+							
 				var userid = app.getLoginInfo().userid;
 				//调用方法
 				var billInfo = {
@@ -426,6 +433,14 @@
 					LeaveReason.focus();
 					return;
 				}
+				
+				                     
+			    if(LeaveEndTime.value.substr(5,2)!=LeaveStartTime.value.substr(5,2)) 
+			    {
+					plus.nativeUI.toast("请假日期不能跨月");
+					LeaveStartTime.focus();
+					return;
+			    }
 				
 				var userid = app.getLoginInfo().userid;
 				//调用方法

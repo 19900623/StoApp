@@ -95,7 +95,7 @@
 				document.getElementById("buttoncommit").style.display = "";
 				document.getElementById("buttonok").style.display = "";
 				document.getElementById("buttondel").style.display = "";
-				
+				plus.nativeUI.showWaiting();
 				var id = plus.webview.currentWebview().name;
 				var url = app.getUrl() + 'GetLeaveBillByID';
 				mui.ajax(url, {
@@ -129,6 +129,7 @@
 							else{
 								document.getElementById("buttonundo").style.display = "none";
 							}
+							plus.nativeUI.closeWaiting();
 						}
 					}
 				});

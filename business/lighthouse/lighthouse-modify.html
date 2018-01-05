@@ -37,17 +37,23 @@
 						<input type="text" id="RequestDate" class="mui-input" required="required" readonly="readonly">
 					</div>
 					<div class="mui-input-row">
-						<label>指派人</label>
-						<input type="text" id="AssignUserName" class="mui-input" required="required" readonly="readonly">
-					</div>
-					<div class="mui-input-row">
 						<label>状态</label>
 						<input type="text" id="State" class="mui-input" required="required" readonly="readonly">
 					</div>
-
+					<div class="mui-input-row">
+						<label>处理人</label>
+						<input type="text" id="AssignUserName" class="mui-input" required="required" readonly="readonly">
+					</div>					
+					<div class="mui-input-row">
+						<label>处理进度</label>
+						<input type="text" id="FinishSchedule" class="mui-input" required="required" readonly="readonly">
+					</div>
 				</form>
-				<div class="mui-input-row" style="margin: 5px 0px;">
+				<div class="mui-input-row" style="margin-top: 5px; margin-bottom: -20px;">
 					<textarea id="Request" rows="3" placeholder="问题描述" class="mui-input-clear mui-input"></textarea>
+				</div>				
+			    <div class="mui-input-row" style="margin-top: 5px; margin-bottom: -15px;">
+					<textarea id="FinishScheduleRemarks" rows="4" placeholder="处理备注" class="mui-input-clear mui-input"></textarea>
 				</div>
 
 				<ul id="images" class="dlist">
@@ -73,6 +79,8 @@
 				var Request = document.getElementById("Request");
 				var State = document.getElementById("State");
 				var AssignUserName = document.getElementById("AssignUserName");
+				var FinishSchedule = document.getElementById("FinishSchedule");
+				var FinishScheduleRemarks = document.getElementById("FinishScheduleRemarks");
 				var url = app.getUrl() + 'GetPersonRequestByID';
 				mui.ajax(url, {
 					data: {
@@ -81,12 +89,15 @@
 					type: 'post', //HTTP请求类型
 					dataType: 'json',
 					success: function(data) {
-						if (data) {						
+						if (data) {		
+							console.log(JSON.stringify(data))
 							Type.value = data[0].type;
 							RequestDate.value = data[0].requestdate;
 							Request.value = data[0].request;
 							State.value = data[0].state;
-							AssignUserName.value = data[0].modifyusername;
+							AssignUserName.value = data[0].assignusername;
+							FinishSchedule.value=data[0].finishschedule;
+							FinishScheduleRemarks.value=data[0].finishscheduleremarks;
 							if (State.value != '未分配') {
 								document.getElementById("buttondel").style.display = "none";
 							}

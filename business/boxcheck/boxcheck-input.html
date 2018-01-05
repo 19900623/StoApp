@@ -52,6 +52,10 @@
 						<label>类别</label>
 						<input type="text" id="Type" class="mui-input" required="required" readonly="readonly">
 					</div>
+					<div class="mui-input-row">
+						<label>所属</label>
+						<input type="text" id="Dept" class="mui-input" required="required" readonly="readonly">
+					</div>
 
 				</form>
 				<div class="mui-input-row" style="margin: 5px 0px 0px;">
@@ -75,7 +79,7 @@
 		<script type="text/javascript" src="../../js/common.js"></script>
 		<script>
 			mui.init({});
-			var KPIPicker, name;
+			var KPIPicker, name,SSPicker;
 			mui.plusReady(function() {
 				name = plus.webview.currentWebview().name;
 				document.getElementById("title").innerHTML = '新增' + name;
@@ -97,11 +101,31 @@
 					text: '开箱验视及品名'
 				}
 				]);
+				
+				SSPicker = new mui.PopPicker({
+					layer: 1
+				});
+				
+				SSPicker.setData([{
+					value: '临沂公司',
+					text: '临沂公司'
+				}, {
+					value: '中转部',
+					text: '中转部'
+				}]);
 			});
+			
 			//类别	
 			document.getElementById("Type").addEventListener('tap', function() {
 				KPIPicker.show(function(items) {
 					document.getElementById("Type").value = items[0].value;
+				});
+			});
+			
+			//选择所属类型	
+			document.getElementById("Dept").addEventListener('tap', function() {
+				SSPicker.show(function(items) {
+					document.getElementById("Dept").value = items[0].value;
 				});
 			});
 
@@ -111,6 +135,8 @@
 				var WayBillNumber = document.getElementById("WayBillNumber");
 				var Remark = document.getElementById("Remark");
 				var Type = document.getElementById("Type");
+				var Dept = document.getElementById("Dept");
+				
 				//验证
 				if (WayBillNumber.value == "") {
 					plus.nativeUI.toast("运单编号不能为空");
@@ -125,6 +151,11 @@
 				var images = document.getElementById("images");
 				if (images.children.length == 0) {
 					plus.nativeUI.toast("请上传照片");
+					return;
+				}
+				if (Dept.value == "") {
+					plus.nativeUI.toast("所属不能为空");
+					Dept.focus();
 					return;
 				}
 				var ImagePaths = '';
@@ -144,7 +175,7 @@
 						} else {
 							db.transaction(function(context) {
 								var sql = "INSERT INTO BoxCheck (WayBillNumber, Remark,Image,State,CreateDate,KPI,Type) VALUES (?,?,?,'未上传',?,?,?)";
-								context.executeSql(sql, [WayBillNumber.value, Remark.value, ImagePaths, d, name,Type.value],
+								context.executeSql(sql, [WayBillNumber.value, Dept.value+Remark.value, ImagePaths, d, name,Type.value],
 									function(tx, result) {
 										plus.nativeUI.toast('添加成功');
 										var page = plus.webview.getWebviewById('boxcheck-list-sub');
